@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="top"
+    android:background="@color/textColorPrimary"
+    android:gravity="top"
+    android:orientation="vertical"
+
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/custom_round_dark_view_bg"
+            android:orientation="horizontal">
+
+            <TableLayout
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="1px">
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_consignee_text"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Item Name"
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:text="Pack"
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+
+                        android:layout_marginLeft="2dp"
+                        android:text="Sales Qty"
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:text="Sales Amount"
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+                        android:layout_marginLeft="2dp"
+                        android:text="Sales Return Qty"
+
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:text="Sales Return Amount"
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+                        android:layout_marginLeft="2dp"
+                        android:text="Claim Qty"
+
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:text="Claim Amount"
+
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+                        android:layout_marginLeft="2dp"
+                        android:text="Br/Exp Qty"
+
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+                        android:layout_marginLeft="2dp"
+                        android:text="Br/Exp Amount"
+
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/s_qty"
+                        android:visibility="gone"
+                        android:layout_marginLeft="2dp"
+                        android:text="Stock Qty"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/s_amt"
+                        android:visibility="gone"
+                        android:layout_marginLeft="2dp"
+                        android:text="Stock Amount"
+                        android:textColor="#fff"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+
+                </TableRow>
+
+            </TableLayout>
+
+
+        </LinearLayout>
+
+
+        <ListView
+            android:id="@+id/spo_product_wise_list"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"></ListView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

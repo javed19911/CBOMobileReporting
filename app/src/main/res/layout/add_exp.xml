@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Exp. Head"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/black"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:text="Exp. Head"
+                android:id="@+id/head"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/black"
+                />
+            <Spinner
+                android:id="@+id/exp_head_root"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:prompt="@string/spinner_title9" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:id="@+id/ex_head_root_txt"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ems="10"
+                android:text="Amount"
+                android:textColor="@android:color/black" />
+            <EditText
+                android:id="@+id/ex_head_root"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:hint="Amt."
+                android:inputType="number" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/text_remark"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text=" Exp Remark:"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000"
+            />
+        <EditText
+
+            android:textColor="#000"
+            android:id="@+id/exp_remark_root"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="Add Exp Remark"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Attachment"
+            android:id="@+id/add_attachment"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/attach_option"
+            android:orientation="horizontal">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/attach"
+                android:text="Galary"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/cam"
+                android:text="Camera"/>
+        </RadioGroup>
+    </LinearLayout>
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:id="@+id/attach_img"
+    android:minWidth="100dp"
+    android:minHeight="100dp"
+    android:scaleType="fitXY"
+    android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:textColor="#fff"
+        android:background="@drawable/button_text_view_selector"
+        android:layout_gravity="right"
+        android:layout_width="80dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:layout_height="40dp"
+        android:id="@+id/save_exp_root"
+        android:text="Add"
+
+        android:layout_marginRight="10dp"/>
+
+</LinearLayout>

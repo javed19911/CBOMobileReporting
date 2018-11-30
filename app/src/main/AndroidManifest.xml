@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.cbo.cbomobilereporting"
+    android:installLocation="internalOnly">
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.location.network" />
+    <uses-feature android:name="android.hardware.location.gps" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
+    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" />
+    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- <action android:name="android.location.PROVIDERS_CHANGED" /> -->
+    <application
+        android:name="utils.clearAppData.MyCustumApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/cbo_icon"
+        android:label="@string/app_name"
+        android:theme="@style/MyMaterialTheme">
+        <activity
+            android:name=".ui_new.SplashScreen_2016"
+            android:clearTaskOnLaunch="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.DELETE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="services.NotificationService" />
+
+        <receiver android:name="receivers.DOB_DOA_broadcastreciever">
+            <intent-filter>
+                <action android:name="DOB_DOA_notification_flag" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="receivers.MyBroadcastReceiver" />
+
+        <service android:name="fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".ui_new.utilities_activities.PersonalInfo"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.NonListedCall"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.CaptureSignature"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.LoginMain"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.FogetPin"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".ui_new.dcr_activities.Work_Feedback_Of_Managers" />
+        <activity
+            android:name=".ui_new.dcr_activities.DrPrescription"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui_new.dcr_activities.DrCall"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".ui_new.report_activities.DashboardReport"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.personal_activities.Add_Delete_Leave"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.transaction_activities.ComplaintView"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.transaction_activities.Complaint"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.ChemistCall"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.StockistCall"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.area.Expense"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.GetDCR"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.TotalDrRpt"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.TotalRxRpt"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.report_activities.TpReports"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.for_all_activities.CustomWebView"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Contact_Us"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Comp_Logged_rpt"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.report_activities.DcrReports"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.CBOReportView"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Stk_Sample"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Chm_Sample"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Dr_Sample"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Dr_Gift"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.Doctor_Sample"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.ViewPager_2016"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.PrescribeNew"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Chemist_Gift"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.ReminderCall"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Load_New"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.NonWorking_DCR"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.MailTo_PPL"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Mail_CC"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.mail_activities.Inbox_Mail"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Inbox_Msg"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.mail_activities.Outbox_Mail"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.report_activities.Logged_UnLogged"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Rpt_Detail"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Rpt_Unlogged"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".ui.GridViewActivity" />
+        <activity
+            android:name=".ui.FullScreenViewActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".ui_new.utilities_activities.DocPhotos"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".ui.Show_Sample" />
+        <activity
+            android:name=".ui_new.utilities_activities.VisualAid_Download"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.Dcr_Workwith"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.Dcr_Area"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui_new.utilities_activities.DivisionWise_Map"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.MapsActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity
+            android:name=".ui.Dr_Workwith"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.AnotherActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.utilities_activities.Upload_Photo"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.LoginFake"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".ui_new.mail_activities.CreateMail1"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.TpReport_View"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.TotalChemistRpt"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.TotalStockistRpt"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.TotalNonListedRpt"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.utilities_activities.CaptureSignatureMain"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.report_activities.Spo_Report"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.LayoutZoomer"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.SpoHeadquarterWise"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.SpoStock_Report"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.SpoProductWiseStock"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.SpoDistributorsWise"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.DcrRoot"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.root.ExpenseRoot"
+            android:configChanges="orientation|screenSize" />
+
+        <service
+            android:name="services.Sync_service"
+            android:enabled="true" />
+
+        <activity
+            android:name=".ui.VideoPlay"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui_new.dcr_activities.FinalSubmitDcr_new"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.report_activities.DrWiseVisit"
+            android:label="@string/title_activity_previous_dr_visit" />
+        <activity
+            android:name=".ui.Leave_Request"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui_new.transaction_activities.Rcpa_Call"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.transaction_activities.Farmer_registration_form"
+            android:configChanges="orientation|screenSize" />
+
+        <service android:name=".emp_tracking.MyLoctionService" />
+
+        <receiver
+            android:name=".emp_tracking.LocationBroadcast"
+            android:enabled="true" />
+
+        <!-- ****Below broadcast Start the Receiver  after Boot Completed -->
+        <receiver
+            android:name=".emp_tracking.StartAlarmAfterDeviceRestart"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".emp_tracking.ServiceForSendingData10Minute" />
+        <service android:name=".ui_new.approval_activities.Remainder.FloatingRemainderApproval"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <receiver android:name=".emp_tracking.ReciverFor10minuteData" />
+
+        <activity
+            android:name="utils_new.Update_Avilable"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="New Version Available" />
+        <activity
+            android:name=".ui_new.report_activities.DOB_DOA"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.DrVisitedList"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".ui_new.report_activities.Msg_ho"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".ui_new.mail_activities.Notification"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name="utils_new.GalleryUtil"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".ui_new.dcr_activities.DCR_Summary_new"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".ui_new.dcr_activities.area.Dcr_Open_New"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.root.DCR_Root_new"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui_new.dcr_activities.NonListedCall_CNF"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".ui_new.transaction_activities.Doctor_registration_GPS"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".ui_new.report_activities.LoggedUnlogged_Dat" />
+
+        <receiver android:name="utils_new.GpsLocationReceiver">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/providers_path" />
+        </provider>
+
+        <activity android:name=".ui_new.dcr_activities.DairyCall" />
+        <activity
+            android:name="locationpkg.LocationTest"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme" />
+        <activity
+            android:name="locationpkg.SetGPS_Setting"
+            android:excludeFromRecents="true"
+            android:theme="@style/Appdilogtheme" />
+        <activity android:name=".ui_new.dcr_activities.PospondFarmerMeeting" />
+
+        <receiver
+            android:name="utils_new.CustomTextToSpeech"
+            android:process=":remote" />
+
+        <activity
+            android:name=".ui_new.SystemAlertActivity"
+            android:excludeFromRecents="true"
+            android:label=""
+            android:theme="@style/Appdilogtheme" />
+        <activity android:name=".ui_new.report_activities.MissedDoctor.MissedDoctorActivity" />
+
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+
+        <activity android:name=".ui_new.approval_activities.Remainder.RemainderActivity"></activity>
+    </application>
+
+</manifest>

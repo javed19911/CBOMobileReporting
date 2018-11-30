@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff"
+    android:layout_gravity="top"
+    android:gravity="top"
+    android:id="@+id/main_container"
+
+
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableLayout
+
+                android:stretchColumns="*"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TableRow android:layout_height="1px"
+                    android:layout_width="wrap_content"
+
+
+                    >
+                    <utils.font_package.Text_view_Bold_10
+
+                        android:id="@+id/spo_product_wise_stock_item_name"
+                        android:textColor="#000"
+
+                        android:layout_gravity="center_vertical"
+
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+
+                        android:text="Item Name"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_pack"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Pack"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_sales_qty"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+
+
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Sales Qty"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_sales_amt"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Sales Amount"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+                    <utils.font_package.Text_view_Bold_10
+                    android:id="@+id/spo_product_wise_stock_sales_returns_qty"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="1dp"
+                    android:layout_width="38dp"
+
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Sales Return Qty"
+                    android:textStyle="bold"
+                    android:textSize="8dp"
+                    />
+                    <utils.font_package.Text_view_Bold_10
+                    android:id="@+id/spo_product_wise_stock_sales_return_amt"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="1dp"
+                    android:layout_width="38dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text="Sales Return Amount"
+                    android:textStyle="bold"
+                    android:textSize="8dp"
+                    />
+                    <utils.font_package.Text_view_Bold_10
+                        android:layout_gravity="center"
+                        android:id="@+id/spo_product_wise_stock_claim_qty"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Claim Qty"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_claim_amt"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Claim Amount"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_br_exp_qty"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Br/Exp Qty"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_br_exp_amt"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Br/Exp Amount"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_stock_qty"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Stock Qty"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_product_wise_stock_stock_amt"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="38dp"
+
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="Stock Amount"
+                        android:textStyle="bold"
+                        android:textSize="8dp"
+                        />
+
+
+
+                </TableRow>
+
+            </TableLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

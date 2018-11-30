@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical">
+
+    <include layout="@layout/hadder_2016" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:visibility="gone"
+        android:id="@+id/tab"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="3dp"
+            android:elevation="6dp"
+            android:id="@+id/call"
+            android:background="@drawable/tab_selected"
+            android:text="Call"
+            android:layout_weight="2"/>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="3dp"
+            android:id="@+id/summary"
+            android:background="@drawable/tab_deselected"
+            android:text="Summary"
+            android:layout_weight="2"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:weightSum="3"
+        android:visibility="gone"
+        android:background="@color/tab_sellected"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/custom_square_transparent_bg"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/call_layout"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="center"
+                        android:text="Dr Name "
+                        android:textColor="@color/navigationBarColor"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+
+
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/drop_bg"
+                            android:gravity="center"
+                            android:minHeight="40dp"
+                            android:orientation="horizontal">
+
+                            <Spinner
+                                android:id="@+id/drname_sample"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:layout_margin="3dp"
+                                android:prompt="@string/spinner_title10"
+                                android:textColor="@color/navigationBarColor" />
+
+                            <View
+                                android:layout_width="1.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="3.5dp"
+                                android:layout_marginTop="3.5dp"
+                                android:background="@color/colorPrimaryDark" />
+
+                            <ImageView
+                                android:id="@+id/spinner_img_doctor_sample"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="1dp"
+                                android:layout_weight="5"
+                                android:padding="6.5dp"
+                                android:src="@drawable/drop_icon" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/remak"
+                            android:textStyle="bold|italic"
+                            android:textColor="#800000"
+                            android:layout_marginLeft="15dp"
+                            android:textSize="12sp"/>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dr_remark_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dip"
+                    android:layout_marginRight="8dip"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"
+                            android:text="Remark"
+                            android:visibility="gone"
+                            android:textColor="@color/navigationBarColor"
+                            android:textSize="17sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/drop_bg"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/remark"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_weight="1"
+                                    android:background="@android:color/transparent"
+                                    android:minHeight="40dp"
+                                    android:prompt="@string/spinner_title4"
+                                    android:text="---Select Remark---"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/navigationBarColor"
+
+                                    />
+
+                                <View
+                                    android:layout_width="1.5dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginBottom="3.5dp"
+                                    android:layout_marginTop="3.5dp"
+                                    android:background="@color/colorPrimaryDark" />
+
+                                <ImageView
+                                    android:id="@+id/remark_img"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="1dp"
+                                    android:layout_weight="7"
+                                    android:padding="6.5dp"
+                                    android:src="@drawable/drop_icon" />
+                            </LinearLayout>
+
+
+
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+
+                    <EditText
+                        android:id="@+id/dr_remark_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top|left"
+                        android:layout_marginTop="10dp"
+                        android:hint="Remark Here.." />
+
+                </LinearLayout>
+
+
+                <TableLayout
+
+                    android:id="@+id/tableLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shrinkColumns="*"
+                    android:stretchColumns="*">
+
+                    <LinearLayout
+                        android:id="@+id/tableRow4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <utils.font_package.Button_Regular_white
+                            android:id="@+id/sample"
+                            android:layout_width="fill_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="3"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Sample/POB"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="17sp" />
+
+                        <utils.font_package.Button_Regular_white
+                            android:id="@+id/gift"
+                            android:layout_width="fill_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="3.5"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Gift"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+
+
+                            android:textSize="17sp" />
+
+                        <utils.font_package.Button_Regular_white
+                            android:id="@+id/pics"
+                            android:layout_width="fill_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="3dp"
+                            android:layout_weight="3"
+                            android:background="@drawable/button_text_view_selector"
+
+                            android:text="Visual Ads"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="17sp" />
+                        />
+
+                        <utils.font_package.Button_Regular_white
+
+                            android:id="@+id/bt_Dr_Sale"
+                            android:layout_width="match_parent"
+                            android:layout_weight="3"
+                            android:layout_height="45dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Sale"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="17sp" />
+
+                    </LinearLayout>
+
+                </TableLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="6"
+                    android:layout_marginTop="10dp">
+
+                    <utils.font_package.Button_Regular_white
+
+                        android:id="@+id/bt_prescribed"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1.9"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/button_text_view_selector"
+                        android:text="Prescribed"
+                        android:textAllCaps="false"
+                        android:visibility="gone"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="17sp" />
+
+                    <utils.font_package.Button_Regular_white
+
+                        android:id="@+id/bt_Dr_Sale_gone"
+                        android:layout_width="match_parent"
+                        android:layout_weight="3.8"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:visibility="gone"
+                        android:background="@drawable/button_text_view_selector"
+                        android:text="Sale"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="17sp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone">
+
+                    <utils.font_package.Button_Regular_white
+
+                        android:id="@+id/bt_videoplay"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/button_text_view_selector"
+                        android:text="Video Play"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="17sp" />
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/main_visual"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <Button
+                        android:id="@+id/aid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="52dp"
+                        android:text="Visual Aid"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/promotion">
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gift_layout">
+                </TableLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <utils.font_package.Button_Bold
+
+                android:id="@+id/dr_submit_sample"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_text_view_selector"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+
+                android:textSize="19sp" />
+            <utils.font_package.Button_Bold
+
+                android:id="@+id/later"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/button_text_view_selector"
+                android:text="Later"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:layout_weight="1"
+                android:textSize="19sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/summary_layout"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:divider="#fff"
+            android:dividerHeight="0dp"
+            android:layout_above="@+id/back"
+            android:layout_width="match_parent"/>
+
+    </LinearLayout>
+
+</LinearLayout>

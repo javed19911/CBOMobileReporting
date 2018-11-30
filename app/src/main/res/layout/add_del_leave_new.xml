@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="250dp"
+    android:background="@color/textColorPrimary"
+    android:padding="5dp"
+    >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+       android:background="@drawable/custom_round_white_view_bg"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+    <utils.font_package.Text_view_Bold_16
+        android:id="@+id/doc_no1"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="Doc No.       : "
+
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+        android:textSize="18dp"
+
+        />
+    <utils.font_package.Text_view_Regular
+        android:layout_alignLeft="@+id/doc_no1"
+        android:id="@+id/doc_no"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Doc No."
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="118dp"
+        android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"/>
+        <utils.font_package.Text_view_Bold_16
+        android:layout_below="@+id/doc_no1"
+        android:id="@+id/doc_date1"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="Doc Date     :"
+        android:layout_marginLeft="5dp"
+            android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_marginTop="2dp"
+        />
+        <utils.font_package.Text_view_Regular
+        android:layout_below="@+id/doc_no"
+        android:id="@+id/doc_date"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Doc No."
+        android:layout_marginLeft="123dp"
+            android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"/>
+        <utils.font_package.Text_view_Bold_16
+        android:layout_below="@+id/doc_date1"
+        android:id="@+id/days1"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="Days            :"
+            android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:textSize="18dp"
+        android:layout_marginTop="0dp"/>
+        <utils.font_package.Text_view_Regular
+        android:layout_marginLeft="120dp"
+        android:layout_below="@+id/doc_date"
+        android:id="@+id/days"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text=" Doc No."
+         android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"/>
+
+        <utils.font_package.Text_view_Bold_16
+        android:layout_below="@+id/days"
+        android:id="@+id/fromdate1"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="From Date  :"
+        android:layout_marginLeft="5dp"
+            android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_marginTop="3dp"/>
+        <utils.font_package.Text_view_Regular
+        android:layout_below="@+id/days"
+        android:id="@+id/fromdate"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Doc"
+        android:layout_marginLeft="124dp"
+            android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"/>
+        <utils.font_package.Text_view_Bold_16
+        android:layout_below="@+id/fromdate"
+        android:id="@+id/todate1"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="To Date       :"
+        android:layout_marginLeft="5dp"
+            android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_marginTop="5dp"/>
+
+        <utils.font_package.Text_view_Regular
+        android:layout_below="@+id/fromdate"
+        android:id="@+id/todate"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Doc"
+        android:layout_marginLeft="124dp"
+            android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"/>
+        <utils.font_package.Text_view_Bold_16
+  android:layout_below="@+id/todate"
+        android:id="@+id/purpose1"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="Purpose      :"
+        android:layout_marginLeft="5dp"
+            android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_marginTop="5dp"/>
+        <utils.font_package.Text_view_Regular
+        android:layout_below="@+id/todate"
+        android:id="@+id/purpose"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Doc No."
+        android:layout_marginLeft="124dp"
+            android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"/>
+
+        <utils.font_package.Text_view_Bold_16
+        android:layout_below="@+id/purpose"
+        android:id="@+id/leave_status"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="Approval     :"
+        android:layout_marginLeft="5dp"
+            android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_marginTop="5dp"/>
+        <utils.font_package.Text_view_Regular
+        android:layout_below="@+id/purpose"
+        android:id="@+id/leave_status1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Doc No."
+        android:layout_marginLeft="124dp"
+        android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"/>
+
+        <utils.font_package.Text_view_Bold_16
+        android:visibility="gone"
+        android:layout_below="@+id/leave_status"
+        android:id="@+id/leave_id"
+        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:text="Approval Ho :"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/navigationBarColor"
+        android:textStyle="bold"
+            android:layout_marginTop="2dp"
+        android:textSize="17dp"/>
+        <utils.font_package.Text_view_Regular
+        android:visibility="gone"
+        android:layout_below="@+id/leave_status"
+        android:id="@+id/leave_id1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Doc No."
+            android:layout_marginTop="2dp"
+        android:layout_marginLeft="124dp"
+        android:textColor="@color/navigationBarColor"
+        android:textSize="15dp"/>
+
+    <utils.font_package.Button_Bold_13_white
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/leave_status"
+        android:id="@+id/leaveDelete"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:text="Delete"
+
+        android:textColor="@color/textColorPrimary"
+        android:textAllCaps="false"
+        android:background="@drawable/button_text_view_selector"
+        />
+    <utils.font_package.Button_Bold_13_white
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/leave_status"
+        android:id="@+id/leaveEdit"
+        android:layout_marginLeft="120dp"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:text="View"
+        android:textAllCaps="false"
+        android:textColor="@color/textColorPrimary"
+        android:background="@drawable/button_text_view_selector"
+        />
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

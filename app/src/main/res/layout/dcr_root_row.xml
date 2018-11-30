@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_round_white_view_bg"
+    android:padding="5dp"
+    android:layout_margin="8dp">
+    <utils.font_package.Text_view_Regular
+        android:layout_width="fill_parent"
+        android:text="Just gona stand there and ..."
+        android:visibility="gone"
+        android:gravity="center|left"
+        android:id="@+id/dcr_rootrow_id"
+        android:layout_height="fill_parent"
+        android:layout_weight="4"/>
+    <utils.font_package.Text_view_Regular
+        android:layout_width="fill_parent"
+        android:id="@+id/dcr_rootrow_name"
+        android:gravity="center|left"
+        android:text="Rihanna Love the way lie"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"/>
+    <RadioButton
+        android:layout_width="50dp"
+        android:layout_height="65dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/rootselector"
+        android:button="@drawable/custom_checkbox_design"
+        android:checked="false"/>
+
+</LinearLayout>

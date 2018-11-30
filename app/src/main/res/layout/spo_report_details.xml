@@ -1,0 +1,1491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fff"
+    android:layout_gravity="top"
+    android:gravity="top"
+    android:id="@+id/main_container"
+
+
+    >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="@drawable/custom_round_dark_view_bg"
+        android:layout_margin="2dp"
+        android:layout_height="wrap_content">
+        <utils.font_package.Text_view_Bold_10
+            android:id="@+id/spo_cnf_consignee_text"
+            android:textColor="#000"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:maxWidth="45dp"
+            android:layout_height="wrap_content"
+
+            android:text="Consignee"
+            android:textStyle="bold"
+            android:textSize="10dp"
+            />
+              <utils.font_package.Text_view_Bold_10
+                  android:layout_gravity="center"
+                  android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="40dp"
+
+                  android:gravity="end"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="10dp"
+                  />
+              <utils.font_package.Text_view_Bold_10
+                  android:layout_gravity="center"
+                  android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="30dp"
+                  android:gravity="end"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales   Return"
+                  android:textStyle="bold"
+                  android:textSize="10dp"
+                  />
+              <utils.font_package.Text_view_Bold_10
+                  android:layout_gravity="center"
+                  android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="40dp"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+
+                  android:gravity="end"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="10dp"
+                  />
+              <utils.font_package.Text_view_Bold_10
+              android:layout_gravity="center"
+              android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="40dp"
+
+                  android:gravity="end"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="10dp"
+              />
+              <utils.font_package.Text_view_Bold_10
+              android:layout_gravity="center"
+              android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="40dp"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+
+                  android:gravity="end"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="10dp"
+              />
+              <utils.font_package.Text_view_Bold_10
+                  android:layout_gravity="center"
+                  android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="40dp"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+
+                  android:gravity="end"
+                  android:text="Secondary Sales"
+                  android:textStyle="bold"
+                  android:textSize="10dp"
+                  />
+              <utils.font_package.Text_view_Bold_10
+                  android:layout_gravity="center"
+                  android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="40dp"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+
+                  android:gravity="end"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="10dp"
+                  />
+              <utils.font_package.Text_view_Bold_10
+                  android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="40dp"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+
+                  android:gravity="end"
+                  android:layout_gravity="center"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="10dp"
+                  />
+
+              <utils.font_package.Text_view_Bold_10
+                  android:gravity="center"
+                  android:layout_marginLeft="2dp"
+                  android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:maxWidth="45dp"
+                  android:id="@+id/stk"
+
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+
+                  android:text="Stock Amount"
+                  android:textStyle="bold"
+                  android:textSize="10dp"
+                  />
+
+
+
+
+         <!--<TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow> <TableRow android:layout_height="1px" android:background="#BDBDBD">
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Consignee"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Amount"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Return"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Breakage Expiry"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Credit Note Other"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Net Sales"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Receipt"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Outstanding"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+
+
+
+
+
+      </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD">
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+
+
+
+          </TableRow> <TableRow android:layout_height="1px" android:background="#BDBDBD">
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Consignee"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Amount"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Return"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Breakage Expiry"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Credit Note Other"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Net Sales"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Receipt"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Outstanding"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+
+
+
+
+
+      </TableRow> <TableRow android:layout_height="1px" android:background="#BDBDBD">
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Consignee"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Amount"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Return"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Breakage Expiry"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Credit Note Other"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Net Sales"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Receipt"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Outstanding"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+
+
+
+
+
+      </TableRow> <TableRow android:layout_height="1px" android:background="#BDBDBD">
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Consignee"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Amount"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Return"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Breakage Expiry"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Credit Note Other"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Net Sales"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Receipt"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Outstanding"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+
+
+
+
+
+      </TableRow> <TableRow android:layout_height="1px" android:background="#BDBDBD">
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Consignee"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Amount"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Return"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Breakage Expiry"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Credit Note Other"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Net Sales"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Receipt"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Outstanding"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+
+
+
+
+
+      </TableRow> <TableRow android:layout_height="1px" android:background="#BDBDBD">
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Consignee"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Amount"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Return"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Breakage Expiry"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Credit Note Other"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Net Sales"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Receipt"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Outstanding"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+
+
+
+
+
+      </TableRow> <TableRow android:layout_height="1px" android:background="#BDBDBD">
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Consignee"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Amount"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Sales Return"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Breakage Expiry"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Credit Note Other"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />           <TextView
+          android:layout_margin="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#000"
+          android:text="Net Sales"
+          android:textStyle="bold"
+          android:textSize="15dp"
+          />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Receipt"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+          <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Outstanding"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+
+
+
+
+
+      </TableRow>
+          <TableRow android:layout_height="1px" android:background="#BDBDBD"
+
+              >
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Consignee"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Amount"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Sales Return"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Breakage Expiry"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Credit Note Other"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />           <TextView
+              android:layout_margin="5dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#000"
+              android:text="Net Sales"
+              android:textStyle="bold"
+              android:textSize="15dp"
+              />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Receipt"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+              <TextView
+                  android:layout_margin="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000"
+                  android:text="Outstanding"
+                  android:textStyle="bold"
+                  android:textSize="15dp"
+                  />
+
+
+          </TableRow>-->
+
+
+
+
+        </LinearLayout>
+
+
+
+
+    <ListView
+        android:id="@+id/spo_cnf_list"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"></ListView>
+
+        </LinearLayout>
+
+
+</LinearLayout>

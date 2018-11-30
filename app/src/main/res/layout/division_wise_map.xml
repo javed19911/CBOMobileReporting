@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textColorPrimary"
+    >
+    <include layout="@layout/hadder_2016"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="5dp"
+        android:background="@drawable/custom_round_white_view_bg">
+
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+
+            android:id="@+id/rptlay4"
+            android:layout_gravity="center"
+
+
+            >
+            <utils.font_package.Text_view_Regular
+
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:text="Date"
+                android:gravity="center"
+
+
+                android:textColor="@color/navigationBarColor"
+                />
+            <utils.font_package.Edit_text_Regular
+
+                android:layout_width="180dp"
+                android:layout_marginLeft="10sp"
+                android:layout_height="fill_parent"
+
+                android:id="@+id/edt_div_wise_map_date"
+                android:textColor="@color/navigationBarColor"
+
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:text="--- Select Date ---"
+
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+
+            <Button
+
+                android:id="@+id/bt_div_wise_map_calender_btn"
+                android:layout_width="50dp"
+
+                android:layout_height="35dp"
+                android:layout_marginLeft="7dp"
+                android:background="@drawable/calender_00"
+
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            >
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:text="Division:"
+                android:gravity="center"
+                android:textColor="@color/navigationBarColor"
+                android:textSize="17sp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/custom_round_white_view_bg"
+                android:orientation="horizontal">
+
+                <utils.font_package.Button_Regular_black_text
+                    android:id="@+id/bt_division_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="3dp"
+                    android:background="@android:color/transparent"
+                    android:prompt="@string/spinner_title4"
+                    android:textColor="@color/navigationBarColor"
+
+                    />
+                <View
+                    android:layout_width="0.8dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_marginTop="2dp"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="5"
+                    android:src="@drawable/drop_icon"
+                    android:padding="6.5dp"
+                    android:id="@+id/spinner_img_dision_map"
+                     />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            >
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+
+                android:text="Manager:"
+                android:gravity="center"
+                android:textColor="@color/navigationBarColor"
+                android:textSize="17sp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/custom_round_white_view_bg"
+                android:orientation="horizontal">
+
+                <utils.font_package.Button_Regular_black_text
+                    android:id="@+id/bt_managerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="3dp"
+                    android:background="@android:color/transparent"
+                    android:prompt="@string/spinner_title4"
+                    android:textColor="@color/navigationBarColor"
+
+                    />
+                <View
+                    android:layout_width="0.8dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:layout_marginTop="2dp"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="5"
+
+                    android:padding="6.5dp"
+                    android:id="@+id/spinner_img_manager_map"
+                    android:src="@drawable/drop_icon" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <utils.font_package.Text_view_Regular
+                android:textStyle="bold"
+                android:textColor="@color/navigationBarColor"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:text="Check for Satelite View:"
+                android:layout_gravity="center"
+                android:layout_width="200dp"
+                android:layout_height="30dp" />
+            <CheckBox
+                android:id="@+id/check_satelite"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:button="@drawable/custom_checkbox_design"
+                android:layout_marginRight="22dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="5dp"
+                android:checked="false"/>
+        </LinearLayout>
+
+        <LinearLayout
+
+
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <utils.font_package.Button_Bold
+
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:id="@+id/view_map_division"
+                android:layout_weight="2"
+                android:text="View Map"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="19sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_text_view_selector"
+                />
+            <utils.font_package.Button_Bold
+            android:id="@+id/bt_Back_division_wise"
+
+            android:layout_marginLeft="8dp"
+            android:textStyle="bold"
+                android:layout_weight="2"
+                android:text="Back"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="19sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_text_view_selector"
+                android:layout_width="fill_parent"
+            android:layout_height="40dp"
+
+            />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+        </LinearLayout>
+</LinearLayout>

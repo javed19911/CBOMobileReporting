@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="@drawable/custom_round_white_view_bg"
+    android:orientation="vertical" >
+    <utils.font_package.Text_view_Regular
+		android:id="@+id/inbox_id"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
+        <utils.font_package.Text_view_Regular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cnt "
+            android:id="@+id/cnt"
+            android:layout_marginLeft="3dp"
+            android:textColor="#000"
+            />
+        <utils.font_package.Text_view_Regular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name: "
+            android:layout_marginLeft="6dp"
+            android:textColor="#000"
+            />
+        <utils.font_package.Text_view_Regular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mail From: "
+            android:id="@+id/name_unlogged"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="4dp"
+            android:textColor="#000"
+            android:focusableInTouchMode="false"
+android:clickable="false"
+android:focusable="false"/>
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
+            <utils.font_package.Text_view_Regular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Head Qtr: "
+            android:layout_marginLeft="30dp"
+            android:textColor="#000"
+            />
+
+            <utils.font_package.Text_view_Regular
+            android:id="@+id/hq_unlogged"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="4dp"
+            android:text="Mail From: "
+            android:textColor="#000"
+             android:focusableInTouchMode="false"
+android:clickable="false"
+android:focusable="false"/>
+
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:visibility="gone"
+        android:layout_marginBottom="2dp">
+            <utils.font_package.Text_view_Regular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="id "
+            android:layout_marginLeft="3dp"
+            android:textColor="#000000"
+            />
+            <utils.font_package.Text_view_Regular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mail From: "
+            android:id="@+id/id_unlogged_name"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="4dp"
+            android:textColor="#000000"
+            android:focusableInTouchMode="false"
+android:clickable="false"
+android:focusable="false"/>
+        </LinearLayout>
+        
+        
+
+   
+
+</LinearLayout>

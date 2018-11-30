@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/center_logo"
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logo1234"
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/all_fields"
+                    android:layout_width="fill_parent"
+                    android:layout_gravity="center"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/custom_round_white_view_bg"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="38dp"
+                            android:layout_weight="11"
+                            android:padding="4dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/com_code" />
+                        <View
+                            android:layout_width="0.8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_height="fill_parent"
+                            android:background="@color/colorPrimary"/>
+
+                        <EditText
+                            android:id="@+id/ccode_2016"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:inputType="text"
+                            android:textCursorDrawable="@drawable/cursor_for_et"
+                            android:background="@drawable/edit_box_background_2016"
+                            android:hint="Company Code"
+                            android:imeOptions="actionNext"
+                            android:paddingLeft="8dp"
+                            android:textColor="#000"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/custom_round_white_view_bg"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="38dp"
+                            android:layout_weight="11"
+                            android:padding="4dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/user_id" />
+                        <View
+                            android:layout_width="0.8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_height="fill_parent"
+                            android:background="@color/colorPrimary"/>
+
+                        <EditText
+                            android:id="@+id/userid_2016"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:textCursorDrawable="@drawable/cursor_for_et"
+                            android:inputType="text"
+                            android:background="@drawable/edit_box_background_2016"
+                            android:hint="User Id "
+                            android:imeOptions="actionNext"
+                            android:paddingLeft="7dp"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/custom_round_white_view_bg"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="38dp"
+                            android:padding="4dp"
+                            android:layout_weight="11"
+                            android:layout_gravity="center"
+                            android:src="@drawable/password" />
+                        <View
+                            android:layout_width="0.8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_height="fill_parent"
+                            android:background="@color/colorPrimary"/>
+                        <EditText
+                            android:id="@+id/pass_2016"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:textCursorDrawable="@drawable/cursor_for_et"
+                            android:layout_marginLeft="4dp"
+                            android:background="@drawable/edit_box_background_2016"
+                            android:hint="Password"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:paddingLeft="3dp"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/custom_round_white_view_bg"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="38dp"
+                            android:padding="4dp"
+                            android:layout_weight="11"
+
+                            android:layout_gravity="center"
+                            android:src="@drawable/enter_pin" />
+                        <View
+                            android:layout_width="0.8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_height="fill_parent"
+                            android:background="@color/colorPrimary"/>
+
+                        <EditText
+                            android:id="@+id/pin_2016"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:hint="Enter pin"
+                            android:textCursorDrawable="@drawable/cursor_for_et"
+                            android:background="@drawable/edit_box_background_2016"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:paddingLeft="7dp"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/custom_round_white_view_bg"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="38dp"
+                            android:layout_weight="11"
+                            android:padding="4dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/re_enter_pin" />
+                        <View
+                            android:layout_width="0.8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_height="fill_parent"
+                            android:background="@color/colorPrimary"/>
+
+
+                        <EditText
+                            android:id="@+id/repin_2016"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:background="@drawable/edit_box_background_2016"
+                            android:imeOptions="actionGo"
+                            android:inputType="textPassword"
+                            android:paddingLeft="7dp"
+                            android:hint="Re-enter pin"
+                            android:textCursorDrawable="@drawable/cursor_for_et"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3.2"
+                            android:text="ERROR...404"
+                            android:textColor="#ed3237"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            android:visibility="invisible"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+                        <utils.font_package.Button_Bold
+                            android:textAllCaps="false"
+                            android:id="@+id/submit"
+                            android:layout_width="fill_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Login"
+
+
+                            android:gravity="center"
+                            android:layout_marginBottom="10dp"
+                            />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

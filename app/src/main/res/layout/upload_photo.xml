@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/textColorPrimary">
+    <include layout="@layout/hadder_2016"/>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="5dp"
+        android:background="@drawable/custom_round_white_view_bg"
+        android:layout_height="fill_parent">
+    <ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
+
+
+
+     <LinearLayout
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="10dp"
+         android:orientation="vertical" >
+
+         <ImageView
+             android:id="@+id/upload_pic"
+             android:layout_width="300dp"
+             android:layout_height="345dp"
+             android:scaleType="fitXY"
+             android:layout_gravity="center"
+             android:background="@drawable/custom_round_white_view_bg"
+             android:src="@drawable/mypic" />
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="20dp"
+             android:layout_weight="1.03"
+             android:orientation="vertical" >
+
+             <utils.font_package.Button_Bold
+                 android:id="@+id/camera"
+                 android:layout_width="fill_parent"
+                 android:layout_height="40dp"
+                 android:text="Click Picture"
+                 android:textAllCaps="false"
+                 android:gravity="center"
+                 android:layout_gravity="center"
+                 android:background="@drawable/button_text_view_selector"/>
+
+             <utils.font_package.Button_Bold
+                 android:id="@+id/upload_btn"
+                 android:layout_width="fill_parent"
+                 android:layout_height="40dp"
+                 android:text="Send to H.O."
+                 android:textAllCaps="false"
+                 android:gravity="center"
+                 android:layout_gravity="center"
+                 android:layout_marginTop="15dp"
+                 android:background="@drawable/button_text_view_selector"/>
+
+             <utils.font_package.Button_Bold
+                 android:id="@+id/upload_back"
+                 android:layout_width="fill_parent"
+                 android:layout_height="40dp"
+                 android:text="Back"
+                 android:textAllCaps="false"
+                 android:gravity="center"
+                 android:layout_gravity="center"
+                 android:layout_marginTop="15dp"
+                 android:background="@drawable/button_text_view_selector"/>
+         </LinearLayout>
+     </LinearLayout>
+
+    </ScrollView></LinearLayout>
+    </LinearLayout>

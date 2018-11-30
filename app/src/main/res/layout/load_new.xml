@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/textColorPrimary">
+    <include layout="@layout/hadder_2016"/>
+
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_margin="8dp"
+    android:padding="5dp"
+    android:background="@drawable/custom_round_white_view_bg">
+    <utils.font_package.Text_view_Regular
+        android:id="@+id/ver_text"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_height="200dp"
+        android:layout_above="@+id/load_web"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="61dp"
+        android:text="Version :"
+        android:textColor="#fff"></utils.font_package.Text_view_Regular>
+
+    <utils.font_package.Button_Bold
+        android:id="@+id/load_web"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textAllCaps="false"
+        android:maxWidth="250dp"
+        android:text="Get New Version"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/button_text_view_selector"/>
+
+
+</LinearLayout>
+
+      
+
+</LinearLayout>

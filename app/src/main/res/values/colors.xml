@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="titlebackgroundcolor">#6f2a02</color>
+    <color name="background_color">#FDFD96</color>
+    <color name="White_new">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="colorPrimary">#066199</color>
+    <color name="colorPrimaryDark">#104c6c</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="wallet_primary_text_holo_light">#000000</color>
+    <color name="colorAccent">#000000</color>
+    <color name="striper_font_color">#043655</color>
+    <color name="logo_green">#267b1b</color>
+    <color name="hyperLink">#3e60F3</color>
+
+    <color name="tab_unsellected">#125688</color>
+    <color name="tab_sellected">#00afef</color>
+    <color name="tab_sellected1">#3e4095</color>
+
+    <color name="common_action_bar_splitter">#d2d2d2</color>
+
+    <color name="red">#f00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="activity_bg">#aaa</color>
+    <color name="primary">#000</color>
+    <color name="white">#FFFFFF</color>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners
+        android:topLeftRadius="15dp"
+        android:topRightRadius="15dp"/>
+
+    <stroke android:width="0dp"
+        android:color="@color/tab_sellected"
+        />
+
+    <solid
+        android:color="@color/tab_sellected"/>
+    <padding
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp"
+        android:bottom="1dp"
+        />
+
+</shape>

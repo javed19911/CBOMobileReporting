@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/hadder_2016" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="3dp"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/rpt_list_dcr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="#0000"
+            android:dividerHeight="1dp"
+            android:stackFromBottom="false"
+            android:transcriptMode="normal" />
+
+    </LinearLayout>
+</LinearLayout>

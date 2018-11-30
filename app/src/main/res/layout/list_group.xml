@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f4f5fa"
+        android:elevation="5dp">
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:text="+"
+            android:textSize="20sp"
+            android:id="@+id/expend"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/header"
+            android:layout_toRightOf="@+id/expend"
+            android:text="Doctor"
+            android:layout_marginLeft="0dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/e_msg"
+            android:layout_marginRight="10dp">
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:text="0"
+                android:textSize="10sp"
+                android:id="@+id/call_count"
+                android:background="@drawable/button_back_light_2016"
+                android:textColor="#fff"
+                android:gravity="center"
+                android:layout_margin="3dp"
+                android:textStyle="bold"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/msg_1"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:elevation="3dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/DA_layout">
+
+    </TableLayout>
+
+</LinearLayout>

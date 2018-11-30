@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/hadder_refresh_2016"/>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="5dp"
+        android:background="@drawable/custom_round_white_view_bg">
+
+        >
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <utils.font_package.Text_view_Regular
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dcr Date     :"
+
+
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"/>
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" No Dcr Date    :"
+                        android:id="@+id/dcr_date_id"
+
+
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <utils.font_package.Text_view_Regular
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Work With   :"
+
+
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"/>
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No one selected for work with :"
+                        android:id="@+id/dcr_work_id"
+
+
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/route_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Route          :"
+
+
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"/>
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No Area Selected :"
+                        android:id="@+id/dcr_route_getDcr"
+
+
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Area            :"
+
+
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"/>
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No Area Selected :"
+                        android:id="@+id/dcr_area_id"
+
+
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+
+                    android:orientation="vertical" >
+
+                    <utils.font_package.Button_Bold
+                        android:textAllCaps="false"
+                        android:id="@+id/Dcr_day_update"
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:text="Replan"
+                        android:layout_marginTop="20dp"
+                        android:textColor="#fff"
+                        android:background="@drawable/button_text_view_selector"
+                        />
+
+                    <utils.font_package.Button_Bold
+                        android:textAllCaps="false"
+                        android:id="@+id/dcr_stsbk"
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:text="Back"
+                        android:textColor="#fff"
+                        android:background="@drawable/button_text_view_selector"/>
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
+</LinearLayout>

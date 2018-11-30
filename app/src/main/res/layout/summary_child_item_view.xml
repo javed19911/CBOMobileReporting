@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="16"
+            android:background="@drawable/custom_square_transparent_bg"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:padding="2dp"
+            >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="18dp"
+                            android:layout_height="20dp"
+                            android:text="+"
+                            android:textSize="18sp"
+                            android:id="@+id/expend"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Main Item"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="13dp"
+                            android:textColor="@color/navigationBarColor"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="5dp"
+                            android:textSize="13dp"
+                            android:textColor="@color/navigationBarColor"
+                            android:text="00.00"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="25dp"
+                            android:id="@+id/call_time_img"
+                            android:src="@drawable/call_time_img"/>
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/call_edit">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/remark_layout"
+                                    android:visibility="gone"
+                                    android:layout_toLeftOf="@+id/attach"
+                                    android:layout_marginLeft="5dp">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginRight="5dp"
+                                            android:paddingLeft="5dp"
+                                            android:textSize="11dp"
+                                            android:textColor="#000"
+                                            android:text="Remark goes here\n line 1\n line 2"
+                                            android:id="@+id/remark_text" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/attach"
+                                    android:visibility="gone"
+                                    android:layout_alignParentRight="true">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="18dp"
+                                            android:src="@drawable/attach"/>
+
+                                        <View
+                                            android:layout_width="2dp"
+                                            android:layout_height="match_parent"
+                                            android:background="@color/colorPrimary"/>
+
+                                </LinearLayout>
+
+
+                        </RelativeLayout>
+
+
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/call_edit"
+                            android:layout_marginRight="2dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_toLeftOf="@+id/call_delete"
+                            android:src="@android:drawable/ic_menu_edit"/>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/call_delete"
+                            android:layout_alignParentRight="true"
+                            android:src="@android:drawable/ic_menu_delete"/>
+
+                </RelativeLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/dr_detail">
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/work_with">
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/promotion">
+
+                </TableLayout>
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/gift">
+
+                </TableLayout>
+
+        </LinearLayout>
+</LinearLayout>

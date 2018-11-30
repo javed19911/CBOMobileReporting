@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--<android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:elevation="3dp"
+        card_view:cardCornerRadius="3dp">-->
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/custom_square_transparent_bg"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/particulars"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:text="Name"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:textSize="15sp" />
+
+            <!--<TextView
+                android:layout_width="match_parent"
+                android:background="@color/colorPrimaryDark"
+                android:layout_height="1dp"/>-->
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lay_add"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/custom_round_dark_view_bg"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="Add"
+                        android:visibility="gone"
+                        android:padding="3dp"
+                        android:textSize="11sp"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/add_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title"
+                        android:background="@drawable/button_back_light_2016"
+                        android:textColor="@color/white"
+                        android:text="-"
+                        android:padding="3dp"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+
+
+                </LinearLayout>
+
+
+<!--
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:id="@+id/lay_edit"
+                    android:background="@drawable/custom_round_dark_view_bg"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:text="Edit"
+                        android:padding="3dp"
+                        android:textSize="11sp"
+                        android:gravity="center"
+                        android:textColor="@color/colorPrimaryDark"/>
+                    <TextView
+                        android:id="@+id/edit_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title"
+                        android:background="@color/hyperLink"
+                        android:textColor="@color/white"
+                        android:text="-"
+                        android:padding="3dp"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:id="@+id/lay_del"
+                    android:background="@drawable/custom_round_dark_view_bg"
+                    android:layout_weight="1"
+
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:text="Delete"
+                        android:padding="3dp"
+                        android:textSize="11sp"
+                        android:gravity="center"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <TextView
+                        android:id="@+id/delete_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title"
+                        android:textColor="@color/white"
+                        android:background="@color/hyperLink"
+                        android:text="-"
+                        android:padding="3dp"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+
+
+                </LinearLayout>-->
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    <!--</android.support.v7.widget.CardView>-->
+
+</LinearLayout>

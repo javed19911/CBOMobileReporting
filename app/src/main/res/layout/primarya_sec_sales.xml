@@ -1,0 +1,86 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+
+
+    <include layout="@layout/hadder_2016"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ccc"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <utils_new.UnderlineTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="pre"
+            android:id="@+id/previous"
+            android:textColor="@color/hyperLink"
+            android:layout_marginRight="25dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="month"
+            android:id="@+id/month"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="17sp"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+        <utils_new.UnderlineTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:textColor="@color/hyperLink"
+            android:textSize="20sp"
+            android:text="next"
+            android:gravity="center"
+            android:id="@+id/next"/>
+
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_gravity="bottom"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:layout_margin="5dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/back"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:elevation="3dp"
+            android:background="@drawable/button_back_2016"/>
+
+        <ExpandableListView
+            android:id="@+id/summary_list"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:layout_above="@+id/back"
+            android:divider="#fff"
+            android:dividerHeight="0dp"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/textColorPrimary"
+    android:padding="3dp"
+    >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:background="@drawable/custom_square_transparent_bg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="145dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+            <utils.font_package.Text_view_Bold_16
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="T.P. Report   : "
+                android:textColor="@color/wallet_primary_text_holo_light"
+                android:textSize="20dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+
+
+            >
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                >
+                <utils.font_package.Text_view_Bold_16
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Date               :"
+
+                    />
+                <utils.font_package.Text_view_Regular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="filldate"
+                    android:layout_marginLeft="10dp"
+
+                    android:id="@+id/tv_tp_date" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+
+                >
+                <utils.font_package.Text_view_Bold_16
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="WorkWith      :"
+
+                    />
+                <utils.font_package.Text_view_Regular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="filldate"
+                    android:layout_marginLeft="10dp"
+
+                    android:id="@+id/tv_tp_workwith" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+
+                >
+                <utils.font_package.Text_view_Bold_16
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Area               :"
+
+                    android:textSize="17sp"
+                    android:textColor="#fff"
+
+                    />
+                <utils.font_package.Text_view_Regular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="filldate"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:textColor="#fff"
+                    android:layout_marginLeft="10dp"
+
+                    android:id="@+id/tv_tp_area" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+
+                >
+                <utils.font_package.Text_view_Bold_16
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Remark          :"
+
+
+                    />
+                <utils.font_package.Text_view_Regular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="filldate"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:textColor="#fff"
+                    android:layout_marginLeft="10dp"
+
+                    android:id="@+id/tv_tp_remark" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="5dp"
+
+                >
+                <utils.font_package.Text_view_Bold_16
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Doctor          :"
+
+
+                    />
+                <utils.font_package.Text_view_Regular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="filldate"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:textColor="#fff"
+                    android:layout_marginLeft="10dp"
+
+                    android:id="@+id/tv_tp_doctor" />
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="3dp"
+                android:id="@+id/DA_layout">
+
+            </TableLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

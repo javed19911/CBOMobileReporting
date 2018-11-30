@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:background="@drawable/bg_new"
+    android:orientation="vertical" >
+    <TextView
+		android:id="@+id/inbox_id"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type: "
+            android:layout_marginLeft="3dp"
+            android:textColor="#fff"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mail From: "
+            android:id="@+id/type"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="4dp"
+            android:textColor="#fff"
+            android:focusableInTouchMode="false"
+android:clickable="false"
+android:focusable="false"/>
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name: "
+            android:layout_marginLeft="3dp"
+            android:textColor="#fff"
+            />
+
+        <TextView
+            android:id="@+id/emp_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="4dp"
+            android:text="Mail From: "
+            android:textColor="#fff"
+             android:focusableInTouchMode="false"
+android:clickable="false"
+android:focusable="false"/>
+
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time: "
+            android:layout_marginLeft="3dp"
+            android:textColor="#fff"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mail From: "
+            android:id="@+id/emp_time"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="4dp"
+            android:textColor="#fff"
+            android:focusableInTouchMode="false"
+android:clickable="false"
+android:focusable="false"/>
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Actual Area: "
+            android:layout_marginLeft="3dp"
+            android:textColor="#fff"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mail From: "
+            android:id="@+id/emp_act_area"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="4dp"
+            android:textColor="#fff"
+            android:focusableInTouchMode="false"
+android:clickable="false"
+android:focusable="false"/>
+        </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/mob_loc"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rpt. Area: "
+            android:layout_marginLeft="3dp"
+            android:textColor="#fff"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mail From: "
+            android:id="@+id/emp_rpt_area"
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="4dp"
+            android:textColor="#fff"
+            android:focusableInTouchMode="false"
+            android:clickable="false"
+            android:focusable="false"/>
+        </LinearLayout>
+
+   
+
+</LinearLayout>

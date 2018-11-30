@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/send" android:title="Send"
+        android:icon="@android:drawable/ic_menu_send"
+        android:orderInCategory="100" app:showAsAction="always"/>
+
+    <item android:id="@+id/draft" android:title="Save as Draft"
+        android:orderInCategory="100" app:showAsAction="never"/>
+
+    <item android:id="@+id/show_draft" android:title="Show Draft"
+        android:orderInCategory="100" app:showAsAction="never"/>
+
+    <item android:id="@+id/attach" android:title="Attach file"
+        android:icon="@drawable/attach_overflow"
+        android:orderInCategory="10" app:showAsAction="always">
+
+        <menu>
+
+            <item android:id="@+id/camera" android:title="Camera"
+                android:icon="@android:drawable/ic_menu_camera"
+                android:orderInCategory="100" app:showAsAction="always"/>
+
+            <item android:id="@+id/galary" android:title="Gallery"
+                android:icon="@android:drawable/ic_menu_gallery"
+                android:orderInCategory="100" app:showAsAction="always"/>
+
+            <item android:id="@+id/file" android:title="Other File"
+                android:icon="@drawable/attach_overflow"
+                android:orderInCategory="100" app:showAsAction="always"/>
+
+        </menu>
+
+
+        </item>
+
+</menu>

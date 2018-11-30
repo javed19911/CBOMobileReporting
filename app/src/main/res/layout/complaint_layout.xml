@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical">
+
+    <include layout="@layout/hadder_2016" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="8dp"
+        android:background="@drawable/custom_round_white_view_bg"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:weightSum="10"
+            android:orientation="horizontal">
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.8"
+                android:text="C.No."
+                android:textColor="@color/navigationBarColor"
+                android:textSize="18dp" />
+
+            <utils.font_package.Edit_text_Regular
+                android:id="@+id/edt_complain_cno"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="2.2"
+                android:clickable="false"
+                android:editable="false"
+                android:gravity="center"
+                android:textColor="@color/navigationBarColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.8"
+                android:text="Date:"
+                android:textColor="@color/navigationBarColor"
+                android:textSize="18dp"
+
+                android:textStyle="bold" />
+
+            <utils.font_package.Edit_text_Regular
+
+                android:id="@+id/edt_complain_date"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.2"
+                android:clickable="false"
+                android:editable="false"
+                android:focusableInTouchMode="true"
+                android:text=""
+                android:textColor="@color/navigationBarColor"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+
+            >
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:text="Retailer Name:"
+                android:textColor="@color/navigationBarColor"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/drop_bg"
+                android:orientation="horizontal">
+
+                <utils.font_package.Button_Regular_black_text
+                    android:id="@+id/bt_complaion_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+
+                    android:background="@android:color/transparent"
+                    android:prompt="@string/spinner_title4"
+                    android:textColor="@color/navigationBarColor"
+
+                    />
+
+                <View
+                    android:layout_width="1.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3.5dp"
+                    android:layout_marginBottom="3.5dp"
+                    android:background="@color/colorPrimaryDark"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="4"
+
+                    android:padding="6.5dp"
+                    android:id="@+id/spinner_img"
+                    android:src="@drawable/drop_icon" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"
+
+            >
+
+            <utils.font_package.Text_view_Bold_16
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Complain/Enquiry:"
+                android:textColor="@color/navigationBarColor"
+                android:textSize="18dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/attach_txt"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="left"
+                    android:text="* Attach Picture...."
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:textStyle="italic" />
+                <ImageView
+                    android:id="@+id/attachnew"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="2.5dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/button_text_view_selector"
+                    android:src="@android:drawable/ic_menu_camera" />
+
+            </LinearLayout>
+
+            <utils.font_package.Edit_text_Regular
+                android:id="@+id/edit_complaion_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:background="@drawable/custom_round_white_view_bg"
+                android:gravity="top"
+                android:hint="Text Here..... "
+                android:lines="8"
+                android:padding="8dp"
+                android:scrollHorizontally="false"
+                android:singleLine="false"
+                android:textColor="@color/navigationBarColor"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:gravity="center">
+
+            <utils.font_package.Button_Bold
+                android:id="@+id/bt_complaion_save"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_text_view_selector"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="18dp" />
+
+            <utils.font_package.Button_Bold
+                android:id="@+id/bt_complaion_back"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_text_view_selector"
+                android:text="Back"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

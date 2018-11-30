@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+
+    >
+
+    <include layout="@layout/hadder_2016" />
+    <GridView
+        android:id="@+id/grid_view_example"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:numColumns="3"
+        android:orientation="vertical"
+        android:stretchMode="columnWidth">
+
+    </GridView>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+
+            >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+
+                android:id="@+id/img_change_password"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="5dp"
+                android:layout_weight="2"
+                android:src="@drawable/change_pwd" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Change Password"
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_salary_slip"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_marginLeft="3.5dp"
+                android:layout_marginRight="3.5dp"
+                android:layout_weight="2"
+                android:src="@drawable/salary_slip" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Salary Slip"
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+
+        <LinearLayout
+
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_circular"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="2"
+                android:src="@drawable/circular" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Circular"
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+
+                android:id="@+id/img_declaration"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="5dp"
+                android:layout_weight="2"
+                android:src="@drawable/decl_ofsaving" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Declaration of Saving"
+
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_pi"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_marginLeft="3.5dp"
+                android:layout_marginRight="3.5dp"
+                android:layout_weight="2"
+                android:src="@drawable/perso_info" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Personal Information"
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/hide_dr_2016"
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_form16"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="2"
+                android:src="@drawable/form16" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Form 16"
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+
+                android:id="@+id/holiday"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="5dp"
+                android:layout_weight="2"
+                android:src="@drawable/dcr_reports_white" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Holiday List"
+
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:id="@+id/leave_req"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_marginLeft="3.5dp"
+                android:layout_marginRight="3.5dp"
+                android:layout_weight="2"
+                android:src="@drawable/request_leave_white" />
+
+            <utils.font_package.Text_view_Regular
+
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Leave Request"
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="140dp"
+            android:layout_height="155dp"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ImageView
+
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="2"
+                android:src="@drawable/form16" />
+
+            <utils.font_package.Text_view_Regular
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="12"
+                android:gravity="center|top"
+                android:text="Form 16"
+                android:textColor="@color/navigationBarColor" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>
+</LinearLayout>
+
+
+

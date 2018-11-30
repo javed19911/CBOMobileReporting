@@ -1,0 +1,125 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/previous_dr_visit"
+    android:orientation="vertical"
+    android:background="@drawable/custom_square_transparent_bg" >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#f4f5fa"
+    android:elevation="5dp"
+    android:visibility="gone"
+    android:padding="3dp"
+    android:layout_marginBottom="5dp"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:id="@+id/sn"
+        android:textSize="12dp"
+        android:textColor="@color/colorPrimaryDark"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  DR. Name  "
+        android:id="@+id/tv_dr_data"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark" />
+
+
+</LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/remark"
+        android:visibility="gone"
+        android:textSize="11dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="#000" />
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/details">
+
+    </TableLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    android:layout_margin="2dp"
+    >
+    <utils.font_package.Text_view_Regular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Visit Frequency     :"
+        android:textSize="18dp"
+
+        android:textColor="#000000"
+        android:id="@+id/tv_visit_frequency"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <utils.font_package.Text_view_Regular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="  Visit Frequency "
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:id="@+id/tv_visit_fre_data"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    android:layout_margin="2dp"
+    >
+    <utils.font_package.Text_view_Regular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Visited Dates         :"
+        android:id="@+id/tv_visit_date"
+        android:textSize="18dp"
+        android:textColor="#000000"
+
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <utils.font_package.Text_view_Regular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="  Visited Dates"
+        android:id="@+id/tv_dr_visited_date"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/tv_visit_date_data"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</LinearLayout>
+</LinearLayout>

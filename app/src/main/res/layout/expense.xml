@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/hadder_2016"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:background="@drawable/custom_square_transparent_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:text="D.A.Type"
+
+                />
+
+            <Spinner
+                android:background="@drawable/custom_round_dark_view_bg"
+                android:id="@+id/da_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="8dip"
+                android:prompt="@string/spinner_title7" />
+
+            <EditText
+                android:id="@+id/ex_da"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="Amt."
+                android:inputType="number"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:text="Distance"
+                />
+
+            <Spinner
+                android:background="@drawable/custom_round_dark_view_bg"
+                android:id="@+id/da_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dip"
+                android:layout_marginRight="8dip"
+
+
+                android:prompt="@string/spinner_title8" />
+
+            <EditText
+                android:id="@+id/ex_dis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="Amt."
+                android:inputType="number"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimary"/>
+
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="3dp"
+            android:id="@+id/DA_layout">
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:id="@+id/add_exp"
+                android:text="+"
+                android:background="@drawable/button_text_view_selector"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:text="Other Expenses"/>
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_exp"/>
+
+
+       </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <utils.font_package.Button_Regular_white
+            android:textColor="#fff"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:id="@+id/save_back1"
+            android:background="@drawable/button_text_view_selector"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+	

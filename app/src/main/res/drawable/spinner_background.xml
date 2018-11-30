@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/drop_bg" />
+
+    <item android:drawable="@drawable/drop_icon"
+        android:right="0px"
+        />
+    <item>
+        <shape android:shape="line">
+            <stroke android:width="3dp" android:color="#000"
+                android:dashWidth="1dp" />
+            <size android:height="0dp" />
+        </shape>
+    </item>
+</layer-list>

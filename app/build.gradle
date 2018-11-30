@@ -1,0 +1,81 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+android {
+    compileSdkVersion 26
+    buildToolsVersion '27.0.3'
+
+    defaultConfig {
+        applicationId "com.cbo.cbomobilereporting"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 295
+        versionName "2.95"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        jackOptions {
+//            enabled true
+//        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize = "4g"
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation files('libs/ftp4j-1.7.2.jar')
+    implementation files('libs/activation.jar')
+    implementation files('libs/mail.jar')
+    implementation files('libs/additionnal.jar')
+    implementation files('libs/jtds-1.2.7.jar')
+    implementation files('libs/okio-1.8.0.jar')
+    implementation files('libs/okhttp-2.5.0.jar')
+    implementation files('libs/pinchzoom.jar')
+    implementation files('libs/android-zoom-view.jar')
+    implementation files('libs/FlurryAnalytics-4.2.0.jar')
+    implementation files('libs/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
+    implementation files('libs/jxl.jar')
+    implementation files('libs/gson-2.6.2.jar')
+    //to check the version
+    implementation project(path: ':ShortcutBadger')
+    implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.google.android.gms:play-services-location:11.8.0'
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'org.jsoup:jsoup:1.8.3'
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'android.arch.lifecycle:extensions:1.0.0'
+
+    // glide
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+
+
+apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}
+apply plugin: 'kotlin-android-extensions'

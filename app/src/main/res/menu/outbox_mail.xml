@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <item android:id="@+id/Send"
+                android:title="Send"
+                android:orderInCategory="100"
+                app:showAsAction="never"/>
+
+            <item android:id="@+id/Reply_Forwarded"
+                android:title="Reply/Forwarded"
+                android:orderInCategory="100"
+                app:showAsAction="never"/>
+
+            <item android:id="@+id/Draft"
+                android:title="Draft"
+                android:icon="@drawable/attach_overflow"
+                android:orderInCategory="100"
+                app:showAsAction="never"/>
+
+</menu>

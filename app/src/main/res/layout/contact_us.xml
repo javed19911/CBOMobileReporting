@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+
+    >
+
+    <include layout="@layout/hadder_2016"/>
+    
+    <LinearLayout
+
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/custom_round_white_view_bg"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        
+        >
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        
+        <utils.font_package.Text_view_Bold_Black_large
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Powered By-"
+            android:textColor="#151c59"
+            />
+        <utils.font_package.Text_view_small_14
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/contact_us_details"
+
+            android:text="sdklfjklsj sdfk lsjdfl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" /></LinearLayout>
+
+            <LinearLayout
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <TextView
+                android:maxHeight="20dp"
+                android:textStyle="bold"
+                android:text="Copyright © 1999-2016 CBO Infotech All Rights Reserved."
+                android:id="@+id/viewpager_marquee"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:gravity="center"
+                android:textColor="@color/navigationBarColor"
+                android:textSize="12dp"
+                />
+            </LinearLayout>
+        </LinearLayout>
+        
+    </LinearLayout>
+
+</LinearLayout>

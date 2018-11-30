@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:id="@+id/tableLayout1"  
+    android:layout_width="match_parent"  
+    android:layout_height="wrap_content" >
+     <LinearLayout
+        android:id="@+id/tableRow4"  
+        android:layout_height="wrap_content"
+		 android:layout_marginLeft="10dp"
+		 android:layout_marginRight="10dp"
+        android:layout_width="match_parent">
+
+		<TextView
+			android:id="@+id/gift_label"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="kul"
+			android:layout_gravity="center_vertical"
+			android:layout_weight="1"
+			android:textColor="#000000"
+			android:textSize="18sp"/>
+
+		 <utils.font_package.Text_view_Regular
+			android:id="@+id/gift_label2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="kul2"
+			android:visibility="gone"
+			android:textSize="2sp"/>
+
+		 <utils.font_package.Text_view_Regular
+			android:id="@+id/gift_label_rate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="kul2"
+			android:visibility="gone"
+			android:textSize="2sp"/>
+
+		<CheckBox
+			android:id="@+id/gift_check"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="gone"
+			android:gravity="center"/>
+
+		<EditText
+			android:id="@+id/gift_txtAddress"
+			android:layout_width="match_parent"
+			android:inputType="number"
+			android:hint="qty"
+			android:layout_weight="2"
+			android:layout_gravity="right"
+			android:textColor="@color/navigationBarColor"
+			android:textSize="18sp"
+			android:layout_height="wrap_content"/>
+		</LinearLayout>
+</LinearLayout>

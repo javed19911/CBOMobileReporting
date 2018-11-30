@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/hadder_2016"
+        android:id="@+id/include2" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager_introduction"
+        android:layout_above="@+id/control"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_below="@+id/include2" />
+
+    <Button
+        android:id="@+id/next_img"
+        style="?android:attr/buttonStyleSmall"
+        android:background="@drawable/next"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:textColor="#ffffff"
+        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        />
+
+    <Button
+        android:id="@+id/back_img"
+        style="?android:attr/buttonStyleSmall"
+        android:background="@drawable/previous"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:textColor="#ffffff"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/viewPagerCountDots"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@+id/pager_introduction"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal" />
+
+
+
+    <!-- <utils_new.CustomImageVIew
+         android:id="@+id/img_sample"
+         android:layout_above="@+id/control"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_centerInParent="true"
+         android:src="@android:drawable/ic_menu_call"
+         android:scaleType="matrix"/>-->
+
+
+
+    <Button
+        android:id="@+id/save_sample_btn"
+        android:background="@drawable/save_next"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:textColor="#ffffff" />
+
+
+
+
+</RelativeLayout>

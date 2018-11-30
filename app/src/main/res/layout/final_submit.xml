@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/hadder_2016"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="5dp"
+        android:background="@drawable/custom_round_white_view_bg">
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+    
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/final_layout"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location: "
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_weight="3"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/loc_final"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DCR Date"
+                android:textStyle="bold"
+                android:layout_weight="2.8"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <EditText
+                android:id="@+id/DCR_Date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:textStyle="bold"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Working Type"
+                android:layout_weight="2.8"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/working_type"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginRight="5dp"
+                android:textStyle="bold"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+        <utils.font_package.Text_view_Regular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Remark: "
+        android:textColor="#fff"
+        
+        android:layout_marginTop="29dp"/>
+    <utils.font_package.Edit_text_Regular
+                android:layout_marginTop="5dp"
+                android:id="@+id/final_remark"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:lines="5"
+                android:singleLine="false"
+                android:gravity="left|top"
+                android:hint="Add Remark"
+                android:padding="5dp"
+                android:background="@drawable/custom_square_transparent_bg"
+                />
+    </LinearLayout>
+
+        <EditText
+            android:id="@+id/Late_Submit_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="15dp"
+            android:hint="Enter late Submit Remark"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimaryDark" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+    <utils.font_package.Button_Bold
+        android:textAllCaps="false"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:id="@+id/save_final"
+        android:text="Submit Dcr"
+        android:background="@drawable/button_text_view_selector"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"/>
+    
+        
+    </LinearLayout>
+    
+   
+    </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
+</LinearLayout>

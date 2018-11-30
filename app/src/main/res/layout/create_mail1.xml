@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical">
+
+    <include layout="@layout/hadder_with_overflow" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:padding="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/custom_square_transparent_bg">
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:id="@+id/rt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/topplfont"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" To "
+                        android:layout_margin="10dp"
+                        android:textSize="15sp"
+                        android:layout_gravity="center" />
+
+
+
+                    <EditText
+                        android:id="@+id/idfortoppl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3sp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:textSize="15sp"
+                        android:hint="---Select----"
+                        android:background="@android:color/transparent"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textMultiLine|textNoSuggestions" />
+                    />
+
+
+                    <Button
+                        android:id="@+id/idtoaddppl"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:drawable/ic_input_add"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@android:color/darker_gray" />
+
+                <LinearLayout
+                    android:id="@+id/rt2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/ccpplfont"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cc"
+                        android:layout_margin="10dp"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"/>
+
+
+                    <EditText
+                        android:id="@+id/idforccppl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="3sp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:background="@android:color/transparent"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:hint="---Select----"
+                        android:textSize="15sp"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textMultiLine|textNoSuggestions" />/>
+
+
+                    <Button
+                        android:id="@+id/idtoccppl"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:drawable/ic_input_add"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/line_cc"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@android:color/darker_gray" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+
+                    <EditText
+                        android:id="@+id/idforsubject"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Subject"
+                        android:background="@android:color/transparent"
+                        android:textSize="15sp"
+                        android:inputType="textMultiLine|textNoSuggestions" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@android:color/darker_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/idformessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="1"
+                        android:hint="Compose Mail"
+                        android:background="@android:color/transparent"
+                        android:textSize="15sp"
+                        android:scrollHorizontally="false"
+                        android:layout_marginBottom="20dp"
+                        android:textColor="@color/navigationBarColor" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical" >
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Add Attachment"
+                        android:id="@+id/add_attachment"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#000"/>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/attach_option"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/attach"
+                            android:text="Galary"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/cam"
+                            android:text="Camera"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/file"
+                            android:text="File"/>
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="220dp"
+                    android:minHeight="220dp"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/attach_img"
+                    android:layout_gravity="center_horizontal"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/sendmail2"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/button_text_view_selector"
+            android:text="Send"
+            android:layout_margin="5dp"
+            android:textColor="#fff"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/backmail2"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_text_view_selector"
+            android:text="Back"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+</LinearLayout>

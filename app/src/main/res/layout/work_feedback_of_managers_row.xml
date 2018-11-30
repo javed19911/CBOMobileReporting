@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="2dp"
+    >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <utils.font_package.Text_view_Regular
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:gravity="left|center"
+            android:text="1"
+            android:id="@+id/sr_no"
+            android:textColor="#000"
+            android:textSize="18sp" />
+
+        <utils.font_package.Text_view_Regular
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="7.2"
+            android:gravity="left|center"
+            android:text="1"
+            android:id="@+id/cust_id"
+            android:textColor="#000"
+            android:textSize="18sp" />
+        <TextView
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="7.2"
+            android:gravity="left|center"
+            android:text="1"
+            android:id="@+id/spin_id"
+            android:textColor="#000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/fields_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="3"
+            android:gravity="left|center"
+            android:text="Customer Selection "
+            android:textColor="#000"
+            android:textSize="15sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_weight="6"
+            android:background="@drawable/drop_bg"
+            android:orientation="horizontal">
+
+            <Button
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:id="@+id/drop_button"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp" />
+            <View
+                android:layout_width="1.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3.5dp"
+                android:layout_marginBottom="3.5dp"
+                android:background="@color/colorPrimaryDark"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="1dp"
+                android:padding="6.5dp"
+                android:layout_gravity="center"
+                android:id="@+id/spinner_img"
+                android:src="@drawable/drop_icon" />
+        </LinearLayout>
+
+
+
+
+    <!--<Spinner
+           android:entries="@array/number"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/drop"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/drop_down_item"
+            android:layout_weight="6">
+      </Spinner>-->
+    </LinearLayout>
+
+</LinearLayout>

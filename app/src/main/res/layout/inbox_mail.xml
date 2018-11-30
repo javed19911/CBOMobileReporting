@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/textColorPrimary">
+
+    <include layout="@layout/hadder_2016"/>
+
+    <ListView android:id="@+id/mailinbox_list"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+         android:layout_weight="1"
+         android:transcriptMode="normal"
+         android:stackFromBottom="false" />
+
+    <utils.font_package.Button_Bold
+        android:id="@+id/btn_inboxbk"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:text="Back"
+        android:textAllCaps="false"
+
+        android:background="@drawable/button_text_view_selector"
+        />
+
+</LinearLayout>

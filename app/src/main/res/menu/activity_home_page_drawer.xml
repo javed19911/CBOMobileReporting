@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group android:id="@+id/group1"
+        android:checkableBehavior="single"/>
+    <group android:id="@+id/group"
+        android:checkableBehavior="single"
+        android:orderInCategory="99">
+        <item android:title="Communicate">
+            <menu>
+                <item android:id="@+id/nav_share"
+                    android:icon="@drawable/vp_share1"
+                    android:title="Share" />
+                <item android:id="@+id/nav_contact_us"
+                    android:icon="@drawable/vp_contact_us1"
+                    android:title="Contact us" />
+            </menu>
+        </item>
+   </group>
+</menu>

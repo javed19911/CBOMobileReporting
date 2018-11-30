@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "173555013984",
+    "firebase_url": "https://cbofcm-197f1.firebaseio.com",
+    "project_id": "cbofcm-197f1",
+    "storage_bucket": "cbofcm-197f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173555013984:android:fb6ddfa9c2840e1a",
+        "android_client_info": {
+          "package_name": "com.cbo.cbomobilereporting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173555013984-1uc8q9r00k4i9sqrggd3jo9s9k7n2b7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoy12dne0_RJ-pP7nSWFNED74O-q1It_E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

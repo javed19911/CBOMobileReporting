@@ -1,0 +1,102 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/textColorPrimary">
+
+    <include layout="@layout/hadder_2016"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:padding="5dp"
+        android:background="@drawable/custom_square_transparent_bg" >
+
+        <utils.font_package.Button_Bold
+            android:id="@+id/workwith_save"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorPrimary"
+            android:background="@drawable/button_text_view_selector"
+            android:text="Done" />
+
+        <utils.font_package.Edit_text_Regular
+            android:id="@+id/myfilter"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="17sp"
+            android:textColor="@color/navigationBarColor"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/custom_round_dark_view_bg"
+            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:hint="search"
+
+            />
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal"
+            android:id="@+id/header"
+            android:background="@color/colorPrimary"
+            android:layout_below="@+id/myfilter"
+            android:padding="3dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:gravity="left"
+                android:layout_gravity="center_vertical"
+                android:text="Name"
+                android:textColor="#FFF"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"/>
+            <TextView
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:text="Work with"
+                android:gravity="center"
+                android:textSize="11sp"
+                android:textColor="#FFF"
+                android:checked="false"/>
+            <TextView
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="Work independent"
+                android:textSize="10sp"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:checked="false"/>
+
+        </LinearLayout>
+        <ListView
+            android:id="@+id/workwith_list"
+            android:layout_above="@+id/workwith_save"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/header">
+        </ListView>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progess"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
+

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical"
+
+
+    >
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+
+
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_id"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:text="Sales Amount"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <utils.font_package.Button_Bold_10_black
+                        android:id="@+id/spo_cnf_consignee"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:maxWidth="45dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/custom_round_dark_view_bg"
+                        android:text="Consignee"
+                        android:textAllCaps="false" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_sales_amt"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="right"
+
+                        android:text="Sales Amount" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_sales_return"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="2dp"
+                        android:maxWidth="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="end"
+                        android:text="Sales Return"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_breakage_exp"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center"
+                        android:gravity="end"
+                        android:text="Breakage Expiry"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_creadit_note_other"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center"
+                        android:layout_marginLeft="2dp"
+                        android:gravity="end"
+                        android:text="Credit Note Other"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_net_sales"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center"
+                        android:layout_marginLeft="2dp"
+                        android:gravity="end"
+                        android:text="Net Sales"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_Secondary_sales"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center"
+                        android:layout_marginLeft="2dp"
+                        android:gravity="end"
+                        android:text="Secondary Sales"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_receipt"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center"
+                        android:layout_marginLeft="2dp"
+                        android:gravity="end"
+                        android:maxWidth="40dp"
+                        android:text="Receipt"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Text_view_Bold_10
+                        android:id="@+id/spo_cnf_out_standing"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:maxWidth="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center"
+                        android:layout_marginLeft="2dp"
+                        android:gravity="end"
+                        android:text="Outstanding"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+                    <utils.font_package.Button_Bold_10_black
+                        android:id="@+id/spo_cnf_stock_amt"
+                        android:layout_width="match_parent"
+                        android:layout_weight=".98"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:background="@drawable/custom_round_dark_view_bg"
+                        android:text="Stock Amount"
+                        android:textAllCaps="false"
+                        android:textColor="#000"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

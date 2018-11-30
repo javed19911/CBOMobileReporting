@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/custom_square_transparent_bg"
+    android:layout_width="match_parent">
+
+        <utils.font_package.Text_view_Regular
+            android:gravity="center|left"
+            android:id="@+id/name_pob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kul"
+            android:layout_gravity="center_vertical"
+            android:textSize="15sp"
+            android:layout_weight="2"
+            android:textColor="@color/navigationBarColor"
+            />
+
+        <utils.font_package.Text_view_Regular
+            android:id="@+id/id_pob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kul2"
+            android:textSize="3sp"
+            android:visibility="gone" />
+
+        <utils.font_package.Text_view_Regular
+            android:id="@+id/rate_pob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kul2"
+            android:textColor="@color/navigationBarColor"
+            android:textSize="3sp"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:checked="false"
+            android:id="@+id/check_pob"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <utils.font_package.Edit_text_Regular
+            android:id="@+id/qty_pob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:hint="smp. qty"
+            android:layout_weight="2.8"
+            android:inputType="number"
+            android:textSize="13sp" />
+
+        <utils.font_package.Edit_text_Regular
+            android:id="@+id/pob_pob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:hint="POB"
+            android:inputType="number"
+            android:textSize="13sp"/>
+
+        <utils.font_package.Edit_text_Regular
+            android:id="@+id/noc_pob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:hint="NOC"
+            android:layout_weight="3"
+            android:inputType="number"
+            android:textSize="13sp"/>
+
+
+        <CheckBox
+            android:checked="false"
+            android:id="@+id/check_prescribe"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+</LinearLayout>

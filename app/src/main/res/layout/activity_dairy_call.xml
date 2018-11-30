@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/hadder_2016" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:weightSum="3"
+        android:id="@+id/tab"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="3dp"
+            android:elevation="6dp"
+            android:id="@+id/call"
+            android:background="@drawable/tab_selected"
+            android:text="Call"
+            android:layout_weight="2"/>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="3dp"
+            android:id="@+id/summary"
+            android:background="@drawable/tab_deselected"
+            android:text="Summary"
+            android:layout_weight="2"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/custom_square_transparent_bg"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/call_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+
+                        android:id="@+id/layout2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        >
+
+                        <utils.font_package.Text_view_Regular
+
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Location"
+                            android:textColor="@color/navigationBarColor"
+                            android:textSize="17sp" />
+
+                        <utils.font_package.Edit_text_Regular
+                            android:id="@+id/loc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="15dp"
+                            android:layout_toRightOf="@+id/textView1"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:ems="10"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="textMultiLine|textNoSuggestions"
+                            android:textColor="@color/navigationBarColor"
+                            android:textSize="17sp">
+
+                            <requestFocus />
+                        </utils.font_package.Edit_text_Regular>
+
+                        <Button
+                            android:id="@+id/address4dr"
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="3dp"
+                            android:text="Refresh"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Name"
+                            android:textColor="@color/navigationBarColor"
+                            android:textSize="17sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:background="@drawable/drop_bg"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/drname"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_weight="1"
+                                    android:background="@android:color/transparent"
+                                    android:minHeight="40dp"
+                                    android:prompt="@string/spinner_title4"
+                                    android:text="---Select---"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/navigationBarColor"
+
+                                    />
+
+                                <View
+                                    android:layout_width="1.5dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginBottom="3.5dp"
+                                    android:layout_marginTop="3.5dp"
+                                    android:background="@color/colorPrimaryDark" />
+
+                                <ImageView
+                                    android:id="@+id/spinner_img_drCall"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="1dp"
+                                    android:layout_weight="5"
+                                    android:padding="6.5dp"
+                                    android:src="@drawable/drop_icon" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/last_visited"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="3dp"
+                                android:text="Last visited on 20/01/2017"
+                                android:textColor="#800000"
+                                android:textSize="11dp"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+
+                        <utils.font_package.Edit_text_Regular
+                            android:id="@+id/get_workwith"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="8dip"
+                            android:layout_marginRight="8dip"
+
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="Click  + sign for Contact Person"
+                            android:inputType="textMultiLine|textNoSuggestions"
+                            android:textColor="@color/navigationBarColor"
+
+                            android:textSize="17sp" />
+
+                        <utils.font_package.Button_Bold
+                            android:id="@+id/getdcal"
+
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="+"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="23sp" />
+                    </LinearLayout>
+
+
+
+                    <CheckBox
+                        android:id="@+id/call_missed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:checked="false"
+                        android:visibility="gone"
+                        android:text="Interested"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/drop_bg"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btn_intrested"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:minHeight="40dp"
+                                android:prompt="@string/spinner_title4"
+                                android:text="---Select---"
+                                android:textAllCaps="false"
+                                android:textColor="@color/navigationBarColor"
+
+                                />
+
+                            <View
+                                android:layout_width="1.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="3.5dp"
+                                android:layout_marginTop="3.5dp"
+                                android:background="@color/colorPrimaryDark" />
+
+                            <ImageView
+                                android:id="@+id/intrested_img"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="1dp"
+                                android:layout_weight="7"
+                                android:padding="6.5dp"
+                                android:src="@drawable/drop_icon" />
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pob_layout"
+                        android:visibility="gone"
+                        android:layout_marginLeft="8dip"
+                        android:layout_marginRight="8dip"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <utils.font_package.Text_view_Regular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="P.O.B."
+                            android:textSize="17dp"
+                            android:textColor="@color/navigationBarColor" />
+
+                        <utils.font_package.Edit_text_Regular
+                            android:id="@+id/dairy_pob"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="    Enter P.O.B."
+                            android:inputType="number"
+                            android:textColor="@color/navigationBarColor"
+                            />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:id="@+id/product_layout"
+                        android:layout_marginLeft="8dip"
+                        android:layout_marginRight="8dip"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <utils.font_package.Button_Bold
+                            android:id="@+id/dairy_product"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Products"
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/textColorPrimary"
+                            android:textAllCaps="false"
+                            android:textSize="18dp"/>
+
+                        <utils.font_package.Button_Bold
+                            android:id="@+id/dairy_gift"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Gift"
+                            android:visibility="gone"
+                            android:textColor="@color/textColorPrimary"
+                            android:textAllCaps="false"
+                            android:textSize="18dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/dr_remark_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dip"
+                        android:layout_marginRight="8dip"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/dr_remark_Dp"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:layout_marginLeft="10dp"
+                                android:gravity="center"
+                                android:text="Remark"
+                                android:visibility="gone"
+                                android:textColor="@color/navigationBarColor"
+                                android:textSize="17sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/drop_bg"
+                                    android:orientation="horizontal">
+
+                                    <Button
+                                        android:id="@+id/remark"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="3dp"
+                                        android:layout_weight="1"
+                                        android:background="@android:color/transparent"
+                                        android:minHeight="40dp"
+                                        android:prompt="@string/spinner_title4"
+                                        android:text="---Select Remark---"
+                                        android:textAllCaps="false"
+                                        android:textColor="@color/navigationBarColor"
+
+                                        />
+
+                                    <View
+                                        android:layout_width="1.5dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginBottom="3.5dp"
+                                        android:layout_marginTop="3.5dp"
+                                        android:background="@color/colorPrimaryDark" />
+
+                                    <ImageView
+                                        android:id="@+id/remark_img"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_margin="1dp"
+                                        android:layout_weight="7"
+                                        android:padding="6.5dp"
+                                        android:src="@drawable/drop_icon" />
+                                </LinearLayout>
+
+
+
+                            </LinearLayout>
+
+
+
+                        </LinearLayout>
+
+
+                        <EditText
+                            android:id="@+id/dr_remark_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="top|left"
+                            android:layout_marginTop="10dp"
+                            android:hint="Remark Here.." />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/detail_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <TableLayout
+                            android:id="@+id/doc_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        </TableLayout>
+
+                        <TableLayout
+                            android:id="@+id/last_pob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                        </TableLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+
+                <utils.font_package.Button_Bold
+                    android:id="@+id/add"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_text_view_selector"
+                    android:text="Add Doctor"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="20sp" />
+
+
+                <utils.font_package.Button_Bold
+                    android:id="@+id/bkfinal_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="20sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_text_view_selector"
+                    android:text="Back"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="20sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/summary_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/back"
+            android:background="#fff"
+            android:divider="#fff"
+            android:dividerHeight="0dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:weightSum="3"
+        android:background="@color/tab_sellected"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+    </LinearLayout>
+
+</LinearLayout>
+

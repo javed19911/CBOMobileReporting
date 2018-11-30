@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0000"
+    tools:context="com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA">
+
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/close"
+        android:elevation="6dp"
+        android:background="#1f527e"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+    <!--  this list contains products -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main"
+        android:background="#fff"
+        android:orientation="vertical">
+
+
+        <include layout="@layout/hadder_2016" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <WebView
+        android:background="@drawable/custom_round_white_view_bg"
+        android:id="@+id/msg_webview"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/back"
+        android:layout_height="match_parent"
+        >
+
+    </WebView>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:text="Close"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/back"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:elevation="3dp"
+            android:background="@drawable/button_back_2016"/>
+</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

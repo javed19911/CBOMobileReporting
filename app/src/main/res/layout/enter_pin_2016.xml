@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    android:orientation="vertical"
+    >
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            >
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="170dp"
+                android:padding="15dp"
+                android:gravity="center"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/center_logo"
+                    android:layout_width="200dp"
+                    android:layout_height="170dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logo1234"
+
+                    />
+
+                <WebView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/center_logo1"
+                    android:visibility="gone"
+                    >
+
+                </WebView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_gravity="center"
+                >
+                <utils.font_package.Text_view_Regular
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="@color/navigationBarColor"
+                    android:layout_marginBottom="18dp"
+                    android:text="Please enter your PIN below"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/custom_round_white_view_bg"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="38dp"
+                        android:layout_weight="11"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/enter_pin" />
+                    <View
+                        android:layout_width="0.8dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="fill_parent"
+                        android:background="@color/logo_green"/>
+
+                    <utils.font_package.Edit_text_Regular
+                        android:id="@+id/pin_again22"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="2"
+                        android:textCursorDrawable="@drawable/cursor_for_et"
+                        android:imeOptions="actionGo"
+                        android:background="@drawable/edit_box_background_2016"
+                        android:hint="Enter pin"
+                        android:inputType="textPassword"
+                        android:paddingLeft="7dp"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/reset_pin_enter_pin"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot/Reset Pin ?"
+                    android:gravity="center|right"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                    <utils.font_package.Text_view_Regular
+                        android:id="@+id/version_code"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="Version : 000"
+                        android:textColor="@color/logo_green"
+                        android:textSize="14sp" />
+
+                    <utils.font_package.Button_Bold
+                        android:id="@+id/submit_login22_enter_pin"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/button_text_view_selector"
+                        android:gravity="center"
+                        android:text="Login"
+                        android:textAllCaps="false"
+                        android:textColor="#fff"
+                        android:textSize="22sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

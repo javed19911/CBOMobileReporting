@@ -1,0 +1,87 @@
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/textColorPrimary">
+    <include layout="@layout/hadder_2016"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/custom_round_white_view_bg"
+        android:layout_margin="8dp"
+        android:padding="5dp">
+
+
+        <ProgressBar
+            android:id="@+id/pb"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="130dp" />
+
+
+        <utils.font_package.Text_view_Regular
+            android:id="@+id/visual_compname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:textSize="18sp"
+             />
+
+        <utils.font_package.Text_view_Regular
+            android:id="@+id/visual_empname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/visual_compname"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+
+            android:textSize="22dp" />
+
+        <utils.font_package.Button_Bold
+            android:id="@+id/save_visual_download2"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:textAllCaps="false"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="121dp"
+            android:text="Download"
+
+            android:background="@drawable/button_text_view_selector"/>
+
+        <utils.font_package.Text_view_Bold_16
+            android:id="@+id/per"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pb"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text="0%"
+            />
+
+        <utils.font_package.Text_view_Regular
+            android:id="@+id/msgbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+id/per"
+            android:layout_marginTop="17dp"
+            android:text="TextView"
+            android:textColor="#000000" />
+
+    </RelativeLayout>
+</LinearLayout>
+
+

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/textColorPrimary"  >
+
+    <include layout="@layout/hadder_2016"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:padding="5dp"
+        android:background="@drawable/custom_round_white_view_bg">
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:id="@+id/logged_ccname"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"/>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/log_layout"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
+
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="90dp"
+                        android:layout_height="fill_parent"
+                        android:gravity="center|left"
+                        android:text="Status :"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/drop_bg"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/sts"
+                            android:padding="3dp"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="3dp" android:background="@android:color/transparent"
+
+                            />
+                        <View
+                            android:layout_width="1.5dp"
+                            android:layout_height="match_parent" android:background="@color/colorPrimaryDark"
+                            />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:layout_weight="4"
+                            android:src="@drawable/drop_icon"
+                            android:padding="7.5dp"
+                            android:id="@+id/spinner_img_logun_status"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/logged_emp"
+                    android:minHeight="50dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp">
+
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="90dp"
+                        android:layout_height="fill_parent"
+                        android:gravity="center|left"
+                        android:text="Employee"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@drawable/drop_bg"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/emp"
+                            android:padding="3dp"
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="3dp"
+                            android:background="@android:color/transparent"
+                            />
+                        <View
+                            android:layout_width="1.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="3.5dp"
+                            android:background="@color/colorPrimaryDark"
+                            android:layout_marginTop="3.5dp"/>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:layout_margin="1dp"
+                            android:layout_weight="4"
+                            android:src="@drawable/drop_icon"
+                            android:padding="7.5dp"
+                            android:id="@+id/spinner_img_logunlog_emp"
+                            />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="90dp"
+                        android:layout_height="fill_parent"
+                        android:gravity="center|left"
+                        android:text="Date"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/layout_date_upto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_square_transparent_bg"
+                        android:orientation="horizontal">
+
+                        <utils.font_package.Edit_text_Regular
+                            android:id="@+id/date_upto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="#fff"
+                            android:hint="Set Date"
+                            android:padding="5dp" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorPrimaryDark" />
+
+                        <Button
+                            android:id="@+id/btn_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:layout_margin="1dp"
+                            android:layout_weight="4"
+                            android:layout_gravity="center"
+                            android:background="@drawable/calender_00"
+                            android:textColor="#fff" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/logged_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="90dp"
+                        android:layout_height="fill_parent"
+                        android:gravity="center|left"
+                        android:text="TimeUpto "
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/layout_time_upto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_square_transparent_bg"
+                        android:orientation="horizontal">
+
+                        <utils.font_package.Edit_text_Regular
+                            android:id="@+id/time_upto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="#fff"
+                            android:hint="Set Time"
+                            android:padding="5dp" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorPrimaryDark" />
+
+                        <Button
+                            android:id="@+id/btn_viewtime"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:layout_margin="1dp"
+                            android:layout_weight="4"
+                            android:layout_gravity="center"
+                            android:background="@drawable/calender_00"
+                            android:textColor="#fff" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/chekbox_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp">
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="90dp"
+                        android:layout_height="fill_parent"
+                        android:gravity="center|left"
+                        android:text="Brief Report :"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/ck_logged"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="22dp"
+                        android:layout_marginTop="11dp"
+                        android:button="@drawable/custom_checkbox_design"
+                        android:checked="false" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp">
+                    <utils.font_package.Button_Bold
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/button_text_view_selector"
+                        android:id="@+id/show"
+                        android:text="Show"
+                        android:textAllCaps="false"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"/>
+                    <utils.font_package.Button_Bold
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/button_text_view_selector"
+                        android:id="@+id/logged_bk"
+                        android:text="Back"
+                        android:textAllCaps="false"
+                        android:layout_gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+
+</LinearLayout>

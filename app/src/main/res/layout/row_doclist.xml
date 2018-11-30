@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector_unselected"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <ImageView
+        android:id="@+id/doc_sample_img"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/rihanna"
+        />
+
+
+
+    <TextView
+        android:id="@+id/dcr_workwith_name"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:text="Rihanna Love the way lie"
+        android:textColor="#040404"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+
+    <TextView
+        android:id="@+id/dcr_workwith_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
+        android:textColor="#343434"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/list_row_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/promoted"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/done"
+        android:layout_gravity="center_vertical"/>
+
+    <!-- Rightend Arrow -->
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/arrow"
+        android:visibility="gone"
+        android:layout_gravity="center_vertical"/>
+
+
+
+</LinearLayout>

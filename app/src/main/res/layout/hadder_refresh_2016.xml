@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_hadder_ref"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/Theme.AppCompat"
+
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:id="@+id/hadder_text__ref"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:gravity="center"
+                android:lines="1"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:textStyle="bold"
+
+                />
+
+            <ImageView
+                android:layout_marginRight="7dp"
+                android:id="@+id/ref_header"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="9"
+                android:src="@drawable/ref" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <View
+
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:background="#fff"
+
+        ></View>
+
+
+</LinearLayout>

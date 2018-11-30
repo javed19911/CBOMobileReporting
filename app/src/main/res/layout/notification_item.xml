@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:id="@+id/not_main"
+        android:background="@drawable/custom_round_white_view_bg">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:id="@+id/not_subMain"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/not_title"
+            android:textStyle="bold"
+            android:lines="1"
+            android:textSize="18sp"
+            android:layout_marginLeft="10dp"
+            android:text="Title"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/not_des"
+            android:layout_below="@+id/not_title"
+            android:textSize="15sp"
+            android:layout_marginLeft="10dp"
+            android:text="Describtion"/>
+
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/not_time"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:text="Time"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/not_delete"
+            android:src="@android:drawable/ic_menu_delete"/>
+    </LinearLayout>
+
+</RelativeLayout>
