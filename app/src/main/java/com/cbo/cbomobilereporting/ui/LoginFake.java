@@ -45,6 +45,7 @@ import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
+import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -221,14 +222,13 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             public void onClick(View v) {
                 view = v;
                 if (checkDrawOverlayPermission()) {
-                    LoginFake(false);
+                    //LoginFake(false);
 
-                    /*try {
-                        Intent intent = new Intent(context, FloatingRemainderApproval.class);
-                        startService(intent);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }*/
+                    Intent intent = new Intent(context, Doctor_registration_GPS.class);
+                    intent.putExtra("id",0);
+                    intent.putExtra("name","hg");
+                    intent.putExtra("type","S");
+                    startActivity(intent);
                 }
             }
         });

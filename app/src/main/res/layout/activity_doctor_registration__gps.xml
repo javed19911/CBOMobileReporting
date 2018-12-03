@@ -176,13 +176,12 @@
 
 
 
+
                     <TextView
 
                         android:id="@+id/textView1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
                         android:layout_marginTop="10dp"
                         android:background="@color/colorPrimaryDark"
                         android:padding="3dp"
@@ -190,6 +189,143 @@
                         android:textColor="#FFF"
                         android:textSize="13sp"
                         android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/addressLayout"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.5"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
+                                android:text="Lane 1"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="3dp"
+                                android:id="@+id/lane1"
+                                android:background="@drawable/custom_square_transparent_bg"
+                                android:layout_weight="1"
+                                android:hint="Lane 1...."/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.5"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
+                                android:text="Lane 2"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="3dp"
+                                android:id="@+id/lane2"
+                                android:background="@drawable/custom_square_transparent_bg"
+                                android:layout_weight="1"
+                                android:hint="Lane 2...."/>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.5"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
+                                android:text="City"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="3dp"
+                                android:id="@+id/city"
+                                android:background="@drawable/custom_square_transparent_bg"
+                                android:layout_weight="1"
+                                android:hint="City...."/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.5"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
+                                android:text="PinCode"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="3dp"
+                                android:id="@+id/pincode"
+                                android:background="@drawable/custom_square_transparent_bg"
+                                android:layout_weight="1"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:hint="Pincode..."/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.5"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
+                                android:text="State"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="3dp"
+                                android:id="@+id/state"
+                                android:background="@drawable/custom_square_transparent_bg"
+                                android:layout_weight="1"
+                                android:hint="State..."/>
+                        </LinearLayout>
+
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/colorPrimaryDark" />
+
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -264,12 +400,7 @@
                         android:id="@+id/loc_img"
                         android:minHeight="200dp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-
-                    </LinearLayout>
 
                 </LinearLayout>
             </ScrollView>

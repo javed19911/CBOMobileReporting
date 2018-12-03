@@ -76,8 +76,10 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
 
 
     TextView loc,address,name_tag, refress_address1;
+    EditText lane1,lane2,city,pincode,state;
     Button drname, back,submit;
     ImageView dr_img,show_address;
+    LinearLayout addressLayout;
     Custom_Variables_And_Method customVariablesAndMethod;
     CBO_DB_Helper cbohelp;
     String dr_name = "", dr_id = "", doc_name = "";
@@ -136,6 +138,13 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
         refress_address1= (TextView) findViewById(R.id.refress_address1);
         dr_img= (ImageView) findViewById(R.id.spinner_img_drCall);
         show_address = (ImageView) findViewById(R.id.show_address);
+
+        addressLayout = findViewById(R.id.addressLayout);
+        lane1 = findViewById(R.id.lane1);
+        lane2= findViewById(R.id.lane2);
+        city= findViewById(R.id.city);
+        pincode= findViewById(R.id.pincode);
+        state= findViewById(R.id.state);
 
         tab_doctor= (Button) findViewById(R.id.doctor);
         tab_chemist= (Button) findViewById(R.id.chemist);
@@ -335,13 +344,31 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
                     new GPS_Timmer_Dialog(context,mHandler,"Registration in Progress...",REGISTRATION).show();
 
 
-                }else{
+                }else if(addressLayout.getVisibility() == View.VISIBLE){
+                    if (lane1.getText().toString().trim().isEmpty()){
+                        lane1.setError("Please enter Lane1...");
+                    }else if (lane2.getText().toString().trim().isEmpty()){
+                        lane2.setError("Please enter Lane2...");
+                    }else if (city.getText().toString().trim().isEmpty()){
+                        city.setError("Please enter city...");
+                    }else if (pincode.getText().toString().trim().isEmpty()){
+                        pincode.setError("Please enter pincode...");
+                    }else if (state.getText().toString().trim().isEmpty()){
+                        state.setError("Please enter state...");
+                    }else {
+                        String address = lane1.getText().toString() + "," + lane2.getText().toString() +"," +city.getText().toString()
+                                + "," + state.getText().toString() + "," + pincode.getText().toString() ;
+                        getLatLongFrom(address);
+                    }
+                } else{
                     //customVariablesAndMethod.UpdateGPS_Location_Forcefully(context);
                     Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
                     Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
                     new GPS_Timmer_Dialog(context,mHandler,"Scanning your Location...",REFRESH).show();
                 }
             }
+
+
         });
 
 
@@ -349,6 +376,8 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
 
     }
 
+    private void getLatLongFrom(String address) {
+    }
 
     private final Handler mHandler = new Handler() {
         @Override
