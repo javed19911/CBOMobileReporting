@@ -51,7 +51,7 @@ public class Msg_ho extends AppCompatActivity {
     Custom_Variables_And_Method customVariablesAndMethod;
     Context context;
     WebView webView;
-    Bundle bundle;
+    Intent bundle;
     String url;
 
 
@@ -103,9 +103,9 @@ public class Msg_ho extends AppCompatActivity {
             }
         });
 
-        bundle = getIntent().getExtras();
-        if ((bundle != null) && ((bundle.getString("msg_ho")) != null)) {
-            url = bundle.getString("msg_ho");
+        bundle = getIntent();
+        if ((bundle != null) && ((bundle.getStringExtra("msg_ho")) != null)) {
+            url = bundle.getStringExtra("msg_ho");
         }else {
             url = "http://www.cboservices.com";
         }

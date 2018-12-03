@@ -264,6 +264,13 @@
                         android:id="@+id/loc_img"
                         android:minHeight="200dp"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </ScrollView>
 
