@@ -1173,7 +1173,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public long insert_phdoctor(int dr_id, String dr_name, String dr_code, String area, int spl_id,String LAST_VISIT_DATE
             , String CLASS, String PANE_TYPE, String POTENCY_AMT,String ITEM_NAME
             , String ITEM_POB, String ITEM_SALE, String DR_AREA, String DR_LAT_LONG, String FREQ, String NO_VISITED
-            ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN) {
+            ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN,int MAX_REG) {
 
         sd = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -1197,8 +1197,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         cv.put("FREQ", FREQ);
         cv.put("NO_VISITED", NO_VISITED);
 
-        cv.put("DR_LAT_LONG2", DR_LAT_LONG2);
-        cv.put("DR_LAT_LONG3", DR_LAT_LONG3);
+        cv.put("DR_LAT_LONG2", MAX_REG >1? DR_LAT_LONG2:DR_LAT_LONG);
+        cv.put("DR_LAT_LONG3", MAX_REG >2? DR_LAT_LONG3:DR_LAT_LONG);
         cv.put("COLORYN", COLORYN);
 
         cv.put("CRM_COUNT", CRM_COUNT);
@@ -1443,15 +1443,31 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         if (type.equals("C")) {
             cv.put("DR_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("DR_LAT_LONG2", latlong);
+                cv.put("DR_LAT_LONG3", latlong);
+            }
             sd.update("phchemist", cv, "chem_id =" + id, null);
         }else if (type.equals("D")) {
             cv.put("DR_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("DR_LAT_LONG3", latlong);
+                cv.put("DR_LAT_LONG2", latlong);
+            }
             sd.update("phdoctor", cv, "dr_id =" + id, null);
         }else if (type.equals("DP")) {
             cv.put("DR_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("DR_LAT_LONG3", latlong);
+                cv.put("DR_LAT_LONG2", latlong);
+            }
             sd.update(PH_DAIRY, cv, "DAIRY_ID =" + id, null);
         }else if (type.equals("S")) {
             cv.put("PA_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("PA_LAT_LONG3", latlong);
+                cv.put("PA_LAT_LONG2", latlong);
+            }
             sd.update("phparty", cv, "pa_id =" + id, null);
         }
 

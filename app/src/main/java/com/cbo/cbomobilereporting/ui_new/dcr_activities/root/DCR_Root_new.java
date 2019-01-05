@@ -1254,7 +1254,7 @@ public class DCR_Root_new extends AppCompatActivity {
                             c.getString("CLASS"), c.getString("PANE_TYPE"),c.getString("POTENCY_AMT"),
                             c.getString("ITEM_NAME"), c.getString("ITEM_POB"), c.getString("ITEM_SALE"),c.getString("AREA"),c.getString("DR_LAT_LONG")
                             , c.getString("FREQ"),c.getString("NO_VISITED") , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("COLORYN")
-                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"));
+                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"));
 
                 }
 
