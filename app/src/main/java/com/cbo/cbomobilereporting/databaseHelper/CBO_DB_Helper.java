@@ -1999,7 +1999,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         //cv.put("address", address);
         if(!allgiftid.equals("")) {
             cv.put("allgiftid", allgiftid);
-            cv.put("allgiftqty", allgiftid);
+            cv.put("allgiftqty", allgiftqty);
         }
 
         cv.put("remark", remark);
