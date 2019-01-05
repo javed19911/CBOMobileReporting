@@ -122,10 +122,29 @@ public abstract class CustomActivity extends AppCompatActivity {
             startService(intent);
         }
     }
-
     public void startLoctionService() {
+        startLoctionService(false);
+    }
+    public void startLoctionService(boolean forcefully) {
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Final_submit","N").equals("N") || forcefully) {
+            Intent intent = new Intent(this, MyLoctionService.class);
+            intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d(TAG, "Running on Android O");
+                //startForegroundService(intent);
+                startService(intent);
+            } else {
+                Log.d(TAG, "Running on Android N or lower");
+                startService(intent);
+            }
+        }else{
+            stopLoctionService();
+        }
+    }
+
+    public void stopLoctionService() {
         Intent intent = new Intent(this, MyLoctionService.class);
-        intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "Running on Android O");
             //startForegroundService(intent);

@@ -320,7 +320,8 @@ public class Dr_Sample extends AppCompatActivity implements Up_Dwn_interface{
             if (c.moveToFirst()) {
                 do {
                     list.add(new PobModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), c.getString(c.getColumnIndex("stk_rate")), c.getString(c.getColumnIndex("sn")),
-                            c.getInt(c.getColumnIndex("STOCK_QTY")), c.getInt(c.getColumnIndex("BALANCE"))));
+                            c.getInt(c.getColumnIndex("STOCK_QTY")), c.getInt(c.getColumnIndex("BALANCE")),
+                            c.getInt(c.getColumnIndex("SPL_ID"))));
                 } while (c.moveToNext());
             }
 

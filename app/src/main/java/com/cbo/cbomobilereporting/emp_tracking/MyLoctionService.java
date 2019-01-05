@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,13 +66,14 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.firebase.messaging.RemoteMessage;
 
 
 import utils.CBOUtils.Constants;
 import utils.MyConnection;
 import utils_new.Custom_Variables_And_Method;
 
-public class MyLoctionService extends IntentService implements
+public class MyLoctionService extends Service implements
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -105,27 +107,26 @@ public class MyLoctionService extends IntentService implements
 
 
     public MyLoctionService() {
-        //super();
-        super(MyLoctionService.class.getName());
+        super();
+        //super(MyLoctionService.class.getName());
 
     }
 
 
-   /* @Override
+    @Override
     public int onStartCommand(Intent intent,int flag,int startId) {
         super.onStartCommand(intent,flag, startId);
 
-
-
         startForgroungService(intent);
-        return START_STICKY;
-    }*/
 
+
+        return START_STICKY;
+    }
 
     private void startForgroungService(Intent intent){
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-            if (!mGoogleApiClient.isConnected())
-                return;
+            /*if (!mGoogleApiClient.isConnected())
+                return;*/
 
 
             Log.i(LOG_TAG, "Received Start Foreground Intent ");
@@ -154,7 +155,7 @@ public class MyLoctionService extends IntentService implements
 
             String CHANNEL_ID = "Location Service";// The id of the channel.
             CharSequence name =  "CBO Location Notification"; //getString(R.string.channel_name);// The user-visible name of the channel.
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+
 
 
             Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.cbo_icon);
@@ -187,7 +188,16 @@ public class MyLoctionService extends IntentService implements
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // Sets an ID for the notification, so it can be updated.
-                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
+                // Sets whether notifications posted to this channel should display notification lights
+                mChannel.enableLights(true);
+                // Sets whether notification posted to this channel should vibrate.
+                mChannel.enableVibration(true);
+                // Sets the notification light color for notifications posted to this channel
+                mChannel.setLightColor(Color.GREEN);
+                // Sets whether notifications posted to this channel appear on the lockscreen or not
+                mChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+                mChannel.setSound(null, null);
                 notificationManager.createNotificationChannel(mChannel);
             }
 
@@ -196,7 +206,16 @@ public class MyLoctionService extends IntentService implements
             startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,
                     notification);
 
+            if (!mGoogleApiClient.isConnected())
+                mGoogleApiClient.connect();
+
         } else if (intent.getAction().equals(Constants.ACTION.LIVE_TRACKING_ACTION)) {
+
+            if (!mGoogleApiClient.isConnected()) {
+                intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                startForgroungService(intent);
+            }
+
             Log.i(LOG_TAG, "LIVE tracking");
             String tracking = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tracking","N");
 
@@ -215,12 +234,21 @@ public class MyLoctionService extends IntentService implements
             Log.i(LOG_TAG, "Clicked Next");
         } else if (intent.getAction().equals(
                 Constants.ACTION.STOPFOREGROUND_ACTION)) {
+
+            if (!mGoogleApiClient.isConnected()) {
+                intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                startForgroungService(intent);
+            }
+
+           stopLocationUpdates();
             Log.i(LOG_TAG, "Received Stop Foreground Intent");
             stopForeground(true);
             stopSelf();
         }
+
+
     }
-    @Override
+    /*@Override
     protected void onHandleIntent(Intent intent) {
 
 
@@ -234,7 +262,7 @@ public class MyLoctionService extends IntentService implements
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -247,15 +275,21 @@ public class MyLoctionService extends IntentService implements
     public void onCreate() {
         super.onCreate();
 
-       /* myCon = new MyConnection(this);*/
         context=this;
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         myDbUtil = new CBO_DB_Helper(this);
         mCos = new MyCustomMethod(this);
 
+       /* myCon = new MyConnection(this);*/
+
+        init();
+
+    }
+
+    private void init(){
 
         if (!isGooglePlayServicesAvailable()) {
-
+            stopSelf();
         }
         createLocationRequest();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -263,15 +297,12 @@ public class MyLoctionService extends IntentService implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
-
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        if (!mGoogleApiClient.isConnected())
-            mGoogleApiClient.connect();
+
     }
 
     @Nullable

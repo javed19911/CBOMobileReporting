@@ -353,9 +353,10 @@
         </receiver>
 
         <service android:name=".emp_tracking.ServiceForSendingData10Minute" />
-        <service android:name=".ui_new.approval_activities.Remainder.FloatingRemainderApproval"
+        <service
+            android:name=".ui_new.approval_activities.Remainder.FloatingRemainderApproval"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <receiver android:name=".emp_tracking.ReciverFor10minuteData" />
 
@@ -455,7 +456,8 @@
             android:name="android.app.searchable"
             android:resource="@xml/searchable" />
 
-        <activity android:name=".ui_new.approval_activities.Remainder.RemainderActivity"></activity>
+        <activity android:name=".ui_new.approval_activities.Remainder.RemainderActivity" />
+        <activity android:name=".ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity"></activity>
     </application>
 
 </manifest>

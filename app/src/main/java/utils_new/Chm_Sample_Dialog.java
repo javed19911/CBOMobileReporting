@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,8 +44,10 @@ import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
 import utils.adapterutils.MyAdapter;
 import utils.adapterutils.RCPA_Adapter;
+import utils.model.DropDownModel;
 import utils.networkUtil.NetworkUtil;
 import utils.upload_download;
+import utils_new.CustomDialog.Spinner_Dialog;
 
 public class Chm_Sample_Dialog  implements Up_Dwn_interface {
 
@@ -58,7 +61,8 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
     int PA_ID = 0;
     ResultSet rs;
     ArrayAdapter<GiftModel> adapter;
-    List<GiftModel> list = new ArrayList<GiftModel>();
+    List<GiftModel> main_item_list = new ArrayList<GiftModel>();
+    List<GiftModel> display_item_list = new ArrayList<GiftModel>();
     ArrayList<String> id,score,sample,rate,item_list;//data1, data2, data3, data5;
     StringBuilder sb3, sb2, sb4, sb5,item_list_string;
     double mainval = 0.0;
@@ -67,11 +71,13 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
     Context context;
     String sample_name="",sample_pob="",sample_sample="";
     String sample_name_previous="",sample_pob_previous="",sample_sample_previous="";
+    ImageView speciality_filter;
     EditText search;
 
     Dialog dialog;
     public ProgressDialog progress1;
     private  static final int MESSAGE_INTERNET=1;
+    ArrayList<DropDownModel> Specialitis;
 
 
     public Chm_Sample_Dialog(@NonNull Context context, Handler hh, Bundle Msg, Integer response_code) {
@@ -100,7 +106,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
 
 
         TextView hader_text =(TextView) view.findViewById(R.id.hadder_text_1);
-        hader_text.setText("Chemsit Sample");
+        hader_text.setText("Chemist Sample");
        // hader_text.setText( Msg.getString("header"));
 
 
@@ -142,6 +148,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
 
         progress1 = new ProgressDialog(context);
         search= (EditText) view.findViewById(R.id.search);
+        speciality_filter = view.findViewById(R.id.filter);
         mylist = (ListView) view.findViewById(R.id.chm_sample_list);
         mylist.setItemsCanFocus(true);
         mylist.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
@@ -167,6 +174,27 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
 
 
 
+        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_DIVISION_FILTER_YN","N").equals("N")){
+
+            speciality_filter.setVisibility(View.GONE);
+
+        }
+
+        speciality_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (Specialitis == null){
+                    Specialitis = cbohelp.get_Specialitis();
+                }
+                new Spinner_Dialog(context, Specialitis, new Spinner_Dialog.OnItemClickListener() {
+                    @Override
+                    public void ItemSelected(DropDownModel item) {
+                        filer_item_speciality(item.getId());
+                    }
+                }).show();
+            }
+        });
 
 
 
@@ -179,28 +207,28 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                for (int l = 0; l < list.size(); l++) {
-                    if (!search.getText().toString().equals("") &&  search.getText().length() <= list.get(l).getName().length()) {
-                        if (list.get(l).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
+                for (int l = 0; l < display_item_list.size(); l++) {
+                    if (!search.getText().toString().equals("") &&  search.getText().length() <= display_item_list.get(l).getName().length()) {
+                        if (display_item_list.get(l).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
                             //mylist.smoothScrollToPosition(l);
                             mylist.smoothScrollToPositionFromTop(l,l,500);
-                            for (int j = l; j < list.size(); j++) {
-                                if (search.getText().length() <= list.get(j).getName().length()) {
-                                    if (list.get(j).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
-                                        list.get(j).setHighlight(true);
+                            for (int j = l; j < display_item_list.size(); j++) {
+                                if (search.getText().length() <= display_item_list.get(j).getName().length()) {
+                                    if (display_item_list.get(j).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
+                                        display_item_list.get(j).setHighlight(true);
                                     }else{
-                                        list.get(j).setHighlight(false);
+                                        display_item_list.get(j).setHighlight(false);
                                     }
                                 }else{
-                                    list.get(j).setHighlight(false);
+                                    display_item_list.get(j).setHighlight(false);
                                 }
                             }
                             break;
                         }else{
-                            list.get(l).setHighlight(false);
+                            display_item_list.get(l).setHighlight(false);
                         }
                     }else{
-                        list.get(l).setHighlight(false);
+                        display_item_list.get(l).setHighlight(false);
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -225,22 +253,22 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
                     StringBuilder sbRemark = new StringBuilder();
 
                     int j = 0;
-                    for (int i = 0; i < list.size(); i++) {
-                        boolean check = list.get(i).isSelected();
+                    for (int i = 0; i < main_item_list.size(); i++) {
+                        boolean check = main_item_list.get(i).isSelected();
                         if (check) {
                             if (j == 0) {
-                                if (list.get(i).getScore()!=null && !list.get(i).getScore().equals("")){
-                                    sbItemId.append(list.get(i).getId());
-                                    sbQty.append(list.get(i).getScore());
-                                    sbProduct.append(list.get(i).getSample());
-                                    sbRemark.append(list.get(i).getRate());
+                                if (main_item_list.get(i).getScore()!=null && !main_item_list.get(i).getScore().equals("")){
+                                    sbItemId.append(main_item_list.get(i).getId());
+                                    sbQty.append(main_item_list.get(i).getScore());
+                                    sbProduct.append(main_item_list.get(i).getSample());
+                                    sbRemark.append(main_item_list.get(i).getRate());
                                 }
                             } else {
-                                if (list.get(i).getScore()!=null && !list.get(i).getScore().equals("")){
-                                    sbItemId.append("^").append(list.get(i).getId());
-                                    sbQty.append("^").append(list.get(i).getScore());
-                                    sbProduct.append("^").append(list.get(i).getSample());
-                                    sbRemark.append("^").append(list.get(i).getRate());
+                                if (main_item_list.get(i).getScore()!=null && !main_item_list.get(i).getScore().equals("")){
+                                    sbItemId.append("^").append(main_item_list.get(i).getId());
+                                    sbQty.append("^").append(main_item_list.get(i).getScore());
+                                    sbProduct.append("^").append(main_item_list.get(i).getSample());
+                                    sbRemark.append("^").append(main_item_list.get(i).getRate());
                                 }
                             }
 
@@ -297,35 +325,35 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
                     //customVariablesAndMethod.msgBox(context,"Successfully Submitted....");
                 } else {
 
-                    for (int i = 0; i < list.size(); i++) {
-                        boolean check = list.get(i).isSelected();
+                    for (int i = 0; i < main_item_list.size(); i++) {
+                        boolean check = main_item_list.get(i).isSelected();
                         if (check) {
 
-                            id.add(list.get(i).getId());
-                            item_list.add(list.get(i).getName());
+                            id.add(main_item_list.get(i).getId());
+                            item_list.add(main_item_list.get(i).getName());
 
-                            if (list.get(i).getScore()==null || list.get(i).getScore().equals("")){
+                            if (main_item_list.get(i).getScore()==null || main_item_list.get(i).getScore().equals("")){
                                 score.add("0");
                             }else {
-                                score.add(list.get(i).getScore());
+                                score.add(main_item_list.get(i).getScore());
                             }
 
-                            if (list.get(i).getSample()==null || list.get(i).getSample().equals("")){
+                            if (main_item_list.get(i).getSample()==null || main_item_list.get(i).getSample().equals("")){
                                 sample.add("0");
                             }else {
-                                sample.add(list.get(i).getSample());
+                                sample.add(main_item_list.get(i).getSample());
                             }
 
-                            // data2.add(list.get(i).getSample());
-                            rate.add(list.get(i).getRate());
+                            // data2.add(display_item_list.get(i).getSample());
+                            rate.add(main_item_list.get(i).getRate());
 
                            /* ArrayList<String> mychmid = cbohelp.getChemistIdForsample();
 
                             if (!(mychmid.contains(Custom_Variables_And_Method.CHEMIST_ID))) {
 
 
-                                cbohelp.insertChemistSample(Custom_Variables_And_Method.CHEMIST_ID, list.get(i).getId(), list.get(i).getName(), list.get(i).getScore(), list.get(i).getSample());
-                                Log.e("^^^^^^^^", Custom_Variables_And_Method.CHEMIST_ID + "," + list.get(i).getId() + "," + list.get(i).getName() + "," + list.get(i).getScore());
+                                cbohelp.insertChemistSample(Custom_Variables_And_Method.CHEMIST_ID, display_item_list.get(i).getId(), display_item_list.get(i).getName(), display_item_list.get(i).getScore(), display_item_list.get(i).getSample());
+                                Log.e("^^^^^^^^", Custom_Variables_And_Method.CHEMIST_ID + "," + display_item_list.get(i).getId() + "," + display_item_list.get(i).getName() + "," + display_item_list.get(i).getScore());
                             }*/
 
                         } else {
@@ -431,6 +459,25 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
     }
 
 
+    private void filer_item_speciality(String SPL_ID){
+        display_item_list.clear();
+        if (SPL_ID.equalsIgnoreCase("0")){
+            display_item_list.addAll(main_item_list);
+        }else {
+            for (GiftModel item : main_item_list) {
+                if (item.getSPL_ID() == Integer.parseInt(SPL_ID)) {
+                    display_item_list.add(item);
+                }
+
+            }
+        }
+        if (callFromRcpa.equals("intent_fromRcpaCAll")) {
+            adapter = new RCPA_Adapter((Activity) context, display_item_list);
+        }else {
+            adapter = new MyAdapter((Activity) context, display_item_list);
+        }
+        mylist.setAdapter(adapter);
+    }
 
     @Override
     public void onDownloadComplete() {
@@ -444,23 +491,26 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
         @Override
         protected List<GiftModel> doInBackground(Integer... params) {
             // TODO Auto-generated method stub
-            list.clear();
+            main_item_list.clear();
+            display_item_list.clear();
             String ItemIdNotIn = "0";
             who = params[1];
             Cursor c = cbohelp.getAllProducts(ItemIdNotIn);
             if (c.moveToFirst()) {
                 do {
                     if (callFromRcpa.equals("intent_fromRcpaCAll")) {
-                        list.add(new GiftModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), "",
-                                c.getInt(c.getColumnIndex("STOCK_QTY")), c.getInt(c.getColumnIndex("BALANCE"))));
+                        main_item_list.add(new GiftModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), "",
+                                c.getInt(c.getColumnIndex("STOCK_QTY")), c.getInt(c.getColumnIndex("BALANCE")),c.getInt(c.getColumnIndex("SPL_ID"))));
                     }else {
-                        list.add(new GiftModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")),
-                                c.getString(c.getColumnIndex("stk_rate")),c.getInt(c.getColumnIndex("STOCK_QTY")), c.getInt(c.getColumnIndex("BALANCE"))));
+                        main_item_list.add(new GiftModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")),
+                                c.getString(c.getColumnIndex("stk_rate")),c.getInt(c.getColumnIndex("STOCK_QTY")),
+                                c.getInt(c.getColumnIndex("BALANCE")),c.getInt(c.getColumnIndex("SPL_ID"))));
                     }
 
                 } while (c.moveToNext());
             }
-            return list;
+            display_item_list.addAll(main_item_list);
+            return main_item_list;
 
         }
 
@@ -500,12 +550,12 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
                 String[] sample_pob1= sample_pob.split(",");
 
                 for (int i=0;i<sample_name1.length;i++){
-                    for (int j=0;j<list.size();j++) {
-                        if (sample_name1[i].equals(list.get(j).getName())) {
-                            list.get(j).setScore(sample_pob1[i]);
-                            list.get(j).setSample(sample_qty1[i]);
+                    for (int j=0;j<result.size();j++) {
+                        if (sample_name1[i].equals(result.get(j).getName())) {
+                            result.get(j).setScore(sample_pob1[i]);
+                            result.get(j).setSample(sample_qty1[i]);
 
-                           // list.get(j).setBalance( list.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
+                           // display_item_list.get(j).setBalance( display_item_list.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
                         }
                     }
                 }
@@ -514,9 +564,9 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
                 String[] sample_qty1_previous= sample_sample_previous.split(",");
 
                 for (int i=0;i<sample_name1_previous.length;i++){
-                    for (int j=0;j<list.size();j++) {
-                        if (sample_name1_previous[i].equals(list.get(j).getName())) {
-                            list.get(j).setBalance( list.get(j).getBalance() + Integer.parseInt(sample_qty1_previous[i]));
+                    for (int j=0;j<result.size();j++) {
+                        if (sample_name1_previous[i].equals(result.get(j).getName())) {
+                            result.get(j).setBalance( result.get(j).getBalance() + Integer.parseInt(sample_qty1_previous[i]));
                         }
                     }
                 }

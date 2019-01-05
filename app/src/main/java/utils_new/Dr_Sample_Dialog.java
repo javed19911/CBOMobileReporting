@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,8 +41,10 @@ import services.CboServices;
 import services.Up_Dwn_interface;
 import utils.adapterutils.PobAdapter;
 import utils.adapterutils.PobModel;
+import utils.model.DropDownModel;
 import utils.networkUtil.NetworkUtil;
 import utils.upload_download;
+import utils_new.CustomDialog.Spinner_Dialog;
 
 public class Dr_Sample_Dialog implements Up_Dwn_interface {
 
@@ -58,7 +62,8 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
     CBO_DB_Helper cbohelp;
     String item_id = "", item_name = "", item_qty = "", item_pob = "";
     ArrayAdapter<PobModel> adapter;
-    List<PobModel> list = new ArrayList<PobModel>();
+    List<PobModel> display_item_list = new ArrayList<PobModel>();
+    List<PobModel> main_item_list = new ArrayList<PobModel>();
     ArrayList<String> data1, data2, data3, data4, data5;
     StringBuilder itemid, itemname, itemqty, itempob;
     StringBuilder sb2, sb3, sb4, sb5;
@@ -68,8 +73,10 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
     Context context;
     EditText search;
     Boolean checkIfPOB_Entered=false;
+    ImageView speciality_filter;
 
     String sample_name="",sample_pob="",sample_sample="",sample_noc="";
+    ArrayList<DropDownModel> Specialitis;
 
 
     Dialog dialog;
@@ -117,6 +124,8 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
         search= (EditText) view.findViewById(R.id.search);
         mylist = (ListView) view.findViewById(R.id.dr_sample_list);
         save = (Button) view.findViewById(R.id.dr_sample_save);
+        speciality_filter = view.findViewById(R.id.filter);
+
         cbohelp = new CBO_DB_Helper(context);
         mylist.setItemsCanFocus(true);
         mylist.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
@@ -145,6 +154,28 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
         }
 
 
+        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_DIVISION_FILTER_YN","N").equals("N")){
+
+            speciality_filter.setVisibility(View.GONE);
+
+        }
+
+        speciality_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (Specialitis == null){
+                    Specialitis = cbohelp.get_Specialitis();
+                }
+                new Spinner_Dialog(context, Specialitis, new Spinner_Dialog.OnItemClickListener() {
+                    @Override
+                    public void ItemSelected(DropDownModel item) {
+                        filer_item_speciality(item.getId());
+                    }
+                }).show();
+            }
+        });
+
 
 
 
@@ -157,28 +188,28 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                for (int l = 0; l < list.size(); l++) {
-                    if (!search.getText().toString().equals("") &&  search.getText().length() <= list.get(l).getName().length()) {
-                        if (list.get(l).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
+                for (int l = 0; l < display_item_list.size(); l++) {
+                    if (!search.getText().toString().equals("") &&  search.getText().length() <= display_item_list.get(l).getName().length()) {
+                        if (display_item_list.get(l).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
                             //mylist.smoothScrollToPosition(l);
                             mylist.smoothScrollToPositionFromTop(l,l,500);
-                            for (int j = l; j < list.size(); j++) {
-                                if (search.getText().length() <= list.get(j).getName().length()) {
-                                    if (list.get(j).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
-                                        list.get(j).setHighlight(true);
+                            for (int j = l; j < display_item_list.size(); j++) {
+                                if (search.getText().length() <= display_item_list.get(j).getName().length()) {
+                                    if (display_item_list.get(j).getName().toLowerCase().contains(search.getText().toString().toLowerCase().trim())) {
+                                        display_item_list.get(j).setHighlight(true);
                                     }else{
-                                        list.get(j).setHighlight(false);
+                                        display_item_list.get(j).setHighlight(false);
                                     }
                                 }else{
-                                    list.get(j).setHighlight(false);
+                                    display_item_list.get(j).setHighlight(false);
                                 }
                             }
                             break;
                         }else{
-                            list.get(l).setHighlight(false);
+                            display_item_list.get(l).setHighlight(false);
                         }
                     }else{
-                        list.get(l).setHighlight(false);
+                        display_item_list.get(l).setHighlight(false);
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -198,19 +229,19 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
                 try{
                     String total_pob="";
                     boolean count=false;
-                    for (int i = 0; i < list.size(); i++) {
-                        check = list.get(i).isSelected();
+                    for (int i = 0; i < display_item_list.size(); i++) {
+                        check = display_item_list.get(i).isSelected();
                         if (check ) {
                             count=true;
                             break;
                         }
                     }
                     if (count) {
-                        for (int i = 0; i < list.size(); i++) {
-                            check = list.get(i).isSelected();
+                        for (int i = 0; i < display_item_list.size(); i++) {
+                            check = display_item_list.get(i).isSelected();
 
-                            if (check && !list.get(i).getPob().equals("")) {
-                                total_pob = list.get(i).getPob();
+                            if (check && !display_item_list.get(i).getPob().equals("")) {
+                                total_pob = display_item_list.get(i).getPob();
                                 break;
                             }
                         }
@@ -246,6 +277,21 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
         return myno;
     }
 
+    private void filer_item_speciality(String SPL_ID){
+        display_item_list.clear();
+        if (SPL_ID.equalsIgnoreCase("0")){
+            display_item_list.addAll(main_item_list);
+        }else {
+            for (PobModel item : main_item_list) {
+                if (item.getSPL_ID() == Integer.parseInt(SPL_ID)) {
+                    display_item_list.add(item);
+                }
+
+            }
+        }
+        adapter = new PobAdapter((Activity) context, display_item_list,customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty());
+        mylist.setAdapter(adapter);
+    }
 
     @Override
     public void onDownloadComplete() {
@@ -259,7 +305,8 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
         @Override
         protected List<PobModel> doInBackground(String... params) {
 
-            list.clear();
+            display_item_list.clear();
+            main_item_list.clear();
             int i = 0;
             String ItemIdNotIn = "0";
             who = params[1];
@@ -267,13 +314,15 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
             Cursor c = cbohelp.getAllProducts(params[0]);
             if (c.moveToFirst()) {
                 do {
-                    list.add(new PobModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), c.getString(c.getColumnIndex("stk_rate")), c.getString(c.getColumnIndex("sn")),
-                            c.getInt(c.getColumnIndex("STOCK_QTY")), c.getInt(c.getColumnIndex("BALANCE"))));
+                    main_item_list.add(new PobModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), c.getString(c.getColumnIndex("stk_rate")), c.getString(c.getColumnIndex("sn")),
+                            c.getInt(c.getColumnIndex("STOCK_QTY")), c.getInt(c.getColumnIndex("BALANCE")),
+                            c.getInt(c.getColumnIndex("SPL_ID"))));
                 } while (c.moveToNext());
             }
 
             cbohelp.close();
-            return list;
+            display_item_list.addAll(main_item_list);
+            return main_item_list;
 
         }
 
@@ -302,12 +351,12 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
                 String[] sample_noc1= sample_noc.split(",");
 
                 for (int i=0;i<sample_name1.length;i++){
-                    for (int j=0;j<list.size();j++) {
-                        if (sample_name1[i].equals(list.get(j).getName())) {
-                            list.get(j).setPob(sample_pob1[i]);
-                            list.get(j).setScore(sample_qty1[i]);
-                            list.get(j).setNOC(sample_noc1[i]);
-                            list.get(j).setBalance( list.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
+                    for (int j = 0; j< result.size(); j++) {
+                        if (sample_name1[i].equals(result.get(j).getName())) {
+                            result.get(j).setPob(sample_pob1[i]);
+                            result.get(j).setScore(sample_qty1[i]);
+                            result.get(j).setNOC(sample_noc1[i]);
+                            result.get(j).setBalance( result.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
                         }
                     }
                 }
@@ -358,9 +407,9 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
             String seprator ="";
             cbohelp.deletedata(Custom_Variables_And_Method.DR_ID,"");
 
-            for (int i = 0; i < list.size(); i++) {
-                check = list.get(i).isSelected();
-                check_Rx = list.get(i).isSelected_Rx();
+            for (int i = 0; i < main_item_list.size(); i++) {
+                check = main_item_list.get(i).isSelected();
+                check_Rx = main_item_list.get(i).isSelected_Rx();
                 if (check_Rx) {
 
                     if (j==0){
@@ -370,22 +419,22 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
 
                     }
 
-                    sb_rx.append(seprator).append(list.get(i).getId()).append(",");
+                    sb_rx.append(seprator).append(display_item_list.get(i).getId()).append(",");
                     j++;
 
                 }
 
                 if (check) {
                     checkIfPOB_Entered=true;
-                    data1.add(list.get(i).getId());
-                    data2.add(list.get(i).getScore());
-                    data5.add(list.get(i).getName());
-                    data3.add(list.get(i).getPob());
-                    data4.add(list.get(i).getRate());
-                    Qty = list.get(i).getScore();
-                    POB = list.get(i).getPob();
-                    Rate = list.get(i).getRate();
-                    NOC = list.get(i).getNOC();
+                    data1.add(main_item_list.get(i).getId());
+                    data2.add(main_item_list.get(i).getScore());
+                    data5.add(main_item_list.get(i).getName());
+                    data3.add(main_item_list.get(i).getPob());
+                    data4.add(main_item_list.get(i).getRate());
+                    Qty = main_item_list.get(i).getScore();
+                    POB = main_item_list.get(i).getPob();
+                    Rate = main_item_list.get(i).getRate();
+                    NOC = main_item_list.get(i).getNOC();
                     if (Qty.equals("")) {
                         Qty = "0";
                     }
@@ -404,18 +453,18 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
                     ArrayList<Integer> actlist = getdoclist();
                     if (actlist.contains(Integer.parseInt(Custom_Variables_And_Method.DR_ID))) {
                         if (visual_id.contains("1")) {
-                            //cbohelp.deletedata(Custom_Variables_And_Method.DR_ID, list.get(i).getId());
-                            cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, list.get(i).getId(), list.get(i).getName(), Qty, POB, Rate, "1",NOC);
+                            //cbohelp.deletedata(Custom_Variables_And_Method.DR_ID, display_item_list.get(i).getId());
+                            cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, main_item_list.get(i).getId(), main_item_list.get(i).getName(), Qty, POB, Rate, "1",NOC);
                         } else {
 
                             Log.e("no updation in sample", "no update");
-                            //cbohelp.deletedata(Custom_Variables_And_Method.DR_ID, list.get(i).getId());
-                            cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, list.get(i).getId(), list.get(i).getName(), Qty, POB, Rate, "0",NOC);
+                            //cbohelp.deletedata(Custom_Variables_And_Method.DR_ID, display_item_list.get(i).getId());
+                            cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, main_item_list.get(i).getId(), main_item_list.get(i).getName(), Qty, POB, Rate, "0",NOC);
                         }
 
                     } else {
 
-                        cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, list.get(i).getId(), list.get(i).getName(), Qty, POB, Rate, "0",NOC);
+                        cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, main_item_list.get(i).getId(), main_item_list.get(i).getName(), Qty, POB, Rate, "0",NOC);
                     }
 
 

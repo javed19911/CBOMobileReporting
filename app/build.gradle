@@ -8,8 +8,8 @@ android {
         applicationId "com.cbo.cbomobilereporting"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 295
-        versionName "2.95"
+        versionCode 298
+        versionName "2.98"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        jackOptions {
@@ -55,6 +55,7 @@ dependencies {
     implementation files('libs/gson-2.6.2.jar')
     //to check the version
     implementation project(path: ':ShortcutBadger')
+    implementation project(path: ':CBOLibrary')
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.android.gms:play-services-location:11.8.0'

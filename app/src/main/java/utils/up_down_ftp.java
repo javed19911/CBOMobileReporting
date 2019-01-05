@@ -31,6 +31,11 @@ public class up_down_ftp {
     String web_root_path="";
     String ftp_port="";
 
+    String ftp_username_download="";
+    String ftp_hostname_download="";
+    String ftp_password_download="";
+    String ftp_port_download="";
+
     CBO_DB_Helper cbohelp;
     //Shareclass shareclass;
     private AdapterCallback mAdapterCallback;
@@ -189,6 +194,12 @@ public class up_down_ftp {
                 ftp_password=c.getString(c.getColumnIndex("password"));
                 ftp_port=c.getString(c.getColumnIndex("port"));
                 web_root_path=c.getString(c.getColumnIndex("path"));
+
+                ftp_hostname_download=c.getString(c.getColumnIndex("ftpip_download"));
+                ftp_username_download=c.getString(c.getColumnIndex("username_download"));
+                ftp_password_download=c.getString(c.getColumnIndex("password_download"));
+                ftp_port_download=c.getString(c.getColumnIndex("port_download"));
+
             }while(c.moveToNext());
         }
         //port=Integer.parseInt(ftp_port);

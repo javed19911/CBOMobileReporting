@@ -31,6 +31,7 @@ import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
+import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAid_Download;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
@@ -340,7 +341,9 @@ public class UtilitiesMenuInGrid extends Fragment {
         if (!networkUtil.internetConneted(context)) {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
         } else {
-            startActivity(new Intent(getActivity(), VisualAid_Download.class));
+            //startActivity(new Intent(getActivity(), VisualAid_Download.class));
+            startActivity(new Intent(getActivity(), VisualAdsDownloadActivity.class));
+
         }
 
 
@@ -416,25 +419,28 @@ public class UtilitiesMenuInGrid extends Fragment {
 
                     for (int a = 0; a < jsonArray0.length(); a++) {
                         JSONObject jasonObj1 = jsonArray0.getJSONObject(a);
-                        val = cbohelper.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"), Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"));
+                        val = cbohelper.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"),
+                                Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),
+                                jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"),
+                                jasonObj1.getInt("SPL_ID"));
                         Log.e("%%%%%%%%%%%%%%%", "item insert");
 
                     }
+
                     /*for (int b = 0; b<jsonArray2.length();b++){
                         JSONObject jasonObj2 = jsonArray2.getJSONObject(b);
                         val=cbohelper.insertDoctorData(jasonObj2.getString("DR_ID"), jasonObj2.getString("ITEM_ID"),jasonObj2.getString("item_name"));
                         Log.e("%%%%%%%%%%%%%%%", "doctor insert");
 
                     }*/
-                    for (int c = 0; c < jsonArray3.length(); c++) {
 
+                    for (int c = 0; c < jsonArray3.length(); c++) {
                         JSONObject jsonObject3 = jsonArray3.getJSONObject(c);
                         val = cbohelper.insert_phallmst(jsonObject3.getInt("ID"), jsonObject3.getString("TABLE_NAME"), jsonObject3.getString("FIELD_NAME"), jsonObject3.getString("REMARK"));
                         Log.e("%%%%%%%%%%%%%%%", "allmst_insert");
                     }
 
                     for (int d = 0; d < jsonArray4.length(); d++) {
-
                         JSONObject jsonObject4 = jsonArray4.getJSONObject(d);
                         val = cbohelper.insert_phparty(jsonObject4.getInt("PA_ID"), jsonObject4.getString("PA_NAME"),
                                 jsonObject4.getInt("DESIG_ID"), jsonObject4.getString("CATEGORY"),
@@ -442,8 +448,8 @@ public class UtilitiesMenuInGrid extends Fragment {
                                 jsonObject4.getString("PA_LAT_LONG2"), jsonObject4.getString("PA_LAT_LONG3"),
                                 jsonObject4.getString("SHOWYN"));
                         Log.e("%%%%%%%%%%%%%%%", "party_insert");
-
                     }
+
                     for (int e = 0; e < jsonArray5.length(); e++) {
 
                         JSONObject jsonObject5 = jsonArray5.getJSONObject(e);
@@ -460,18 +466,20 @@ public class UtilitiesMenuInGrid extends Fragment {
 
 
                     }
+
                     for (int f = 0; f < jsonArray7.length(); f++) {
-
                         JSONObject jsonObject7 = jsonArray7.getJSONObject(f);
-
-                        val = cbohelper.insert_FtpData(jsonObject7.getString("WEB_IP"), jsonObject7.getString("WEB_USER"), jsonObject7.getString("WEB_PWD"), jsonObject7.getString("WEB_PORT"), jsonObject7.getString("WEB_ROOT_PATH"));
+                        val = cbohelper.insert_FtpData(jsonObject7.getString("WEB_IP"), jsonObject7.getString("WEB_USER"), jsonObject7.getString("WEB_PWD"), jsonObject7.getString("WEB_PORT"), jsonObject7.getString("WEB_ROOT_PATH"),
+                                jsonObject7.getString("WEB_IP_DOWNLOAD"), jsonObject7.getString("WEB_USER_DOWNLOAD"), jsonObject7.getString("WEB_PWD_DOWNLOAD"), jsonObject7.getString("WEB_PORT_DOWNLOAD"));
                         Log.e("%%%%%%%%%%%%%%%", "ftp_insert");
                     }
+
                     for (int g = 0; g < jsonArray9.length(); g++) {
                         JSONObject jsonObject9 = jsonArray9.getJSONObject(g);
                         count = jsonObject9.getInt("NO_DR");
                         chem_count = jsonObject9.getInt("NO_CHEM");
                     }
+
                     JSONObject jsonObjectLoginUrl = jsonArray10.getJSONObject(0);
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Login_Url", jsonObjectLoginUrl.getString("LOGIN_URL"));
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DR_ADDNEW_URL", jsonObjectLoginUrl.getString("DR_ADDNEW_URL"));
@@ -561,6 +569,9 @@ public class UtilitiesMenuInGrid extends Fragment {
                         editor.putString("DR_COLOR", c.getString("DR_COLOR"));
                         editor.putString("DCRPPNA", c.getString("DCRPPNA"));
                         editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
+                        editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
+                        editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
+
                         editor.commit();
 
                     }
@@ -770,6 +781,8 @@ public class UtilitiesMenuInGrid extends Fragment {
                     myProgress.dismiss();
                     customVariablesAndMethod.msgBox(context,"Dcr Day Successfully Reset ");
                     new CBOFinalTasks(getActivity()).releseResources();
+
+                    ((CustomActivity) context).stopLoctionService();
 
                     customMethod.stopAlarm10Minute();
                     customMethod.stopAlarm10Sec();

@@ -24,11 +24,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import utils.MyConnection;
+import utils.model.DropDownModel;
 import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 36
+    private static final int DATABASE_VERSION = 38
             ;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
@@ -143,7 +144,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_DOCTOR_SAMPLE = "CREATE TABLE " + DOCTOR_ITEM_TABLE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text, updated text, noc  text DEFAULT '0')";
         String CREATE_DR_RX_TABLE = "CREATE TABLE " + DR_RX_TABLE + "(id integer primary key, dr_id text,item_id text)";
         String CREATE_DOCTOR_PRESCRIBE = "CREATE TABLE " + Dr_PRESCRIBE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text)";
-        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text)";
+        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer)";
         String PH_DOCTOR_IETM = "CREATE TABLE " + PH_DOCTOR_ITEM_TABLE + "( id integer primary key,dr_id integer,item_id integer,item_name text)";
 
         String ALLMST = "CREATE TABLE phallmst ( id integer primary key,allmst_id integer,table_name text,field_name text,remark text )";
@@ -152,7 +153,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String RELATION = "CREATE TABLE phrelation ( id integer primary key,pa_id integer,under_id integer,rank integer)";
         String ITEM_SPL = "CREATE TABLE phitemspl ( id integer primary key,item_id text,dr_spl_id text,srno integer)";
         String DCR_CHK = "CREATE TABLE finaldcrcheck ( id integer primary key,chemist text,stockist text,exp text)";
-        String FTP_TABLE = "CREATE TABLE ftpdetail ( id integer primary key,ftpip text,username text,password text,port text,path text)";
+        String FTP_TABLE = "CREATE TABLE ftpdetail ( id integer primary key,ftpip text,username text,password text,port text,path text," +
+                "ftpip_download text,username_download text,password_download text,port_download text)";
 
 
         String STOCKIST_ADD_TABLE = "CREATE TABLE tempstockist ( id integer primary key,stk_id integer,stk_name text,visit_time text,stk_latLong text)";
@@ -491,6 +493,13 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             case 35:
                 db.execSQL("ALTER TABLE "+"phdcrchem"+" ADD COLUMN rate text DEFAULT ''");
                 db.execSQL("ALTER TABLE "+"phdcrstk"+" ADD COLUMN rate text DEFAULT ''");
+            case 36:
+                db.execSQL("ALTER TABLE "+ DOCTOR_PRODUCTS_TABLE +" ADD COLUMN SPL_ID integer DEFAULT 0");
+            case 37:
+                db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN ftpip_download text DEFAULT '220.158.164.114'");
+                db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN username_download text DEFAULT 'CBO_DOMAIN_SERVER'");
+                db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN password_download text DEFAULT 'cbodomain@321'");
+                db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN port_download text DEFAULT '21'");
 
 
         }
@@ -1057,7 +1066,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     //=============================================================Doctor Products=======================================================================================
-    public long insertProducts(String id, String name, double stk_rate, String gift,String SHOW_ON_TOP,String SHOW_YN) {
+    public long insertProducts(String id, String name, double stk_rate, String gift,String SHOW_ON_TOP,String SHOW_YN,int SPL_ID) {
         sd = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("item_id", id);
@@ -1066,6 +1075,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         cv.put("gift_type", gift);
         cv.put("SHOW_ON_TOP", SHOW_ON_TOP);
         cv.put("SHOW_YN", SHOW_YN);
+        cv.put("SPL_ID", SPL_ID);
         Long l=sd.insert(DOCTOR_PRODUCTS_TABLE, null, cv);
         return l;
     }
@@ -1078,8 +1088,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public Cursor getAllProducts(String itemidnotin) {
         sd = this.getWritableDatabase();
-        return sd.rawQuery(" Select  T.item_id, item_name,ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE from (select item_id, item_name,stk_rate, '1' as sn from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
-               " select phdoctoritem.item_id,phdoctoritem.item_name,phitem.stk_rate,'0' as sn from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
+        return sd.rawQuery(" Select  T.item_id, item_name,ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
+               " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
                 "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
                 "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"'", null);
         // phitem.SHOW_YN = '1' and
@@ -1106,7 +1116,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public Cursor getAllGifts(String ItemIdNotIn) {
         sd = this.getWritableDatabase();
         //return sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='GIFT' ", null);
-        return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE from phitem"
+        return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE,phitem.SPL_ID from phitem"
                 + " left join VSTOCK on VSTOCK.ITEM_ID = phitem.item_id"
                 + " where gift_type='GIFT' ", null);
     }
@@ -1260,6 +1270,32 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return l;
     }
 
+    public  ArrayList<DropDownModel> get_Specialitis() {
+        ArrayList<DropDownModel> Specialitis = new ArrayList<>();
+        Specialitis = get_Allmst("SPECIALITY");
+        Specialitis.add(0,new DropDownModel("All","0"));
+        return Specialitis;
+    }
+
+    public  ArrayList<DropDownModel> get_Allmst(String table) {
+        ArrayList<DropDownModel> data = new ArrayList<>();
+        sd = this.getWritableDatabase();
+        String query = "Select * from phallmst where table_name= '"+ table+"'" ;
+        Cursor c = sd.rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+
+                    data.add(new DropDownModel(c.getString(c.getColumnIndex("field_name")),
+                            c.getString(c.getColumnIndex("allmst_id"))));
+
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+        }
+        return data;
+    }
     //=========================================================================phparty===============================================================================
 
     public long insert_phparty(int pa_id, String pa_name, int desig_id, String category,
@@ -1309,6 +1345,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         sd.delete("phitemspl", null, null);
     }
 
+
     public Cursor getphitemSpl() {
         sd = this.getWritableDatabase();
         //Cursor c=sd.rawQuery("select phitem.item_name,phitem.item_id from phitemspl inner join phitem phitem on phitem.item_id=phitemspl.item_id where phitemspl.dr_spl_id="+MyConnection.DOCTOR_SPL_ID+" order by phitem.item_name", null);
@@ -1350,7 +1387,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     //===========================================FTP TABLE======================================================================================================
 
-    public long insert_FtpData(String ip, String user, String pass, String port, String path) {
+    public long insert_FtpData(String ip, String user, String pass, String port, String path,
+                               String ip_download, String user_download, String pass_download, String port_download) {
         sd = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("ftpip", ip);
@@ -1358,6 +1396,10 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         cv.put("password", pass);
         cv.put("port", port);
         cv.put("path", path);
+        cv.put("ftpip_download", ip_download);
+        cv.put("username_download", user_download);
+        cv.put("password_download", pass_download);
+        cv.put("port_download", port_download);
         long l= sd.insert("ftpdetail", null, cv);
         return l;
     }

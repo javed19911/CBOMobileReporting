@@ -161,7 +161,7 @@ public class Dr_Workwith_Dialog {
 			    		 rs=smt.executeQuery("WORKWITH "+PA_ID+",'','','','','','',''");
 			    		 while(rs.next())
 			    		 {
-			    			 list.add(new Dcr_Workwith_Model(rs.getString("PA_NAME"),rs.getString("PA_ID")));
+			    			 display_item_list.add(new Dcr_Workwith_Model(rs.getString("PA_NAME"),rs.getString("PA_ID")));
 			    		 }
 						 rs.close();
 						 smt.close();*/

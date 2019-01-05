@@ -16,6 +16,7 @@ public class AnotherActivity  extends Activity{
 		super.onCreate(b);
 		setContentView(R.layout.another_activity);
 		rpt=(TextView)findViewById(R.id.error_rpt);
+		rpt.setText(getIntent().getStringExtra("error"));
 
 	}
 

@@ -154,7 +154,7 @@ public class LoginMain extends CustomActivity {
 
             // if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
                 //startService(new Intent(context, MyLoctionService.class));
-            startLoctionService();
+            startLoctionService(true);
             // }
 
 
@@ -329,7 +329,10 @@ public class LoginMain extends CustomActivity {
 
                 for (int a = 0; a < jsonArray11.length(); a++) {
                     JSONObject jasonObj1 = jsonArray11.getJSONObject(a);
-                    cbohelp.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"), Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"));
+                    cbohelp.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"),
+                            Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),
+                            jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"),
+                            jasonObj1.getInt("SPL_ID"));
                     Log.e("%%%%%%%%%%%%%%%", "item insert");
 
                 }
@@ -376,7 +379,8 @@ public class LoginMain extends CustomActivity {
 
                     JSONObject jsonObject7 = jsonArray18.getJSONObject(f);
 
-                    cbohelp.insert_FtpData(jsonObject7.getString("WEB_IP"), jsonObject7.getString("WEB_USER"), jsonObject7.getString("WEB_PWD"), jsonObject7.getString("WEB_PORT"), jsonObject7.getString("WEB_ROOT_PATH"));
+                    cbohelp.insert_FtpData(jsonObject7.getString("WEB_IP"), jsonObject7.getString("WEB_USER"), jsonObject7.getString("WEB_PWD"), jsonObject7.getString("WEB_PORT"), jsonObject7.getString("WEB_ROOT_PATH"),
+                            jsonObject7.getString("WEB_IP_DOWNLOAD"), jsonObject7.getString("WEB_USER_DOWNLOAD"), jsonObject7.getString("WEB_PWD_DOWNLOAD"), jsonObject7.getString("WEB_PORT_DOWNLOAD"));
                     Log.e("%%%%%%%%%%%%%%%", "ftp_insert");
                 }
                 for (int g = 0; g < jsonArray20.length(); g++) {
@@ -474,6 +478,8 @@ public class LoginMain extends CustomActivity {
                     editor.putString("DR_COLOR", c.getString("DR_COLOR"));
                     editor.putString("DCRPPNA", c.getString("DCRPPNA"));
                     editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
+                    editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
+                    editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
                     editor.commit();
 
                 }

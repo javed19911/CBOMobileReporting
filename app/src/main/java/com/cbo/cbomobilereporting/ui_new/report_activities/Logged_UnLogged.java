@@ -386,12 +386,13 @@ public class Logged_UnLogged extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("Tables0");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        mylist.add(new SpinnerModel(i==0 ? "All" :jsonObject1.getString("PA_NAME"), jsonObject1.getString("PA_ID")));
+                        //mylist.add(new SpinnerModel(i==0 ? "All" :jsonObject1.getString("PA_NAME"), jsonObject1.getString("PA_ID")));
+                        mylist.add(new SpinnerModel(jsonObject1.getString("PA_NAME"), jsonObject1.getString("PA_ID")));
 
                     }
-                    if(mylist.size()==2){
+                    /*if(mylist.size()==2){
                         mylist.remove(0);
-                    }
+                    }*/
                 } catch (JSONException json) {
                     pd.dismiss();
                     customVariablesAndMethod.msgBox(context,"Exception Found..");

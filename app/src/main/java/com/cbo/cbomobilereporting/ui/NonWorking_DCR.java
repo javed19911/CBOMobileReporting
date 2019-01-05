@@ -1352,6 +1352,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
 
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Final_submit", "Y");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "work_type_Selected", "w");
+
                 finish();
 
             } catch (JSONException e) {

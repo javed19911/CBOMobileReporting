@@ -10,14 +10,19 @@ import android.content.pm.ResolveInfo;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import utils.ExceptionHandler;
+import utils_new.Custom_Variables_And_Method;
+
 
 public class MyCustumApplication extends MultiDexApplication {
     private static MyCustumApplication instance;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        //new ExceptionHandler(this);
     }
 
     public static MyCustumApplication getInstance(){
@@ -73,6 +78,14 @@ public class MyCustumApplication extends MultiDexApplication {
         return dir.delete();
     }
 
+    public static String getServeiceURL() {
+        String URL= "http://www.cboservices.com/mobilerpt.asmx";
+        URL= Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"WEBSERVICE_URL",URL);
+        if(URL.equals("")){
+            URL= "http://www.cboservices.com/mobilerpt.asmx";
+        }
+        return URL;
+    }
 
     public void ShowAutoStart(){
         try {

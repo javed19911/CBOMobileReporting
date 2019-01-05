@@ -11,6 +11,7 @@ public class GiftModel {
     private int Stock = 0;
     private int Balance = 0;
     private boolean highlight=false;
+    private int SPL_ID = 0;
 
 
     public GiftModel(String name, String id, String rate) {
@@ -22,7 +23,7 @@ public class GiftModel {
         score = "";
     }
 
-    public GiftModel(String name, String id, String rate,int Stock,int Balance) {
+    public GiftModel(String name, String id, String rate,int Stock,int Balance,int SPL_ID) {
         this.name = name;
         this.id = id;
         this.rate = rate;
@@ -31,6 +32,7 @@ public class GiftModel {
         score = "";
         this.Stock = Stock;
         this.Balance = Balance;
+        this.SPL_ID = SPL_ID;
     }
     public String getId() {
         return id;
@@ -102,6 +104,14 @@ public class GiftModel {
 
     public void setBalance(int balance) {
         Balance = balance;
+    }
+
+    public int getSPL_ID() {
+        return SPL_ID;
+    }
+
+    public void setSPL_ID(int SPL_ID) {
+        this.SPL_ID = SPL_ID;
     }
 }
 

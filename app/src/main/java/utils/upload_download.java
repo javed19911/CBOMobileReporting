@@ -96,7 +96,10 @@ public class upload_download extends AsyncTask<Void, Integer, Long> {
 
                 for (int a = 0; a < jsonArray0.length(); a++) {
                     JSONObject jasonObj1 = jsonArray0.getJSONObject(a);
-                    val = cbohelper.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"), Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"));
+                    val = cbohelper.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"),
+                            Double.parseDouble(jasonObj1.getString("STK_RATE")),
+                            jasonObj1.getString("GIFT_TYPE"),jasonObj1.getString("SHOW_ON_TOP"),
+                            jasonObj1.getString("SHOW_YN"),jasonObj1.getInt("SPL_ID"));
                     Log.e("%%%%%%%%%%%%%%%", "item insert");
 
                 }
@@ -144,7 +147,8 @@ public class upload_download extends AsyncTask<Void, Integer, Long> {
 
                     JSONObject jsonObject7 = jsonArray7.getJSONObject(f);
 
-                    val = cbohelper.insert_FtpData(jsonObject7.getString("WEB_IP"), jsonObject7.getString("WEB_USER"), jsonObject7.getString("WEB_PWD"), jsonObject7.getString("WEB_PORT"), jsonObject7.getString("WEB_ROOT_PATH"));
+                    val = cbohelper.insert_FtpData(jsonObject7.getString("WEB_IP"), jsonObject7.getString("WEB_USER"), jsonObject7.getString("WEB_PWD"), jsonObject7.getString("WEB_PORT"), jsonObject7.getString("WEB_ROOT_PATH"),
+                            jsonObject7.getString("WEB_IP_DOWNLOAD"), jsonObject7.getString("WEB_USER_DOWNLOAD"), jsonObject7.getString("WEB_PWD_DOWNLOAD"), jsonObject7.getString("WEB_PORT_DOWNLOAD"));
                     Log.e("%%%%%%%%%%%%%%%", "ftp_insert");
                 }
                 for (int g = 0; g < jsonArray9.length(); g++) {
