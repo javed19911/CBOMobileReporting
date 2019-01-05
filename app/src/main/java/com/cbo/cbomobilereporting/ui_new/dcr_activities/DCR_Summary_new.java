@@ -20,6 +20,7 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
+import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +39,7 @@ import utils_new.Custom_Variables_And_Method;
 
 import static java.lang.Thread.sleep;
 
-public class DCR_Summary_new extends AppCompatActivity {
+public class DCR_Summary_new extends CustomActivity {
 
     android.support.v7.widget.Toolbar toolbar;
 
@@ -394,7 +395,7 @@ public class DCR_Summary_new extends AppCompatActivity {
                     cboDbHelper.DropDatabase(context);
 
                     Intent i = new Intent(context, LoginMain.class);
-
+                    stopLoctionService();
                     startActivity(i);
                     finish();
                 } else {

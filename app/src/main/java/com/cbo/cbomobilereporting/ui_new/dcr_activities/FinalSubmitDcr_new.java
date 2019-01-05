@@ -30,6 +30,7 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
+import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 
 
 import org.json.JSONArray;
@@ -60,7 +61,7 @@ import utils_new.SendMailTask;
 /**
  * Created by Akshit on 1/5/2016.
  */
-public class FinalSubmitDcr_new extends AppCompatActivity {
+public class FinalSubmitDcr_new extends CustomActivity {
 
 
     EditText remark, loc,Late_Submit_remark;
@@ -792,6 +793,7 @@ public class FinalSubmitDcr_new extends AppCompatActivity {
                         new GetVersionCode(FinalSubmitDcr_new.this).execute();
                     }
                     commitDialog.dismiss();
+                    stopLoctionService();
                     customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
                     finish();
                     //setAlertDialogifDataNotFound_2(""+result);
@@ -905,6 +907,8 @@ public class FinalSubmitDcr_new extends AppCompatActivity {
                     editor.putString("DR_COLOR", c.getString("DR_COLOR"));
                     editor.putString("DCRPPNA", c.getString("DCRPPNA"));
                     editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
+                    editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
+                    editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
                     editor.commit();
 
                 }
@@ -990,6 +994,7 @@ public class FinalSubmitDcr_new extends AppCompatActivity {
                             }
                             commitDialog.dismiss();
                             customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
+                            stopLoctionService();
                             finish();
                             //setAlertDialogifDataNotFound_2(""+result);
                         } else {

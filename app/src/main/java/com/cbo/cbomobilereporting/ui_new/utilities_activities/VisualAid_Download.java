@@ -177,6 +177,7 @@ public class VisualAid_Download extends AppCompatActivity implements up_down_ftp
 					msg.setText(" Please don't use Back Button While Downloading Visual Aids.....");
 					File f=new File(Environment.getExternalStorageDirectory(),"cbo/product");
 					deleteDirectory(f);
+					f.mkdir();
 					//getcount();
 					// new Get_count().execute();
 					save.setVisibility(View.GONE);
@@ -485,17 +486,17 @@ public class VisualAid_Download extends AppCompatActivity implements up_down_ftp
 
 
 							  if(object.getString("ITEM_NAME").equals("CATALOG")){
-								  new up_down_ftp().download_Directory(context);
+								  new up_down_ftp().download_Directory((up_down_ftp.AdapterCallback) context);
 
 							  }else {
                                   load_img=object.getString("FILE_NAME");
 								  msg_text=object.getString("ITEM_NAME")+" is being Downloaded...";
 								  if(visual_pdf.equals("Y")){
 									  //downloadFile(load_img,object.getString("ITEM_NAME"));
-									  new up_down_ftp().download_visual_aids(context,download_file);
+									  new up_down_ftp().download_visual_aids((up_down_ftp.AdapterCallback) context,download_file);
 								  }else if(!(exists(Custom_Variables_And_Method.WEB_URL+"/visualaid/"+object.getString("FILE_NAME")+ext).equals("404"))) {
 									  //saveImage(load_img,"");
-									  new up_down_ftp().download_visual_aids(context,download_file);
+									  new up_down_ftp().download_visual_aids((up_down_ftp.AdapterCallback) context,download_file);
 								  }
                               }
 

@@ -45,6 +45,7 @@ import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
+import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -194,7 +195,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             //check for notification
            // myCustomMethod.notification_check();
 
-            if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Final_submit","N").equals("N")) {if (live_km.equalsIgnoreCase("Y") || (live_km.equalsIgnoreCase("Y5"))) {
+            if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Final_submit","N").equals("N")) {
+                if (live_km.equalsIgnoreCase("Y") || (live_km.equalsIgnoreCase("Y5"))) {
                     MyCustomMethod myCustomMethod = new MyCustomMethod(context);
                     myCustomMethod.stopAlarm10Minute();
                     myCustomMethod.startAlarmIn10Minute();
@@ -223,12 +225,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 if (checkDrawOverlayPermission()) {
                     LoginFake(false);
 
-                    /*try {
-                        Intent intent = new Intent(context, FloatingRemainderApproval.class);
-                        startService(intent);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }*/
+                    /*Intent intent = new Intent(context, Doctor_registration_GPS.class);
+                    intent.putExtra("id",0);
+                    intent.putExtra("name","hg");
+                    intent.putExtra("type","S");
+                    startActivity(intent);*/
                 }
             }
         });
@@ -620,8 +621,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         cbohelp.delete_Mail("");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "WEBSERVICE_URL", "");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DOB_DOA_notification_date", "");
+        myCustomMethod.stopAlarm10Sec();
+        myCustomMethod.stopAlarm10Minute();
         myCustomMethod.stopDOB_DOA_Remainder();
         new CustomTextToSpeech().stopTextToSpeech();
+        stopLoctionService();
 
         cbohelp.DropDatabase(context);
 

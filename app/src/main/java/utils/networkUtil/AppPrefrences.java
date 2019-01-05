@@ -111,6 +111,8 @@ public class AppPrefrences {
                     editor.putString("DR_COLOR", c.getString("DR_COLOR"));
                     editor.putString("DCRPPNA", c.getString("DCRPPNA"));
                     editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
+                    editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
+                    editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
                     editor.commit();
 
                 }
@@ -216,6 +218,8 @@ public class AppPrefrences {
                     editor.putString("DR_COLOR", c.getString("DR_COLOR"));
                     editor.putString("DCRPPNA", c.getString("DCRPPNA"));
                     editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
+                    editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
+                    editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
                     editor.commit();
 
                 }

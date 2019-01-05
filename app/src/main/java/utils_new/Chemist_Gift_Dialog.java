@@ -227,7 +227,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
             do{
 
                 list.add(new GiftModel(c1.getString(c1.getColumnIndex("item_name")), c1.getString(c1.getColumnIndex("item_id")), "",
-                        c1.getInt(c1.getColumnIndex("STOCK_QTY")), c1.getInt(c1.getColumnIndex("BALANCE"))));
+                        c1.getInt(c1.getColumnIndex("STOCK_QTY")), c1.getInt(c1.getColumnIndex("BALANCE")),c1.getInt(c1.getColumnIndex("SPL_ID"))));
 
             }while(c1.moveToNext());
         }

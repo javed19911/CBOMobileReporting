@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import receivers.DOB_DOA_broadcastreciever;
 import receivers.MyBroadcastReceiver;
 import services.ServiceHandler;
 import utils.MyConnection;
@@ -573,10 +574,11 @@ public class MyCustomMethod {
         if (from.equals("0")){
             startDOB_DOA_Remainder();
         }
-        Intent intent = new Intent();
+
+        Intent intent = new Intent(context, DOB_DOA_broadcastreciever.class);
         intent.putExtra("from",from);
         intent.putExtra("url",notification_url);
-        intent.setAction("DOB_DOA_notification_flag");
+        //intent.setAction("DOB_DOA_notification_flag");
         context.sendBroadcast(intent);
     }
 

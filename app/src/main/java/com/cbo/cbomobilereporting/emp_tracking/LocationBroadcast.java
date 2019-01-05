@@ -43,17 +43,17 @@ public class LocationBroadcast extends BroadcastReceiver {
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking","Y");
 
           ComponentName comp = new ComponentName(context.getPackageName(), MyLoctionService.class.getName());
-            ComponentName service = context.startService(new Intent().setComponent(comp));
+            //ComponentName service = context.startService(new Intent().setComponent(comp));
 
-       /* Intent intent1 = new Intent(context, MyLoctionService.class);
-        intent1.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        Intent intent1 = new Intent().setComponent(comp);
+        intent1.setAction(Constants.ACTION.LIVE_TRACKING_ACTION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "Running on Android O");
             context.startForegroundService(intent1);
         }else{
             Log.d(TAG, "Running on Android N or lower");
             context.startService(intent1);
-        }*/
+        }
 
           //  myConnection.msgBox("Service Start For Storing  Data in 1 Minute.... ");
             Log.d("Broadcast is Running","Service Start For Storing  Data in 1 Minute ");

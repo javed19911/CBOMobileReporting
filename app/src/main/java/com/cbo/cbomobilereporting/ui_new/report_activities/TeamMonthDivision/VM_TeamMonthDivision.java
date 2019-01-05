@@ -134,6 +134,11 @@ public class VM_TeamMonthDivision extends ViewModel{
 
     private void setUser(mUser user) {
         this.user = user;
+
+        if (getMissed_call_Filter(user).size() >= 1){
+            setMissedFilter(getMissed_call_Filter(user).get(0));
+        }
+
         if(iTeam!=null){
             iTeam.OnNameSelected(user);
         }
@@ -210,13 +215,30 @@ public class VM_TeamMonthDivision extends ViewModel{
 
             try {
 
+                String table3 = result.getString("Tables3");
+                JSONArray jsonArray3 = new JSONArray(table3);
+                missedFiletr.clear();
+                for (int i = 0; i < jsonArray3.length(); i++) {
+                    JSONObject c = jsonArray3.getJSONObject(i);
+                    mMissedFilter missedFilter = new mMissedFilter(c.getString("PA_NAME"),c.getString("PA_ID"));
+                    missedFilter.setDESIG_ID(c.getInt("TO_DESIG_ID"));
+                    missedFiletr.add(missedFilter);
+                }
+                mTeamMonthDivision.setMissed_call_Filter(missedFiletr);
+                /*if (missedFiletr.size() >= 1){
+                  setMissedFilter(missedFiletr.get(0));
+                }*/
+
+
                 String table0 = result.getString("Tables0");
                 JSONArray jsonArray1 = new JSONArray(table0);
                 rptName.clear();
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject c = jsonArray1.getJSONObject(i);
                     // rptName.add(new DropDownModel(c.getString("PA_NAME"),c.getString("PA_ID")));
-                    rptName.add(new mUser(c.getString("PA_NAME"),c.getString("PA_ID")));
+                    mUser user = new mUser(c.getString("PA_NAME"),c.getString("PA_ID"));
+                    user.setDESIG_ID(c.getInt("DESIG_ID"));
+                    rptName.add(user);
 
                 }
 
@@ -249,17 +271,7 @@ public class VM_TeamMonthDivision extends ViewModel{
                 }
 
 
-                String table3 = result.getString("Tables3");
-                JSONArray jsonArray3 = new JSONArray(table3);
-                missedFiletr.clear();
-                for (int i = 0; i < jsonArray3.length(); i++) {
-                    JSONObject c = jsonArray3.getJSONObject(i);
-                    missedFiletr.add(new mMissedFilter(c.getString("PA_NAME"),c.getString("PA_ID")));
-                }
-                mTeamMonthDivision.setMissed_call_Filter(missedFiletr);
-                if (missedFiletr.size() >= 1){
-                  setMissedFilter(missedFiletr.get(0));
-                }
+
 
                 progress1.dismiss();
                 if(resultlistner!=null){
@@ -282,8 +294,18 @@ public class VM_TeamMonthDivision extends ViewModel{
 
     }
 
+    private ArrayList<mMissedFilter> getMissed_call_Filter(mUser user){
+        ArrayList<mMissedFilter> missedFiletrs = new ArrayList<>();
+
+        for (mMissedFilter missedFiletr : mTeamMonthDivision.getMissed_call_Filter()) {
+            if (missedFiletr.getDESIG_ID()>= user.getDESIG_ID())
+                missedFiletrs.add(missedFiletr);
+        }
+        return missedFiletrs;
+    }
+
     public void onMissedTypeClicked(Context context){
-        new Spinner_Dialog(context,mTeamMonthDivision.getMissed_call_Filter(), item -> setMissedFilter((mMissedFilter) item)).show();
+        new Spinner_Dialog(context,getMissed_call_Filter(getUser()), item -> setMissedFilter((mMissedFilter) item)).show();
     }
 
     public void onClickName(Context context){

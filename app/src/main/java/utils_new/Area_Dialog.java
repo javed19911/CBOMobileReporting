@@ -452,16 +452,16 @@ public class Area_Dialog {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                for(int i=0;i<list.size();i++){
-                    boolean check=list.get(i).isSelected();
+                for(int i=0;i<display_item_list.size();i++){
+                    boolean check=display_item_list.get(i).isSelected();
                     if(check){
-                        data.add(list.get(i).getId());
-                        data1.add(list.get(i).getName());
+                        data.add(display_item_list.get(i).getId());
+                        data1.add(display_item_list.get(i).getName());
                     }
                     else
                     {
-                        data.remove(list.get(i));
-                        data1.remove(list.get(i));
+                        data.remove(display_item_list.get(i));
+                        data1.remove(display_item_list.get(i));
                     }
                 }
                 for(int i=0;i<data.size();i++){

@@ -38,11 +38,15 @@ public class DOB_DOA_broadcastreciever  extends BroadcastReceiver {
                 context.startActivity(intent1);
                 break;
             case "1":
-                intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent1.putExtra("msg","1");
-                intent1.putExtra("msg_ho", new CBO_DB_Helper(context1).getMenuUrl("REPORTS","MSG_HO"));
-                context1.startActivity(intent1);
+
+                String url = new CBO_DB_Helper(context1).getMenuUrl("REPORTS","MSG_HO");
+                if (!url.trim().isEmpty()) {
+                    intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
+                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent1.putExtra("msg","1");
+                    intent1.putExtra("msg_ho", url);
+                    context1.startActivity(intent1);
+                }
                 break;
             case "2":
                 intent1=new Intent(context1.getApplicationContext(), Update_Avilable.class);

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity">
+
+    <include layout="@layout/hadder_2016"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/visual_compname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="TextView"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:id="@+id/visual_empname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="TextView"
+            android:textColor="@color/logo_green"
+            android:textSize="17dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/downloadProgress"
+            android:visibility="gone"
+            android:gravity="center">
+            <ProgressBar
+                android:id="@+id/pb"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content" />
+
+            <utils.font_package.Text_view_Bold_16
+                android:id="@+id/per"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="-"
+                />
+
+            <utils.font_package.Text_view_Regular
+                android:id="@+id/msgbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="TextView"
+                android:visibility="gone"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Start Download"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:id="@+id/startdownload"
+            android:textColor="@color/hyperLink"
+            android:background="@drawable/custom_square_transparent_bg"/>
+
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimary"/>
+   <android.support.v7.widget.RecyclerView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/file_list"/>
+
+</LinearLayout>

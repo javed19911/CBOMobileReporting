@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -31,9 +32,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import it.sauronsoftware.ftp4j.FTPAbortedException;
@@ -45,6 +50,7 @@ import it.sauronsoftware.ftp4j.FTPFile;
 import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
 import it.sauronsoftware.ftp4j.FTPListParseException;
 import services.CboServices;
+import utils.clearAppData.MyCustumApplication;
 
 /**
  * Created by pc24 on 06/12/2016.
@@ -60,6 +66,11 @@ public class up_down_ftp {
     String ftp_port="21";
     Integer responseCode = 0;
 
+    String ftp_username_download="";
+    String ftp_hostname_download="";
+    String ftp_password_download="";
+    String ftp_port_download="21";
+
     CBO_DB_Helper cbohelp;
     //Shareclass shareclass;
     private AdapterCallback mAdapterCallback;
@@ -72,52 +83,20 @@ public class up_down_ftp {
 
     }
 
-    private Boolean connnectingwithFTP(String ip, String userName, String pass,final Context context) {
+    public up_down_ftp setResponseCode(Integer responseCode) {
+        this.responseCode = responseCode;
+        return this;
+    }
 
+    private Boolean connectFTP(String ip, String userName, String pass){
         try {
-            mFtpClient = new FTPClient();
-            //mFtpClient.setAutoNoopTimeout(5000);
-            mFtpClient.connect(ip,Integer.parseInt(ftp_port));
-            mFtpClient.login(userName, pass);
-            status=true;
-            Log.e("isFTPConnected", String.valueOf(status));
-            mFtpClient.setType(FTPClient.TYPE_BINARY);
-
-            //mFtpClient.changeDirectory("//DEMO/upload/");
-            mFtpClient.changeDirectory(web_root_path);
-
+            if (!mFtpClient.isConnected()) {
+                mFtpClient.connect(ip, Integer.parseInt(ftp_port));
+                mFtpClient.login(userName, pass);
+                //mFtpClient.setPassive(true);
+                //mFtpClient.noop();
+            }
             return true;
-        } catch (SocketException e) {
-            e.printStackTrace();
-            try {
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        mAdapterCallback.failed(responseCode,"Failed!!!","Upload Failed....\nPlease try after sometime");
-                    }
-                });
-
-
-            } catch (ClassCastException e1) {
-                throw new ClassCastException("Activity must implement AdapterCallback.");
-            }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            try {
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        mAdapterCallback.failed(responseCode,"Failed!!!","Upload Failed....\nPlease try after sometime");
-                    }
-                });
-
-            } catch (ClassCastException e1) {
-                throw new ClassCastException("Activity must implement AdapterCallback.");
-            }
         } catch (IOException e) {
             e.printStackTrace();
             try {
@@ -126,39 +105,14 @@ public class up_down_ftp {
 
                     @Override
                     public void run() {
-                        mAdapterCallback.failed(responseCode,"Failed!!!","Upload Failed....\nPlease try after sometime");
+                        mAdapterCallback.failed(responseCode,"Failed!!!",e.getLocalizedMessage());
                     }
                 });
+
 
             } catch (ClassCastException e1) {
                 throw new ClassCastException("Activity must implement AdapterCallback.");
             }
-        } catch (FTPException e) {
-
-            try {
-                mFtpClient.createDirectory(web_root_path);
-                mFtpClient.changeDirectory(web_root_path);
-                return true;
-            } catch (IOException | FTPException | FTPIllegalReplyException e1) {
-                e1.printStackTrace();
-
-                try {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            mAdapterCallback.failed(responseCode,"Folder not found!!!",web_root_path + "   Invalid path \nPlease contact your administrator");// upload_complete("ERROR@"+web_root_path);
-                        }
-                    });
-
-                } catch (ClassCastException e2) {
-                    throw new ClassCastException("Activity must implement AdapterCallback.");
-                }
-
-            }
-
-            e.printStackTrace();
         } catch (FTPIllegalReplyException e) {
             e.printStackTrace();
             try {
@@ -167,9 +121,26 @@ public class up_down_ftp {
 
                     @Override
                     public void run() {
-                        mAdapterCallback.failed(responseCode,"Failed!!!","Upload Failed....\nPlease try after sometime");
+                        mAdapterCallback.failed(responseCode,"Failed!!!",e.getLocalizedMessage());
                     }
                 });
+
+
+            } catch (ClassCastException e1) {
+                throw new ClassCastException("Activity must implement AdapterCallback.");
+            }
+        } catch (FTPException e) {
+            e.printStackTrace();
+            try {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mAdapterCallback.failed(responseCode,"Failed!!!",e.getLocalizedMessage());
+                    }
+                });
+
 
             } catch (ClassCastException e1) {
                 throw new ClassCastException("Activity must implement AdapterCallback.");
@@ -178,109 +149,499 @@ public class up_down_ftp {
         return false;
     }
 
-    public void download_visual_aids(Context context,ArrayList file_list){
-
-        cbohelp=new CBO_DB_Helper(context);
-        getFtpDetail();
-        mAdapterCallback = ((AdapterCallback) context);
-        if(connnectingwithFTP(ftp_hostname, ftp_username, ftp_password,context)) {
+    private FTPClient connnectingwithFTP( String ip, String userName, String pass,final AdapterCallback context) {
+        try {
+            FTPClient mFtpClient = new FTPClient();
+            AdapterCallback mAdapterCallback = context;
             try {
 
-               // mAdapterCallback = ((AdapterCallback) context);
-                if (file_list.contains("CATALOG")) {
-                    download_Directory(context);
-                } else {
 
-                    mFtpClient.changeDirectoryUp();
-                    mFtpClient.changeDirectory(mFtpClient.currentDirectory() + "/visualaid");
-                    String[] files = mFtpClient.listNames();
-                    ArrayList<String> file_name = new ArrayList<>();
-                    File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product" + File.separator);
-                    file2.mkdirs();
-                    for (int i = 0; i < files.length; i++) {
+                //mFtpClient.setAutoNoopTimeout(5000);
+                mFtpClient.connect(ip, Integer.parseInt(ftp_port));
+                mFtpClient.login(userName, pass);
+           /* mFtpClient.connect("220.158.164.79",21);
+            mFtpClient.login("cbo_user", "cbo@12345#$");*/
+                status = true;
+                Log.e("isFTPConnected", String.valueOf(status));
+                mFtpClient.setType(FTPClient.TYPE_BINARY);
 
-                        if (files[i].contains(".") && file_list.contains(files[i].substring(0, files[i].lastIndexOf(".")))) {
-                            file_name.add(files[i]);
-                        }else if(files[i].contains("_") && file_list.contains(files[i].substring(0, files[i].indexOf("_")))){
-                            file_name.add(files[i]);
+                //mFtpClient.changeDirectory("//DEMO/upload/");
+                mFtpClient.changeDirectory(web_root_path);
+                //mFtpClient.setPassive(true);
+                //mFtpClient.noop();
+
+                return mFtpClient;
+            } catch (SocketException e) {
+                e.printStackTrace();
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (mAdapterCallback != null) {
+                            mAdapterCallback.failed(responseCode, "Failed!!!", "Upload Failed....\nPlease try after sometime");
                         }
                     }
+                });
 
-                    for (int i = 0; i < file_name.size(); i++) {
-                        File file1 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product" + File.separator + file_name.get(i));
-                        //mFtpClient.download(file_name.get(i),file1,new DownloadListener(context));
-                        mFtpClient.download(file_name.get(i), file1);
-                    }
-                    mFtpClient.disconnect(true);
-                }
-            } catch (IOException | FTPListParseException | FTPException | FTPDataTransferException | FTPAbortedException | FTPIllegalReplyException e) {
+
+            } catch (UnknownHostException e) {
                 e.printStackTrace();
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (mAdapterCallback != null) {
+                            mAdapterCallback.failed(responseCode, "Failed!!!", "Upload Failed....\nPlease try after sometime");
+                        }
+                    }
+                });
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (mAdapterCallback != null) {
+                            mAdapterCallback.failed(responseCode, "Failed!!!", "Upload Failed....\nPlease try after sometime");
+                        }
+                    }
+                });
+
+
+            } catch (FTPException e) {
+
+                try {
+                    mFtpClient.createDirectory(web_root_path);
+                    return mFtpClient;
+                } catch (IOException | FTPException | FTPIllegalReplyException e1) {
+                    e1.printStackTrace();
+
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            if (mAdapterCallback != null) {
+                                mAdapterCallback.failed(responseCode, "Folder not found!!!", web_root_path + "   Invalid path \nPlease contact your administrator");// upload_complete("ERROR@"+web_root_path);
+                            }
+                        }
+                    });
+
+
+                }
+
+                e.printStackTrace();
+            } catch (FTPIllegalReplyException e) {
+                e.printStackTrace();
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (mAdapterCallback != null) {
+                            mAdapterCallback.failed(responseCode, "Failed!!!", "Upload Failed....\nPlease try after sometime");
+                        }
+                    }
+                });
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (mAdapterCallback != null) {
+                            mAdapterCallback.failed(responseCode, "Failed!!!", "Upload Failed....\nPlease try after sometime");
+                        }
+                    }
+                });
+
+
             }
+        }catch (Throwable e){
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mAdapterCallback != null) {
+                        mAdapterCallback.failed(responseCode, "Failed!!!", "Upload Failed....\nPlease try after sometime");
+                    }
+                }
+            });
         }
+        return null;
+    }
+
+    public void download_visual_aids(AdapterCallback context,ArrayList file_list){
+        download_visual_aids(context,file_list,"/visualaid");
+    }
+    public void download_visual_aids(AdapterCallback context,String file,String directory){
+        ArrayList<String>download_file=new ArrayList<String>();
+        download_file.add(file);
+        download_visual_aids(context,download_file,directory);
+    }
+    public void download_visual_aids(AdapterCallback context,ArrayList file_list,String directory){
+
+        cbohelp=new CBO_DB_Helper(MyCustumApplication.getInstance());
+
+        getFtpDetail();
+        ftp_port = ftp_port_download;
+        mAdapterCallback = ((AdapterCallback) context);
+
+
+            try {
+                FTPClient mFtpClient = connnectingwithFTP(ftp_hostname_download, ftp_username_download, ftp_password_download,context);
+                if(mFtpClient != null) {
+                    // mAdapterCallback = ((AdapterCallback) context);
+                    if (file_list.contains("CATALOG")) {
+                        download_Directory(context);
+                    } else {
+
+                        mFtpClient.changeDirectoryUp();
+                        mFtpClient.changeDirectory(mFtpClient.currentDirectory() + directory);
+                        String storeToDirectory = directory.replace("/visualaid", "");
+                        String[] files = mFtpClient.listNames();
+                        ArrayList<String> file_name = new ArrayList<>();
+                        File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product" + storeToDirectory + File.separator);
+                        file2.mkdirs();
+                        if (storeToDirectory.trim().isEmpty()) {
+                            for (int i = 0; i < files.length; i++) {
+                                if (files[i].contains(".") && (file_list.contains(files[i].substring(0, files[i].lastIndexOf("."))) || file_list.contains(files[i]))) {
+                                    file_name.add(files[i]);
+                                } else if (files[i].contains("_") && file_list.contains(files[i].substring(0, files[i].indexOf("_")))) {
+                                    file_name.add(files[i]);
+                                }
+                            }
+                        } else {
+                            file_name = file_list;
+                        }
+
+                        for (int i = 0; i < file_name.size(); i++) {
+                            File file1 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product" + storeToDirectory + File.separator + file_name.get(i));
+                            //mFtpClient.download(file_name.get(i),file1,new DownloadListener(context));
+                            mFtpClient.download(file_name.get(i), file1);
+
+                        }
+                        mFtpClient.disconnect(true);
+
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    mAdapterCallback.complete(responseCode, "Success!!!", "Downloaded Completed...");
+                                }
+                            });
+
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapterCallback.failed(responseCode,"Failed!!!","Download Failed....\n"+e.getMessage());
+                        }
+                    });
+
+
+            }
+        //}
 
     }
 
-    public boolean download_Directory(Context context){
-        cbohelp=new CBO_DB_Helper(context);
-        getFtpDetail();
+
+    public void downloadFile(AdapterCallback context,String remoteFileName,String directory) {
+         download_visual_aids(context,remoteFileName,directory);
+         return;
+        /*File file = null;
+        int downloadedSize = 0, totalsize;
+        float per = 0;
+        // set the path where we want to save the file
+        File SDCardRoot = Environment.getExternalStorageDirectory();
+
         mAdapterCallback = ((AdapterCallback) context);
-        if(connnectingwithFTP(ftp_hostname, ftp_username, ftp_password,context)) {
+
+        new File(SDCardRoot + "/cbo").mkdir();
+        // create a new file, to save the downloaded file
+        String storeToDirectory = directory.replace("/visualaid","");
+        file = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product" + storeToDirectory+ File.separator+remoteFileName);
+        file.mkdirs();
+        //file = new File(SDCardRoot, dest_file_path);
+
+
+        URL myFileUrl = null;
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        try {
+            myFileUrl = new URL(Custom_Variables_And_Method.WEB_URL + directory + File.separator+remoteFileName);
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl
+                    .openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            Log.i("im connected", myFileUrl.toString());
+            FileOutputStream fileOutput = new FileOutputStream(file);
+            // create a buffer...
+            byte[] buffer = new byte[1024 * 1024];
+            int bufferLength = 0;
+
+            totalsize = conn.getContentLength();
+
+            while ((bufferLength = is.read(buffer)) > 0) {
+                fileOutput.write(buffer, 0, bufferLength);
+                downloadedSize += bufferLength;
+                per = ((float) downloadedSize / totalsize) * 100;
+                //msg_text=name+"is being Downloded...\n"+(int) per+"% compleded";
+
+                Log.d("javed pdf test","Total PDF File size  : "
+                        + (totalsize / 1024)
+                        + " KB\n\nDownloading PDF " + (int) per
+                        + "% complete");
+            }
+            // close the output stream when complete //
+            fileOutput.close();
+            try {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mAdapterCallback.complete(responseCode,"Success!!!","Downloaded Completed...");
+                    }
+                });
+
+            } catch (ClassCastException e1) {
+                throw new ClassCastException("Activity must implement AdapterCallback.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            *//*try {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapterCallback.failed(responseCode,"Failed!!!","Download Failed....\n"+e.getMessage());
+                    }
+                });
+
+            } catch (ClassCastException e1) {
+                throw new ClassCastException("Activity must implement AdapterCallback.");
+            }*//*
+            download_visual_aids(context,remoteFileName,directory);
+
+
+        }*/
+
+        //return file;
+    }
+
+    public  ArrayList<mFTPFile>  getDirectoryFiles(Context context,String Directory){
+        cbohelp=new CBO_DB_Helper(MyCustumApplication.getInstance());
+        getFtpDetail();
+        ftp_port = ftp_port_download;
+        //mAdapterCallback = ((AdapterCallback) context);
+        FTPClient mFtpClient = connnectingwithFTP(ftp_hostname_download, ftp_username_download, ftp_password_download,null);
+        if(mFtpClient != null) {
             try {
                 mFtpClient.changeDirectoryUp();
-                mFtpClient.changeDirectory(mFtpClient.currentDirectory() + "/visualaid/Catalog");
+                String baseDirectory = mFtpClient.currentDirectory();
+                mFtpClient.changeDirectory(baseDirectory + "/visualaid"+Directory);
                 String[] files = mFtpClient.listNames();
                 ArrayList<String> file_name = new ArrayList<>();
                 ArrayList<String> directory_name = new ArrayList<>();
+                ArrayList<mFTPFile> downloadable_files = new ArrayList<>();
+
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product" +Directory+ File.separator);
+                file.mkdirs();
+
+                String currentDirectory = mFtpClient.currentDirectory();
+
                 for (int i = 0; i < files.length; i++) {
-                    File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator);
-                    file2.mkdirs();
+
                     if (files[i].contains(".")) {
                         file_name.add(files[i]);
+                        downloadable_files.add(new mFTPFile( files[i],currentDirectory.replace(baseDirectory,"")));
                     } else {
                         directory_name.add(files[i]);
                     }
                 }
 
-                for (int i = 0; i < file_name.size(); i++) {
-                    File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator + file_name.get(i));
-                    mFtpClient.download(file_name.get(i), file2);
-                }
 
-                for (int i = 0; i < directory_name.size(); i++) {
-                    mFtpClient.changeDirectory(mFtpClient.currentDirectory() + File.separator + directory_name.get(i));
-                    String[] files_child = mFtpClient.listNames();
-                    File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator + directory_name.get(i) + File.separator);
-                    file2.mkdirs();
-                    for (int j = 0; j < files_child.length; j++) {
-                        if (files_child[j].contains(".")) {
-                            File file3 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator + directory_name.get(i) + File.separator + files_child[j]);
-                            mFtpClient.download(files_child[j], file3);
+                if (!Directory.trim().isEmpty()) {
+                    for (int i = 0; i < directory_name.size(); i++) {
+                        mFtpClient.changeDirectory(currentDirectory + File.separator + directory_name.get(i));
+                        File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product" + Directory + File.separator + directory_name.get(i) + File.separator);
+                        file2.mkdirs();
+                        String[] files_child = mFtpClient.listNames();
+
+
+                        for (int j = 0; j < files_child.length; j++) {
+                            if (files_child[j].contains(".")) {
+                                downloadable_files.add(new mFTPFile(files_child[j], currentDirectory.replace(baseDirectory, "") + File.separator + directory_name.get(i)));
+                            }
                         }
-
-                        Log.d("File child ", files_child[j]);
+                        mFtpClient.changeDirectoryUp();
+                        Log.d("File ", directory_name.get(i));
 
                     }
-                    mFtpClient.changeDirectoryUp();
-                    Log.d("File ", directory_name.get(i));
                 }
-
                 mFtpClient.disconnect(true);
+                return downloadable_files;
+
             } catch (SocketException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
             } catch (FTPException e) {
                 e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
             } catch (FTPIllegalReplyException e) {
                 e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
             } catch (FTPDataTransferException e) {
                 e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
             } catch (FTPListParseException e) {
                 e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
             } catch (FTPAbortedException e) {
                 e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
+            }
+
+
+        }
+        return null;
+    }
+
+
+    public boolean download_Directory(AdapterCallback context){
+        cbohelp=new CBO_DB_Helper(MyCustumApplication.getInstance());
+        getFtpDetail();
+        ftp_port = ftp_port_download;
+        mAdapterCallback = ((AdapterCallback) context);
+        FTPClient mFtpClient = connnectingwithFTP(ftp_hostname_download, ftp_username_download, ftp_password_download,context);
+        if(mFtpClient != null) {
+            try {
+                mFtpClient.changeDirectoryUp();
+                String baseDirectory = mFtpClient.currentDirectory();
+                mFtpClient.changeDirectory(baseDirectory + "/visualaid/Catalog");
+                String[] files = mFtpClient.listNames();
+                ArrayList<String> file_name = new ArrayList<>();
+                ArrayList<String> directory_name = new ArrayList<>();
+                ArrayList<mFTPFile> downloadable_files = new ArrayList<>();
+
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator);
+                file.mkdirs();
+
+                String currentDirectory = mFtpClient.currentDirectory();
+
+                for (int i = 0; i < files.length; i++) {
+
+                    if (files[i].contains(".")) {
+                        file_name.add(files[i]);
+                        downloadable_files.add(new mFTPFile( files[i],currentDirectory.replace(baseDirectory,"")));
+                    } else {
+                        directory_name.add(files[i]);
+                    }
+                }
+
+                /*for (int i = 0; i < file_name.size(); i++) {
+                    File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator + file_name.get(i));
+
+                    if(connectFTP(ftp_hostname, ftp_username, ftp_password)) {
+                        mFtpClient.download(file_name.get(i), file2, new DownloadListener(context));
+                    }
+                }*/
+
+
+
+                for (int i = 0; i < directory_name.size(); i++) {
+                    mFtpClient.changeDirectory(currentDirectory + File.separator + directory_name.get(i));
+                    File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator + directory_name.get(i) + File.separator);
+                    file2.mkdirs();
+                    String[] files_child = mFtpClient.listNames();
+
+                    //download_visual_aids(context, new ArrayList<String>(Arrays.asList(files_child)),currentDirectory.replace(baseDirectory,"")+ File.separator + directory_name.get(i));
+                   /* for (int j = 0; j < files_child.length; j++) {
+                        if (files_child[j].contains(".")) {
+                            File file3 = new File(Environment.getExternalStorageDirectory() + File.separator + "cbo/product/Catalog" + File.separator + directory_name.get(i) + File.separator + files_child[j]);
+                            //if(connectFTP(ftp_hostname, ftp_username, ftp_password)) {
+                            mFtpClient.download(files_child[j], file3);
+                            //}
+                        }
+                        Log.d("File child ", files_child[j]);
+                    }*/
+                    for (int j = 0; j < files_child.length; j++) {
+                        if (files_child[j].contains(".")) {
+                            downloadable_files.add(new mFTPFile(files_child[j], currentDirectory.replace(baseDirectory,"")+ File.separator + directory_name.get(i)));
+                        }
+                    }
+                    mFtpClient.changeDirectoryUp();
+                    Log.d("File ", directory_name.get(i));
+
+                }
+
+                mFtpClient.disconnect(true);
+                //download_visual_aids(context,file_name,currentDirectory.replace(baseDirectory,""));
+
+                for (mFTPFile ftpfile :downloadable_files){
+                    download_visual_aids(context,ftpfile.getFileName(),ftpfile.getDirectory());
+                }
+
+
+
+
+
+                //mFtpClient.disconnect(true);
+            } catch (SocketException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
+            } catch (FTPException e) {
+                e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
+            } catch (FTPIllegalReplyException e) {
+                e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
+            } catch (FTPDataTransferException e) {
+                e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
+            } catch (FTPListParseException e) {
+                e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
+            } catch (FTPAbortedException e) {
+                e.printStackTrace();
+                //AppAlert.getInstance().getAlert(context,"Error",e.getMessage());
             }
 
             return true;
@@ -288,15 +649,17 @@ public class up_down_ftp {
         return false;
     }
 
-    public boolean downloadSingleFile(final String remoteFilePath,final  File downloadFile,final Context context) {
+    public boolean downloadSingleFile(final String remoteFilePath,final  File downloadFile,final AdapterCallback context) {
 
         final Boolean[] result = {false};
         Runnable runnable = new Runnable() {
             public void run() {
                 //shareclass=new Shareclass();
-                cbohelp=new CBO_DB_Helper(context);
+                cbohelp=new CBO_DB_Helper(MyCustumApplication.getInstance());
                 getFtpDetail();
-                if(connnectingwithFTP(ftp_hostname, ftp_username, ftp_password,context)) {
+                ftp_port = ftp_port_download;
+                FTPClient mFtpClient = connnectingwithFTP(ftp_hostname_download, ftp_username_download, ftp_password_download,context);
+                if(mFtpClient != null) {
                     File parentDir = downloadFile.getParentFile();
                     if (!parentDir.exists())
                         parentDir.mkdir();
@@ -305,23 +668,7 @@ public class up_down_ftp {
                         mFtpClient.download(remoteFilePath, downloadFile);
                         mFtpClient.disconnect(true);
                         result[0] = true;
-                   /* if(shareclass.getValue(context,"Chat","InActive").equals("Active")){
-                        Handler handler = new Handler(Looper.getMainLooper());
 
-                        handler.post(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                try {
-                                    mAdapterCallback = ((AdapterCallback) context);
-                                    mAdapterCallback. updateAdaptor();
-                                } catch (ClassCastException e) {
-                                    throw new ClassCastException("Activity must implement AdapterCallback.");
-                                }
-
-                            }
-                        });
-                    }*/
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -347,11 +694,12 @@ public class up_down_ftp {
         Runnable runnable = new Runnable() {
 
             public void run() {
-                cbohelp=new CBO_DB_Helper(context);
+                cbohelp=new CBO_DB_Helper(MyCustumApplication.getInstance());
                 getFtpDetail();
                 mAdapterCallback = ((AdapterCallback) context);
                 //connnectingwithFTP("220.158.164.114", "CBO_DOMAIN_SERVER", "cbodomain@321");
-                if(connnectingwithFTP(ftp_hostname, ftp_username, ftp_password,context)) {
+                FTPClient mFtpClient = connnectingwithFTP(ftp_hostname, ftp_username, ftp_password,mAdapterCallback);
+                if(mFtpClient != null) {
                     try {
 
 
@@ -401,7 +749,8 @@ public class up_down_ftp {
                 getFtpDetail();
                 mAdapterCallback = ((AdapterCallback) context);
                 //connnectingwithFTP("220.158.164.114", "CBO_DOMAIN_SERVER", "cbodomain@321");
-                if(connnectingwithFTP(ftp_hostname, ftp_username, ftp_password,context)) {
+                FTPClient mFtpClient = connnectingwithFTP(ftp_hostname, ftp_username, ftp_password,mAdapterCallback);
+                if(mFtpClient != null) {
                     try {
 
 
@@ -437,6 +786,23 @@ public class up_down_ftp {
 
     }
 
+    public class mFTPFile{
+        String fileName;
+        String Directory;
+
+        public mFTPFile(String fileName, String directory) {
+            this.fileName = fileName;
+            Directory = directory;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public String getDirectory() {
+            return Directory;
+        }
+    }
 
     /*******  Used to file upload and show progress  **********/
 
@@ -634,100 +1000,202 @@ public class up_down_ftp {
     }
 
 
-//    public class DownloadListener implements FTPDataTransferListener {
-//
-//        Context context;
-//
-//        DownloadListener(Context context){
-//            this.context=context;
-//        }
-//
-//        public void started() {
-//
-//
-//            // Transfer started
-//            //Toast.makeText(getBaseContext(), " Upload Started ...", Toast.LENGTH_SHORT).show();
-//            //System.out.println(" Upload Started ...");
-//            try {
-//                mAdapterCallback. upload_complete("S");
-//            } catch (ClassCastException e) {
-//                throw new ClassCastException("Activity must implement AdapterCallback.");
-//            }
-//
-//
-//        }
-//
-//        public void transferred(int length) {
-//
-//            // Yet other length bytes has been transferred since the last time this
-//            // method was called
-//            //Toast.makeText(getBaseContext(), " transferred ..." +MyConnection.user_name+ length, Toast.LENGTH_SHORT).show();
-//            //System.out.println(" transferred ..." + length);
-//
-//         /*   //build notification
-//            file_uploaded=file_uploaded +  length;
-//            float uploaded=file_uploaded*100/file_size;
-//            NotificationCompat.Builder mBuilder =
-//                    new NotificationCompat.Builder(context)
-//                            .setSmallIcon(R.drawable.ic_upload_file)
-//                            .setContentTitle(""+uploaded+" % completed...")
-//                            .setContentText("Please Do not switch off your Internet ")
-//                            .setAutoCancel(false)
-//                            .setOngoing(true);
-//
-//            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                int color = 0x125688;
-//                mBuilder.setColor(color);
-//                mBuilder.setSmallIcon(R.drawable.ic_upload_file);
-//            }
-//
-//            Random random = new Random();
-//            //int m = random.nextInt(9999 - 1000) + 1000;
-//            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//            notificationManager.notify(0, mBuilder.build()); //m = ID of notification*/
-//        }
-//
-//        public void completed() {
-//
-//
-//            // Transfer completed
-//
-//            //Toast.makeText(getBaseContext(), " completed ...", Toast.LENGTH_SHORT).show();
-//            //System.out.println(" completed ..." );
-//           /* try {
-//                mAdapterCallback. upload_complete("Y");
-//            } catch (ClassCastException e) {
-//                throw new ClassCastException("Activity must implement AdapterCallback.");
-//            }*/
-//
-//        }
-//
-//        public void aborted() {
-//
-//
-//            // Transfer aborted
-//            //Toast.makeText(getBaseContext()," transfer aborted , please try again...", Toast.LENGTH_SHORT).show();
-//            //System.out.println(" aborted ..." );
-//            try {
-//                mAdapterCallback. upload_complete("N");
-//            } catch (ClassCastException e) {
-//                throw new ClassCastException("Activity must implement AdapterCallback.");
-//            }
-//        }
-//
-//        public void failed() {
-//
-//            // Transfer failed
-//            System.out.println(" failed ..." );
-//            try {
-//                mAdapterCallback. upload_complete("N");
-//            } catch (ClassCastException e) {
-//                throw new ClassCastException("Activity must implement AdapterCallback.");
-//            }
-//
-//        }
-//
-//    }
+    /*******  Used to file upload and show progress  **********/
+
+    public class DownloadListener implements FTPDataTransferListener {
+
+        Context context;
+
+        DownloadListener(Context context){
+            this.context=context;
+        }
+
+        public void started() {
+
+
+            // Transfer started
+            //Toast.makeText(getBaseContext(), " Upload Started ...", Toast.LENGTH_SHORT).show();
+            //System.out.println(" Upload Started ...");
+            try {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mAdapterCallback.started(responseCode,"Started!!!","Upload Started!!!");
+                    }
+                });
+
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Activity must implement AdapterCallback.");
+            }
+            //build notification
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.drawable.ic_upload_file)
+                            .setContentTitle("Upload Started ...")
+                            .setContentText("Please Do not switch off your Internet")
+                            .setAutoCancel(false)
+                            .setDefaults(Notification.DEFAULT_ALL)
+                            .setOngoing(true);
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int color = 0x125688;
+                mBuilder.setColor(color);
+                mBuilder.setSmallIcon(R.drawable.ic_upload_file);
+            }
+
+            Random random = new Random();
+            //int m = random.nextInt(9999 - 1000) + 1000;
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, mBuilder.build()); //m = ID of notification
+
+        }
+
+        public void transferred(int length) {
+
+            // Yet other length bytes has been transferred since the last time this
+            // method was called
+            //Toast.makeText(getBaseContext(), " transferred ..." +MyConnection.user_name+ length, Toast.LENGTH_SHORT).show();
+            //System.out.println(" transferred ..." + length);
+
+            //build notification
+            file_uploaded=file_uploaded +  length;
+            float uploaded=file_uploaded*100/file_size;
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    mAdapterCallback.progess(responseCode,file_size,uploaded,""+uploaded+" % completed...");
+                }
+            });
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.drawable.ic_upload_file)
+                            .setContentTitle(""+uploaded+" % completed...")
+                            .setContentText("Please Do not switch off your Internet ")
+                            .setAutoCancel(false)
+                            .setOngoing(true);
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int color = 0x125688;
+                mBuilder.setColor(color);
+                mBuilder.setSmallIcon(R.drawable.ic_upload_file);
+            }
+
+            Random random = new Random();
+            //int m = random.nextInt(9999 - 1000) + 1000;
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, mBuilder.build()); //m = ID of notification
+        }
+
+        public void completed() {
+
+
+            // Transfer completed
+
+            //Toast.makeText(getBaseContext(), " completed ...", Toast.LENGTH_SHORT).show();
+            //System.out.println(" completed ..." );
+            try {
+                if (IsLastFile){
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            mAdapterCallback.complete(responseCode,"Success!!!","Upload completed....");
+                        }
+                    });
+                }
+
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Activity must implement AdapterCallback.");
+            }
+            //build notification
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.drawable.ic_upload_complete)
+                            .setContentTitle("Upload completed")
+                            .setContentText("Sucessfully uploaded...")
+                            .setAutoCancel(true)
+                            .setDefaults(Notification.DEFAULT_ALL);
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int color = 0x125688;
+                mBuilder.setColor(color);
+                mBuilder.setSmallIcon(R.drawable.ic_upload_complete);
+            }
+
+            Random random = new Random();
+            //int m = random.nextInt(9999 - 1000) + 1000;
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, mBuilder.build()); //m = ID of notification
+        }
+
+        public void aborted() {
+
+
+            // Transfer aborted
+            //Toast.makeText(getBaseContext()," transfer aborted , please try again...", Toast.LENGTH_SHORT).show();
+            //System.out.println(" aborted ..." );
+            try {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mAdapterCallback.failed(responseCode,"Failed!!!","Upload Failed....\nPlease try after sometime");
+                    }
+                });
+
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Activity must implement AdapterCallback.");
+            }
+        }
+
+        public void failed() {
+
+            // Transfer failed
+            System.out.println(" failed ..." );
+            try {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mAdapterCallback.failed(responseCode,"Failed!!!","Upload Failed....\nPlease try after sometime");
+                    }
+                });
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Activity must implement AdapterCallback.");
+            }
+            //build notification
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.drawable.ic_upload_failed)
+                            .setContentTitle("Upload Failed ...")
+                            .setContentText("Please try again...")
+                            .setAutoCancel(false)
+                            .setDefaults(Notification.DEFAULT_ALL)
+                            .setOngoing(true);
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int color = 0x125688;
+                mBuilder.setColor(color);
+                mBuilder.setSmallIcon(R.drawable.ic_upload_failed);
+            }
+
+            Random random = new Random();
+            //int m = random.nextInt(9999 - 1000) + 1000;
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, mBuilder.build()); //m = ID of notification
+        }
+
+    }
+
+
 
 
     public void getFtpDetail()
@@ -742,6 +1210,12 @@ public class up_down_ftp {
                 ftp_password=c.getString(c.getColumnIndex("password"));
                 ftp_port=c.getString(c.getColumnIndex("port"));
                 web_root_path=c.getString(c.getColumnIndex("path"));
+
+                ftp_hostname_download=c.getString(c.getColumnIndex("ftpip_download"));
+                ftp_username_download=c.getString(c.getColumnIndex("username_download"));
+                ftp_password_download=c.getString(c.getColumnIndex("password_download"));
+                ftp_port_download=c.getString(c.getColumnIndex("port_download"));
+
             }while(c.moveToNext());
         }
         //port=Integer.parseInt(ftp_port);
@@ -918,5 +1392,7 @@ public class up_down_ftp {
         return uriSting;
 
     }
+
+
 
 }
