@@ -1443,15 +1443,31 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         if (type.equals("C")) {
             cv.put("DR_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("DR_LAT_LONG2", latlong);
+                cv.put("DR_LAT_LONG3", latlong);
+            }
             sd.update("phchemist", cv, "chem_id =" + id, null);
         }else if (type.equals("D")) {
             cv.put("DR_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("DR_LAT_LONG3", latlong);
+                cv.put("DR_LAT_LONG2", latlong);
+            }
             sd.update("phdoctor", cv, "dr_id =" + id, null);
         }else if (type.equals("DP")) {
             cv.put("DR_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("DR_LAT_LONG3", latlong);
+                cv.put("DR_LAT_LONG2", latlong);
+            }
             sd.update(PH_DAIRY, cv, "DAIRY_ID =" + id, null);
         }else if (type.equals("S")) {
             cv.put("PA_LAT_LONG"+index, latlong);
+            if(index.equalsIgnoreCase("")){
+                cv.put("PA_LAT_LONG3", latlong);
+                cv.put("PA_LAT_LONG2", latlong);
+            }
             sd.update("phparty", cv, "pa_id =" + id, null);
         }
 
