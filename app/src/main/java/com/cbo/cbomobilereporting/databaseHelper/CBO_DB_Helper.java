@@ -1173,7 +1173,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public long insert_phdoctor(int dr_id, String dr_name, String dr_code, String area, int spl_id,String LAST_VISIT_DATE
             , String CLASS, String PANE_TYPE, String POTENCY_AMT,String ITEM_NAME
             , String ITEM_POB, String ITEM_SALE, String DR_AREA, String DR_LAT_LONG, String FREQ, String NO_VISITED
-            ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN) {
+            ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN,int MAX_REG) {
 
         sd = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -1197,8 +1197,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         cv.put("FREQ", FREQ);
         cv.put("NO_VISITED", NO_VISITED);
 
-        cv.put("DR_LAT_LONG2", DR_LAT_LONG2);
-        cv.put("DR_LAT_LONG3", DR_LAT_LONG3);
+        cv.put("DR_LAT_LONG2", MAX_REG >1? DR_LAT_LONG2:DR_LAT_LONG);
+        cv.put("DR_LAT_LONG3", MAX_REG >2? DR_LAT_LONG3:DR_LAT_LONG);
         cv.put("COLORYN", COLORYN);
 
         cv.put("CRM_COUNT", CRM_COUNT);

@@ -115,7 +115,8 @@ public class ChoosePhoto {
                     /*FileUtil.getInstance(mContext)
                     .createImageTempFile(Environment.getExternalStorageDirectory()));*/
             String realPathFromURI = FileUtil.getRealPathFromURI(mContext, data.getData());
-            File file1 = new File(realPathFromURI == null ? getImageUrlWithAuthority(mContext, data.getData()) : realPathFromURI);
+        assert (realPathFromURI == null ? getImageUrlWithAuthority(mContext, data.getData()) : realPathFromURI) != null;
+        File file1 = new File(realPathFromURI == null ? getImageUrlWithAuthority(mContext, data.getData()) : realPathFromURI);
             if (file1.exists()) {
                 if (currentAndroidDeviceVersion > 23) {
                     cropImage(FileProvider.getUriForFile(mContext, mContext.getApplicationContext().getPackageName() + ".provider", file1), cropPictureUrl);
