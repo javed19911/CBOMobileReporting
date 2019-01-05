@@ -1,1 +1,1 @@
-include ':app', ':ShortcutBadger'
+include ':app', ':ShortcutBadger', ':CBOLibrary'

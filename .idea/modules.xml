@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/CBOLibrary/CBOLibrary.iml" filepath="$PROJECT_DIR$/CBOLibrary/CBOLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/CBOMobileReporting.iml" filepath="$PROJECT_DIR$/CBOMobileReporting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ShortcutBadger/ShortcutBadger.iml" filepath="$PROJECT_DIR$/ShortcutBadger/ShortcutBadger.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShortcutBadger/ShortcutBadger.iml" filepath="$PROJECT_DIR$/ShortcutBadger/ShortcutBadger.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
