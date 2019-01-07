@@ -53,7 +53,7 @@ import utils_new.SendMailTask;
 public class CboServices {
 
     private static final String NAMESPACE = "http://tempuri.org/";
-    private static String URL= "http://www.cboservices.com/mobilerpt.asmx";
+    private static String URL= "http://www.cboservices1.com/mobilerpt.asmx";
     private final Handler h1;
     Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
@@ -68,7 +68,7 @@ public class CboServices {
         h1 = hh;
         this.context=context;
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
-        URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL",URL);
+       // URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL",URL);
         if(URL.equals("")){
             URL= "http://www.cboservices.com/mobilerpt.asmx";
         }
@@ -103,6 +103,9 @@ public class CboServices {
 
                 for (int service_try = 0; service_try < 2; service_try++) {
                     try {
+                        if(service_try != 0){
+                            URL= "http://www.cboservices.com/mobilerpt.asmx";
+                        }
                         URL url = new URL(URL + "/" + methodName);
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.setRequestMethod("POST");
@@ -110,6 +113,7 @@ public class CboServices {
                         connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
                         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                         connection.setDoOutput(true);
+                        connection.setConnectTimeout(5000);
 
                         urlParameters = new StringBuilder();
                         for (String key : data.keySet()) {
@@ -123,9 +127,9 @@ public class CboServices {
                         if (params.length() > 1) {
                             params = params.substring(0, params.length() - 1);
                         }
-                        int no_of_try = 0;
-                        try {
-                            for (no_of_try = 1; no_of_try <= 3; no_of_try++) {
+                        //int no_of_try = 0;
+                        //try {
+                            //for (no_of_try = 1; no_of_try <= 3; no_of_try++) {
                                 DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
                                 dStream.writeBytes(params); //Writes out the string to the underlying output stream as a sequence of bytes
                                 dStream.flush(); // Flushes the data output stream.
@@ -169,26 +173,27 @@ public class CboServices {
                                     threadMsg("[ERROR] " + methodName + " " + responseOutput.toString(), response_code, table, methodName);
                                 }
                                 // output.append(System.getProperty("line.separator") + "Response " + System.getProperty("");
-                                service_try = 1;
+                                //service_try = 1;
                                 break;
-                            }
+                           // }
                         } catch (SocketTimeoutException e1) {
-                            if (no_of_try == 3) {
+                            if (service_try >= 2) {
                                 threadMsg("[ERROR] " + "service  method " + methodName + " " + e1.toString(), response_code, table, methodName);
+                                break;
                             } else {
-                                try {
+                                //try {
                                     if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
                                         URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
-                                        url = new URL(URL + "/" + methodName);
+                                        /*url = new URL(URL + "/" + methodName);
                                         connection = (HttpURLConnection) url.openConnection();
                                         connection.setRequestMethod("POST");
                                         connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
                                         connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
                                         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                                        connection.setDoOutput(true);
+                                        connection.setDoOutput(true);*/
                                     }
 
-                                } catch (ProtocolException e) {
+                                /*} catch (ProtocolException e) {
                                     // PROTOCOL EXCEPTION
                                     threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
                                     e.printStackTrace();
@@ -204,13 +209,14 @@ public class CboServices {
                                     e.printStackTrace();
                                     threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
                                     no_of_try = 4;
-                                }
+                                }*/
                             }
-                        }
+                        //}
                     } catch (ProtocolException e) {
                         // PROTOCOL EXCEPTION
-                        if (service_try == 1) {
+                        if (service_try >= 2) {
                             threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
+                            break;
                         } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
 
                             URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
@@ -220,8 +226,9 @@ public class CboServices {
                         e.printStackTrace();
                     } catch (MalformedURLException e) {
                         //URL CONVERT Exception
-                        if (service_try == 1) {
+                        if (service_try >= 2) {
                             threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
+                            break;
                         } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
 
                             URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
@@ -230,14 +237,24 @@ public class CboServices {
 
                     } catch (IOException e) {
                         //OPEN EXCEPTION
-                        if (service_try == 1) {
+                        if (service_try >= 2) {
                             threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
+                            break;
                         } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
 
                             URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
                         }
                         e.printStackTrace();
 
+                    }catch (Exception e){
+                        if (service_try >= 2) {
+                            threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
+                            break;
+                        } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
+
+                            URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
+                        }
+                        e.printStackTrace();
                     }
                 }
             }

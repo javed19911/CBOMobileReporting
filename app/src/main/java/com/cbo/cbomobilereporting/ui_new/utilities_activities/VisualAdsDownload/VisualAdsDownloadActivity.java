@@ -138,7 +138,7 @@ public class VisualAdsDownloadActivity extends AppCompatActivity {
         tables.add(0);
         new MyAPIService(context)
                 .execute(new ResponseBuilder("VISUALAID_DOWNLOAD", request)
-                        .setMultiTable(false).setTables(tables).setResponse(new CBOServices.APIResponse() {
+                        .setMultiTable(false).setTables(tables).setDescription("Please Wait....\nProcessing downloadable files....").setResponse(new CBOServices.APIResponse() {
                             @Override
                             public void onComplete(Bundle message) {
 
@@ -195,6 +195,11 @@ public class VisualAdsDownloadActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Bundle response) {
                                 parser_worktype(response);
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+
                             }
 
 

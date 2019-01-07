@@ -7,7 +7,7 @@ public class AppConstant {
 
 // Number of columns of Grid View
 	public static final int NUM_OF_COLUMNS = 3;
-	public static String MAIN_URL="http://www.cboservices.com/mobilerpt.asmx";
+	public static String MAIN_URL="http://www.cboservices1.com/mobilerpt.asmx";
       //public static String MAIN_URL="http://www.cboinfotech.co.in/MobileRpt.asmx";
       //public static String MAIN_URL="http://www.akumentishealthcare.co.in/MobileRpt.asmx";
 	  // Gridview image padding
