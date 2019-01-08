@@ -48,7 +48,10 @@ public class ServiceHandler {
     public ServiceHandler(Context context){
         this.context =context;
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
-        //URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL",URL);
+        URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL",URL);
+        if(URL.equals("")){
+            URL= "http://www.cboservices.com/mobilerpt.asmx";
+        }
     }
 
 
@@ -907,9 +910,9 @@ public class ServiceHandler {
         for (int service_try = 0; service_try < 2; service_try++) {
             try {
 
-                if(service_try != 0){
+                /*if(service_try != 0){
                     URL= "http://www.cboservices.com/mobilerpt.asmx";
-                }
+                }*/
                 java.net.URL url = new URL(URL+"/"+methodName);
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("POST");

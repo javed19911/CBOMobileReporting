@@ -53,7 +53,7 @@ import utils_new.SendMailTask;
 public class CboServices {
 
     private static final String NAMESPACE = "http://tempuri.org/";
-    private static String URL= "http://www.cboservices1.com/mobilerpt.asmx";
+    private static String URL= "http://www.cboservices.com/mobilerpt.asmx";
     private final Handler h1;
     Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
@@ -68,7 +68,7 @@ public class CboServices {
         h1 = hh;
         this.context=context;
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
-       // URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL",URL);
+        URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL",URL);
         if(URL.equals("")){
             URL= "http://www.cboservices.com/mobilerpt.asmx";
         }
@@ -103,9 +103,9 @@ public class CboServices {
 
                 for (int service_try = 0; service_try < 2; service_try++) {
                     try {
-                        if(service_try != 0){
+                        /*if(service_try != 0){
                             URL= "http://www.cboservices.com/mobilerpt.asmx";
-                        }
+                        }*/
                         URL url = new URL(URL + "/" + methodName);
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.setRequestMethod("POST");
