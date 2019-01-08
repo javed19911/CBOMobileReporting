@@ -34,7 +34,11 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
+import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
 import com.google.android.gms.location.LocationSettingsStates;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.Response;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 
 import org.json.JSONArray;
@@ -44,9 +48,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import services.CboServices;
+import services.MyAPIService;
 import utils.CBOUtils.SystemArchitecture;
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 /**
  * Created by Akshit on 5/9/2015.
@@ -254,7 +261,7 @@ public class LoginMain extends CustomActivity {
         request.put("MobileVersion",Custom_Variables_And_Method.VERSION);
         request.put("GCM_TOCKEN", Custom_Variables_And_Method.GCMToken);
 
-        ArrayList<Integer> tables = new ArrayList<>();
+        /*ArrayList<Integer> tables = new ArrayList<>();
         tables.add(-1);  // to get all the tables
 
         progress1.setMessage("Please Wait.. \n Login in progress...");
@@ -264,7 +271,30 @@ public class LoginMain extends CustomActivity {
 
         new CboServices(this, mHandler).customMethodForAllServices(request, "LOGIN_MOBILE_2", MESSAGE_INTERNET_LOGIN, tables);
 
-        //End of call to service
+        //End of call to service*/
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("LOGIN_MOBILE_2", request)
+                        .setDescription("Please Wait.. \n Login in progress...").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+
+                                parser_login(message);
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+                            }
+
+
+                        })
+                );
     }
 
 
@@ -546,10 +576,10 @@ public class LoginMain extends CustomActivity {
                        process_login_data(result);
                     }else if (c.getString("STATUS").equals("L")) {
                         startActivity(new Intent(getApplicationContext(), Load_New.class));
-                        progress1.dismiss();
+                        //progress1.dismiss();
                     }else{
-                        customVariablesAndMethod.getAlert(context,"Alert !!!",c.getString("STATUS"));
-                        progress1.dismiss();
+                        AppAlert.getInstance().getAlert(context,"Alert !!!",c.getString("STATUS"));
+                        //progress1.dismiss();
                     }
                 }
 
@@ -620,10 +650,36 @@ public class LoginMain extends CustomActivity {
                 }
 
 
+                cbohelp.insertdata(company_code, mylog, mypass, pin.getText().toString());
+                cbohelp.deleteVersion();
+                cbohelp.insertVersionInLocal(Custom_Variables_And_Method.VERSION);
+
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_type_Selected","w");
 
                 //progress1.dismiss();
-                //Start of call to service
+
+               new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                   @Override
+                   public void onSuccess(Bundle bundle) {
+
+                        customMethod.notification_check();
+                        if (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("11")) {
+                            startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
+
+                        } else {
+                        startActivity(new Intent(getApplicationContext(), ViewPager_2016.class));
+
+                        }
+
+                        finish();
+                   }
+
+                   @Override
+                   public void onError(String message, String description) {
+                       AppAlert.getInstance().getAlert(context,message,description);
+                   }
+               });
+               /* //Start of call to service
 
                 HashMap<String, String> request = new HashMap<>();
                 request.put("sCompanyFolder", company_code);
@@ -639,7 +695,7 @@ public class LoginMain extends CustomActivity {
 
                 new CboServices(this, mHandler).customMethodForAllServices(request, "GetItemListForLocal", MESSAGE_INTERNET_UTILITES, tables);
 
-                //End of call to service
+                //End of call to service*/
 
 
 

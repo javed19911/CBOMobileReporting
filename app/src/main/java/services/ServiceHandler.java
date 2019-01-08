@@ -49,6 +49,9 @@ public class ServiceHandler {
         this.context =context;
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
         URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL",URL);
+        if(URL.equals("")){
+            URL= "http://www.cboservices.com/mobilerpt.asmx";
+        }
     }
 
 
@@ -906,6 +909,10 @@ public class ServiceHandler {
 
         for (int service_try = 0; service_try < 2; service_try++) {
             try {
+
+                /*if(service_try != 0){
+                    URL= "http://www.cboservices.com/mobilerpt.asmx";
+                }*/
                 java.net.URL url = new URL(URL+"/"+methodName);
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("POST");
@@ -925,9 +932,9 @@ public class ServiceHandler {
                 if (params.length() > 1) {
                     params = params.substring(0, params.length() - 1);
                 }
-                int no_of_try = 0;
-                try {
-                    for ( no_of_try = 1; no_of_try <= 3; no_of_try++) {
+                //int no_of_try = 0;
+                //try {
+                    //for ( no_of_try = 1; no_of_try <= 3; no_of_try++) {
                         service_try = 1;
                         DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
                         dStream.writeBytes(params); //Writes out the string to the underlying output stream as a sequence of bytes
@@ -973,47 +980,20 @@ public class ServiceHandler {
                         // output.append(System.getProperty("line.separator") + "Response " + System.getProperty("");
 
                         //break;
+                    //}
+                }catch(SocketTimeoutException e){
+                    // PROTOCOL EXCEPTION
+                    if (service_try >= 2) {
+                        return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
+                    } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
+
+                        URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
                     }
-                }catch(SocketTimeoutException e1){
-                    if (no_of_try==3) {
-                        return threadMsg("[ERROR] " + "service  method " + methodName + " " + e1.toString(),  methodName);
-                    }else {
-                        try {
-                            if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
-                                URL= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL_ALTERNATE",URL);
-                                url = new URL(URL + "/" + methodName);
-                                connection = (HttpURLConnection) url.openConnection();
-                                connection.setRequestMethod("POST");
-                                connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
-                                connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
-                                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                                connection.setDoOutput(true);
-                            }
 
-                        }
-                        catch(ProtocolException e){
-                            // PROTOCOL EXCEPTION
-                            e.printStackTrace();
-                            return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
-
-                            //no_of_try = 4;
-
-                        } catch(MalformedURLException e){
-                            //URL CONVERT Exception
-                            e.printStackTrace();
-                            return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
-                            //no_of_try = 4;
-                        } catch(IOException e){
-                            //OPEN EXCEPTION
-                            e.printStackTrace();
-                            return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
-                            //no_of_try = 4;
-                        }
-                    }
-                }
+                //}
             } catch (ProtocolException e) {
                 // PROTOCOL EXCEPTION
-                if (service_try == 1) {
+                if (service_try >= 2) {
                     return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
                 } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
 
@@ -1024,7 +1004,7 @@ public class ServiceHandler {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
                 //URL CONVERT Exception
-                if (service_try == 1) {
+                if (service_try >= 2) {
                     return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
                 } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
 
@@ -1034,7 +1014,7 @@ public class ServiceHandler {
 
             } catch (IOException e) {
                 //OPEN EXCEPTION
-                if (service_try == 1) {
+                if (service_try >= 2) {
                     return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
                 } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
 
@@ -1042,6 +1022,14 @@ public class ServiceHandler {
                 }
                 e.printStackTrace();
 
+            }catch (Exception e){
+                if (service_try >= 2) {
+                    return threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), methodName);
+                } else if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
+
+                    URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
+                }
+                e.printStackTrace();
             }
         }
         return reply;

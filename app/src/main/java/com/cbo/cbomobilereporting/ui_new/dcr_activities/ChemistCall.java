@@ -1019,7 +1019,22 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
                     save.setText("Update Chemist");
                     retail_save.setText("Update Retailer");
+                }else{
+
+                    sample_name = "";
+                    sample_pob = "";
+                    sample_sample = "";
+
+                    gift_name = "";
+                    gift_qty = "";
                 }
+
+                sample_name_previous=sample_name;
+                sample_pob_previous=sample_pob;
+                sample_sample_previous=sample_sample;
+
+                gift_name_previous = gift_name;
+                gift_qty_previous = gift_qty;
                 dialog.dismiss();
             }
         });

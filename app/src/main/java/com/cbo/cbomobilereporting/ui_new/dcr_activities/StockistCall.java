@@ -691,9 +691,9 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         sample_pob = stockist_list.get("sample_pob").get(0);
 
 
-                        sample_name_previous=sample_name;
+                       /* sample_name_previous=sample_name;
                         sample_pob_previous=sample_pob;
-                        sample_sample_previous=sample_sample;
+                        sample_sample_previous=sample_sample;*/
 
 
                         String remarkWithPOB = stockist_list.get("remark").get(0);
@@ -1269,6 +1269,13 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
                         save.setText("Add Stockist");
                     }
+
+                    sample_name_previous=sample_name;
+                    sample_pob_previous=sample_pob;
+                    sample_sample_previous=sample_sample;
+
+                    gift_name_previous = gift_name;
+                    gift_qty_previous = gift_qty;
 
 
                 }
