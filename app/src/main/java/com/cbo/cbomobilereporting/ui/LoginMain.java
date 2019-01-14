@@ -299,7 +299,7 @@ public class LoginMain extends CustomActivity {
 
 
 
-    private final Handler mHandler = new Handler() {
+  /*  private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -331,9 +331,9 @@ public class LoginMain extends CustomActivity {
 
             }
         }
-    };
+    };*/
 
-    private void parser_utilites(Bundle result) {
+    /*private void parser_utilites(Bundle result) {
         if (result != null) {
 
             try {
@@ -366,12 +366,12 @@ public class LoginMain extends CustomActivity {
                     Log.e("%%%%%%%%%%%%%%%", "item insert");
 
                 }
-                                /*for (int b = 0; b<jsonArray2.length();b++){
+                                *//*for (int b = 0; b<jsonArray2.length();b++){
                                     JSONObject jasonObj2 = jsonArray2.getJSONObject(b);
                                     val=cbohelper.insertDoctorData(jasonObj2.getString("DR_ID"), jasonObj2.getString("ITEM_ID"),jasonObj2.getString("item_name"));
                                     Log.e("%%%%%%%%%%%%%%%", "doctor insert");
 
-                                }*/
+                                }*//*
                 for (int c = 0; c < jsonArray14.length(); c++) {
 
                     JSONObject jsonObject3 = jsonArray14.getJSONObject(c);
@@ -525,21 +525,21 @@ public class LoginMain extends CustomActivity {
                     cbohelp.insertMenu(menu, menu_code, menu_name, menu_url, main_menu_srno);
                 }
 
-                    /*Custom_Variables_And_Method.ip = "0";
+                    *//*Custom_Variables_And_Method.ip = "0";
                     Custom_Variables_And_Method.user = "0";
                     Custom_Variables_And_Method.pwd = "0";
                     Custom_Variables_And_Method.db = "0";
 
-                    cbohelp.insertLoginDetail(company_code, ols_ip, ols_db_name, ols_db_user, ols_db_password, version_new);*/
+                    cbohelp.insertLoginDetail(company_code, ols_ip, ols_db_name, ols_db_user, ols_db_password, version_new);*//*
 
                 cbohelp.insertdata(company_code, mylog, mypass, pin.getText().toString());
                 cbohelp.deleteVersion();
                 cbohelp.insertVersionInLocal(Custom_Variables_And_Method.VERSION);
                 customMethod.notification_check();
-                /*if (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("11")) {
+                *//*if (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("11")) {
                     startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
 
-                } else {*/
+                } else {*//*
                     startActivity(new Intent(getApplicationContext(), ViewPager_2016.class));
 
                 //}
@@ -552,7 +552,7 @@ public class LoginMain extends CustomActivity {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     //8372amit
     //8372

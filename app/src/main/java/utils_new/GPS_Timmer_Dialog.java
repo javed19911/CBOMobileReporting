@@ -18,6 +18,7 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.DcrmenuInGrid;
+import com.uenics.javed.CBOLibrary.Response;
 
 /**
  * Created by pc24 on 28/11/2017.
@@ -33,6 +34,7 @@ public class GPS_Timmer_Dialog extends AlertDialog {
     Handler h1;
     Integer response_code;
     Integer delay;
+    Response listener = null;
 
     public GPS_Timmer_Dialog(@NonNull Context context,String Msg) {
         super(context);
@@ -52,6 +54,13 @@ public class GPS_Timmer_Dialog extends AlertDialog {
         this.Msg=Msg;
     }
 
+    public GPS_Timmer_Dialog(@NonNull Context context, String Msg, Integer response_code, Response listener) {
+        super(context);
+        this.context = context;
+        this.listener=listener;
+        this.response_code=response_code;
+        this.Msg=Msg;
+    }
     @Override
     public void show() {
         super.show();
@@ -67,9 +76,15 @@ public class GPS_Timmer_Dialog extends AlertDialog {
             Custom_Variables_And_Method.GPS_STATE_CHANGED=false;
             new ShowProgess().execute();
         }else if (IsGPS_GPRS_ON){
-            threadMsg("");
+            if (listener != null)
+                listener.onSuccess(null);
+            if (h1 != null)
+                threadMsg("");
             dismiss();
         }else{
+            if (listener != null)
+                listener.onError("Alert!!!!","Please Swicth ON your GPS");
+
             customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
             dismiss();
         }
@@ -119,6 +134,9 @@ public class GPS_Timmer_Dialog extends AlertDialog {
         @Override
         protected void onPostExecute(String result) {
             dismiss();
+            if (listener != null)
+                listener.onSuccess(null);
+
             if (h1 !=null){
                 threadMsg("Done");
             }

@@ -39,7 +39,6 @@ import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -60,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 
 import locationpkg.LocationTest;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 
 /**
@@ -98,8 +98,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String ROOT_NEEDED;
     public static String CHEMIST_ID;
     public static String COMPANY_NAME;
-    public static String checkVersion = "20190107";
-    public static String VERSION = "20190107";
+    public static String checkVersion = "20190114";
+    public static String VERSION = "20190114";
     public static String RPT_DATE;
     public static String EMP_ID;
     public static String DCR_DATE;
@@ -301,10 +301,11 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
             @Override
             public void onClick(View view) {
                 if (url!=null && !url.isEmpty()){
-                    Intent i = new Intent(context, CustomWebView.class);
+                    /*Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", title);
-                    context.startActivity(i);
+                    context.startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(title,url);
                 }
                 dialog.dismiss();
             }

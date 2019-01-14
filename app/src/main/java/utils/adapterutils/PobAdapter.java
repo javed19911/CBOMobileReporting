@@ -96,8 +96,13 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 										@Override
 										public void onClick(View v) {
 											clicked = false;
-											viewHolder.scores.setText(""+element.getBalance());
-											element.setScore(""+element.getBalance());
+											if (element.getBalance() >= 0) {
+												viewHolder.scores.setText("" + element.getBalance());
+												element.setScore("" + element.getBalance());
+											}else{
+												viewHolder.scores.setText("" );
+												element.setScore("0");
+											}
 											if(s.toString().equals("") && viewHolder.pob_val.getText().toString().equals("") && viewHolder.noc.getText().toString().equals("") && !element.isSelected() ) {
 												viewHolder.checkbox.setChecked(false);
 											}else {

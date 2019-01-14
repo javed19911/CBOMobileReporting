@@ -106,8 +106,14 @@ public class MyAdapter extends ArrayAdapter<GiftModel> {
                                     @Override
                                     public void onClick(View v) {
                                         clicked = false;
-                                        viewHolder.sample.setText(""+element.getBalance());
-                                        element.setSample(""+element.getBalance());
+                                        if (element.getBalance() >= 0) {
+                                            viewHolder.sample.setText(""+element.getBalance());
+                                            element.setSample(""+element.getBalance());
+                                        }else{
+                                            viewHolder.sample.setText("" );
+                                            element.setSample("0");
+                                        }
+
                                         if (s.toString().equals("") && viewHolder.scores.getText().toString().equals("") && !element.isSelected()) {
                                             viewHolder.checkbox.setChecked(false);
                                         } else {

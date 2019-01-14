@@ -24,12 +24,12 @@ public class MyAPIService extends CBOServices {
         setAternateURL(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(context,"WEBSERVICE_URL_ALTERNATE",""));
 
         ArrayList<String> toEmailList = new ArrayList<>();
-        String to1=Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(context,"ERROR_EMAIL","");    //"javed.hussain19911@gmail.com";
+        //String to1=Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(context,"ERROR_EMAIL","");    //"javed.hussain19911@gmail.com";
 
         toEmailList.add("mobilereporting@cboinfotech.com");
-        if (!to1.trim().isEmpty()) {
+        /*if (!to1.trim().isEmpty()) {
             toEmailList.add(to1);
-        }
+        }*/
         configureErrorMail(new SendMail.MailBuilder("mobilereporting@cboinfotech.com", "mreporting")
                 .setSendTo(toEmailList)
                 .setSubject(Custom_Variables_And_Method.COMPANY_CODE)

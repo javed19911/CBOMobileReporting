@@ -7,8 +7,14 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+
+import com.cbo.cbomobilereporting.R;
+import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
+import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 
 import utils.ExceptionHandler;
 import utils_new.Custom_Variables_And_Method;
@@ -85,6 +91,70 @@ public class MyCustumApplication extends MultiDexApplication {
             URL= "http://www.cboservices.com/mobilerpt.asmx";
         }
         return URL;
+    }
+
+    public void LoadURL(String title,String url) {
+        LoadURL( title, url,0);
+    }
+    public void LoadURL(String title,String url,int showAs){
+
+        // showAs normal or notification
+
+
+
+        if (url.toLowerCase().contains("https://play.google.com/store/apps/details?id=com.cbo.cbomobilereporting")) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.cbo.cbomobilereporting&hl=en"));
+            startActivity(i);
+
+        }if (url.toLowerCase().contains("play.google.com/store/apps/")) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(i);
+
+        }else {
+
+            if(!url.toLowerCase().contains("http://") && !url.toLowerCase().contains("emulated/0")){
+                url="http://"+url;
+            }else if(url.toLowerCase().contains("emulated/0")){
+                url="file:///"+url;
+            }
+
+            Custom_Variables_And_Method.GLOBAL_LATLON =  Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
+            Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT=Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"DCR_DATE");
+            if(!url.contains("emulated/0") && !url.isEmpty()){
+                if ( url.contains("?")) {
+                    url = url + "&LAT_LONG=" + Custom_Variables_And_Method.GLOBAL_LATLON ;
+                }else{
+                    url = url + "?LAT_LONG=" + Custom_Variables_And_Method.GLOBAL_LATLON ;
+                }
+            }
+
+            //customVariablesAndMethod.getAlert(context,"Url",url);
+            String ALLOWED_URI_CHARS = "@#&=*-_.,:!?()/~'%";
+            String url1 = Uri.encode(url, ALLOWED_URI_CHARS);
+
+            if (showAs>0){
+                Intent intent1=new Intent(getInstance(),Msg_ho.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent1.putExtra("msg",""+showAs);
+                intent1.putExtra("msg_ho", url);
+                startActivity(intent1);
+                return;
+            }
+
+            /*CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            CustomTabsIntent customTabsIntent = builder.build();
+            customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            builder.setToolbarColor(getResources().getColor( R.color.colorPrimaryDark));
+            customTabsIntent.launchUrl(getInstance(),
+                    Uri.parse(url1));*/
+
+            Intent i = new Intent(getInstance(), CustomWebView.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("A_TP", url);
+            i.putExtra("Title", title);
+            startActivity(i);
+        }
+
     }
 
     public void ShowAutoStart(){

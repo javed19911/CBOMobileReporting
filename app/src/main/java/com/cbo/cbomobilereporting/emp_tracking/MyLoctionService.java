@@ -457,7 +457,8 @@ public class MyLoctionService extends Service implements
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
+        if (mGoogleApiClient.isConnected())
+            LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
         Log.d("", "Location update stopped .......................");
     }

@@ -34,7 +34,6 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
 
 import org.json.JSONArray;
@@ -49,6 +48,7 @@ import services.CboServices;
 import utils.CBOUtils.SystemArchitecture;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
+import utils.clearAppData.MyCustumApplication;
 import utils_new.Area_Dialog;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
@@ -361,20 +361,22 @@ public class DCR_Root_new extends AppCompatActivity {
                             }else{
                                 url = url + "?DATE=" + Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT;
                             }
-                            Intent i = new Intent(context, CustomWebView.class);
+                            /*Intent i = new Intent(context, CustomWebView.class);
                             i.putExtra("A_TP", url);
                             i.putExtra("Title",  "Leave Request");
-                            startActivity(i);
+                            startActivity(i);*/
+                            MyCustumApplication.getInstance().LoadURL(cbo_helper.getMenu("TRANSACTION", "T_LR1").get("T_LR1"),url);
                         } else if (url1 != null && !url1.equals("")) {
                             if ( url1.contains("?")) {
                                 url1 = url1 +  "&DATE=" + Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT ;
                             }else{
                                 url1 = url1 + "?DATE=" + Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT;
                             }
-                            Intent i = new Intent(context, CustomWebView.class);
+                            /*Intent i = new Intent(context, CustomWebView.class);
                             i.putExtra("A_TP", url1);
                             i.putExtra("Title",  "Leave Request");
-                            startActivity(i);
+                            startActivity(i);*/
+                            MyCustumApplication.getInstance().LoadURL(cbo_helper.getMenu("TRANSACTION", "LEAVE").get("LEAVE"),url1);
                         } else {
                             Intent leaveRequestActivity = new Intent(context, Add_Delete_Leave.class);
                             startActivity(leaveRequestActivity);

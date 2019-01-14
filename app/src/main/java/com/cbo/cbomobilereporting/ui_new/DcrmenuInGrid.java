@@ -55,7 +55,6 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.ReminderCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.StockistCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Work_Feedback_Of_Managers;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.GetDCR;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Farmer_registration_form;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -75,6 +74,7 @@ import locationpkg.Const;
 import services.CboServices;
 import services.ServiceHandler;
 import utils.CBOUtils.Constants;
+import utils.clearAppData.MyCustumApplication;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GetVersionCode;
@@ -167,10 +167,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 }else {
                     String url = new CBO_DB_Helper(getActivity()).getMenuUrl("DCR", nameOnClick);
                     if (url != null && !url.equals("")) {
-                        Intent i = new Intent(getActivity(), CustomWebView.class);
+                       /* Intent i = new Intent(getActivity(), CustomWebView.class);
                         i.putExtra("A_TP", url);
                         i.putExtra("Title", listOfAllTab.get(position));
-                        startActivity(i);
+                        startActivity(i);*/
+                        MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                     } else if (customVariablesAndMethod.IsGPS_GRPS_ON(context)){
                         OnGridItemClick(nameOnClick,false);
                     }
@@ -643,10 +644,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                     public void onPositiveClicked(View item, String result1) {
                                         try {
                                             if (!jsonArray0.getJSONObject(0).getString("URL").equalsIgnoreCase("")){
-                                                Intent i = new Intent(getActivity(), CustomWebView.class);
+                                                /*Intent i = new Intent(getActivity(), CustomWebView.class);
                                                 i.putExtra("A_TP", jsonArray0.getJSONObject(0).getString("URL"));
                                                 i.putExtra("Title", jsonArray0.getJSONObject(0).getString("TITLE"));
-                                                startActivity(i);
+                                                startActivity(i);*/
+                                                MyCustumApplication.getInstance().LoadURL(jsonArray0.getJSONObject(0).getString("TITLE"),jsonArray0.getJSONObject(0).getString("URL"));
                                             }else{
                                                 openDCR(result);
                                             }

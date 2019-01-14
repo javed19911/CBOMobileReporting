@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.SystemAlertActivity;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import org.json.JSONException;
 
@@ -151,10 +150,11 @@ public class AppAlert {
             @Override
             public void onClick(View view) {
                 if (url!=null && !url.isEmpty()){
-                    Intent i = new Intent(context, CustomWebView.class);
+                   /* Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", title);
-                    context.startActivity(i);
+                    context.startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(title,url);
                 }
                 dialog.dismiss();
             }

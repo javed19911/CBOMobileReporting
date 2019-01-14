@@ -27,6 +27,7 @@ import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
 import com.flurry.android.FlurryAgent;
+import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 
 import services.ServiceHandler;
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
 
@@ -154,7 +156,18 @@ public class GetDCR extends AppCompatActivity {
                     customVariablesAndMethod.Connect_to_Internet_Msg(context);
                 } else {
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DcrPlantimestamp", customVariablesAndMethod.get_currentTimeStamp());
-                    new Service_Call_From_Multiple_Classes().DownloadAll(context,hh,MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                   // new Service_Call_From_Multiple_Classes().DownloadAll(context,hh,MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                    new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            customVariablesAndMethod.msgBox(context,"Data Up-dated Sucessfully...");
+                        }
+
+                        @Override
+                        public void onError(String s, String s1) {
+                            AppAlert.getInstance().getAlert(context,s,s1);
+                        }
+                    });
                     //new getDoctor_Chemist().execute();
                     vbr.vibrate(100);
 

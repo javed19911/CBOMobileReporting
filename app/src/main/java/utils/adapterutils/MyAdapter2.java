@@ -79,8 +79,13 @@ public class MyAdapter2 extends ArrayAdapter<GiftModel> {
 									@Override
 									public void onClick(View v) {
 										clicked = false;
-										viewHolder.scores.setText(""+element.getBalance());
-										element.setScore(""+element.getBalance());
+										if (element.getBalance() >= 0) {
+											viewHolder.scores.setText("" + element.getBalance());
+											element.setScore("" + element.getBalance());
+										}else{
+											viewHolder.scores.setText("" );
+											element.setScore("0");
+										}
 										clicked = true;
 									}
 								});

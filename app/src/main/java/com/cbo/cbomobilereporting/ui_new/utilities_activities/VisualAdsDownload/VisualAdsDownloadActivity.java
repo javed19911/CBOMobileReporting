@@ -26,9 +26,6 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder.ApprovalRemainderAdaptor;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
-import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAid_Download;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -221,7 +218,7 @@ public class VisualAdsDownloadActivity extends AppCompatActivity {
                 }
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject c = jsonArray1.getJSONObject(i);
-                    mVisualAds visualAd = new mVisualAds(c.getString("ITEM_NAME"), c.getString("FILE_NAME"), c.getString("ITEM_NAME").equals("CATALOG"));
+                    mVisualAds visualAd = new mVisualAds(c.getString("ITEM_NAME"), c.getString("FILE_NAME"), c.getString("FOLDER_YN").equals("Y"));
                     visualAd.setDirectory("/visualaid");
 
                     if (visualAd.isFolderYN()) {
@@ -238,16 +235,21 @@ public class VisualAdsDownloadActivity extends AppCompatActivity {
                         }
                     } else {
                         for (up_down_ftp.mFTPFile directoryFile : directoryFiles1) {
+
                             if (directoryFile.getFileName().contains(".")
                                     && visualAd.getFileName().equalsIgnoreCase(directoryFile.getFileName().substring(0, directoryFile.getFileName().lastIndexOf(".")))) {
-                                visualAd.setFileName(directoryFile.getFileName());
-                                visualAds.add(visualAd);
+                                mVisualAds visualAd1 = new mVisualAds(visualAd.getItemName(),visualAd.getFileName(),visualAd.isFolderYN());
+                                visualAd1.setDirectory(visualAd.getDirectory());
+                                visualAd1.setFileName(directoryFile.getFileName());
+                                visualAds.add(visualAd1);
 
                             }else if (directoryFile.getFileName().contains("_")
                                     && visualAd.getFileName().equalsIgnoreCase(directoryFile.getFileName().substring(0, directoryFile.getFileName().lastIndexOf("_")))) {
                                 {
-                                    visualAd.setFileName(directoryFile.getFileName());
-                                    visualAds.add(visualAd);
+                                    mVisualAds visualAd1 = new mVisualAds(visualAd.getItemName(),visualAd.getFileName(),visualAd.isFolderYN());
+                                    visualAd1.setDirectory(visualAd.getDirectory());
+                                    visualAd1.setFileName(directoryFile.getFileName());
+                                    visualAds.add(visualAd1);
                                 }
                             }
                         }

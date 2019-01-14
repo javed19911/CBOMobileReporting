@@ -334,6 +334,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                 //check for notification
                 myCustomMethod.notification_check();
+
+
                 if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Final_submit","N").equals("N")) {
                     if (live_km.equalsIgnoreCase("Y") || (live_km.equalsIgnoreCase("Y5"))) {
                         MyCustomMethod myCustomMethod = new MyCustomMethod(context);
@@ -630,6 +632,9 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         cbohelp.DropDatabase(context);
 
         Intent i = new Intent(getApplicationContext(), LoginMain.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.putExtra("picture", byteArray);
         startActivity(i);
     }

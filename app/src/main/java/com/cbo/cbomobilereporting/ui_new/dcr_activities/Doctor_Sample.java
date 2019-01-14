@@ -31,7 +31,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.cbo.cbomobilereporting.ui.Dr_Gift;
 import com.cbo.cbomobilereporting.ui.Dr_Sample;
@@ -56,6 +55,7 @@ import utils.MyConnection;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
+import utils.clearAppData.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Dr_Gift_Dialog;
 import utils_new.Dr_Sample_Dialog;
@@ -478,10 +478,11 @@ public class Doctor_Sample extends AppCompatActivity {
                     customVariablesAndMethod.msgBox(context,"Select Doctor from List...");
                 } else {
 
-                    Intent i = new Intent(context, CustomWebView.class);
+                    /*Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP", Dr_sale_url+"&DR_ID="+dr_id+"&MONTH="+customVariablesAndMethod.currentDate());
                     i.putExtra("Title", doc_name);
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(doc_name,Dr_sale_url+"&DR_ID="+dr_id+"&MONTH="+customVariablesAndMethod.currentDate());
                 }
             }
         });

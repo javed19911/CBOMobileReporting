@@ -53,6 +53,7 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Dr_Workwith_Dialog;
 import utils_new.GPS_Timmer_Dialog;
@@ -142,7 +144,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
     boolean IsRefreshedClicked = true;
 
-
+    Service_Call_From_Multiple_Classes service ;
 
     public void onCreate(Bundle b) {
         super.onCreate(b);
@@ -161,6 +163,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         }
         context = DrCall.this;
         progress1 = new ProgressDialog(this);
+        service =  new Service_Call_From_Multiple_Classes();
         loc = (EditText) findViewById(R.id.loc);
         workwithdr = (EditText) findViewById(R.id.get_workwith);
         drname = (Button) findViewById(R.id.drname);
@@ -1137,9 +1140,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                     workwithdr.setText("" + work_with_name);
                     break;
                 case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
-                    new GPS_Timmer_Dialog(context,mHandler,"Scanning Doctors...",GPS_TIMMER).show();
+                    onDownloadAllResponse();
                     break;
                 case MESSAGE_INTERNET_SEND_FCM:
                     customVariablesAndMethod.msgBox(context,"Dr. Added successfully");
@@ -1173,6 +1174,12 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         }
     };
 
+
+    private void onDownloadAllResponse(){
+        Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
+        Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
+        new GPS_Timmer_Dialog(context,mHandler,"Scanning Doctors...",GPS_TIMMER).show();
+    }
     private void onClickDrName() {
         IsRefreshedClicked = true;
         AlertDialog.Builder myDialog = new AlertDialog.Builder(DrCall.this);
@@ -1360,7 +1367,18 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                             LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                                     new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                         }else{
-                            new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                            //new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                            service.DownloadAll(context, new Response() {
+                                @Override
+                                public void onSuccess(Bundle bundle) {
+                                    onDownloadAllResponse();
+                                }
+
+                                @Override
+                                public void onError(String s, String s1) {
+                                    AppAlert.getInstance().getAlert(context,s,s1);
+                                }
+                            });
                         }
 
                         Vibrator vbr = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -1379,7 +1397,18 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         public void onReceive(Context contex, Intent intent) {
             Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
             if ( IsRefreshedClicked ) {
-                new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                //new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                service.DownloadAll(context, new Response() {
+                    @Override
+                    public void onSuccess(Bundle bundle) {
+                        onDownloadAllResponse();
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+                        AppAlert.getInstance().getAlert(context,s,s1);
+                    }
+                });
             }else{
                 submitDoctor(true);
             }

@@ -3,10 +3,12 @@ package com.cbo.cbomobilereporting.ui_new;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -154,4 +156,6 @@ public abstract class CustomActivity extends AppCompatActivity {
             startService(intent);
         }
     }
+
+
 }

@@ -24,6 +24,7 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod
 import com.cbo.cbomobilereporting.ui.Chemist_Gift
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS
+import com.uenics.javed.CBOLibrary.Response
 import locationpkg.Const
 import services.CboServices
 import services.Sync_service
@@ -151,6 +152,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
     internal var name3:String = ""
     internal var name4:String = ""
     internal var IsRefreshedClicked = true
+    lateinit var service: Service_Call_From_Multiple_Classes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,6 +180,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
         progress1 = ProgressDialog(this)
 
         context = this
+        service = Service_Call_From_Multiple_Classes()
         loc= findViewById(R.id.loc)
         workwithdr = findViewById(R.id.get_workwith)
         drname = findViewById(R.id.drname)
@@ -757,9 +760,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                     DoctorData().execute()
                 }
                 MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL -> {
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED = true
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME = customVariablesAndMethod._currentTimeStamp
-                    GPS_Timmer_Dialog(context, this, "Scanning Doctors...", GPS_TIMMER).show()
+                    onDownloadAllResponse();
                 }
                 99 -> if (null != msg.data) {
                     customVariablesAndMethod.msgBox(context, msg.data.getString("Error"))
@@ -769,6 +770,11 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
         }
     }
 
+    private fun onDownloadAllResponse() {
+        Custom_Variables_And_Method.GPS_STATE_CHANGED = true
+        Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME = customVariablesAndMethod._currentTimeStamp
+        GPS_Timmer_Dialog(context, mHandler, "Scanning $head...", GPS_TIMMER).show()
+    }
     internal inner class DoctorData : AsyncTask<ArrayList<SpinnerModel>, String, ArrayList<SpinnerModel>>() {
         var pd: ProgressDialog = ProgressDialog(this@DairyCall)
         //GPS_Timmer_Dialog dilog=new GPS_Timmer_Dialog(context);
@@ -976,7 +982,16 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                             LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                                     IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE))
                         } else {
-                            Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL)
+                            //Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL)
+                            service.DownloadAll(context, object : Response {
+                                override fun onSuccess(bundle: Bundle) {
+                                    onDownloadAllResponse()
+                                }
+
+                                override fun onError(s: String, s1: String) {
+                                    AppAlert.getInstance().getAlert(context, s, s1)
+                                }
+                            })
                         }
 
                         val vbr = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
@@ -995,7 +1010,16 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             val location = intent.getParcelableExtra<Location>(Const.LBM_EVENT_LOCATION_UPDATE)
 
             if (IsRefreshedClicked) {
-                Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL)
+                //Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL)
+                service.DownloadAll(context, object : Response {
+                    override fun onSuccess(bundle: Bundle) {
+                        onDownloadAllResponse()
+                    }
+
+                    override fun onError(s: String, s1: String) {
+                        AppAlert.getInstance().getAlert(context, s, s1)
+                    }
+                })
             } else {
                 submitDoctor(true)
             }
@@ -1349,13 +1373,13 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
             0 ->{
                 if (resultCode == Activity.RESULT_OK){
-                    val b1 = data.extras
+                    val b1 = data!!.extras
                     name = b1!!.getString("val")//id
                     name2 = b1.getString("val2")//score or pob
                     result = b1.getDouble("resultpob")
@@ -1377,7 +1401,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             }
             1 -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    val b1 = data.extras
+                    val b1 = data!!.extras
                     name3 = b1!!.getString("giftid")
                     name4 = b1.getString("giftqan")
                     //if (b1.getString("giftname") != "") {
@@ -1393,7 +1417,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             }
 
             WORK_WITH_DIALOG -> {
-                val b1 = data.extras
+                val b1 = data!!.extras
                 work_with_name = b1!!.getString("workwith_name")
                 work_with_id = b1.getString("workwith_id")
                 workwithdr.setText("" + work_with_name)

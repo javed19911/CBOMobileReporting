@@ -60,6 +60,7 @@ import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
+import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,6 +88,7 @@ import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Report_Registration;
@@ -108,7 +110,6 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 	LinearLayout layout;
 	ArrayList<SpinnerModel>mylist=new ArrayList<SpinnerModel>();
 	ArrayList<SpinnerModel>doclist;
-    ServiceHandler myServiceHandler;
     Boolean value;
 	NetworkUtil networkUtil;
 	String live_km;
@@ -137,6 +138,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 	String latLong = "";
 	String ref_latLong = "";
+	Service_Call_From_Multiple_Classes service ;
 
 	public ArrayList<SpinnerModel>getDoctorFromLocal(int id)
 	{
@@ -201,7 +203,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		drname=(Button)findViewById(R.id.rem_drname);
 		context=this;
 		progress1 = new ProgressDialog(this);
-		myServiceHandler = new ServiceHandler(context);
+		service =  new Service_Call_From_Multiple_Classes();
 		customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 		PA_ID=Custom_Variables_And_Method.PA_ID;
 		cbohelp=new CBO_DB_Helper(getApplicationContext());
@@ -435,9 +437,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 					new Doback2().execute(PA_ID);
 					break;
 				case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
-					Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
-					Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
-					new GPS_Timmer_Dialog(context,mHandler,"Scanning Doctors...",GPS_TIMMER).show();
+					onDownloadAllResponse();
 					break;
 				case MESSAGE_INTERNET_SEND_FCM:
 					if (networkUtil.internetConneted(ReminderCall.this)){
@@ -469,6 +469,15 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 			}
 		}
 	};
+
+
+	private void onDownloadAllResponse(){
+		Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
+		Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
+		new GPS_Timmer_Dialog(context,mHandler,"Scanning Doctors...",GPS_TIMMER).show();
+
+	}
+
 
 	public void submitDoctorRcInLocal()
 	{
@@ -1024,7 +1033,18 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 							LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
 									new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
 						}else{
-							new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+							//new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+							service.DownloadAll(context, new Response() {
+								@Override
+								public void onSuccess(Bundle bundle) {
+									onDownloadAllResponse();
+								}
+
+								@Override
+								public void onError(String s, String s1) {
+									AppAlert.getInstance().getAlert(context,s,s1);
+								}
+							});
 						}
 
 						Vibrator vbr = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -1043,7 +1063,18 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		public void onReceive(Context contex, Intent intent) {
 			Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
 			if ( IsRefreshedClicked ) {
-				new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+				//new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+				service.DownloadAll(context, new Response() {
+					@Override
+					public void onSuccess(Bundle bundle) {
+						onDownloadAllResponse();
+					}
+
+					@Override
+					public void onError(String s, String s1) {
+						AppAlert.getInstance().getAlert(context,s,s1);
+					}
+				});
 			}else{
 				submitRC_Dr();
 			}

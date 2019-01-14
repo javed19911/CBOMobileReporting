@@ -55,6 +55,7 @@ import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui.Stk_Sample;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -72,6 +73,7 @@ import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
 import utils_new.Chm_Sample_Dialog;
 import utils_new.Custom_Variables_And_Method;
@@ -143,6 +145,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
     String latLong = "";
     String ref_latLong = "";
+    Service_Call_From_Multiple_Classes service ;
 
     public ArrayList<String> getmydata() {
         ArrayList<String> raw = new ArrayList<String>();
@@ -187,6 +190,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
         mNetworkUtil = new NetworkUtil(context);
         progress1 = new ProgressDialog(this);
+        service =  new Service_Call_From_Multiple_Classes();
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         loc = (EditText) findViewById(R.id.loc_stock);
         pob = (EditText) findViewById(R.id.stk_pob);
@@ -1023,9 +1027,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     new StokistData().execute();
                     break;
                 case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
-                    new GPS_Timmer_Dialog(context,mHandler,"Scanning Stockist...",GPS_TIMMER).show();
+                    onDownloadAllResponse();
                     break;
                 case MESSAGE_INTERNET_SEND_FCM:
                     if (mNetworkUtil.internetConneted(context)) {
@@ -1058,6 +1060,14 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             }
         }
     };
+
+
+    private void onDownloadAllResponse(){
+        Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
+        Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
+        new GPS_Timmer_Dialog(context,mHandler,"Scanning Stockist...",GPS_TIMMER).show();
+
+    }
 
     class StokistData extends AsyncTask<ArrayList<SpinnerModel>, String, ArrayList<SpinnerModel>> {
         ProgressDialog pd;
@@ -1326,7 +1336,18 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                             LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                                     new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                         }else{
-                            new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                            //new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                            service.DownloadAll(context, new Response() {
+                                @Override
+                                public void onSuccess(Bundle bundle) {
+                                    onDownloadAllResponse();
+                                }
+
+                                @Override
+                                public void onError(String s, String s1) {
+                                    AppAlert.getInstance().getAlert(context,s,s1);
+                                }
+                            });
                         }
 
                         Vibrator vbr = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -1345,7 +1366,18 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
         public void onReceive(Context contex, Intent intent) {
             Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
             if ( IsRefreshedClicked ) {
-                new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                //new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                service.DownloadAll(context, new Response() {
+                    @Override
+                    public void onSuccess(Bundle bundle) {
+                        onDownloadAllResponse();
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+                        AppAlert.getInstance().getAlert(context,s,s1);
+                    }
+                });
             }else{
                 submitStockist(true);
             }

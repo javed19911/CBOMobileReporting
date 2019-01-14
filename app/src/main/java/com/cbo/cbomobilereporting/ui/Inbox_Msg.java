@@ -30,7 +30,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.CreateMail1;
 
 import org.json.JSONArray;
@@ -39,6 +38,7 @@ import org.json.JSONObject;
 
 import services.CboServices;
 import utils.adapterutils.MailDetails_Adapter;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -139,11 +139,12 @@ public class Inbox_Msg extends AppCompatActivity{
 					aT1[0]=(new File(Environment.getExternalStorageDirectory(), "cbo/"+aT1[0]).toString());
 				}
 
-				Intent i = new Intent(context, CustomWebView.class);
+				/*Intent i = new Intent(context, CustomWebView.class);
 				i.putExtra("A_TP1", aT1[0]);
 				i.putExtra("Menu_code", "");
 				i.putExtra("Title", "Attachment");
-				context.startActivity(i);
+				context.startActivity(i);*/
+				MyCustumApplication.getInstance().LoadURL("Attachment",aT1[0]);
 			}
 		});
 

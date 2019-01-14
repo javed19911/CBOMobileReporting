@@ -29,8 +29,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 38
-            ;
+    private static final int DATABASE_VERSION = 38;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";

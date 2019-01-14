@@ -14,12 +14,12 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Notification;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import utils.clearAppData.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 /**
@@ -126,11 +126,12 @@ public class Notification_Adapter extends BaseAdapter {
                     intent1.putExtra("msg", "1");
                     intent1.putExtra("msg_ho", dataList.get("Info_url").get(position));*/
 
-                    Intent intent1 = new Intent(context, CustomWebView.class);
+                    /*Intent intent1 = new Intent(context, CustomWebView.class);
                     intent1.putExtra("A_TP", dataList.get("Info_url").get(position));
                     intent1.putExtra("Title", dataList.get("Title").get(position));
                     //Log.d("javed", new CBO_DB_Helper(context1).getMenuUrl("REPORTS","MSG_HO"));
-                    context.startActivity(intent1);
+                    context.startActivity(intent1);*/
+                    MyCustumApplication.getInstance().LoadURL(dataList.get("Title").get(position),dataList.get("Info_url").get(position));
 
                 }
                 dataList.get("Status").set(position, "1");

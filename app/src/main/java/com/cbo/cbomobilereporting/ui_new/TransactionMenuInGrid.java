@@ -22,13 +22,13 @@ import com.cbo.cbomobilereporting.ui_new.transaction_activities.ComplaintView;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Farmer_registration_form;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Rcpa_Call;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.Transaction_Grid_Adapter;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -85,10 +85,11 @@ public class TransactionMenuInGrid extends Fragment {
               String nameOnClick = getKeyList.get(position);
                 String url=new CBO_DB_Helper(getActivity()).getMenuUrl("TRANSACTION",nameOnClick);
                 if(url!=null && !url.equals("")) {
-                    Intent i = new Intent(getActivity(), CustomWebView.class);
+                    /*Intent i = new Intent(getActivity(), CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", listOfAllTab.get(position));
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
 
                 }else {
                     switch (nameOnClick) {
@@ -98,10 +99,10 @@ public class TransactionMenuInGrid extends Fragment {
                             onClickLeaveReq();
                             break;
                         }
-                        case "T_SS": {
+                        /*case "T_SS": {
                             onClickSecSales(position);
                             break;
-                        }
+                        }*/
                         case "T_COMP": {
                             onClickComplaint();
                             break;
@@ -126,47 +127,47 @@ public class TransactionMenuInGrid extends Fragment {
                             break;
                         }
 
-                        case "T_ADDDOC": {
+                        /*case "T_ADDDOC": {
                             onClickAddDoctor(position);
                             break;
-                        }
+                        }*/
 
-                        case "T_ADDCHEM": {
+                        /*case "T_ADDCHEM": {
                             onClickAddChemist(position);
                             break;
 
-                        }
-                        case "T_DRSHALE": {
+                        }*/
+                       /* case "T_DRSHALE": {
                             onClickDrWiseSales(position);
                             break;
 
-                        }
+                        }*/
 
-                        case "T_ADDTP": {
+                       /* case "T_ADDTP": {
 
                             onClickAddTP(position);
                             break;
 
-                        }
-                        case "T_TPAPROVE": {
+                        }*/
+                        /*case "T_TPAPROVE": {
 
                             onClickAddTPApproval(position);
                             break;
 
-                        }
+                        }*/
 
-                        case "T_CHALACK": {
+                       /* case "T_CHALACK": {
 
                             onClickChallanAck(position);
 
                             break;
-                        }
-                        case "T_RM": {
+                        }*/
+                        /*case "T_RM": {
 
                             onClickRouteMaster(position);
 
                             break;
-                        }
+                        }*/
                         case "T_DRREG": {
 
                             onClickDoctorRegistration(position);
@@ -201,10 +202,11 @@ public class TransactionMenuInGrid extends Fragment {
                         default: {
                             url = new CBO_DB_Helper(context).getMenuUrl("TRANSACTION", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
-                                Intent i = new Intent(getActivity(), CustomWebView.class);
+                                /*Intent i = new Intent(getActivity(), CustomWebView.class);
                                 i.putExtra("A_TP", url);
                                 i.putExtra("Title", listOfAllTab.get(position));
-                                startActivity(i);
+                                startActivity(i);*/
+                                MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                             } else {
                                 Toast.makeText(context, "Page Under Development", Toast.LENGTH_LONG).show();
                             }
@@ -332,7 +334,7 @@ public class TransactionMenuInGrid extends Fragment {
     }
 
 
-    ///////////onClickAddDoctor/////////////
+    /*///////////onClickAddDoctor/////////////
 
     private void onClickAddDoctor(Integer position) {
 
@@ -424,9 +426,9 @@ public class TransactionMenuInGrid extends Fragment {
             startActivity(i);
 
 
-            /*Intent i = new Intent(getActivity(), Sec_Sales.class);
+            *//*Intent i = new Intent(getActivity(), Sec_Sales.class);
 
-            startActivity(i);*/
+            startActivity(i);*//*
         }
 
     }
@@ -444,7 +446,7 @@ public class TransactionMenuInGrid extends Fragment {
             startActivity(i);
         }
 
-    }
+    }*/
 
     private void onClickDoctorRegistration(Integer position) {
 
@@ -464,7 +466,7 @@ public class TransactionMenuInGrid extends Fragment {
 
 ///////////onClickAddTP/////////////
 
-    private void onClickAddTP(Integer position) {
+   /* private void onClickAddTP(Integer position) {
         if (!networkUtil.internetConneted(context)) {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
         } else {
@@ -474,7 +476,7 @@ public class TransactionMenuInGrid extends Fragment {
             startActivity(i);
         }
 
-    }
+    }*/
 
 
 }

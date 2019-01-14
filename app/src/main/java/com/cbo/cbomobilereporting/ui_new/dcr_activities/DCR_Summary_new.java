@@ -21,6 +21,7 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
+import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,8 +35,10 @@ import async.CBOFinalTasks;
 import services.CboServices;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.clearAppData.MyCustumApplication;
+import utils_new.AppAlert;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 import static java.lang.Thread.sleep;
 
@@ -267,7 +270,7 @@ public class DCR_Summary_new extends CustomActivity {
         Alert_Nagative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Custom_Variables_And_Method.internetConneted(context)) {
+                /*if (Custom_Variables_And_Method.internetConneted(context)) {
                     //Start of call to service
 
                     HashMap<String,String> request=new HashMap<>();
@@ -286,7 +289,19 @@ public class DCR_Summary_new extends CustomActivity {
                     //End of call to service
                 }else{
                     customVariablesAndMethod.Connect_to_Internet_Msg(context);
-                }
+                }*/
+
+                new Service_Call_From_Multiple_Classes().resetDCR(context, new Response() {
+                    @Override
+                    public void onSuccess(Bundle bundle) {
+                        //customVariablesAndMethod.msgBox(context,"Data Downloded Sucessfully...");
+                    }
+
+                    @Override
+                    public void onError(String message, String description) {
+                        AppAlert.getInstance().getAlert(context,message,description);
+                    }
+                });
                 dialog.dismiss();
             }
         });
@@ -311,7 +326,7 @@ public class DCR_Summary_new extends CustomActivity {
     }
 
 
-    private final Handler mHandler = new Handler() {
+    /*private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -413,5 +428,5 @@ public class DCR_Summary_new extends CustomActivity {
         }
         //Log.d("MYAPP", "objects are1: " + result);
         progress1.dismiss();
-    }
+    }*/
 }

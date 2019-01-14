@@ -25,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Random;
 
+import utils.clearAppData.MyCustumApplication;
 import utils_new.AppAlert;
 
 
@@ -268,11 +268,12 @@ public class FloatingRemainderApproval extends Service implements IApprovalRemai
                 new ApprovalRemainderAdaptor(context, mApprovalRemainders, (view, position, isLongClick) -> {
                     collapsedView.setVisibility(View.VISIBLE);
                     expandedView.setVisibility(View.GONE);
-                    Intent i = new Intent(context, CustomWebView.class);
+                    /*Intent i = new Intent(context, CustomWebView.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     i.putExtra("A_TP", mApprovalRemainders.get(position).getADD_URL());
                     i.putExtra("Title",  mApprovalRemainders.get(position).getPARICULARS());
-                    context.startActivity(i);
+                    context.startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(mApprovalRemainders.get(position).getPARICULARS(),mApprovalRemainders.get(position).getADD_URL());
                 });
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());

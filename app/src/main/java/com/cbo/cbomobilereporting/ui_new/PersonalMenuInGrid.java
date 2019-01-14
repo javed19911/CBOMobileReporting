@@ -15,7 +15,6 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.Personal_info_Adapter;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -79,15 +79,16 @@ public class PersonalMenuInGrid extends Fragment {
 
                 String url=new CBO_DB_Helper(getActivity()).getMenuUrl("PERSONAL_INFO",itemLebel);
                 if(url!=null && !url.equals("")) {
-                    Intent i = new Intent(getActivity(), CustomWebView.class);
+                   /* Intent i = new Intent(getActivity(), CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", listOfAllTab.get(position));
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                 }else {
 
                     switch (itemLebel) {
 
-                        case "CP": {
+                        /*case "CP": {
 
                             onClickChngPass(position);
                             break;
@@ -119,7 +120,7 @@ public class PersonalMenuInGrid extends Fragment {
                         case "HL": {
                             onClickHolidayList(position);
                             break;
-                        }
+                        }*/
                         case "LEAVE": {
 
                             onClickLeaveReq();
@@ -128,10 +129,11 @@ public class PersonalMenuInGrid extends Fragment {
                         default: {
                             url = new CBO_DB_Helper(getActivity()).getMenuUrl("PERSONAL_INFO", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
-                                Intent i = new Intent(getActivity(), CustomWebView.class);
+                                /*Intent i = new Intent(getActivity(), CustomWebView.class);
                                 i.putExtra("A_TP", url);
                                 i.putExtra("Title", listOfAllTab.get(position));
-                                startActivity(i);
+                                startActivity(i);*/
+                                MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                             } else {
                                 customVariablesAndMethod.msgBox(context, "Page Under Development");
                             }
@@ -150,22 +152,7 @@ public class PersonalMenuInGrid extends Fragment {
 
     }
 
-    private void onClickmsg_ho() {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-        } else {
 
-            Intent i = new Intent(getActivity(), Msg_ho.class);
-            //i.putExtra("msg_ho","http://www.yahoo.com");
-           // Log.d("javed", new CBO_DB_Helper(context).getMenuUrl("REPORTS","MSG_HO"));
-            i.putExtra("msg_ho", new CBO_DB_Helper(context).getMenuUrl("REPORTS","MSG_HO"));
-            //i.putExtra("msg","1");
-            startActivity(i);
-
-            //mycon.msgBox("Under development.....");
-        }
-
-    }
 
     //////Add Data In List///
     private void addTabInList() {
@@ -191,7 +178,7 @@ public class PersonalMenuInGrid extends Fragment {
     }
 
 
-    private void onClickChngPass(Integer position) {
+    /*private void onClickChngPass(Integer position) {
         if (!networkUtil.internetConneted(context)) {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
@@ -273,7 +260,7 @@ public class PersonalMenuInGrid extends Fragment {
             i.putExtra("Title", listOfAllTab.get(position));
             startActivity(i);
         }
-    }
+    }*/
 
     private void onClickLeaveReq() {
 

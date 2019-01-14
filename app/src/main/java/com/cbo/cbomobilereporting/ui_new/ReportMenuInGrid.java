@@ -1,9 +1,12 @@
 package com.cbo.cbomobilereporting.ui_new;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +26,6 @@ import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.MissedDo
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Spo_Report;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TpReports;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.ReportMenu_Grid_Adapter;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -83,10 +86,11 @@ public class ReportMenuInGrid extends Fragment {
                 String itemLebel = getKeyList.get(position);
                 String url=new CBO_DB_Helper(getActivity()).getMenuUrl("REPORTS",itemLebel);
                 if(url!=null && !url.equals("")) {
-                    Intent i = new Intent(getActivity(), CustomWebView.class);
+                    /*Intent i = new Intent(getActivity(), CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", listOfAllTab.get(position));
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                 }else {
                     switch (itemLebel) {
 
@@ -140,10 +144,11 @@ public class ReportMenuInGrid extends Fragment {
                         default: {
                             url = new CBO_DB_Helper(getActivity()).getMenuUrl("REPORTS", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
-                                Intent i = new Intent(getActivity(), CustomWebView.class);
+                                /*Intent i = new Intent(getActivity(), CustomWebView.class);
                                 i.putExtra("A_TP", url);
                                 i.putExtra("Title", listOfAllTab.get(position));
-                                startActivity(i);
+                                startActivity(i);*/
+                                MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                             } else {
                                 customVariablesAndMethod.msgBox(context, "Page Under Development");
                             }
@@ -166,12 +171,19 @@ public class ReportMenuInGrid extends Fragment {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
         } else {
 
-            Intent i = new Intent(getActivity(), Msg_ho.class);
+            //String url = ¨https://paul.kinlan.me¨;
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            CustomTabsIntent customTabsIntent = builder.build();
+            builder.setToolbarColor(getResources().getColor( R.color.colorPrimaryDark));
+            customTabsIntent.launchUrl((Activity) context,
+                    Uri.parse( new CBO_DB_Helper(context).getMenuUrl("REPORTS","MSG_HO")));
+
+           /* Intent i = new Intent(getActivity(), Msg_ho.class);
             //i.putExtra("msg_ho","http://www.yahoo.com");
            // Log.d("javed", new CBO_DB_Helper(context).getMenuUrl("REPORTS","MSG_HO"));
             i.putExtra("msg_ho", new CBO_DB_Helper(context).getMenuUrl("REPORTS","MSG_HO"));
             //i.putExtra("msg","1");
-            startActivity(i);
+            startActivity(i);*/
 
             //mycon.msgBox("Under development.....");
         }
