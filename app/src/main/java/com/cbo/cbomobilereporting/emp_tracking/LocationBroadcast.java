@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.Log;
 
 import utils.CBOUtils.Constants;
+import utils.clearAppData.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 
@@ -45,7 +46,8 @@ public class LocationBroadcast extends BroadcastReceiver {
           ComponentName comp = new ComponentName(context.getPackageName(), MyLoctionService.class.getName());
             //ComponentName service = context.startService(new Intent().setComponent(comp));
 
-        Intent intent1 = new Intent().setComponent(comp);
+        MyCustumApplication.getInstance().startLoctionService();
+        /*Intent intent1 = new Intent().setComponent(comp);
         intent1.setAction(Constants.ACTION.LIVE_TRACKING_ACTION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "Running on Android O");
@@ -53,7 +55,7 @@ public class LocationBroadcast extends BroadcastReceiver {
         }else{
             Log.d(TAG, "Running on Android N or lower");
             context.startService(intent1);
-        }
+        }*/
 
           //  myConnection.msgBox("Service Start For Storing  Data in 1 Minute.... ");
             Log.d("Broadcast is Running","Service Start For Storing  Data in 1 Minute ");

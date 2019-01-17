@@ -80,7 +80,7 @@ public class SplashScreen_2016 extends CustomActivity  {
                       try{
                          // if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
                               //startService(new Intent(context, MyLoctionService.class));
-                          startLoctionService();
+                          //startLoctionService();
                           //}
                           Intent intent=new Intent(SplashScreen_2016.this, LoginFake.class);
                           intent.putExtra("picture", byteArray);

@@ -138,7 +138,7 @@ public class FogetPin extends CustomActivity {
 
                    // if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
                         //startService(new Intent(context, MyLoctionService.class));
-                    startLoctionService();
+                    //startLoctionService();
                    // }
 
 
@@ -283,7 +283,7 @@ public class FogetPin extends CustomActivity {
                     //mycon.msgBox("Permission Granted For Location");
 
                     //startService(new Intent(this, MyLoctionService.class));
-                    startLoctionService();
+                    //startLoctionService();
 
 
                 } else {

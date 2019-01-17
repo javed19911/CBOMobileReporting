@@ -339,7 +339,8 @@
             android:name=".ui_new.transaction_activities.Farmer_registration_form"
             android:configChanges="orientation|screenSize" />
 
-        <service android:name=".emp_tracking.MyLoctionService" />
+        <service android:name=".emp_tracking.MyLoctionService"
+            android:stopWithTask="false"/>
 
         <receiver
             android:name=".emp_tracking.LocationBroadcast"

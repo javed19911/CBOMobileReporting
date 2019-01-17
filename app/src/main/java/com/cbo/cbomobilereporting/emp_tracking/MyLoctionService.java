@@ -90,6 +90,8 @@ public class MyLoctionService extends Service implements
     Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
     MyCustomMethod mCos;
+
+    Boolean serviceStarted = false;
     Runnable dataFromOnLocationChange = new Runnable() {
         @Override
         public void run() {
@@ -129,13 +131,14 @@ public class MyLoctionService extends Service implements
                 return;*/
 
 
-            Log.i(LOG_TAG, "Received Start Foreground Intent ");
-            Intent notificationIntent = new Intent(this, SplashScreen_2016.class);
-            notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                    notificationIntent, 0);
+            if (!serviceStarted) {
+                Log.i(LOG_TAG, "Received Start Foreground Intent ");
+                Intent notificationIntent = new Intent(this, SplashScreen_2016.class);
+                notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                        notificationIntent, 0);
 
           /*  Intent previousIntent = new Intent(this, MyLoctionService.class);
             previousIntent.setAction(Constants.ACTION.PREV_ACTION);
@@ -153,21 +156,20 @@ public class MyLoctionService extends Service implements
                     nextIntent, 0);
 */
 
-            String CHANNEL_ID = "Location Service";// The id of the channel.
-            CharSequence name =  "CBO Location Notification"; //getString(R.string.channel_name);// The user-visible name of the channel.
+                String CHANNEL_ID = "Location Service";// The id of the channel.
+                CharSequence name = "CBO Location Notification"; //getString(R.string.channel_name);// The user-visible name of the channel.
 
 
-
-            Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.cbo_icon);
-            NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle("CBO Mobile Reporting")
-                    .setContentText("Running......")
-                    .setSmallIcon(R.drawable.cbo_noti)
-                    .setTicker("CBO")
-                    .setOngoing(true)
-                    .setLargeIcon(Bitmap.createScaledBitmap(largeIcon, 128, 128, false))
-                    .setChannelId(CHANNEL_ID)
-                    .setContentIntent(pendingIntent);
+                Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.cbo_icon);
+                NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setContentTitle("CBO Mobile Reporting")
+                        .setContentText("Running......")
+                        .setSmallIcon(R.drawable.cbo_noti)
+                        .setTicker("CBO")
+                        .setOngoing(true)
+                        .setLargeIcon(Bitmap.createScaledBitmap(largeIcon, 128, 128, false))
+                        .setChannelId(CHANNEL_ID)
+                        .setContentIntent(pendingIntent);
                     /*.addAction(android.R.drawable.ic_media_previous,
                             "Previous", ppreviousIntent)
                     .addAction(android.R.drawable.ic_media_play, "Play",
@@ -176,42 +178,42 @@ public class MyLoctionService extends Service implements
                             pnextIntent);*/
 
 
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int color = 0x125688;
+                    noBuilder.setColor(color);
+                    noBuilder.setSmallIcon(R.drawable.cbo_noti);
+                }
 
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                int color = 0x125688;
-                noBuilder.setColor(color);
-                noBuilder.setSmallIcon(R.drawable.cbo_noti);
+                //Random random = new Random();
+                //int m = random.nextInt(9999 - 1000) + 1000;
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Sets an ID for the notification, so it can be updated.
+                    NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
+                    // Sets whether notifications posted to this channel should display notification lights
+                    mChannel.enableLights(true);
+                    // Sets whether notification posted to this channel should vibrate.
+                    mChannel.enableVibration(true);
+                    // Sets the notification light color for notifications posted to this channel
+                    mChannel.setLightColor(Color.GREEN);
+                    // Sets whether notifications posted to this channel appear on the lockscreen or not
+                    mChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+                    mChannel.setSound(null, null);
+                    notificationManager.createNotificationChannel(mChannel);
+                }
+
+                Notification notification = noBuilder.build();
+
+                startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,
+                        notification);
+                serviceStarted = true;
+
+                if (!mGoogleApiClient.isConnected())
+                    mGoogleApiClient.connect();
             }
-
-            //Random random = new Random();
-            //int m = random.nextInt(9999 - 1000) + 1000;
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // Sets an ID for the notification, so it can be updated.
-                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
-                // Sets whether notifications posted to this channel should display notification lights
-                mChannel.enableLights(true);
-                // Sets whether notification posted to this channel should vibrate.
-                mChannel.enableVibration(true);
-                // Sets the notification light color for notifications posted to this channel
-                mChannel.setLightColor(Color.GREEN);
-                // Sets whether notifications posted to this channel appear on the lockscreen or not
-                mChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-                mChannel.setSound(null, null);
-                notificationManager.createNotificationChannel(mChannel);
-            }
-
-            Notification notification =  noBuilder.build();
-
-            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,
-                    notification);
-
-            if (!mGoogleApiClient.isConnected())
-                mGoogleApiClient.connect();
-
         } else if (intent.getAction().equals(Constants.ACTION.LIVE_TRACKING_ACTION)) {
 
-            if (!mGoogleApiClient.isConnected()) {
+            if (!serviceStarted) {
                 intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                 startForgroungService(intent);
             }
@@ -228,22 +230,24 @@ public class MyLoctionService extends Service implements
                     e.printStackTrace();
                 }
             }
-        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            Log.i(LOG_TAG, "Clicked Play");
-        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-            Log.i(LOG_TAG, "Clicked Next");
         } else if (intent.getAction().equals(
                 Constants.ACTION.STOPFOREGROUND_ACTION)) {
 
-            if (!mGoogleApiClient.isConnected()) {
-                intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-                startForgroungService(intent);
-            }
+            /**/
 
-           stopLocationUpdates();
-            Log.i(LOG_TAG, "Received Stop Foreground Intent");
-            stopForeground(true);
-            stopSelf();
+            if (serviceStarted) {
+                Log.i(LOG_TAG, "Received Stop Foreground Intent");
+                serviceStarted = false;
+                if (!mGoogleApiClient.isConnected()) {
+                    intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                    startForgroungService(intent);
+                }
+                serviceStarted = false;
+                stopLocationUpdates();
+
+                stopForeground(true);
+                stopSelf();
+            }
         }
 
 
@@ -546,6 +550,15 @@ public class MyLoctionService extends Service implements
 
     }
 
+   /* @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        stopLocationUpdates();
+        stopForeground(true);
+        //stop service
+        stopSelf();
+        super.onTaskRemoved(rootIntent);
+    }
+*/
 
 
 }

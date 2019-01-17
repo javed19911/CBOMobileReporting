@@ -216,7 +216,9 @@ public class CustomWebView extends AppCompatActivity {
                     previous_url=url;
                 }
 
-                progressDialog.dismiss();
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
             }
 
             @Override
@@ -725,7 +727,14 @@ public class CustomWebView extends AppCompatActivity {
     }
 
 
-
+    @Override
+    protected void onDestroy() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+        super.onDestroy();
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

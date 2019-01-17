@@ -161,7 +161,7 @@ public class LoginMain extends CustomActivity {
 
             // if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
                 //startService(new Intent(context, MyLoctionService.class));
-            startLoctionService(true);
+            //startLoctionService(true);
             // }
 
 
@@ -755,7 +755,7 @@ public class LoginMain extends CustomActivity {
                     //mycon.msgBox("Permission Granted For Location");
 
                     //startService(new Intent(this, MyLoctionService.class));
-                    startLoctionService();
+                    //startLoctionService();
 
 
                 } else {

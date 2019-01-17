@@ -34,9 +34,6 @@ public class Constants {
 
     public interface ACTION {
         public static String MAIN_ACTION = "com.cbo.foregroundservice.action.main";
-        public static String PREV_ACTION = "com.cbo.foregroundservice.action.prev";
-        public static String PLAY_ACTION = "com.cbo.foregroundservice.action.play";
-        public static String NEXT_ACTION = "com.cbo.foregroundservice.action.next";
         public static String STARTFOREGROUND_ACTION = "com.cbo.foregroundservice.action.startforeground";
         public static String LIVE_TRACKING_ACTION = "com.cbo.foregroundservice.action.startforegroundtracking";
         public static String STOPFOREGROUND_ACTION = "com.cbo.foregroundservice.action.stopforeground";

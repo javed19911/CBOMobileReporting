@@ -3,19 +3,25 @@ package utils.clearAppData;
 import java.io.File;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.cbo.cbomobilereporting.R;
+import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 
+import utils.CBOUtils.Constants;
 import utils.ExceptionHandler;
 import utils_new.Custom_Variables_And_Method;
 
@@ -23,14 +29,50 @@ import utils_new.Custom_Variables_And_Method;
 public class MyCustumApplication extends MultiDexApplication {
     private static MyCustumApplication instance;
 
+    static String TAG = "MyCustumApplication";
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        registerActivityLifecycleCallbacks(new AppLifecycleTracker());
         //new ExceptionHandler(this);
     }
 
+
+
+  /*  @Override
+    public void onTrimMemory(int level) {
+        Intent intent = new Intent(getInstance(), MyLoctionService.class);
+        intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d(TAG, "Running on Android O");
+            startForegroundService(intent);
+            //startService(intent);
+        }else{
+            Log.d(TAG, "Running on Android N or lower");
+            startService(intent);
+        }
+        super.onTrimMemory(level);
+    }
+
+
+
+    @Override
+    public void onTerminate() {
+        Intent intent = new Intent(getInstance(), MyLoctionService.class);
+        intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d(TAG, "Running on Android O");
+            startForegroundService(intent);
+            //startService(intent);
+        }else{
+            Log.d(TAG, "Running on Android N or lower");
+            startService(intent);
+        }
+        super.onTerminate();
+    }
+*/
     public static MyCustumApplication getInstance(){
         return instance;
     }
@@ -231,4 +273,109 @@ public class MyCustumApplication extends MultiDexApplication {
             //logException(e);
         }
     }
+
+
+    public Boolean isLiveTrackingOn(){
+
+        //return false;
+        String fmcg_Live_Km =Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"live_km");
+
+        return  (fmcg_Live_Km.equalsIgnoreCase("Y"))||
+                (fmcg_Live_Km.equalsIgnoreCase("5"))||
+                (fmcg_Live_Km.equalsIgnoreCase("Y5"));
+
+
+    }
+
+    class AppLifecycleTracker implements ActivityLifecycleCallbacks {
+
+        private int numStarted = 0;
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+            if (numStarted == 0) {
+                // app went to foreground
+                startLoctionService();
+            }
+            numStarted++;
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+
+
+
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+            numStarted--;
+            if (numStarted == 0) {
+                // app went to background
+                stopLoctionService(false);
+            }
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+
+        }
+    }
+
+    public void startLoctionService() {
+        startLoctionService(false);
+    }
+
+
+    public void startLoctionService(boolean forcefully) {
+        if(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"Final_submit","N").equals("N") || forcefully) {
+            Intent intent = new Intent(getInstance(), MyLoctionService.class);
+            intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d(TAG, "Running on Android O");
+                startForegroundService(intent);
+                //startService(intent);
+            } else {
+                Log.d(TAG, "Running on Android N or lower");
+                startService(intent);
+            }
+        }else{
+            stopLoctionService();
+        }
+    }
+    public void stopLoctionService() {
+        stopLoctionService(true);
+    }
+
+    public void stopLoctionService(boolean forcefully) {
+
+        if (!isLiveTrackingOn() || forcefully) {
+            Intent intent = new Intent(getInstance(), MyLoctionService.class);
+            intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d(TAG, "Running on Android O");
+                startForegroundService(intent);
+                //startService(intent);
+            } else {
+                Log.d(TAG, "Running on Android N or lower");
+                startService(intent);
+            }
+        }
+    }
+
+
 }

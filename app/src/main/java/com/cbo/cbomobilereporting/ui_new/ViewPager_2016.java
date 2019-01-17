@@ -66,6 +66,7 @@ import java.util.List;
 import services.Sync_service;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
 public class ViewPager_2016 extends CustomActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -445,10 +446,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_logout) {
-            Intent intent = new Intent(ViewPager_2016.this, LoginFake.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+            logout();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -498,17 +496,29 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
 
     @Override
     public void onBackPressed() {
-
-        Intent intent = new Intent(getApplicationContext(), LoginFake.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        intent.putExtra("EXIT", true);
-        startActivity(intent);
-        finish();
-        super.onBackPressed();
-
+        logout();
     }
 
+    private void logout(){
+        AppAlert.getInstance().DecisionAlert(context, "Logout!!!", "Are you sure to Logout?", new AppAlert.OnClickListener() {
+            @Override
+            public void onPositiveClicked(View item, String result) {
+                stopLoctionService(false);
+                Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.putExtra("EXIT", true);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onNegativeClicked(View item, String result) {
+
+            }
+        });
+
+    }
     @Override
     public void finish() {
         super.finish();
@@ -550,6 +560,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     @Override
     protected void onResume() {
         super.onResume();
+        //startLoctionService();
         IsSyncReqd();
     }
 
@@ -585,6 +596,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     protected void onDestroy() {
         // Unregister since the activity is about to be closed.
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        //stopLoctionService(false);
         super.onDestroy();
     }
 

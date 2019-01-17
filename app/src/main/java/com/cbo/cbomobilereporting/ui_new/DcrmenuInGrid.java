@@ -516,7 +516,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     customVariablesAndMethod.getGpsSetting(context);
                 } else {
                    // getActivity().startService(new Intent(getActivity(), MyLoctionService.class));
-                    ((CustomActivity) getActivity()).startLoctionService(true);
+                    //((CustomActivity) getActivity()).startLoctionService(true);
                     new Thread(threadConvertAddress).start();
                    /* if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {*/
                         //new Doback3().execute(PA_ID);
@@ -1620,7 +1620,6 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 } else {
                     //if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
                        // context.startService(new Intent(context, MyLoctionService.class));
-                    ((CustomActivity) context).startLoctionService();
                    // }
 
                     if (Custom_Variables_And_Method.INTERNET_REQ.equals("Y")) {

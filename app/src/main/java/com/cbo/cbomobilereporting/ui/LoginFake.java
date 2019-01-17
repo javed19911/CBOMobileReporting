@@ -297,7 +297,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 "ShowSystemAlert","Y");
         //if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
         //startService(new Intent(context, MyLoctionService.class));
-        startLoctionService();
+        //startLoctionService();
         //}
 
         // int a = customVariablesAndMethod.isTimeAutomatic(context) ? Log.d("time" ,"Auto time Enabled") : Log.d("time" ,"Auto time Disabled") ;
