@@ -85,7 +85,7 @@ public class DcrMenu_Grid_Adapter extends BaseAdapter {
         } else if (arrayLevel.equals("D_DRCALL")) {
             imgView.setImageResource(R.drawable.doctor_call_white);
         }
-        else if (arrayLevel.equals("D_DR_RX")) {
+        else if (arrayLevel.equals("D_DR_RX") || arrayLevel.equals("D_RX_GEN") || arrayLevel.equals("D_RX_GEN_NA")) {
             imgView.setImageResource(R.drawable.add_doctor);
         }
         else if (arrayLevel.equals("D_DRSAM")) {

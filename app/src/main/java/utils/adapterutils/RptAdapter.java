@@ -126,8 +126,17 @@ public class RptAdapter extends BaseAdapter{
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("N")) {
             holder.totalDr_text.setText("Total " + cbohelp.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL").split(" ")[0] + " :");
         }
-        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Doctor_RC_NOT_REQUIRED").equals("N")) {
+
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N")) {
             holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_DR_RX").get("D_DR_RX"));
+        }
+
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N")) {
+            holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN"));
+        }
+
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NA_NOT_REQUIRED").equals("N")) {
+            holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA"));
         }
 
         if ((Rptdata.get(position).getTtldr()).equals("")){
@@ -323,7 +332,7 @@ public class RptAdapter extends BaseAdapter{
                 Intent ttlRetailer = new Intent(v.getContext(), TotalRxRpt.class);
                 ttlRetailer.putExtra("date",Rptdata.get(position).getDate());
                 ttlRetailer.putExtra("call_type","D");
-                ttlRetailer.putExtra("Title", cbohelp.getMenu("DCR", "D_DR_RX").get("D_DR_RX"));
+                ttlRetailer.putExtra("Title", holder.totalTenivia_text.getText().toString());
                 v.getContext().startActivity(ttlRetailer);
             }
         });

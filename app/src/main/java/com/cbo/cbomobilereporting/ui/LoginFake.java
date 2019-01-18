@@ -760,6 +760,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                 break;
                             default:
                                 startActivity(new Intent(context, ViewPager_2016.class));
+                                startActivity(new Intent(context, ViewPager_2016.class));
+                                startActivity(new Intent(context, ViewPager_2016.class));
                                 finish();
                         }
 //                    }

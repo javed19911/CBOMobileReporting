@@ -54,10 +54,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/cbo_icon"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/MyMaterialTheme">
-
-
+        android:theme="@style/MyMaterialTheme"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".ui_new.SplashScreen_2016"
             android:clearTaskOnLaunch="true">
@@ -339,8 +337,9 @@
             android:name=".ui_new.transaction_activities.Farmer_registration_form"
             android:configChanges="orientation|screenSize" />
 
-        <service android:name=".emp_tracking.MyLoctionService"
-            android:stopWithTask="false"/>
+        <service
+            android:name=".emp_tracking.MyLoctionService"
+            android:stopWithTask="false" />
 
         <receiver
             android:name=".emp_tracking.LocationBroadcast"
@@ -460,7 +459,10 @@
             android:resource="@xml/searchable" />
 
         <activity android:name=".ui_new.approval_activities.Remainder.RemainderActivity" />
-        <activity android:name=".ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity"></activity>
+        <activity android:name=".ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity" />
+
+        <activity android:name=".ui_new.dcr_activities.DrRXActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

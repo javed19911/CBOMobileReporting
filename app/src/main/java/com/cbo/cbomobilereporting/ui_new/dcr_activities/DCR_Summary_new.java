@@ -149,6 +149,12 @@ public class DCR_Summary_new extends CustomActivity {
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX"),tenivia_traker);
         }
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NA_NOT_REQUIRED").equals("N")){
+            summary_list.put(cboDbHelper.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA"),tenivia_traker);
+        }
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N")){
+            summary_list.put(cboDbHelper.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN"),tenivia_traker);
+        }
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Expense_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_EXP").get("D_EXP"),expense_list);
         }

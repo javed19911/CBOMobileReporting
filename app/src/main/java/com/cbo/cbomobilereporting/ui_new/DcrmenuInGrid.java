@@ -43,6 +43,7 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.DairyCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Doctor_Sample;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrPrescription;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrRXActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Expense;
@@ -216,11 +217,22 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 }
                 break;
             }
+            case "D_RX_GEN": {
+                if (DCR_ID.equals("0")  || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
+                    customVariablesAndMethod.msgBox(context, "Please open your DCR Days first....");
+                } else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,SkipLocationVarification)) {
+                    customVariablesAndMethod.msgBox(context,"Verifing Your Location");
+                    LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
+                            new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
+                }else {
+                    onClickRxGen();
+                }
+                break;
+            }
             case "D_DR_RX": {
                 onClickDrPrescrtion();
                 break;
             }
-
             case "D_RCCALL": {
                 if (DCR_ID.equals("0")  || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
                     customVariablesAndMethod.msgBox(context,"Please open your DCR Days first....");
@@ -490,8 +502,17 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
         }
     };
+
+    private void onClickRxGen() {
+        if (!Custom_Variables_And_Method.internetConneted(getActivity())) {
+            customVariablesAndMethod.Connect_to_Internet_Msg(context);
+        } else {
+            Intent i = new Intent(getActivity(), DrRXActivity.class);
+            startActivity(i);
+        }
+    }
     private void onClickDrPrescrtion() {
-        if (!networkUtil.internetConneted(getActivity())) {
+        if (!Custom_Variables_And_Method.internetConneted(getActivity())) {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
         } else {
             Intent i = new Intent(getActivity(), DrPrescription.class);
@@ -1386,7 +1407,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     }
                     customVariablesAndMethod.getAlert(context,"Expenses Pending",pending_list);
 
-                }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N") && (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("1"))) {
+                }else if (IsTeniviaMenuAvilable()
+                        && (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("1"))) {
                     if (cboDbHelper.getmenu_count("Tenivia_traker")>0 && IsExpCriteriaFulfiled(drInLocal.size())) {
                         startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
                         getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
@@ -1752,6 +1774,16 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         }else {
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Tenivia_NOT_REQUIRED", "N");
         }
+        if(!getKeyList.contains("D_RX_GEN")){
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED","Y");
+        }else {
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Rx_NOT_REQUIRED", "N");
+        }
+        if(!getKeyList.contains("D_RX_GEN_NA")){
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Rx_NA_NOT_REQUIRED","Y");
+        }else {
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Rx_NA_NOT_REQUIRED", "N");
+        }
         if(!getKeyList.contains("D_DAIRY")){
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Dairy_NOT_REQUIRED","Y");
         }else {
@@ -1809,6 +1841,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 result=1;
                 break;
             case "D_DR_RX":
+            case "D_RX_GEN":
                 flag=true;
                 table="Tenivia_traker";
                 result=1;
@@ -2047,6 +2080,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
     }
 
 
+    private Boolean IsTeniviaMenuAvilable(){
+       return customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N") ||
+               customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N");
+    }
+
     private Boolean IsExpCriteriaFulfiled(int NoOfDrCalled){
         String NO_DR_CALL_REQ= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NO_DR_CALL_REQ","0");
         if (NO_DR_CALL_REQ.equals("0")) return true;
@@ -2054,8 +2092,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code", "W").equals("OCC")||
                 customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("OSC")||
                 customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("CSC")||
-                (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")
-                        && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("W"))){
+                (
+                        customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")
+                        && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("W")
+                )
+                ){
             return true;
         }
         if (NoOfDrCalled < Integer.parseInt(NO_DR_CALL_REQ)) {
