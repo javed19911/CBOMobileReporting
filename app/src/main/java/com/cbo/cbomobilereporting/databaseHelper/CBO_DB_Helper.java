@@ -5324,8 +5324,31 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         cv.put("TIME", TIME);
         cv.put("REMARK", REMARK);
         sd.insert(Tenivia_traker, null, cv);
+        if (!DR_ID.equalsIgnoreCase("-1")){
+            delete_tenivia_traker("-1");
+        }
     }
 
+    public void Update_tenivia_traker(String DR_ID, String DR_NAME,String QTY
+            ,String AMOUNT, String QTY_CAPTION,String ITEM_ID,String AMOUN_CAPTION, String TIME,String REMARK) {
+        sd = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("DR_ID", DR_ID);
+        cv.put("DR_NAME", DR_NAME);
+        cv.put("QTY", QTY);
+        cv.put("AMOUNT", AMOUNT);
+        cv.put("QTY_CAPTION", QTY_CAPTION);
+        cv.put("ITEM_ID", ITEM_ID);
+        cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
+        cv.put("TIME", TIME);
+        cv.put("REMARK", REMARK);
+        sd.update(Tenivia_traker, cv, "DR_ID ='" + DR_ID+"'", null);
+    }
+
+    public void delete_tenivia_traker(String DR_ID) {
+        sd = this.getWritableDatabase();
+        sd.delete(Tenivia_traker, "DR_ID ='" + DR_ID+"'", null);
+    }
     public void delete_tenivia_traker() {
         sd = this.getWritableDatabase();
         sd.delete(Tenivia_traker, null, null);

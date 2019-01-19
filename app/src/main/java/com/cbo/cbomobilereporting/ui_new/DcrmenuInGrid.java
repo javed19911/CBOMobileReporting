@@ -1448,7 +1448,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     }
                     customVariablesAndMethod.getAlert(context,"Expenses Pending",pending_list);
 
-                }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N") && (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("1"))) {
+                }else if (IsTeniviaMenuAvilable()
+                        && (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("1"))) {
                     if (cboDbHelper.getmenu_count("Tenivia_traker")>0 && IsExpCriteriaFulfiled(drInLocal.size())) {
                         startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
                         getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);

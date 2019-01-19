@@ -195,11 +195,11 @@ public class DrRXActivity extends AppCompatActivity {
 
     private void Save_RX(int who){
         saveData(who);
-        if (drNameBt.getText().toString().equals("-- Select --")) {
+        if (drNameBt.getText().toString().equals("--Select--")) {
             customVariablesAndMethod.msgBox(context,"Please Select Name First...");
-        } else if (!tenivia_traker.isEmpty() && tenivia_traker.get("name").contains(doc_name)){
+        }/* else if (!tenivia_traker.isEmpty() && tenivia_traker.get("name").contains(doc_name)){
             customVariablesAndMethod.getAlert(context,"Call Found","You have made your call to "+doc_name);
-        }else if (qtyInput) {
+        }*/else if (qtyInput) {
             SaveTask();
         } else {
             customVariablesAndMethod.msgBox(context,"Please fill atlest One Qty...");
@@ -313,6 +313,7 @@ public class DrRXActivity extends AppCompatActivity {
         if (who==1){
             qtyInput = true;
             dr_id = "-1";
+            doc_name = "No Prescription";
             drNameBt.setText("No Prescription");
             sbId.append("-1");
             sbQty.append("0");
@@ -370,9 +371,16 @@ public class DrRXActivity extends AppCompatActivity {
                                 if (sbId.toString().equals("-1")){
                                     remark="No prescription for the day";
                                 }
-                                cbohelp.Insert_tenivia_traker(dr_id, doc_name, sbQty.toString()
-                                        ,  sbamt.toString(), sbQty_caption.toString(), sbId.toString(), sbamt_caption.toString(),  customVariablesAndMethod.currentTime(context), remark);
-                                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"D_DR_RX_VISITED","Y");
+                               if(!tenivia_traker.isEmpty() && tenivia_traker.get("name").contains(doc_name)) {
+                                   cbohelp.Update_tenivia_traker(dr_id, doc_name, sbQty.toString()
+                                           ,  sbamt.toString(), sbQty_caption.toString(), sbId.toString(), sbamt_caption.toString(),  customVariablesAndMethod.currentTime(context), remark);
+
+                               }else{
+                                   cbohelp.Insert_tenivia_traker(dr_id, doc_name, sbQty.toString()
+                                           ,  sbamt.toString(), sbQty_caption.toString(), sbId.toString(), sbamt_caption.toString(),  customVariablesAndMethod.currentTime(context), remark);
+
+                               }
+                                  customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"D_DR_RX_VISITED","Y");
                                 customVariablesAndMethod.msgBox(context,"Successfuly Submitted...");
                                 finish();
                             }
