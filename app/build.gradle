@@ -68,6 +68,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.8.3'
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.google.firebase:firebase-database:11.8.0'
 
 
     implementation 'android.arch.lifecycle:extensions:1.1.1'

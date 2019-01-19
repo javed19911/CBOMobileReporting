@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.SplashScreen_2016;
 import com.google.android.gms.common.ConnectionResult;
@@ -90,6 +91,7 @@ public class MyLoctionService extends Service implements
     Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
     MyCustomMethod mCos;
+    LocationDB locationDB =null;
 
     Boolean serviceStarted = false;
     Runnable dataFromOnLocationChange = new Runnable() {
@@ -210,6 +212,8 @@ public class MyLoctionService extends Service implements
 
                 if (!mGoogleApiClient.isConnected())
                     mGoogleApiClient.connect();
+
+                locationDB = new LocationDB();
             }
         } else if (intent.getAction().equals(Constants.ACTION.LIVE_TRACKING_ACTION)) {
 
@@ -422,6 +426,8 @@ public class MyLoctionService extends Service implements
                // if (currentBestLocation==null) {
                     //lastLatLong = "0.0,0.0";
                     customVariablesAndMethod.putObject(context,"currentBestLocation",mCurrentLocation);
+
+
                 //}
                     if (lastLatLong.equals(msg)) {
                         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "shareLat", "" + lat);
@@ -441,6 +447,15 @@ public class MyLoctionService extends Service implements
                             Custom_Variables_And_Method.GLOBAL_LATLON = msg;
 
                             customVariablesAndMethod.putObject(context,"currentBestLocation_Validated",mCurrentLocation);
+
+
+                            // ======================================insert in firebase database============================
+
+
+                            locationDB.insert(mCurrentLocation);
+
+
+                            //=======================================================
 
                         } else {
                             Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "shareLatLong");
