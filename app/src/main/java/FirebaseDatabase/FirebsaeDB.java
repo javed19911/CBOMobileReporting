@@ -21,7 +21,7 @@ public abstract class FirebsaeDB<T> {
 
 
     private DatabaseReference rootRef;;
-    private boolean  isPushRequired= true;
+    private boolean  primaryKeyAutoGenrate= true;
 
     private Response response = null;
 
@@ -30,12 +30,12 @@ public abstract class FirebsaeDB<T> {
 
 
 
-    public boolean isPushRequired() {
-        return isPushRequired;
+    public boolean isPrimaryKeyAutoGenrate() {
+        return primaryKeyAutoGenrate;
     }
 
-    public void setPushRequired(boolean pushRequired) {
-        isPushRequired = pushRequired;
+    public void setPrimaryKeyAutoGenrate(boolean primaryKeyAutoGenrate) {
+        this.primaryKeyAutoGenrate = primaryKeyAutoGenrate;
 
     }
 
@@ -48,7 +48,7 @@ public abstract class FirebsaeDB<T> {
 
             login (new ILogin () {
                 @Override
-                public void onSuccess(DatabaseReference auth) {
+                public void onSuccess(DatabaseReference rootRef) {
                     rootRef.addValueEventListener (new ValueEventListener () {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -233,10 +233,10 @@ public abstract class FirebsaeDB<T> {
             login ( new ILogin () {
 
                 @Override
-                public void onSuccess(DatabaseReference auth) {
+                public void onSuccess(DatabaseReference rootRef) {
 
 
-                    if (isPushRequired ()) {
+                    if (isPrimaryKeyAutoGenrate ()) {
                         rootRef.push ().setValue (model);
                     } else {
                         rootRef.setValue (model);
@@ -267,10 +267,10 @@ public abstract class FirebsaeDB<T> {
         try {
             login ( new ILogin () {
                 @Override
-                public void onSuccess(DatabaseReference auth) {
+                public void onSuccess(DatabaseReference rootRef) {
 
-                    DatabaseReference primerykeyRef= rootRef;  //.child (primerykey);
-                    primerykeyRef.removeValue ();
+                    //DatabaseReference primerykeyRef= rootRef;  //.child (primerykey);
+                    rootRef.removeValue ();
                     if (response !=null){
                         response.onTableDeleted (model);
                     }

@@ -172,10 +172,16 @@ public class SpoRptAdapter extends BaseAdapter {
             public void onClick(View v) {
 
                 String compName =dataList.get(position).getConsignee().toString();
-                //mycon.msgBox(dataList.get(position).getStockAmt().toString());
-                  Intent spoProductWiseStock = new Intent(context, SpoProductWiseStock.class);
-                spoProductWiseStock.putExtra("company_name",compName);
-                v.getContext().startActivity(spoProductWiseStock);
+                String spoIdFromList = dataList.get(position).getId();
+
+                if (!spoIdFromList.equals("0")) {
+                    //mycon.msgBox(dataList.get(position).getStockAmt().toString());
+                    Intent spoProductWiseStock = new Intent(context, SpoProductWiseStock.class);
+                    spoProductWiseStock.putExtra("company_name", compName);
+                    v.getContext().startActivity(spoProductWiseStock);
+                }else {
+                    customVariablesAndMethod.msgBox(context,compName);
+                }
 
             }
         });

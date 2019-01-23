@@ -1413,7 +1413,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                         startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
                         getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
                     } else {
-                        customVariablesAndMethod.msgBox(context,"Please Visit "+cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX")+"..");
+                        customVariablesAndMethod.msgBox(context,"Please Visit "+ MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+"..");
                     }
                 } else if( IsExpCriteriaFulfiled(drInLocal.size())){
                     startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
@@ -2079,6 +2079,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
         return true;
     }
+
 
 
     private Boolean IsTeniviaMenuAvilable(){

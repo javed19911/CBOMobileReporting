@@ -8,7 +8,7 @@ public abstract class FirebaseDbhelper<T> extends FirebsaeDB<T> {
 
     public FirebaseDbhelper() {
         super ("", "");
-        setBaseURL ("CBO/"+ Custom_Variables_And_Method.COMPANY_CODE+"/"+Custom_Variables_And_Method.PA_ID);
+        setBaseURL ("CBO/"+ Custom_Variables_And_Method.COMPANY_CODE.trim()+"/"+Custom_Variables_And_Method.PA_ID);
     }
 
 }

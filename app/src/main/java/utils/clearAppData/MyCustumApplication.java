@@ -17,6 +17,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.cbo.cbomobilereporting.R;
+import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
@@ -124,6 +125,22 @@ public class MyCustumApplication extends MultiDexApplication {
 
 
         return dir.delete();
+    }
+
+    public String getTaniviaTrakerMenuName(){
+        CBO_DB_Helper cbohelp = new CBO_DB_Helper(getInstance());
+        if(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"Tenivia_NOT_REQUIRED").equals("N")) {
+            return cbohelp.getMenu("DCR", "D_DR_RX").get("D_DR_RX");
+        }
+
+        if(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"Rx_NOT_REQUIRED").equals("N")) {
+            return cbohelp.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN");
+        }
+
+        if(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"Rx_NA_NOT_REQUIRED").equals("N")) {
+            return cbohelp.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA");
+        }
+        return "";
     }
 
     public static String getServeiceURL() {

@@ -298,6 +298,9 @@ public class AppAlert {
         Alert_Positive.setText(getPositiveTxt());
         Alert_negative.setText(getNagativeTxt());
 
+        setNagativeTxt("Cancel");
+        setPositiveTxt("OK");
+
         final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
         pa_id_txt.setText(""+ Custom_Variables_And_Method.PA_ID);
 

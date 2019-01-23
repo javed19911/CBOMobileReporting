@@ -70,6 +70,7 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -698,39 +699,32 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
     @Override
     public void delete_Call(final String Dr_id, final String Dr_name) {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
-        final Button Alert_Nagative= (Button) dialogLayout.findViewById(R.id.nagative);
-        Alert_title.setText("Delete!!!");
-        Alert_message.setText("Do you Really want to delete "+Dr_name+" ?");
-        Alert_Nagative.setText("Cancel");
-        Alert_Positive.setText("Delete");
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
 
-        final AlertDialog dialog = builder1.create();
+        HashMap<String, ArrayList<String>>  tenivia_traker=cbohelp.getCallDetail("tenivia_traker",Dr_id,"1");
+        if (!tenivia_traker.isEmpty () && (tenivia_traker.get ("id").contains ("-99") )) {
 
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               cbohelp.delete_Doctor_from_local_all(Dr_id);
-                customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-                finish();
-            }
-        });
-        Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
+
+            AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete " + Dr_name + " ?", new AppAlert.OnClickListener() {
+                @Override
+                public void onPositiveClicked(View item, String result) {
+                    cbohelp.delete_tenivia_traker(Dr_id);
+                    // customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                    cbohelp.delete_Doctor_from_local_all(Dr_id);
+                    customVariablesAndMethod.msgBox(context, Dr_name + " sucessfully Deleted.");
+                    finish();
+
+
+                }
+
+                @Override
+                public void onNegativeClicked(View item, String result) {
+                }
+            });
+        }else{
+            customVariablesAndMethod.getAlert(context, MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +"!!!","Please delete " +Dr_name+" in "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName());
+        }
+
 
     }
 

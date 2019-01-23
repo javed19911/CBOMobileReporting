@@ -500,7 +500,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     }
 
     private void logout(){
-        AppAlert.getInstance().DecisionAlert(context, "Logout!!!", "Are you sure to Logout?", new AppAlert.OnClickListener() {
+        AppAlert.getInstance().setPositiveTxt("Yes").setNagativeTxt("No").DecisionAlert(context, "Logout!!!", "Are you sure to Logout?", new AppAlert.OnClickListener() {
             @Override
             public void onPositiveClicked(View item, String result) {
                 stopLoctionService(false);

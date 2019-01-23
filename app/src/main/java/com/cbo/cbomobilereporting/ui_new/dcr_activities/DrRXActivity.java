@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -45,6 +46,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,6 +55,7 @@ import services.ServiceHandler;
 import utils.CBOUtils.SystemArchitecture;
 import utils.adapterutils.DrPres_Adapter;
 import utils.adapterutils.DrPres_Model;
+import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.GiftModel;
 import utils.adapterutils.MyAdapter2;
 import utils.adapterutils.SpinAdapter;
@@ -62,7 +65,7 @@ import utils_new.AppAlert;
 import utils_new.CustomDialog.Spinner_Dialog;
 import utils_new.Custom_Variables_And_Method;
 
-public class DrRXActivity extends AppCompatActivity {
+public class DrRXActivity extends AppCompatActivity  implements ExpandableListAdapter.Summary_interface {
 
     ListView mylist;
     Button save;
@@ -78,6 +81,8 @@ public class DrRXActivity extends AppCompatActivity {
     String doc_name;
     TextView drNameBt;
     ImageView drNmaeImg;
+
+    String live_km,head;
     int textlength = 0;
     StringBuilder sbId, sbQty,sbamt, sbQty_caption,sbamt_caption;
     ServiceHandler serviceHandler;
@@ -88,6 +93,13 @@ public class DrRXActivity extends AppCompatActivity {
     ImageView date_name_img;
     private HashMap<String, ArrayList<String>> tenivia_traker;
 
+    private HashMap<String, HashMap<String, ArrayList<String>>> summary_list=new HashMap<>();
+
+
+    ExpandableListAdapter listAdapter;
+    Button tab_call,tab_summary;
+    LinearLayout call_layout;
+    ExpandableListView summary_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +114,13 @@ public class DrRXActivity extends AppCompatActivity {
         cbohelp = new CBO_DB_Helper(context);
         drNameBt = (TextView) findViewById(R.id.drpres_name);
         drNmaeImg = (ImageView) findViewById(R.id.drpres_name_img);
-        serviceHandler = new ServiceHandler(context);
+
+        tab_call=(Button)findViewById (R.id.call);
+        tab_summary=(Button)findViewById (R.id.summary);
+        call_layout=(LinearLayout)findViewById (R.id.call_layout);
+        summary_layout=(ExpandableListView)findViewById (R.id.summary_layout);
+
+
         mylist.setItemsCanFocus(true);
         drNameBt.setText("-- Select --");
         no_prescription= (CheckBox) findViewById(R.id.no_prescription);
@@ -128,7 +146,7 @@ public class DrRXActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             //textView.setText("Dr Prescription");
-            String head=cbohelp.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN");
+            head=cbohelp.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN");
             textView.setText(head);
 
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
@@ -139,30 +157,76 @@ public class DrRXActivity extends AppCompatActivity {
         getDoctorList();
         new Doback().execute();
 
-        tenivia_traker=cbohelp.getCallDetail("tenivia_traker","","0");
+
+        tenivia_traker=cbohelp.getCallDetail("tenivia_traker","","1");
+
+
+
+
+        summary_list=new LinkedHashMap<>();
+        summary_list.put(head,tenivia_traker);
+
+        final ArrayList<String> header_title=new ArrayList<>();
+        //final List<Integer> visible_status=new ArrayList<>();
+        for(String main_menu:summary_list.keySet()){
+            header_title.add(main_menu);
+            //visible_status.add(0);
+        }
+
+
+
+        listAdapter = new ExpandableListAdapter (summary_layout,this, header_title, summary_list);
+
+        // setting list adapter
+        summary_layout.setAdapter(listAdapter);
+        summary_layout.setGroupIndicator(null);
+        for(int i=0; i < listAdapter.getGroupCount(); i++)
+            summary_layout.expandGroup(i);
+        //doctor.expandGroup(1);
+
+        summary_layout.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
+
+                summary_list.get(header_title.get(groupPosition)).get("visible_status").get(childPosition);
+                if (summary_list.get(header_title.get(groupPosition)).get("visible_status").get(childPosition).equals("1")){
+                    summary_list.get(header_title.get(groupPosition)).get("visible_status").set(childPosition,"0");
+                }else {
+                    summary_list.get(header_title.get(groupPosition)).get("visible_status").set(childPosition,"1");
+                }
+                listAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
 
 
 
 
 
+        no_prescription.setText("No "+head+" for the day");
         no_prescription.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 if (checked){
-                    AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
-                            "Are you sure to save as\n\"No prescription for the day\"",
-                            new AppAlert.OnClickListener() {
-                                @Override
-                                public void onPositiveClicked(View item, String result) {
-                                    Save_RX(1);
-                                }
+                    if (!tenivia_traker.isEmpty () && (tenivia_traker.get ("id").contains ("-99") || tenivia_traker.get ("id").contains ("-1"))) {
+                        AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
+                                "Are you sure to save as\n\"No " + head + " for the day\"",
+                                new AppAlert.OnClickListener() {
+                                    @Override
+                                    public void onPositiveClicked(View item, String result) {
+                                        Save_RX(1);
+                                    }
 
-                                @Override
-                                public void onNegativeClicked(View item, String result) {
-                                    no_prescription.setChecked(false);
-                                }
-                            });
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    @Override
+                                    public void onNegativeClicked(View item, String result) {
+                                        no_prescription.setChecked(false);
+                                    }
+                                });
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    }else{
+                        customVariablesAndMethod.msgBox(context,head +"d for the day");
+                        no_prescription.setChecked(false);
+                    }
                 }
             }
         });
@@ -187,6 +251,30 @@ public class DrRXActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickDrName();
+            }
+        });
+
+
+
+
+        tab_call.setText(head);
+        tab_call.setOnClickListener(new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                call_layout.setVisibility(View.VISIBLE);
+                summary_layout.setVisibility(View.GONE);
+                tab_call.setBackgroundResource(R.drawable.tab_selected);
+                tab_summary.setBackgroundResource(R.drawable.tab_deselected);
+            }
+        });
+
+        tab_summary.setOnClickListener(new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                summary_layout.setVisibility(View.VISIBLE);
+                call_layout.setVisibility(View.GONE);
+                tab_call.setBackgroundResource(R.drawable.tab_deselected);
+                tab_summary.setBackgroundResource(R.drawable.tab_selected);
             }
         });
 
@@ -217,6 +305,100 @@ public class DrRXActivity extends AppCompatActivity {
             AppAlert.getInstance().getAlert(context,"Empty List.."," No Data In List..");
         }
     }
+
+    private void isFound(String Dr_id, String Dr_name) {
+
+            if (!tenivia_traker.isEmpty () && tenivia_traker.get ("id").contains (Dr_id)) {
+
+
+
+                HashMap<String, ArrayList<String>> tenivia_traker_DR = cbohelp.getCallDetail ("tenivia_traker", Dr_id, "1");
+
+
+                if (!tenivia_traker_DR.get ("gift_name").get (0).equals ("")) {
+                    String[] gift_name1 = tenivia_traker_DR.get ("gift_name").get (0).split (",");
+                    String[] gift_qty1 = tenivia_traker_DR.get ("gift_qty").get (0).split (",");
+
+                    for (int i = 0; i < list.size (); i++) {
+                        if (Arrays.asList (gift_name1).contains (list.get (i).getName ())) {
+                            for (int j = 0; j < gift_name1.length; j++) {
+                                if (list.get (i).getName ().equalsIgnoreCase (gift_name1[j])) {
+                                    list.get (i).setQty (gift_qty1[j]);
+                                    break;
+                                }
+                            }
+
+                        } else {
+
+                            list.get (i).setQty ("");
+                        }
+                    }
+                    adapter.notifyDataSetChanged ();
+                }
+
+            } else {
+                for (int i = 0; i < list.size (); i++) {
+                    list.get (i).setQty ("");
+
+                }
+                adapter.notifyDataSetChanged ();
+            }
+
+
+    }
+
+    @Override
+    public void Edit_Call(String Dr_id, String Dr_name) {
+
+        if(!Dr_id.equals ("-1")) {
+            AppAlert.getInstance().setPositiveTxt("Edit").DecisionAlert(context, "Edit!!!", "Do you Really want to Edit " + Dr_name + "", new AppAlert.OnClickListener() {
+                @Override
+                public void onPositiveClicked(View item, String result) {
+                    call_layout.setVisibility(View.VISIBLE);
+                    summary_layout.setVisibility(View.GONE);
+                    tab_call.setBackgroundResource(R.drawable.tab_selected);
+                    tab_summary.setBackgroundResource(R.drawable.tab_deselected);
+
+                    dr_id = Dr_id;
+                    doc_name = Dr_name;
+                    Custom_Variables_And_Method.DR_ID = dr_id;//vhange here
+                    drNameBt.setText(doc_name);
+                    save.setText("Update");
+
+                    isFound(Dr_id, Dr_name);
+
+
+                }
+
+                @Override
+                public void onNegativeClicked(View item, String result) {
+                }
+            });
+        }else {
+
+            customVariablesAndMethod.msgBox(context, "you Can't edit in " + Dr_name);
+        }
+    }
+
+    @Override
+    public void delete_Call( String Dr_id, String Dr_name) {
+         AppAlert.getInstance ().setPositiveTxt ("Delete").DecisionAlert (context, "Delete!!!", "Do you Really want to delete "+Dr_name+"", new AppAlert.OnClickListener () {
+             @Override
+             public void onPositiveClicked(View item, String result) {
+                 cbohelp.delete_tenivia_traker (Dr_id);
+                // customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                DeleteRx(Dr_id,Dr_name);
+
+
+             }
+
+             @Override
+             public void onNegativeClicked(View item, String result) {
+                 }
+         });
+
+    }
+
 
 
     class Doback extends AsyncTask<Integer, String, List<DrPres_Model>> {
@@ -299,6 +481,8 @@ public class DrRXActivity extends AppCompatActivity {
             dr_id = item.getId();
             doc_name = item.getName();
             drNameBt.setText(doc_name);
+
+            isFound (dr_id,doc_name);
         }).show();
     }
 
@@ -313,8 +497,8 @@ public class DrRXActivity extends AppCompatActivity {
         if (who==1){
             qtyInput = true;
             dr_id = "-1";
-            doc_name = "No Prescription";
-            drNameBt.setText("No Prescription");
+            doc_name = "No "+head;
+            drNameBt.setText(doc_name);
             sbId.append("-1");
             sbQty.append("0");
             sbamt.append("0");
@@ -369,7 +553,7 @@ public class DrRXActivity extends AppCompatActivity {
 
                                 String remark="";
                                 if (sbId.toString().equals("-1")){
-                                    remark="No prescription for the day";
+                                    remark= no_prescription.getText().toString();
                                 }
                                if(!tenivia_traker.isEmpty() && tenivia_traker.get("name").contains(doc_name)) {
                                    cbohelp.Update_tenivia_traker(dr_id, doc_name, sbQty.toString()
@@ -381,7 +565,7 @@ public class DrRXActivity extends AppCompatActivity {
 
                                }
                                   customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"D_DR_RX_VISITED","Y");
-                                customVariablesAndMethod.msgBox(context,"Successfuly Submitted...");
+                                customVariablesAndMethod.msgBox(context,"Successfully Submitted...");
                                 finish();
                             }
 
@@ -399,4 +583,46 @@ public class DrRXActivity extends AppCompatActivity {
 
 
     }
+
+    private void DeleteRx(String dr_id,String dr_name) {
+        String DCR_DATE= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_DATE");
+        HashMap<String, String> request = new HashMap<>();
+        request.put("sCompanyFolder", cbohelp.getCompanyCode());
+        request.put("iPA_ID", ""+Custom_Variables_And_Method.PA_ID);
+        request.put("DOC_DATE",   DCR_DATE);
+        request.put("iDR_ID",  ""+dr_id);
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCRRX_DELETE", request)
+                        .setDescription("Please Wait..").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+
+
+
+                                customVariablesAndMethod.msgBox(context,dr_name+" Sucessfully Deleted.");
+                                finish();
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+
+                             /*   String result=response.toString ();
+
+                                customVariablesAndMethod.msgBox(context,"Successfuly Deleted..."+result);;*/
+
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+                                finish ();
+                            }
+                        })
+                );
+
+
+
+
+    }
+
 }

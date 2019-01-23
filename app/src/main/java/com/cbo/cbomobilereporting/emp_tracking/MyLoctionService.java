@@ -428,6 +428,8 @@ public class MyLoctionService extends Service implements
                     customVariablesAndMethod.putObject(context,"currentBestLocation",mCurrentLocation);
 
 
+
+
                 //}
                     if (lastLatLong.equals(msg)) {
                         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "shareLat", "" + lat);
@@ -446,17 +448,24 @@ public class MyLoctionService extends Service implements
                             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "last_location_update_time_in_minites", customVariablesAndMethod.get_currentTimeStamp());
                             Custom_Variables_And_Method.GLOBAL_LATLON = msg;
 
-                            customVariablesAndMethod.putObject(context,"currentBestLocation_Validated",mCurrentLocation);
+
+
 
 
                             // ======================================insert in firebase database============================
 
-
-                            locationDB.insert(mCurrentLocation);
+                            Location last_location1 = customVariablesAndMethod.getObject(context,"currentBestLocation_Validated",Location.class);
+                            Double km = DistanceCalculator.distance(mCurrentLocation.getLatitude(), mCurrentLocation.getLatitude()
+                                    ,  last_location1.getLatitude(), last_location1.getLongitude(), "K");
+                            if (km>0.1) {
+                                Log.d("Location update", "Location updated on firebase ..............: ");
+                                locationDB.insert(mCurrentLocation);
+                            }
 
 
                             //=======================================================
 
+                            customVariablesAndMethod.putObject(context,"currentBestLocation_Validated",mCurrentLocation);
                         } else {
                             Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "shareLatLong");
                         }

@@ -4682,7 +4682,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
 
         if (nameList.size() == 0 && !table.equals("Expenses")) {
-            idList.add("0");
+            idList.add("-99");
             nameList.add("Yet to make your first Call");
             timeList.add("");
             sample_name.add("");

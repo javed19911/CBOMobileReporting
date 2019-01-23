@@ -8,7 +8,7 @@ import com.cbo.cbomobilereporting.databaseHelper.FirebaseDbhelper;
 public class UserDB  extends FirebaseDbhelper<mUser> {
     public UserDB() {
         super();
-        setPushRequired (false);
+        setPrimaryKeyAutoGenrate (false);
         setTable ("User");
     }
 
