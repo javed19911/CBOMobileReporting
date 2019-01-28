@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
+import com.cbo.cbomobilereporting.databaseHelper.Location.mLocation;
+import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.SplashScreen_2016;
 import com.google.android.gms.common.ConnectionResult;
@@ -72,6 +74,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import utils.CBOUtils.Constants;
 import utils.MyConnection;
+import utils.clearAppData.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 public class MyLoctionService extends Service implements
@@ -214,6 +217,7 @@ public class MyLoctionService extends Service implements
                     mGoogleApiClient.connect();
 
                 locationDB = new LocationDB();
+                //locationDB.delete(null);
             }
         } else if (intent.getAction().equals(Constants.ACTION.LIVE_TRACKING_ACTION)) {
 
@@ -454,12 +458,17 @@ public class MyLoctionService extends Service implements
 
                             // ======================================insert in firebase database============================
 
-                            Location last_location1 = customVariablesAndMethod.getObject(context,"currentBestLocation_Validated",Location.class);
-                            Double km = DistanceCalculator.distance(mCurrentLocation.getLatitude(), mCurrentLocation.getLatitude()
+                            mUser mUser = MyCustumApplication.getInstance().getUser();
+                            Location last_location1 = mUser.getLocation(); //customVariablesAndMethod.getObject(context,"currentBestLocation_Validated",Location.class);
+                            Double km = DistanceCalculator.distance(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()
                                     ,  last_location1.getLatitude(), last_location1.getLongitude(), "K");
-                            if (km>0.1) {
+                            if (km>0.02) {
                                 Log.d("Location update", "Location updated on firebase ..............: ");
-                                locationDB.insert(mCurrentLocation);
+
+                                mUser.setLocation(mCurrentLocation);
+                                mLocation mlocation = new mLocation(mCurrentLocation).setDCR_ID(mUser.getDCRId());
+                                locationDB.insert(mlocation);
+                                MyCustumApplication.getInstance().updateUser();
                             }
 
 

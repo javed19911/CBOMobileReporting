@@ -50,6 +50,9 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
@@ -147,6 +150,13 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
     Service_Call_From_Multiple_Classes service ;
 
+
+    ///firebase DB
+    mDrCall mdrCall;
+    DrCallDB drCallDB;
+    LocationDB locationDB;
+
+
     public void onCreate(Bundle b) {
         super.onCreate(b);
         //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
@@ -198,6 +208,10 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         tab_call= (Button) findViewById(R.id.call);
         tab_summary= (Button) findViewById(R.id.summary);
         tab_unplaned= (Button) findViewById(R.id.call_unplaned);
+
+
+        locationDB = new LocationDB();
+        drCallDB = new DrCallDB();
 
 
         if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_DR_REMARKYN").equalsIgnoreCase("y")) {
@@ -314,7 +328,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
             @Override
             public void onClick(View v) {
-               /* Intent i = new Intent(DrCall.this, Dr_Workwith.class);
+               /* Intent i = new Intent(mDrCall.this, Dr_Workwith.class);
                 startActivityForResult(i, WORK_WITH_DIALOG);*/
                 new Dr_Workwith_Dialog(context,mHandler,null,WORK_WITH_DIALOG).show();
             }
@@ -646,7 +660,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         Alert_Positive.setText("Edit");
         Alert_title.setText("Edit!!!");
 
-       /* Intent i = new Intent(context, DrCall.class);
+       /* Intent i = new Intent(context, mDrCall.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra("id",Doctor_id_for_POB);
@@ -708,10 +722,16 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
             AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete " + Dr_name + " ?", new AppAlert.OnClickListener() {
                 @Override
                 public void onPositiveClicked(View item, String result) {
+
+                    mdrCall = (mDrCall) new mDrCall().setId(Dr_id);
+                    drCallDB.delete(mdrCall);
+
+
                     cbohelp.delete_tenivia_traker(Dr_id);
                     // customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
                     cbohelp.delete_Doctor_from_local_all(Dr_id);
                     customVariablesAndMethod.msgBox(context, Dr_name + " sucessfully Deleted.");
+
                     finish();
 
 
@@ -848,6 +868,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                     new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
         } else {
 
+
             customVariablesAndMethod.SetLastCallLocation(context);
 
            // if (Custom_Variables_And_Method.GLOBAL_LATLON.equalsIgnoreCase("0.0,0.0")) {
@@ -856,6 +877,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
            // }
 
             currentBestLocation=customVariablesAndMethod.getObject(context,"currentBestLocation",Location.class);
+
 
 
             long val = cbohelp.AddedDoctorMore
@@ -870,7 +892,17 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
             if (currentBestLocation!=null) {
                 locExtra = "Lat_Long " + currentBestLocation.getLatitude() + "," + currentBestLocation.getLongitude() + ", Accuracy " + currentBestLocation.getAccuracy() + ", Time " + currentBestLocation.getTime() + ", Speed " + currentBestLocation.getSpeed() + ", Provider " + currentBestLocation.getProvider();
             }
-            cbohelp.addTempDrInLocal(dr_id, doc_name, "" + customVariablesAndMethod.currentTime(context), myBatteryLevel,latLong, Custom_Variables_And_Method.global_address, dr_remark.getText().toString(), updated, drKm,customVariablesAndMethod.srno(context),work_with_name,AREA,"",call_type, locExtra,ref_latLong);
+
+            mdrCall.setRemark(dr_remark.getText().toString())
+                    .setSrno(customVariablesAndMethod.srno(context))
+                    .setLOC_EXTRA(locExtra)
+                    .setWorkwith(work_with_name)
+                    .setTime(customVariablesAndMethod.currentTime(context));
+
+            drCallDB.insert(mdrCall);
+            locationDB.insert(mdrCall);
+
+            cbohelp.addTempDrInLocal(dr_id, doc_name, "" + customVariablesAndMethod.currentTime(context), myBatteryLevel,latLong, Custom_Variables_And_Method.global_address, dr_remark.getText().toString(), updated, drKm,mdrCall.getSrno(),work_with_name,AREA,"",call_type, locExtra,ref_latLong);
             submitDoctorInLocal();
 
 
@@ -1193,6 +1225,9 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 myalertDialog.dismiss();
+                mdrCall = null;
+                SpinnerModel model = array_sort.get(position);
+
                 dr_id = ((TextView) view.findViewById(R.id.spin_id)).getText().toString();
                 doc_name = ((TextView) view.findViewById(R.id.spin_name)).getText().toString().split("-")[0];
                 drname.setText(doc_name);
@@ -1248,6 +1283,26 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
                 }else {
 
+                    mdrCall = (mDrCall) new mDrCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+
+                    mdrCall.setDrColour(model.getColour())
+                            .setCall_type(model.getPANE_TYPE())
+                            .setDrClass(model.getCLASS())
+                            .setDr_CRM(model.getCRM_COUNT())
+                            .setDrLastVisited(model.getLastVisited())
+                            .setDrPotential(model.getPOTENCY_AMT())
+                            .setDRCAPM_GROUP(model.getDRCAPM_GROUP());
+
+
                     ref_latLong = array_sort.get(position).getREF_LAT_LONG();
                     latLong  = arrayAdapter.latLong;
 
@@ -1256,7 +1311,10 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                         if (!doctor_list.get("remark").get(0).equals("")) {
                             String remark=doctor_list.get("remark").get(0);
                             if (remark.contains("\u20B9"))
+
+                                mdrCall.setPOBAmt(remark.split("\\n")[0]);
                                 remark=remark.split("\\n")[1];
+
                             if (remark_list.contains(remark)){
                                 btn_remark.setText(remark);
                                 dr_remark.setVisibility(View.GONE);
@@ -1264,6 +1322,8 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                                 btn_remark.setText(remark_list.get(remark_list.size()-1));
                                 dr_remark.setVisibility(View.VISIBLE);
                             }
+
+                            mdrCall.setRemark(remark);
                             dr_remark.setText(remark);
                         } else {
                             dr_remark.setText("");
@@ -1281,6 +1341,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
                         if (!doctor_list.get("workwith").get(0).equals("")) {
                             workwithdr.setText(doctor_list.get("workwith").get(0));
+                            mdrCall.setWorkwith(workwithdr.getText().toString());
                         } else {
                             workwithdr.setText("");
                         }
@@ -1296,6 +1357,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
                         if (!doctor_list.get("workwith").get(0).equals("")) {
                             workwithdr.setText(doctor_list.get("workwith").get(0));
+                            mdrCall.setWorkwith(workwithdr.getText().toString());
                         } else {
                             workwithdr.setText("");
                         }
@@ -1418,7 +1480,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.addView(listview);
         myDialog.setView(layout);
-        //ArrayAdapter arrayAdapter = new ArrayAdapter(DrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
+        //ArrayAdapter arrayAdapter = new ArrayAdapter(mDrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
         ArrayAdapter<String> arrayAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, remark_list);
         listview.setAdapter(arrayAdapter);

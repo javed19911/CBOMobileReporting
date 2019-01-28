@@ -55,6 +55,12 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrRcCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.StockistCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
@@ -87,6 +93,7 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -139,6 +146,12 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 	String latLong = "";
 	String ref_latLong = "";
 	Service_Call_From_Multiple_Classes service ;
+
+
+	///firebase DB
+	mDrRCCall mdrRCCall;
+	DrRcCallDB drRcCallDB;
+	LocationDB locationDB;
 
 	public ArrayList<SpinnerModel>getDoctorFromLocal(int id)
 	{
@@ -224,6 +237,10 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 		stk= (TableLayout) findViewById(R.id.last_pob);
 		doc_detail= (TableLayout) findViewById(R.id.doc_detail);
+
+
+		locationDB = new LocationDB();
+		drRcCallDB = new DrRcCallDB();
 
 
 		//rc_time=getTime();
@@ -496,17 +513,30 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 			}
 			else
 			{
-			
+
+
+				mdrRCCall.setRemark(remark.getText().toString())
+						.setSrno(customVariablesAndMethod.srno(context))
+						.setLOC_EXTRA(locExtra)
+						.setTime(customVariablesAndMethod.currentTime(context));
+
 				String dcrid=Custom_Variables_And_Method.DCR_ID;
 				
 				try{
 				
-					long val=cbohelp.insertDrRem(dcrid, dr_id, latLong+"!^"+loc.getText().toString(), customVariablesAndMethod.currentTime(context),Custom_Variables_And_Method.GLOBAL_LATLON,"0","0",customVariablesAndMethod.srno(context),Custom_Variables_And_Method.BATTERYLEVEL,remark.getText().toString(),"",locExtra,ref_latLong);
+					long val=cbohelp.insertDrRem(dcrid, dr_id, latLong+"!^"+loc.getText().toString(),
+							customVariablesAndMethod.currentTime(context),Custom_Variables_And_Method.GLOBAL_LATLON,
+							"0","0",mdrRCCall.getSrno(),Custom_Variables_And_Method.BATTERYLEVEL,
+							remark.getText().toString(),"",locExtra,ref_latLong);
 					Log.e("dr reminder added", ""+val);
 					if(val>0)
 					{
 						Log.e("reminder saved in local", ""+val);
 					}
+
+					drRcCallDB.insert(mdrRCCall);
+					locationDB.insert(mdrRCCall);
+
 				}catch(Exception e){
 					
 				}
@@ -777,6 +807,12 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 				for (int i = 0; i < doclist.size(); i++) {
 					if (doclist.get(i).getId().equals(Dr_id)) {
 						//drname.setSelection(i);
+
+						mdrRCCall = (mDrRCCall) new mDrRCCall()
+								.setId(dr_id)
+								.setName(doc_name)
+								.setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+								.setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
 						PopulateDr_Rc(Dr_id,i);
 					}
 				}
@@ -818,6 +854,10 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		Alert_Positive.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+
+				dialog.dismiss();
+				mdrRCCall = (mDrRCCall) new mDrRCCall().setId(Dr_id);
+				drRcCallDB.delete(mdrRCCall);
 				cbohelp.delete_DoctorRemainder_from_local_all(Dr_id);
 				customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
 				finish();
@@ -930,6 +970,10 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				myalertDialog.dismiss();
+
+				mdrRCCall = null;
+				SpinnerModel model = array_sort.get(position);
+
 				dr_id = ((TextView) view.findViewById(R.id.spin_id)).getText().toString();
 				doc_name = ((TextView) view.findViewById(R.id.spin_name)).getText().toString().split("-")[0];
 				drname.setText(doc_name);
@@ -979,6 +1023,24 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 					dr_id="";
 					doc_name="";
 				}else {
+
+					mdrRCCall = (mDrRCCall) new mDrRCCall()
+							.setId(model.getId())
+							.setName(model.getName())
+							.setArea(model.getAREA())
+							.setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+							.setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+							.setRef_latlong(model.getREF_LAT_LONG())
+							.setLatLong(arrayAdapter.latLong)
+							.setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+					mdrRCCall.setDrColour(model.getColour())
+							.setDrClass(model.getCLASS())
+							.setDr_CRM(model.getCRM_COUNT())
+							.setDrLastVisited(model.getLastVisited())
+							.setDrPotential(model.getPOTENCY_AMT())
+							.setDRCAPM_GROUP(model.getDRCAPM_GROUP());
+
 					latLong = arrayAdapter.latLong;
 					ref_latLong = array_sort.get(position).getREF_LAT_LONG();
                     PopulateDr_Rc(dr_id,position);

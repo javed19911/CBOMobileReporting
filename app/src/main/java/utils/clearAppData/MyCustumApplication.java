@@ -1,79 +1,142 @@
 package utils.clearAppData;
 
 import java.io.File;
-import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.IntentFilter;
+import android.location.Location;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
+import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.User.UserDB;
+import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 
 import utils.CBOUtils.Constants;
-import utils.ExceptionHandler;
 import utils_new.Custom_Variables_And_Method;
 
 
 public class MyCustumApplication extends MultiDexApplication {
     private static MyCustumApplication instance;
-
+    private mUser user = null;
     static String TAG = "MyCustumApplication";
+    public UserDB userDB = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        userDB = new UserDB();
+        getbattrypercentage();
         registerActivityLifecycleCallbacks(new AppLifecycleTracker());
         //new ExceptionHandler(this);
+        getUser();
     }
 
-
-
-  /*  @Override
-    public void onTrimMemory(int level) {
-        Intent intent = new Intent(getInstance(), MyLoctionService.class);
-        intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.d(TAG, "Running on Android O");
-            startForegroundService(intent);
-            //startService(intent);
-        }else{
-            Log.d(TAG, "Running on Android N or lower");
-            startService(intent);
+    public mUser getUser() {
+        if (user != null) {
+            if (!user.getID().trim().equalsIgnoreCase("0")
+                    && !user.getCompanyCode().trim().equalsIgnoreCase("")) {
+                return user;
+            }
         }
-        super.onTrimMemory(level);
+
+
+        CBO_DB_Helper cbohelp = new CBO_DB_Helper(getInstance());
+
+        user = new mUser(cbohelp.getPaid(), cbohelp.getCompanyCode())
+                .setDCRId(cbohelp.getDCR_ID_FromLocal())
+                .setName(cbohelp.getPaName())
+                .setHQ(cbohelp.getHeadQtr())
+                .setDesgination(cbohelp.getDESIG())
+                .setDesginationID(cbohelp.getPUB_DESIG())
+                .setLocation(Custom_Variables_And_Method.getInstance().getObject(getInstance(),"currentBestLocation_Validated", Location.class));
+        getDEVICE_ID();
+
+
+        updateUser();
+        return user;
     }
 
-
-
-    @Override
-    public void onTerminate() {
-        Intent intent = new Intent(getInstance(), MyLoctionService.class);
-        intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.d(TAG, "Running on Android O");
-            startForegroundService(intent);
-            //startService(intent);
-        }else{
-            Log.d(TAG, "Running on Android N or lower");
-            startService(intent);
+    public void updateUser(){
+        if (!user.getID().trim().equalsIgnoreCase("0")
+                && !user.getCompanyCode().trim().equalsIgnoreCase("")) {
+            userDB.insert(user);
         }
-        super.onTerminate();
     }
-*/
+
+    @SuppressLint("MissingPermission")
+    private void getDEVICE_ID() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String DEVICE_ID;
+        try {
+            //DEVICE_ID=telephonyManager.getDeviceId();
+            if (telephonyManager.getDeviceId() != null) {
+                DEVICE_ID = telephonyManager.getDeviceId();
+            }else{
+                DEVICE_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+        }catch (Exception e){
+            DEVICE_ID ="0";
+        }
+
+        String DEVICE_MODEL = android.os.Build.MODEL;
+        String BRAND = android.os.Build.BRAND;
+
+        if (BRAND == null){
+            BRAND ="";
+        }
+        if (DEVICE_MODEL == null){
+            DEVICE_MODEL ="MODEL";
+        }
+        if(DEVICE_ID ==null){
+            DEVICE_ID ="0";
+        }
+
+        user.setIMEI(DEVICE_ID +"'!'"+ BRAND +""+ DEVICE_MODEL);
+        user.setOS(BRAND +" - "+ DEVICE_MODEL+ " : "+Build.VERSION.SDK_INT );
+
+
+    }
+
+    private void getbattrypercentage() {
+
+
+        BroadcastReceiver br = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //context.unregisterReceiver(this);
+                int current_level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+                int level = -1;
+                if (current_level >= 0 && scale > 0) {
+                    level = (current_level * 100) / scale;
+                }
+                if (user!= null) {
+                    user.setBattery( "" + level);
+                    updateUser();
+                }
+            }
+        };
+        IntentFilter batrylevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(br, batrylevelFilter);
+    }
+
+
     public static MyCustumApplication getInstance(){
         return instance;
     }
@@ -309,13 +372,15 @@ public class MyCustumApplication extends MultiDexApplication {
         private int numStarted = 0;
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
+            user = null;
+            getUser();
         }
 
         @Override
         public void onActivityStarted(Activity activity) {
             if (numStarted == 0) {
                 // app went to foreground
+
                 startLoctionService();
             }
             numStarted++;

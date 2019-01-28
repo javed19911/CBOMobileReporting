@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -18,6 +19,8 @@ import android.view.View;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
+import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
@@ -488,11 +491,31 @@ public class Service_Call_From_Multiple_Classes {
 
 
     public void resetDCR(Context context, Response listener){
+        mUser user = MyCustumApplication.getInstance().getUser();
+
+        if (user.getLoggedInAsSupport()){
+
+
+            resetDCRNow(context);
+
+            if (listener != null)
+                listener.onSuccess(null);
+
+
+            Intent i = new Intent(context, LoginMain.class);
+            ((CustomActivity) context).stopLoctionService();
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+            ((CustomActivity) context).finish();
+
+            return;
+        }
 
 
         HashMap<String,String> request=new HashMap<>();
-        request.put("sCompanyFolder",Custom_Variables_And_Method.COMPANY_CODE);
-        request.put("DCRID",Custom_Variables_And_Method.DCR_ID);
+        request.put("sCompanyFolder",user.getCompanyCode());
+        request.put("DCRID",user.getDCRId());
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -538,25 +561,7 @@ public class Service_Call_From_Multiple_Classes {
                 JSONObject c = jsonArray1.getJSONObject(0);
 
                 if (c.getString("DCRID").equals("RESET")) {
-                    //customVariablesAndMethod.msgBox(context,"Dcr Day Successfully Reset ");
-                    MyCustomMethod customMethod;
-                    customMethod=new MyCustomMethod(context);
-
-                    customMethod.stopAlarm10Minute();
-                    customMethod.stopAlarm10Sec();
-                    customMethod.stopDOB_DOA_Remainder();
-                    new CustomTextToSpeech().stopTextToSpeech();
-
-
-                    Custom_Variables_And_Method.DCR_ID = "0";
-                    MyCustumApplication.getInstance().clearApplicationData();
-
-                    cbo_helper.DropDatabase(context);
-
-                    /*Intent i = new Intent(context, LoginMain.class);
-                    stopLoctionService();
-                    startActivity(i);
-                    finish();*/
+                    resetDCRNow(context);
                 } else {
                     throw new ClassCastException("Please Day plan First......");
                 }
@@ -564,6 +569,30 @@ public class Service_Call_From_Multiple_Classes {
         }
 
     }
+
+    private void resetDCRNow(Context context){
+        //customVariablesAndMethod.msgBox(context,"Dcr Day Successfully Reset ");
+        MyCustomMethod customMethod;
+        customMethod=new MyCustomMethod(context);
+
+        customMethod.stopAlarm10Minute();
+        customMethod.stopAlarm10Sec();
+        customMethod.stopDOB_DOA_Remainder();
+        new CustomTextToSpeech().stopTextToSpeech();
+
+        new MainDB().delete(null);
+        Custom_Variables_And_Method.DCR_ID = "0";
+        MyCustumApplication.getInstance().clearApplicationData();
+
+        cbo_helper.DropDatabase(context);
+
+                    /*Intent i = new Intent(context, LoginMain.class);
+                    stopLoctionService();
+                    startActivity(i);
+                    finish();*/
+    }
+
+
     private void parser_utilites(Context context,Bundle result,Response listener) throws JSONException {
         if (result != null) {
 /*

@@ -15,13 +15,14 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.*
 import com.cbo.cbomobilereporting.R
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DairyCallDB
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDairyCall
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod
-import com.cbo.cbomobilereporting.ui.Chemist_Gift
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS
 import com.uenics.javed.CBOLibrary.Response
@@ -32,6 +33,7 @@ import utils.adapterutils.ExpandableListAdapter
 import utils.adapterutils.SpinAdapter
 import utils.adapterutils.SpinAdapter_new
 import utils.adapterutils.SpinnerModel
+import utils.clearAppData.MyCustumApplication
 import utils.networkUtil.NetworkUtil
 import utils_new.*
 import java.io.File
@@ -154,6 +156,11 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
     internal var IsRefreshedClicked = true
     lateinit var service: Service_Call_From_Multiple_Classes
 
+    ///firebase DB
+    internal var mdairyCall: mDairyCall? = null
+    lateinit var dairyCallDB: DairyCallDB
+    lateinit var locationDB: LocationDB
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dairy_call)
@@ -170,6 +177,8 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
         hader_text.text = "$head Call"
         setSupportActionBar(toolbar)
 
+        locationDB = LocationDB();
+        dairyCallDB = DairyCallDB(head);
 
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -571,12 +580,22 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
         val AllSampleQty = sample
         var AllGiftQty = name4
 
+
+        mdairyCall?.setRemark(remark.text.toString())
+        mdairyCall?.setWorkwith(work_with_name)
+        mdairyCall?.setInterested(btn_intrested.getText().toString())
+
         if (remAdded().contains(dr_id)) {
 
             //customVariablesAndMethod.msgBox(context, "$dr_name Allready Added...")
            mydr =  cbohelp.update_phdairy_dcr(dr_id, doc_name,DOC_TYPE,dr_remark.text.toString(),work_with_name,work_with_id,PobAmt,AllItemId,AllItemQty,AllSampleQty,AllGiftId,AllGiftQty,"",if (btn_intrested.getText().toString().equals(intersed_list[1],true) ) "1" else "0")
             msg = "$head Updated successfully"
             customVariablesAndMethod.msgBox(context, msg)
+
+            dairyCallDB.insert(mdairyCall)
+            locationDB.insert(mdairyCall)
+            finish()
+
 
         } else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,Skip_Verification)) {
                 customVariablesAndMethod.msgBox(context,"Verifing Your Location");
@@ -595,9 +614,14 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 locExtra = "Lat_Long " + currentBestLocation!!.getLatitude() + "," + currentBestLocation!!.getLongitude() + ", Accuracy " + currentBestLocation!!.getAccuracy() + ", Time " + currentBestLocation!!.getTime() + ", Speed " + currentBestLocation!!.getSpeed() + ", Provider " + currentBestLocation!!.getProvider()
             }
 
+
+            mdairyCall!!.setSrno(customVariablesAndMethod.srno(context))
+                    .setLOC_EXTRA(locExtra)
+                    .setTime(customVariablesAndMethod.currentTime(context))
+
            mydr = cbohelp.insert_phdairy_dcr(dr_id, doc_name,DOC_TYPE, customVariablesAndMethod.currentTime(context),latLong,
                    myBatteryLevel, Custom_Variables_And_Method.global_address,dr_remark.text.toString(),
-                   drKm,customVariablesAndMethod.srno(context),work_with_name,work_with_id,PobAmt,
+                   drKm,mdairyCall!!.srno,work_with_name,work_with_id,PobAmt,
                    AllItemId,AllItemQty,AllSampleQty,AllGiftId,AllGiftQty,"",locExtra,
                    if (btn_intrested.getText().toString().equals(intersed_list[1],true) ) "1" else "0",ref_latLong)
 
@@ -614,6 +638,8 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                     }
                 }
 
+                dairyCallDB.insert(mdairyCall)
+                locationDB.insert(mdairyCall)
                 finish()
 
             } else {
@@ -660,6 +686,13 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 }
             }*/
 
+
+            mdairyCall = mDairyCall(head)
+                    .setId(Dr_id)
+                    .setName(Dr_name)
+                    .setDcr_id(MyCustumApplication.getInstance().user.dcrId)
+                    .setDcr_date(MyCustumApplication.getInstance().user.dcrDate) as mDairyCall
+
             UpadteUI_If_Called()
             dialog.dismiss()
         }
@@ -689,6 +722,11 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
 
         dialog.setView(dialogLayout)
         Alert_Positive.setOnClickListener {
+            dialog.dismiss()
+
+            mdairyCall = mDairyCall(head).setId(Dr_id) as mDairyCall
+            dairyCallDB.delete(mdairyCall)
+
             cbohelp.delete_phdairy_dcr(Dr_id)
             customVariablesAndMethod.msgBox(context, "$Dr_name sucessfully Deleted.")
             finish()
@@ -728,6 +766,10 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                     sample_pob = name2
                     sample_sample = sample
 
+                    mdairyCall!!.setSample_name_Arr(sample_name)
+                            .setSample_pob_Arr(sample_pob)
+                            .setSample_qty_Arr(sample_sample)
+
                     val sample_name1 = resultList.split(",".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                     val sample_qty1 = sample.split(",".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                     val sample_pob1 = name2.split(",".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
@@ -747,6 +789,10 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
 
                         init_gift(doc_detail, gift_name1, gift_qty1)
                     }
+
+
+                    mdairyCall!!.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty)
                 }
                 WORK_WITH_DIALOG -> {
                     val b1 = msg.data
@@ -886,6 +932,9 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             latLong = ""
             ref_latLong = ""
 
+            mdairyCall = null
+            val model = array_sort[position]
+
             if ((view.findViewById(R.id.distance) as TextView).text.toString() == "Registration pending...") {
                 if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
                     customVariablesAndMethod.Connect_to_Internet_Msg(context)
@@ -925,6 +974,18 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 doc_name = ""
 
             }  else {
+
+
+                mdairyCall = mDairyCall(head)
+                        .setId(model.id)
+                        .setName(model.name)
+                        .setArea(model.area)
+                        .setDcr_id(MyCustumApplication.getInstance().user.dcrId)
+                        .setDcr_date(MyCustumApplication.getInstance().user.dcrDate)
+                        .setRef_latlong(model.reF_LAT_LONG)
+                        .setLatLong(arrayAdapter.latLong)
+                        .setBattery(MyCustumApplication.getInstance().user.battery) as mDairyCall
+
                 latLong = arrayAdapter.latLong
                 ref_latLong = array_sort[position].reF_LAT_LONG
                 UpadteUI_If_Called()
@@ -1094,11 +1155,15 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             gift_name_previous = gift_name
             gift_qty_previous = gift_name
 
+
+
+
             init_gift(doc_detail, gift_name.split(",".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray(), gift_qty.split(",".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray())
 
             if (doctor_list["remark"]!!.get(0) != "") {
                 var remark = doctor_list["remark"]?.get(0)
                 if (remark!!.contains("\u20B9"))
+                    mdairyCall?.setPOBAmt(remark.split("\\n".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[0])
                     remark = remark.split("\\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
 
                 if (remark_list.contains(remark)) {
@@ -1109,6 +1174,8 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                     dr_remark.visibility = View.VISIBLE
                 }
 
+
+
                 /*dr_remarkLayout.visibility = View.VISIBLE
                 dr_remark.visibility = View.GONE
 
@@ -1116,6 +1183,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 product_layout.visibility = View.GONE*/
 
                 dr_remark.setText(remark)
+
 
                 btn_intrested.text = if(gift_name.isEmpty() && sample_name.isEmpty()) intersed_list[2] else intersed_list[1]
 
@@ -1167,6 +1235,15 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             submit.setText("ADD $head")
         }
 
+
+        mdairyCall?.setInterested(btn_intrested.text .toString());
+        mdairyCall?.setRemark(dr_remark.text.toString());
+        mdairyCall?.setWorkwith(work_with_name)
+        mdairyCall!!.setGift_name_Arr(gift_name)
+                .setGift_qty_Arr(gift_qty)
+                .setSample_name_Arr(sample_name)
+                .setSample_pob_Arr(sample_pob)
+                .setSample_qty_Arr(sample_sample)
 
         //Doc_Detail(array_sort[position].`class`, array_sort[position].potencY_AMT, array_sort[position].lastVisited, AREA)
     }
@@ -1280,7 +1357,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             layout.orientation = LinearLayout.VERTICAL
             layout.addView(listview)
             myDialog.setView(layout)
-            //ArrayAdapter arrayAdapter = new ArrayAdapter(DrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
+            //ArrayAdapter arrayAdapter = new ArrayAdapter(mDrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
             val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, remark_list)
             listview.adapter = arrayAdapter
             listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -1312,7 +1389,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             layout.addView(listview)
             myDialog.setView(layout)
 
-            //ArrayAdapter arrayAdapter = new ArrayAdapter(DrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
+            //ArrayAdapter arrayAdapter = new ArrayAdapter(mDrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
             val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, intersed_list)
             listview.adapter = arrayAdapter
             listview.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->

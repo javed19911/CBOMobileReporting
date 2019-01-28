@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
@@ -784,6 +785,8 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     customMethod.stopAlarm10Minute();
                                     customMethod.stopDOB_DOA_Remainder();
                                     new CustomTextToSpeech().stopTextToSpeech();
+
+                                    new MainDB().delete(null);
 
                                     new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
                                     Intent i = new Intent(getApplicationContext(), LoginFake.class);

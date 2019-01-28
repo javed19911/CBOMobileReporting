@@ -115,6 +115,9 @@ public abstract class FirebsaeDB<T> {
 
     }
 
+    public Response getResponse() {
+        return response;
+    }
 
     private void setupFirebaseAuth() {
         //auth=FirebaseAuth.getInstance ();
@@ -224,9 +227,12 @@ public abstract class FirebsaeDB<T> {
     }
 
 
-
-
     public   void insert(final T model){
+        insert(model,null);
+    }
+
+
+    public   void insert(final T model,String primerykey){
         try {
 
 
@@ -239,6 +245,9 @@ public abstract class FirebsaeDB<T> {
                     if (isPrimaryKeyAutoGenrate ()) {
                         rootRef.push ().setValue (model);
                     } else {
+                        if (primerykey != null) {
+                            rootRef = rootRef.child(primerykey);
+                        }
                         rootRef.setValue (model);
                     }
                     if (response !=null){
@@ -263,13 +272,21 @@ public abstract class FirebsaeDB<T> {
             }
         }
     }
-    public void delete( final T model){
+
+
+    public   void delete(final T model){
+        delete(model,null);
+    }
+
+    public void delete( final T model,String primerykey){
         try {
             login ( new ILogin () {
                 @Override
                 public void onSuccess(DatabaseReference rootRef) {
 
-                    //DatabaseReference primerykeyRef= rootRef;  //.child (primerykey);
+                    if (primerykey != null) {
+                        rootRef = rootRef.child(primerykey);
+                    }
                     rootRef.removeValue ();
                     if (response !=null){
                         response.onTableDeleted (model);

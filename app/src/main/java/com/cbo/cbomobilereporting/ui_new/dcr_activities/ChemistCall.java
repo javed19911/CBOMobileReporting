@@ -47,6 +47,9 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.ChemistCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mChemistCall;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
@@ -69,6 +72,7 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
@@ -142,6 +146,12 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
     String ref_latLong = "";
 
     Service_Call_From_Multiple_Classes service ;
+
+
+    ///firebase DB
+    mChemistCall mchemistCall;
+    ChemistCallDB chemistCallDB;
+    LocationDB locationDB;
 
   /*  public String getTime() {
         String mytime = "";
@@ -260,6 +270,10 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
             visited.setVisibility(View.GONE);
         }
 
+
+
+        locationDB = new LocationDB();
+        chemistCallDB = new ChemistCallDB();
 
         ch_name.setText("---Select---");
 
@@ -828,12 +842,21 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                 }
             }
 
+
+            mchemistCall.setRemark(remark.getText().toString());
+
+
             if (cbohelp.searchChemist(chm_id).contains(chm_id)) {
                 int val = cbohelp.updateChemistInLocal(dcrid, chm_id, PobAmt, AllItemId, AllItemQty,
                         Custom_Variables_And_Method.GLOBAL_LATLON + "!^" + address, AllGiftId, AllGiftQty,
                         time,sample,remark.getText().toString(),"",rate);
                 Log.e("chemist updated", "" + val);
                 customVariablesAndMethod.msgBox(context,chm_name + "  successfully updated");
+
+
+                chemistCallDB.insert(mchemistCall);
+                locationDB.insert(mchemistCall);
+
 
                 new Service_Call_From_Multiple_Classes().SendFCMOnCall(context, mHandler, MESSAGE_INTERNET_SEND_FCM,"C",chm_id,"");
 
@@ -855,10 +878,15 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                         locExtra = "Lat_Long " + currentBestLocation.getLatitude() + "," + currentBestLocation.getLongitude() + ", Accuracy " + currentBestLocation.getAccuracy() + ", Time " + currentBestLocation.getTime() + ", Speed " + currentBestLocation.getSpeed() + ", Provider " + currentBestLocation.getProvider();
                     }
 
+
+                    mchemistCall.setSrno(customVariablesAndMethod.srno(context))
+                            .setLOC_EXTRA(locExtra)
+                            .setTime(customVariablesAndMethod.currentTime(context));
+
                     long val = cbohelp.submitChemistInLocal(dcrid, chm_id, PobAmt, AllItemId, AllItemQty,
                             latLong + "!^" + address, AllGiftId, AllGiftQty, customVariablesAndMethod.currentTime(context),
                             currentBatterLevel,sample,remark.getText().toString(),"",locExtra,ref_latLong,rate);
-                    cbohelp.addChemistInLocal(chm_id, chm_name,""+customVariablesAndMethod.currentTime(context), latLong, Custom_Variables_And_Method.global_address,updated,chem_km,customVariablesAndMethod.srno(context),locExtra);
+                    cbohelp.addChemistInLocal(chm_id, chm_name,""+customVariablesAndMethod.currentTime(context), latLong, Custom_Variables_And_Method.global_address,updated,chem_km,mchemistCall.getSrno(),locExtra);
                     Log.e("chemist submit in local", "" + val);
                     Log.e("chemist details", dcrid + "," + chm_id + "," + PobAmt + "," + AllItemId + "," + AllItemQty + "," + address + "," + AllGiftId + "," + AllGiftQty);
                     if (val != -1) {
@@ -881,6 +909,9 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
                         pob.setText("");
                         Custom_Variables_And_Method.CHEMIST_NOT_VISITED = "Y";
+
+                        chemistCallDB.insert(mchemistCall);
+                        locationDB.insert(mchemistCall);
 
                         new Service_Call_From_Multiple_Classes().SendFCMOnCall(context, mHandler, MESSAGE_INTERNET_SEND_FCM,"C",chm_id,Custom_Variables_And_Method.GLOBAL_LATLON);
 
@@ -970,6 +1001,14 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                 Custom_Variables_And_Method.CHEMIST_ID = chm_id;
                 ch_name.setText(chm_name);
 
+
+                mchemistCall = (mChemistCall) new mChemistCall()
+                        .setId(Dr_id)
+                        .setName(Dr_name)
+                        .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                        .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
+
+
                 TextView last_visited= (TextView) findViewById(R.id.last_visited);
                 for (int i=0;i<chemist.size();i++){
                     if (chemist.get(i).getId().equals(Dr_id)){
@@ -1040,6 +1079,15 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
                 gift_name_previous = gift_name;
                 gift_qty_previous = gift_qty;
+
+
+                mchemistCall.setGift_name_Arr(gift_name)
+                        .setGift_qty_Arr(gift_qty)
+                        .setSample_name_Arr(sample_name)
+                        .setSample_pob_Arr(sample_pob)
+                        .setSample_qty_Arr(sample_sample);
+
+
                 dialog.dismiss();
             }
         });
@@ -1078,6 +1126,12 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
         Alert_Positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                dialog.dismiss();
+
+                mchemistCall = (mChemistCall) new mChemistCall().setId(Dr_id);
+                chemistCallDB.delete(mchemistCall);
+
                 cbohelp.delete_Chemist_from_local_all(Dr_id);
                 customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
                 finish();
@@ -1121,6 +1175,10 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                     sample_pob=name2;
                     sample_sample=sample;
 
+                    mchemistCall.setSample_name_Arr(sample_name)
+                            .setSample_pob_Arr(sample_pob)
+                            .setSample_qty_Arr(sample_sample);
+
                     String[] sample_name1 = resultList.split(",");
                     String[] sample_qty1 = sample.split(",");
                     String[] sample_pob1 = name2.split(",");
@@ -1139,6 +1197,10 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                         gift_qty=b1.getString("giftqan");
 
                         init_gift(gift_layout,gift_name1,gift_qty1);
+
+
+                    mchemistCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty);
                     //}
                     break;
                 case GPS_TIMMER:
@@ -1208,6 +1270,10 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 myalertDialog.dismiss();
 
+                mchemistCall = null;
+                SpinnerModel model = array_sort.get(position);
+
+
                 chm_id = ((TextView) view.findViewById(R.id.spin_id)).getText().toString();
                 chm_name = ((TextView) view.findViewById(R.id.spin_name)).getText().toString();
 
@@ -1255,6 +1321,17 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                 }else {
                     Custom_Variables_And_Method.CHEMIST_ID = chm_id;
                     ch_name.setText(chm_name);
+
+
+                    mchemistCall = (mChemistCall) new mChemistCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
 
                     ref_latLong = array_sort.get(position).getREF_LAT_LONG();
                     latLong  = arrayAdapter.latLong;
@@ -1342,6 +1419,13 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
                     gift_name_previous = gift_name;
                     gift_qty_previous = gift_qty;
+
+
+                    mchemistCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty)
+                            .setSample_name_Arr(sample_name)
+                            .setSample_pob_Arr(sample_pob)
+                            .setSample_qty_Arr(sample_sample);
 
                 }
 

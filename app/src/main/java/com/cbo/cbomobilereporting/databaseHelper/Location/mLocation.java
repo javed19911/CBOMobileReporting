@@ -1,69 +1,68 @@
 package com.cbo.cbomobilereporting.databaseHelper.Location;
 
+import android.location.Location;
+
+import com.cbo.cbomobilereporting.databaseHelper.Call.mCall;
+
+import java.util.Date;
+
 public class mLocation {
 
-    String Latitude="";
-    String Longitude="";
-    String Adresss="";
-    String StartTime="";
-    String PauseTime="";
-    String StopTime="";
+    private Location location;
+    private mCall call = null;
+    private String Address="";
+    private String timestamp;
+    private String DCR_ID;
 
-
-    public mLocation(String latitude, String longitude, String adresss, String startTime, String pauseTime, String stopTime) {
-        Latitude = latitude;
-        Longitude = longitude;
-        Adresss = adresss;
-        StartTime = startTime;
-        PauseTime = pauseTime;
-        StopTime = stopTime;
+    public mLocation(Location location) {
+        this.location = location;
     }
 
-    public String getLatitude() {
-        return Latitude;
+
+    //getter
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLatitude(String latitude) {
-        Latitude = latitude;
+    public mCall getCall() {
+        return call;
     }
 
-    public String getLongitude() {
-        return Longitude;
+    public String getAddress() {
+        return Address;
     }
 
-    public void setLongitude(String longitude) {
-        Longitude = longitude;
+    public String getTime() {
+        timestamp = ""+new Date().getTime();
+        return timestamp;
     }
 
-    public String getAdresss() {
-        return Adresss;
+
+
+    public String getDCR_ID() {
+        return DCR_ID;
     }
 
-    public void setAdresss(String adresss) {
-        Adresss = adresss;
+
+    //setter
+
+    public mLocation setLocation(Location location) {
+        this.location = location;
+        return this;
     }
 
-    public String getStartTime() {
-        return StartTime;
+    public mLocation setCall(mCall call) {
+        this.call = call;
+        return this;
     }
 
-    public void setStartTime(String startTime) {
-        StartTime = startTime;
+    public mLocation setAddress(String address) {
+        Address = address;
+        return this;
     }
 
-    public String getPauseTime() {
-        return PauseTime;
-    }
-
-    public void setPauseTime(String pauseTime) {
-        PauseTime = pauseTime;
-    }
-
-    public String getStopTime() {
-        return StopTime;
-    }
-
-    public void setStopTime(String stopTime) {
-        StopTime = stopTime;
+    public mLocation setDCR_ID(String DCR_ID) {
+        this.DCR_ID = DCR_ID;
+        return this;
     }
 }

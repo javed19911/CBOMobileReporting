@@ -49,10 +49,11 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.StockistCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.Chemist_Gift;
 import com.cbo.cbomobilereporting.ui.LoginFake;
-import com.cbo.cbomobilereporting.ui.Stk_Sample;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.uenics.javed.CBOLibrary.Response;
@@ -61,7 +62,6 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -72,12 +72,11 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
+import utils.clearAppData.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
-import utils_new.Chm_Sample_Dialog;
 import utils_new.Custom_Variables_And_Method;
-import utils_new.Dr_Gift_Dialog;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Report_Registration;
 import utils_new.SendAttachment;
@@ -169,6 +168,11 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
 
 
+    ///firebase DB
+    mStockistCall mstockistCall;
+    StockistCallDB stockistCallDB;
+    LocationDB locationDB;
+
     public void onCreate(Bundle b) {
 
         super.onCreate(b);
@@ -240,6 +244,9 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             visited1.setVisibility(View.GONE);
         }*/
 
+
+        locationDB = new LocationDB();
+        stockistCallDB = new StockistCallDB();
 
         stkDataList = new ArrayList<SpinnerModel>();
 
@@ -685,6 +692,15 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     stk_id = Dr_id;
                     stkst_name = Dr_name;
                     stk_name.setText(stkst_name);
+
+                    mstockistCall = (mStockistCall) new mStockistCall()
+                            .setId(Dr_id)
+                            .setName(Dr_name)
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
+
+
+
                     if (!stockist_list.get("sample_name").get(0).equals("")) {
                         String[] sample_name1 = stockist_list.get("sample_name").get(0).split(",");
                         String[] sample_qty1 = stockist_list.get("sample_qty").get(0).split(",");
@@ -755,6 +771,12 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 gift_name_previous = gift_name;
                 gift_qty_previous = gift_qty;
 
+                mstockistCall.setGift_name_Arr(gift_name)
+                        .setGift_qty_Arr(gift_qty)
+                        .setSample_name_Arr(sample_name)
+                        .setSample_pob_Arr(sample_pob)
+                        .setSample_qty_Arr(sample_sample);
+
                 dialog.dismiss();
             }
         });
@@ -793,6 +815,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
         Alert_Positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
+                mstockistCall = (mStockistCall) new mStockistCall().setId(Dr_id);
+                stockistCallDB.delete(mstockistCall);
+
                 cbohelp.delete_Stokist_from_local_all(Dr_id);
                 customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
                 finish();
@@ -874,6 +900,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 locExtra = "Lat_Long " + currentBestLocation.getLatitude() + "," + currentBestLocation.getLongitude() + ", Accuracy " + currentBestLocation.getAccuracy() + ", Time " + currentBestLocation.getTime() + ", Speed " + currentBestLocation.getSpeed() + ", Provider " + currentBestLocation.getProvider();
             }
 
+
+            mstockistCall.setRemark(remark.getText().toString());
+
+
             if (cbohelp.searchStockist(stk_id).contains(stk_id)) {
                 int val = cbohelp.updateStockistInLocal(dcrid, stk_id, PobAtm, AllItemId, AllItemQty,
                         Custom_Variables_And_Method.GLOBAL_LATLON + "!^" + address,
@@ -890,6 +920,9 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 intent.putExtra("EXIT", true);
                 startActivity(intent);*/
 
+                stockistCallDB.insert(mstockistCall);
+                locationDB.insert(mstockistCall);
+
                 finish();
             }else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,Skip_Verification)) {
                 customVariablesAndMethod.msgBox(context,"Verifing Your Location");
@@ -899,13 +932,18 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             } else {
                 try {
 
+                    mstockistCall.setSrno(customVariablesAndMethod.srno(context))
+                            .setLOC_EXTRA(locExtra)
+                            .setTime(customVariablesAndMethod.currentTime(context));
+
                     customVariablesAndMethod.SetLastCallLocation(context);
 
                     long val = cbohelp.submitStockitInLocal(dcrid, stk_id, PobAtm, AllItemId, AllItemQty,
                             latLong+ "!^" + address, customVariablesAndMethod.currentTime(context),
                             currentBatteryLevel,Custom_Variables_And_Method.GLOBAL_LATLON,"0","0",
-                            customVariablesAndMethod.srno(context),sample,remark.getText().toString(),"",
+                            mstockistCall.getSrno(),sample,remark.getText().toString(),"",
                             locExtra,AllGiftId,AllGiftQty,ref_latLong,rate);
+
                     cbohelp.addStockistInLocal(stk_id, stkst_name);
                     Log.e("stockist submitted", "" + val);
                     if (val != -1) {
@@ -927,7 +965,8 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         new Service_Call_From_Multiple_Classes().SendFCMOnCall(context, mHandler, MESSAGE_INTERNET_SEND_FCM,"S",stk_id,Custom_Variables_And_Method.GLOBAL_LATLON);
 
 
-
+                        stockistCallDB.insert(mstockistCall);
+                        locationDB.insert(mstockistCall);
                     }
 
 
@@ -936,6 +975,8 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 }
 
             }
+
+
 
 
         }
@@ -1004,7 +1045,14 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         String[] sample_qty1 = sample.split(",");
                         String[] sample_pob1 = name2.split(",");
                         init(sample_name1, sample_qty1, sample_pob1);
+
+                        mstockistCall.setSample_name_Arr(sample_name)
+                                .setSample_pob_Arr(sample_pob)
+                                .setSample_qty_Arr(sample_sample);
+
                     }
+
+
                     break;
 
                 case GIFT_DILOG:
@@ -1020,6 +1068,9 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
                         init_gift(gift_layout,gift_name1,gift_qty1);
                    // }
+
+                    mstockistCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty);
                     break;
                 case GPS_TIMMER:
                     spinImg.setEnabled(true);
@@ -1165,6 +1216,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 myalertDialog.dismiss();
+
+                mstockistCall = null;
+                SpinnerModel model = array_sort.get(position);
+
                 stk_id = ((TextView) view.findViewById(R.id.spin_id)).getText().toString();
                 stkst_name = ((TextView) view.findViewById(R.id.spin_name)).getText().toString();
                 stk_name.setText(stkst_name);
@@ -1209,6 +1264,17 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     stkst_name="";
                 }else {
 
+
+                    mstockistCall = (mStockistCall) new mStockistCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
                     latLong = arrayAdapter.latLong;
                     ref_latLong = array_sort.get(position).getREF_LAT_LONG();
 
@@ -1222,6 +1288,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         String remarktxt=stockist_list.get("remark").get(0);
                         if (remarktxt.contains("\u20B9")) {
                             if (remarktxt.split("\\n").length>1) {
+                                mstockistCall.setPOBAmt(remarktxt.split("\\n")[0]);
                                 remarktxt = remarktxt.split("\\n")[1];
                             } else {
                                 remarktxt = "";
@@ -1229,7 +1296,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
                         }
                         remark.setText(remarktxt);
-
+                        mstockistCall.setRemark(remarktxt);
 
                         if (!stockist_list.get("sample_name").get(0).equals("")) {
                             String[] sample_name1 = stockist_list.get("sample_name").get(0).split(",");
@@ -1286,6 +1353,12 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
                     gift_name_previous = gift_name;
                     gift_qty_previous = gift_qty;
+
+                    mstockistCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty)
+                            .setSample_name_Arr(sample_name)
+                            .setSample_pob_Arr(sample_pob)
+                            .setSample_qty_Arr(sample_sample);
 
 
                 }

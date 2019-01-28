@@ -12,10 +12,6 @@ public class UserDB  extends FirebaseDbhelper<mUser> {
         setTable ("User");
     }
 
-    public void setBaseURL(String baseURL) {
-        super.setBaseURL (baseURL);
-        setTable ("User");
-    }
 
 
 }
