@@ -742,7 +742,10 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                 }
             });
         }else{
-            customVariablesAndMethod.getAlert(context, MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +"!!!","Please delete " +Dr_name+" in "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName());
+            customVariablesAndMethod.getAlert(context, MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +"!!!",
+                    "You can,t delete from here.\n " + MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ "for "+
+                            Dr_name +" Found...\n" +
+                            "To delete, first remove " +Dr_name+" from "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ "in DCR...");
         }
 
 

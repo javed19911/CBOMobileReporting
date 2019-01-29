@@ -222,6 +222,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 }
                 break;
             }
+            case "D_RX_GEN_NA":
             case "D_RX_GEN": {
                 if (DCR_ID.equals("0")  || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
                     customVariablesAndMethod.msgBox(context, "Please open your DCR Days first....");
@@ -426,37 +427,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                         startActivity(i);
                                     }
                                 });
-                       /* LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
-                        final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
-                        final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
-                        final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-                        Alert_title.setText("Pending!!!");
-                        Alert_message.setText("Call to some Planed Doctor");
 
-                        final TextView pa_id_txt = (TextView) dialogLayout.findViewById(R.id.PA_ID);
-                        pa_id_txt.setText("" + Custom_Variables_And_Method.PA_ID);
-
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-
-                        final AlertDialog dialog = builder1.create();
-
-                        dialog.setView(dialogLayout);
-                        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent i = new Intent(context, DrCall.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                i.putExtra("id", Doctor_id_for_POB);
-                                i.putExtra("remark", "Call Pending");
-                                startActivity(i);
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.setCancelable(false);
-                        dialog.show();*/
 
                     }
                 }
@@ -554,32 +525,16 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
                     customVariablesAndMethod.getGpsSetting(context);
                 } else {
-                   // getActivity().startService(new Intent(getActivity(), MyLoctionService.class));
-                    //((CustomActivity) getActivity()).startLoctionService(true);
+
                     new Thread(threadConvertAddress).start();
-                   /* if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {*/
-                        //new Doback3().execute(PA_ID);
 
-                    //if (customVariablesAndMethod.IsLocationTooOld(0)) {
                         dcr_plan();
-                   /* }else{
-                        customVariablesAndMethod.getAlert(context,"Error !!! ","Please Switch ON/OFF your GPS");
-                    }*/
 
-                   /* }else {
-                        //if data or dcr are pending
-                        startActivity(new Intent(getActivity(), GetDCR.class));
-                    }*/
                 }
             } else {
-                // new Thread(threadConvertAddress).start();
-                /*if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {*/
-                    //new Doback3().execute(PA_ID);
+
                     dcr_plan();
-                /*}else {
-                    //if data or dcr are pending
-                    startActivity(new Intent(getActivity(), GetDCR.class));
-                }*/
+
             }
         }
     }
@@ -635,13 +590,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
                         })
                 );
-        /*progress1.setMessage("Please Wait.. \n" +
-                "Checking your DCR Status");
-        progress1.setCancelable(false);
-        progress1.show();
 
-        new CboServices(context,mHandler).customMethodForAllServices(request,"DCR_DAYPLAN_LOAD_1",MESSAGE_INTERNET_DCR_PLAN,tables);
-*/
         //End of call to service
     }
 
@@ -815,87 +764,6 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
     }
 
 
-
-    //====================================================AsyncTask for dcr planing ===========================================================
-
-
-    class ResetTaskResinedEmp extends AsyncTask<String, String, String> {
-
-        ProgressDialog myProgress;
-
-
-        String resetSatus;
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            myProgress = new ProgressDialog(getActivity());
-            myProgress.setTitle("CBO");
-            myProgress.setMessage("Please Wait...");
-            myProgress.setCanceledOnTouchOutside(false);
-            myProgress.setCancelable(false);
-            myProgress.show();
-
-
-        }
-
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String result;
-            try {
-                cboDbHelper = new CBO_DB_Helper(getActivity());
-
-                String companyCode = cboDbHelper.getCompanyCode();
-                serviceHandler = new ServiceHandler(getActivity());
-
-                result = serviceHandler.getResponse_ResetTask(companyCode, Custom_Variables_And_Method.DCR_ID);
-
-                cboDbHelper.deleteLogin();
-                cboDbHelper.close();
-            }catch (Exception e){
-                return "ERROR apk "+e;
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-
-            if ((s == null) || (s.toLowerCase().contains("error"))) {
-                customVariablesAndMethod.msgBox(context,"Failed to Reset Please Try Again");
-                myProgress.dismiss();
-
-
-            } else {
-                try {
-
-                    JSONObject jsonObject = new JSONObject(s);
-                    JSONArray jsonArray = jsonObject.getJSONArray("Tables0");
-                    JSONObject c = jsonArray.getJSONObject(0);
-                    resetSatus = c.getString("DCRID");
-                } catch (JSONException e) {
-                }
-                if (resetSatus.equals("RESET")) {
-                    myProgress.dismiss();
-                    customVariablesAndMethod.msgBox(context,"Dcr Day Successfully Reset ");
-                    Intent i = new Intent(getActivity(), LoginMain.class);
-                    startActivity(i);
-                } else {
-                    myProgress.dismiss();
-                    customVariablesAndMethod.msgBox(context,"Day plan First......");
-                }
-
-            }
-
-        }
-
-
-    }
 
     ///====================================Dairy call=====================================
     private void onClickDairy(String DOC_TYPE){
@@ -1311,7 +1179,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                             if (!DCR_ID.equals("0")) {
                                 try {
 
-                                    result4FinalSubmit();
+                                    //result4FinalSubmit();
+                                    PreFinalSubmit();
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -1336,7 +1205,9 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
                         if (!DCR_ID.equals("0")) {
                             try {
-                                result4FinalSubmit();
+                                //result4FinalSubmit();
+
+                                PreFinalSubmit();
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1482,6 +1353,154 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
     }
 
+    public void PreFinalSubmit() {
+        IfDrConditionFulfiled(new Response() {
+            @Override
+            public void onSuccess(Bundle bundle) {
+                IfChemistConditionFulfiled(new Response() {
+                    @Override
+                    public void onSuccess(Bundle bundle) {
+                        IfStokistConditionFulfiled(new Response() {
+                            @Override
+                            public void onSuccess(Bundle bundle) {
+                                IfFarmerConditionFulfiled(new Response() {
+                                    @Override
+                                    public void onSuccess(Bundle bundle) {
+                                        IfApprasialConditionFulfiled(new Response() {
+                                            @Override
+                                            public void onSuccess(Bundle bundle) {
+                                                IfExpenseConditionFulfiled(new Response() {
+                                                    @Override
+                                                    public void onSuccess(Bundle bundle) {
+                                                        IfRxConditionFulfiled(new Response() {
+                                                            @Override
+                                                            public void onSuccess(Bundle bundle) {
+                                                                if( IsExpCriteriaFulfiled(cboDbHelper.tempDrListForFinalSubmit().size())){
+                                                                    startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
+                                                                    getActivity().finish();
+                                                                    getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onError(String s, String s1) {
+                                                                AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                                                    @Override
+                                                                    public void onPositiveClicked(View item, String result) {
+                                                                        OnGridItemClick(MyCustumApplication.getInstance().getTaniviaTrakerMenuCode(),true);
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onNegativeClicked(View item, String result) {
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void onError(String s, String s1) {
+                                                        AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                                            @Override
+                                                            public void onPositiveClicked(View item, String result) {
+                                                                OnGridItemClick("D_EXP",true);
+                                                            }
+
+                                                            @Override
+                                                            public void onNegativeClicked(View item, String result) {
+
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onError(String s, String s1) {
+                                                AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                                    @Override
+                                                    public void onPositiveClicked(View item, String result) {
+                                                        OnGridItemClick("D_AP",true);
+                                                    }
+
+                                                    @Override
+                                                    public void onNegativeClicked(View item, String result) {
+
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(String s, String s1) {
+                                        AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                            @Override
+                                            public void onPositiveClicked(View item, String result) {
+                                                OnGridItemClick("D_FAR",true);
+                                            }
+
+                                            @Override
+                                            public void onNegativeClicked(View item, String result) {
+
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                    @Override
+                                    public void onPositiveClicked(View item, String result) {
+                                        OnGridItemClick("D_STK_CALL",true);
+                                    }
+
+                                    @Override
+                                    public void onNegativeClicked(View item, String result) {
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+                        AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                            @Override
+                            public void onPositiveClicked(View item, String result) {
+                                OnGridItemClick("D_CHEMCALL",true);
+                            }
+
+                            @Override
+                            public void onNegativeClicked(View item, String result) {
+
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String s, String s1) {
+                AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                    @Override
+                    public void onPositiveClicked(View item, String result) {
+                        OnGridItemClick("D_DRCALL",true);
+                    }
+
+                    @Override
+                    public void onNegativeClicked(View item, String result) {
+
+                    }
+                });
+            }
+        });
+    }
+
 
 
     //// check the condition for all the menus in dcr
@@ -1619,18 +1638,33 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
     private void IfRxConditionFulfiled(Response listener){
 
         if (IsTeniviaMenuAvilable() && Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("1")) {
-            if (listener != null) {
-                listener.onError("Expense Pending!!!","Please submit Your Expense First... ");
-            }
-        } else if ( mandatory_pending_exp_head.size() != 0) {
 
-            String pending_list = "";
-            for (int i = 0; i < mandatory_pending_exp_head.size(); i++) {
-                pending_list += mandatory_pending_exp_head.get(i).get("PA_NAME") + "\n";
+            /// 0 - not mendetory
+            /// 1 - all mendetory
+            /// 2 - only those where RXGENYN = 1 are mendetory
+
+            String RxValidateCondition = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_RXGEN_VALIDATE","0");
+            int NoRxCalls = cboDbHelper.getmenu_count("Tenivia_traker");
+            int NoRxCallsReqd = cboDbHelper.getDoctorName(RxValidateCondition).getCount();
+            switch (RxValidateCondition){
+                case "0":
+                    if (listener != null){
+                        listener.onSuccess(null);
+                    }
+                    break;
+                default:
+                    if (NoRxCalls>= NoRxCallsReqd) {
+                        if (listener != null){
+                            listener.onSuccess(null);
+                        }
+                    }else{
+                        if (listener != null) {
+                            listener.onError(MyCustumApplication.getInstance().getTaniviaTrakerMenuName() + " Pending!!!","Please Visit "+ MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+"..");
+                        }
+                    }
             }
-            if (listener != null) {
-                listener.onError("Expenses Pending", pending_list);
-            }
+
+
         }else{
             if (listener != null){
                 listener.onSuccess(null);
@@ -2192,39 +2226,6 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 });
 
 
-        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //customVariablesAndMethod.msgBox(context,"Please Visit atleast One " +cboDbHelper.getMenu("DCR", "D_FAR").get("D_FAR"));
-        final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-        final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-        final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.nagative);
-        Alert_Nagative.setText("Ok");
-        Alert_Positive.setText("Postpond ?");
-        Alert_title.setText("Activity found !!!");
-        Alert_message.setText("Today You have an activity for "+cboDbHelper.getMenu("DCR", "D_FAR").get("D_FAR"));
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-        final AlertDialog dialog = builder1.create();
-
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(context, PospondFarmerMeeting.class);
-                startActivity(i);
-                dialog.dismiss();
-            }
-        });
-        Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();*/
     }
 
     private void ShowAlertforNOCalls(){
@@ -2247,40 +2248,6 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 });
 
 
-        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-        final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-        final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.nagative);
-        Alert_Nagative.setText("NO");
-        Alert_Positive.setText("YES");
-        Alert_title.setText("No Calls found !!!");
-        Alert_message.setText("Your DCR has-been Locked, Do You want to reset your DCR?");
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-        final AlertDialog dialog = builder1.create();
-
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(context, DCR_Summary_new.class);
-                i.putExtra("who", 2);
-                startActivity(i);
-                dialog.dismiss();
-            }
-        });
-        Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();*/
     }
 
     private Boolean IsAllowedToCallAtThisTime(){
@@ -2307,39 +2274,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
                             }
                         });
-                /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-                final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
-                final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
-                final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-                final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.nagative);
-                Alert_Nagative.setText("Cancel");
-                Alert_Positive.setText("Check");
-                Alert_title.setText("Call Locked");
-                Alert_message.setText("Your Calls have been Locked... \nYou must have made your first Call before " + FIRST_CALL_LOCK_TIME + " O'Clock\n" +
-                        "Switch ON your Internet and Check if Unlocked...");
-
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-                final AlertDialog dialog = builder1.create();
-
-                dialog.setView(dialogLayout);
-                Alert_Positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        CheckIfCallsUnlocked("C");
-                        dialog.dismiss();
-                    }
-                });
-                Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setCancelable(false);
-                dialog.show();*/
             }else{
                 CheckIfCallsUnlocked("C");
             }
@@ -2375,43 +2310,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                         });
 
 
-               /* LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-                final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
-                final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
-                final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-                final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.nagative);
-                Alert_Nagative.setText("Cancel");
-                Alert_Positive.setText("Check");
-                Alert_title.setText("Approval !!!");
-                *//*Alert_message.setText("Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
-                        "Switch ON your Internet and Check if Approved...");*//*
-
-                Alert_message.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
-                        "APPROVAL_MSG","Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
-                        "Switch ON your Internet and Check if Approved..."));
-
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-                final AlertDialog dialog = builder1.create();
-
-                dialog.setView(dialogLayout);
-                Alert_Positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        CheckIfCallsUnlocked("A");
-                        dialog.dismiss();
-                    }
-                });
-                Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setCancelable(false);
-                dialog.show();*/
             }else{
                 CheckIfCallsUnlocked("A");
             }
@@ -2457,12 +2356,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                         })
                 );
 
-        /*progress1.setMessage("Please Wait.. \n Fetching your worktype");
-        progress1.setCancelable(false);
-        progress1.show();
 
-        new CboServices(context, mHandler).customMethodForAllServices(request, "CallUnlockStatus", MESSAGE_INTERNET_IS_CALL_UNLOCKED, tables);
-*/
         //End of call to service
     }
 

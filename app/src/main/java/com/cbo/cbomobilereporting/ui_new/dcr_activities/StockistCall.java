@@ -298,12 +298,21 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     buttonView.setChecked(false);
                 }else if (buttonView.isChecked()) {
 
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","Y");
+                    AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
+                            "Are you sure to save as\n\"No " + "Stockist" + " for the day",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","Y");
+                                    finish();
+                                }
 
-                   // MyConnection.STOCKIST_NOT_VISITED = "Y";
-                    Intent i = new Intent(getApplicationContext(), ViewPager_2016.class);
-                    startActivity(i);
-                    finish();
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+                                    buttonView.setChecked(false);
+                                }
+                            });
+
                 }
 
             }

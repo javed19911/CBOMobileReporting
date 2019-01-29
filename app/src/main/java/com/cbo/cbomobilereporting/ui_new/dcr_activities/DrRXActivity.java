@@ -222,9 +222,9 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
                                         no_prescription.setChecked(false);
                                     }
                                 });
-                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
                     }else{
-                        customVariablesAndMethod.msgBox(context,head +"d for the day");
+                        customVariablesAndMethod.msgBox(context,head +" for the day");
                         no_prescription.setChecked(false);
                     }
                 }

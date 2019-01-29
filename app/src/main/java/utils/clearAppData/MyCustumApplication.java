@@ -206,6 +206,21 @@ public class MyCustumApplication extends MultiDexApplication {
         return "";
     }
 
+    public String getTaniviaTrakerMenuCode(){
+        CBO_DB_Helper cbohelp = new CBO_DB_Helper(getInstance());
+        if(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"Tenivia_NOT_REQUIRED").equals("N")) {
+            return "D_DR_RX";
+        }
+
+        if(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"Rx_NOT_REQUIRED").equals("N")) {
+            return "D_RX_GEN";
+        }
+
+        if(Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"Rx_NA_NOT_REQUIRED").equals("N")) {
+            return "D_RX_GEN_NA";
+        }
+        return "";
+    }
     public static String getServeiceURL() {
         String URL= "http://www.cboservices.com/mobilerpt.asmx";
         URL= Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"WEBSERVICE_URL",URL);

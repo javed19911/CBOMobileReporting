@@ -352,8 +352,21 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                     customVariablesAndMethod.msgBox(context,"Chemist already in the call-List");
                     buttonView.setChecked(false);
                 }else if (buttonView.isChecked()) {
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED","Y");
-                    finish();
+                    AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
+                            "Are you sure to save as\n\"No " + head + " for the day\"",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED","Y");
+                                    finish();
+                                }
+
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+                                    buttonView.setChecked(false);
+                                }
+                            });
+
                 }
 
             }
