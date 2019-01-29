@@ -56,60 +56,13 @@ public class Service_Call_From_Multiple_Classes {
     Custom_Variables_And_Method customVariablesAndMethod;
     CBO_DB_Helper cbo_helper;
 
-    private  static final int MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL=1,MESSAGE_INTERNET_SEND_FCM_= 2;
+    private  static final int MESSAGE_INTERNET_SEND_FCM_= 2;
 
     public Service_Call_From_Multiple_Classes() {
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
         cbo_helper = new CBO_DB_Helper(MyCustumApplication.getInstance());
     }
 
-  /*  public void DownloadAll(Context context, Handler mHandler, final Integer response_code){
-
-         this.response_code=response_code;
-         this.mHandler = mHandler;
-         this.context = context;
-         progress1 = new ProgressDialog(context);
-         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
-         new SystemArchitecture(context).getDEVICE_ID(context);
-         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
-         cbo_helper = new CBO_DB_Helper(context);
-
-        //Start of call to service
-
-        HashMap<String,String> request=new HashMap<>();
-        request.put("sCompanyFolder",cbo_helper.getCompanyCode());
-        request.put("iPA_ID", "" + Custom_Variables_And_Method.PA_ID);
-        request.put("sDcrId",Custom_Variables_And_Method.DCR_ID);
-        request.put("sRouteYn", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed"));
-        request.put("sGCM_TOKEN", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken"));
-        request.put("sMobileId", SystemArchitecture.COMPLETE_DEVICE_INFO);
-        request.put("sVersion", Custom_Variables_And_Method.VERSION);
-
-        ArrayList<Integer> tables=new ArrayList<>();
-        tables.add(0);
-        tables.add(1);
-        tables.add(2);
-        tables.add(3);
-        tables.add(4);
-        tables.add(5);
-        tables.add(6);
-        tables.add(7);
-        tables.add(8);
-        tables.add(9);
-        tables.add(10);
-        tables.add(11);
-
-        progress1.setMessage("Please Wait..\n" +
-                " Fetching your Utilitis for the day");
-        progress1.setCancelable(false);
-        progress1.show();
-
-        new CboServices(context,hh).customMethodForAllServices(request,"DCRCOMMIT_DOWNLOADALL",MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL,tables);
-
-        //End of call to service
-
-    }
-*/
 
     public void SendFCMOnCall(Context context,Handler mHandler, final Integer response_code,String DocType,String Id,String latlong){
 
@@ -165,14 +118,7 @@ public class Service_Call_From_Multiple_Classes {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
 
-                    if ((null != msg.getData())) {
-
-                        parser_DCRCOMMIT_DOWNLOADALL(context,msg.getData(),null);
-
-                    }
-                    break;
                 case MESSAGE_INTERNET_SEND_FCM_:
 
                     if ((null != msg.getData())) {
@@ -238,7 +184,7 @@ public class Service_Call_From_Multiple_Classes {
                             c.getString("CLASS"), c.getString("PANE_TYPE"),c.getString("POTENCY_AMT"),
                             c.getString("ITEM_NAME"), c.getString("ITEM_POB"), c.getString("ITEM_SALE"),c.getString("AREA"),c.getString("DR_LAT_LONG")
                             , c.getString("FREQ"),c.getString("NO_VISITED") , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("COLORYN")
-                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"));
+                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"),c.getString("RXGENYN"));
 
                 }
 
@@ -395,6 +341,181 @@ public class Service_Call_From_Multiple_Classes {
 
     }
 
+
+    public void DCR_COMMIT_ROUTE(Context context,HashMap<String,String> request, Response listener){
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCR_COMMIT_ROUTE_9", request)
+                        .setTables(tables)
+                        .setDescription("Please Wait..\n" +
+                                " Fetching your Utilitis for the day").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle response) {
+                                /*if (listener != null)
+                                    listener.onSuccess(message);*/
+
+                                parser_submit_for_working(context,response,listener);
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+                               // parser_submit_for_working(context,response,listener);
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                if (listener != null)
+                                    listener.onError(s,s1);
+                            }
+
+
+                        })
+                );
+    }
+
+
+
+    public void parser_submit_for_working(Context context,Bundle result,Response listener) {
+
+
+
+        if (result!=null ) {
+
+            try {
+                String table0 = result.getString("Tables0");
+                JSONArray jsonArray1 = new JSONArray(table0);
+                for (int i = 0; i < jsonArray1.length(); i++) {
+                    JSONObject c = jsonArray1.getJSONObject(i);
+                    Custom_Variables_And_Method.DCR_ID = c.getString("DCRID");
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "FCMHITCALLYN", c.getString("FCMHITCALLYN") );
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "FARMERREGISTERYN", c.getString("FARMERREGISTERYN") );
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DIVERTLOCKYN", c.getString("DIVERTLOCKYN") );
+
+
+                    if(!c.getString("FCMHITCALLYN").equals("") && !c.getString("FCMHITCALLYN").equals("N")){
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "MOBILEDATAYN", "Y" );
+                    }
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "APPROVAL_MSG", "" );
+                    if(Custom_Variables_And_Method.DCR_ID.equals("0") &&  c.getString("DCRID")!=null){
+                        Alert(context,"Alert !!!",c.getString("MSG"),listener);
+                    }else if( c.getString("DIVERTLOCKYN").toUpperCase().equals("Y")){
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "APPROVAL_MSG", c.getString("MSG") );
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DCR_ID", c.getString("DCRID"));
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlanTime_server", c.getString("IN_TIME") );
+                        Alert(context,"Alert !!!",c.getString("MSG"),listener);
+                    }else if(c.getString("FARMERREGISTERYN").equals("Y")){
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "APPROVAL_MSG", c.getString("MSG") );
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DCR_ID", c.getString("DCRID"));
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlanTime_server", c.getString("IN_TIME") );
+                        Alert(context,"Alert !!!",
+                                "Today You have an activity for "+
+                                        cbo_helper.getMenu("DCR", "D_FAR").get("D_FAR"),listener);
+                    }else{
+
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DCR_ID", c.getString("DCRID"));
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlanTime_server", c.getString("IN_TIME") );
+                        DownloadAllAfterDayPlan(context,listener);
+                    }
+                }
+
+
+
+            }catch (JSONException e) {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    public void run() {
+                        if (listener != null)
+                            listener.onError("Missing field error",context.getResources().getString(R.string.service_unavilable) + e.toString());
+
+                        Log.d("MYAPP", "objects are: " + e.toString());
+                        //AppAlert.getInstance().getAlert(context, "Missing field error", context.getResources().getString(R.string.service_unavilable) + e.toString());
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+        }
+
+
+
+    }
+
+
+    private void Alert(Context context,String title,String description,Response listener){
+        AppAlert.getInstance().Alert(context, title, description, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DownloadAllAfterDayPlan(context,listener);
+            }
+        });
+    }
+
+    public void DownloadAllAfterDayPlan(Context context, Response listener){
+        /*if (!(Custom_Variables_And_Method.DCR_ID.equals("0"))) {
+
+
+            cbo_helper.deletedcrFromSqlite();
+            cbo_helper.deleteUtils();
+            cbo_helper.deleteDCRDetails();
+
+            new CustomTextToSpeech().setTextToSpeech("");
+
+            cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
+            long val = cbo_helper.insertUtils(Custom_Variables_And_Method.pub_area);
+            long val2 = cbo_helper.insertDcrDetails(Custom_Variables_And_Method.DCR_ID, Custom_Variables_And_Method.pub_area);
+
+
+            if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")){
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "OveAllKm", "0.0");
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DayPlanLatLong", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "shareLatLong", Custom_Variables_And_Method.GLOBAL_LATLON));
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlantimestamp", customVariablesAndMethod.get_currentTimeStamp());
+            }
+
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"working_head", work_val);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"working_code", work_type_code);
+
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"BackDateReason", late_remark.getText().toString());
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"sDivert_Remark", divert_remark.getText().toString());
+
+
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"dcr_date_real", real_date);
+            cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
+            Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
+
+            DownloadAll(context,listener);
+
+            if ((fmcg_Live_Km.equalsIgnoreCase("Y")) || (fmcg_Live_Km.equalsIgnoreCase("5"))||(fmcg_Live_Km.equalsIgnoreCase("Y5"))) {
+                String lat, lon, time, km;
+                customVariablesAndMethod.deleteFmcg_ByKey(context,"myKm1");
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "Y");
+                lat = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLat");
+                lon = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLon");
+                time =customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareMyTime");
+                km = "0.0";
+                customMethod.insertDataInOnces_Minute(lat, lon, km, time);
+
+                new Thread(r1).start();
+                new Thread(r2).start();
+            }
+
+
+            if(intent.getStringExtra("plan_type").equals("p")) {
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Final_submit","N");
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN","");
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFARE","");
+                cbo_helper.deleteAllRecord10();
+                cbo_helper.delete_DCR_Item(null,null,null,null);
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Dcr_Planed_Date", customVariablesAndMethod.currentDate());
+            }
+            //startActivity(new Intent(getApplicationContext(), ViewPager_2016.class));
+        }*/
+    }
 
 
     public void DownloadAll(Context context, Response listener){
@@ -800,6 +921,7 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
                 editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
                 editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
+                editor.putString("DR_RXGEN_VALIDATE", c.getString("DR_RXGEN_VALIDATE"));
                 editor.commit();
 
             }

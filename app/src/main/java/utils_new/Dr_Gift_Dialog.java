@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
 import utils.adapterutils.MyAdapter2;
 import utils.networkUtil.NetworkUtil;
-import utils.upload_download;
 
 public class Dr_Gift_Dialog implements Up_Dwn_interface {
 
@@ -182,7 +182,19 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
                         customVariablesAndMethod.Connect_to_Internet_Msg(context);
                     } else {
 
-                        new upload_download(context,Dr_Gift_Dialog.this);
+                        //new upload_download(context,Dr_Gift_Dialog.this);
+                        new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                            @Override
+                            public void onSuccess(Bundle bundle) {
+                                onDownloadComplete();
+
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+                            }
+                        });
                     }
 
                 }

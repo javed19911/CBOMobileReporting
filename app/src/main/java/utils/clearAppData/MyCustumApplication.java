@@ -226,11 +226,21 @@ public class MyCustumApplication extends MultiDexApplication {
 
         if (url.toLowerCase().contains("https://play.google.com/store/apps/details?id=com.cbo.cbomobilereporting")) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.cbo.cbomobilereporting&hl=en"));
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
 
         }if (url.toLowerCase().contains("play.google.com/store/apps/")) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
+
+        }else if ( (url.toLowerCase().contains(".pdf"))){
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.parse(url), "application/pdf");
+            startActivity(intent);
+
 
         }else {
 

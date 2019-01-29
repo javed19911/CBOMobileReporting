@@ -13,22 +13,12 @@ import utils_new.Custom_Variables_And_Method;
 public class Constants {
 
     public  static String HIDE_STATUS;
-    public static String FINAL_URL;
 
-    public static String getMainUrl(Context context){
-        SharedPreferences myPrefrence = context.getSharedPreferences("FMCG_PREFRENCE", Context.MODE_PRIVATE);
-        String main_url = myPrefrence.getString("WEBSERVICE_URL", "");
-        if (!main_url.equals("")){
-            AppConstant.MAIN_URL=main_url;
-        }
-
-        return AppConstant.MAIN_URL;
-    }
 
 
     public static String getSIDE_STATUS(Context context){
         SharedPreferences pref=context.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, context.MODE_PRIVATE);
-        HIDE_STATUS=pref.getString("fmcg_value", null);
+        HIDE_STATUS=pref.getString("fmcg_value", "N");
         return HIDE_STATUS;
     }
 

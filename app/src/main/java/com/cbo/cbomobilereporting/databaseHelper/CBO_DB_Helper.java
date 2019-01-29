@@ -29,7 +29,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 38;
+    private static final int DATABASE_VERSION = 39;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -187,7 +187,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_TABLE_NonListed_call = "CREATE TABLE " + NonListed_call + "(id Integer PRIMARY KEY AUTOINCREMENT,sDocType text,sDrName text,sAdd1 text,sMobileNo text,sRemark text,iSplId text,iSpl text,iQflId text,iQfl text,iSrno text,loc text,time text,CLASS text,POTENCY_AMT text,AREA text)";
         String MASTER_DOCTOR = "CREATE TABLE phdoctor ( id integer primary key,dr_id integer,dr_name text,dr_code text,area text,spl_id integer,LAST_VISIT_DATE text" +
                 ",CLASS text,PANE_TYPE text,POTENCY_AMT text,ITEM_NAME text,ITEM_POB text,ITEM_SALE text,DR_AREA text,DR_LAT_LONG text,FREQ text,NO_VISITED text" +
-                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text)";
+                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text,RXGENYN text)";
         String DOCTOR_IN_LOCAL = "CREATE TABLE phdcrdr_more ( id integer primary key,dr_id text,dr_name text,ww1 text,ww2 text,ww3 text,loc text,time text)";
 
         String CREATE_TABLE_LAT_LON_TEN = "CREATE TABLE " + latLong10Minute + "(id Integer PRIMARY KEY AUTOINCREMENT,lat text,lon text,time text,km text,updated text ,LOC_EXTRA text)";
@@ -499,6 +499,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN username_download text DEFAULT 'CBO_DOMAIN_SERVER'");
                 db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN password_download text DEFAULT 'cbodomain@321'");
                 db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN port_download text DEFAULT '21'");
+            case 38:
+                db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN RXGENYN text DEFAULT '0'");
 
 
         }
@@ -729,10 +731,19 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public Cursor getDoctorName() {
+        return getDoctorName("0");
+    }
+
+    public Cursor getDoctorName(String RXGENYN) {
         SQLiteDatabase sd = this.getWritableDatabase();
         //return sd.query("phdcrdr", null, null, null, null, null, null);
-        return sd.rawQuery("select * from tempdr where call_type = '0' or call_type='2'", null);
-        //return sd.query("tempdr", null, null, null, null, null, null);
+        String extraQry = "";
+        if (!RXGENYN.equalsIgnoreCase("0")){
+            extraQry = "and phdoctor.RXGENYN ='"+ RXGENYN +"'";
+        }
+        return sd.rawQuery("select * from tempdr " +
+                "left join phdoctor on phdoctor.dr_id = tempdr.dr_id " +
+                "where (call_type = '0' or call_type='2') " + extraQry, null);
     }
 
     public void deleteDoctor() {
@@ -1172,7 +1183,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public long insert_phdoctor(int dr_id, String dr_name, String dr_code, String area, int spl_id,String LAST_VISIT_DATE
             , String CLASS, String PANE_TYPE, String POTENCY_AMT,String ITEM_NAME
             , String ITEM_POB, String ITEM_SALE, String DR_AREA, String DR_LAT_LONG, String FREQ, String NO_VISITED
-            ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN,int MAX_REG) {
+            ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN,int MAX_REG,
+                                String RXGENYN) {
 
         sd = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -1203,6 +1215,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         cv.put("CRM_COUNT", CRM_COUNT);
         cv.put("DRCAPM_GROUP", DRCAPM_GROUP);
         cv.put("SHOWYN", SHOWYN);
+
+        cv.put("RXGENYN", RXGENYN);
 
         long l=sd.insert("phdoctor", null, cv);
         return l;

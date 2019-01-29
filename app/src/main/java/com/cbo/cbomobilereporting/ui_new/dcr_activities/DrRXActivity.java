@@ -464,7 +464,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
 
      public void getDoctorList() {
          docList = new ArrayList<SpinnerModel>();
-         Cursor c = cbohelp.getDoctorName();
+         Cursor c = cbohelp.getDoctorName(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_RXGEN_VALIDATE","0"));
          docList.add(new SpinnerModel("--Select--", "0"));
          if (c.moveToFirst()) {
              do {

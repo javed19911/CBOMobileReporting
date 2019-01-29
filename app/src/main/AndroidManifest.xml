@@ -169,18 +169,6 @@
             android:name=".ui.CBOReportView"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".ui.Stk_Sample"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".ui.Chm_Sample"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".ui.Dr_Sample"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".ui.Dr_Gift"
-            android:configChanges="orientation|screenSize" />
-        <activity
             android:name=".ui_new.dcr_activities.Doctor_Sample"
             android:configChanges="orientation|screenSize" />
         <activity
@@ -188,9 +176,6 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui.PrescribeNew"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".ui.Chemist_Gift"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui_new.dcr_activities.ReminderCall"
@@ -218,9 +203,6 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui_new.report_activities.Logged_UnLogged"
-            android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".ui.Rpt_Detail"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui.Rpt_Unlogged"

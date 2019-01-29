@@ -60,6 +60,9 @@ import com.cbo.cbomobilereporting.ui_new.transaction_activities.Farmer_registrat
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsStates;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.Response;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,6 +76,7 @@ import java.util.Map;
 
 import locationpkg.Const;
 import services.CboServices;
+import services.MyAPIService;
 import services.ServiceHandler;
 import utils.CBOUtils.Constants;
 import utils.clearAppData.MyCustumApplication;
@@ -81,6 +85,7 @@ import utils_new.Custom_Variables_And_Method;
 import utils_new.GetVersionCode;
 import utils.adapterutils.DcrMenu_Grid_Adapter;
 import utils.networkUtil.NetworkUtil;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
@@ -408,7 +413,20 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "MISSED_CALL_OPTION", "N").equals("D") || checkForDoctorPOB()) {
                         onClickFinalSubmit();
                     } else {
-                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        AppAlert.getInstance().Alert(context, "Pending!!!", "Call to some Planed Doctor",
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent i = new Intent(context, DrCall.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        i.putExtra("id", Doctor_id_for_POB);
+                                        i.putExtra("remark", "Call Pending");
+                                        startActivity(i);
+                                    }
+                                });
+                       /* LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
                         final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
                         final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
@@ -438,7 +456,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                             }
                         });
                         dialog.setCancelable(false);
-                        dialog.show();
+                        dialog.show();*/
 
                     }
                 }
@@ -595,55 +613,40 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         request.put("sMobileVersion", "" + Custom_Variables_And_Method.VERSION);
         request.put("iDCR_ID", "" + Custom_Variables_And_Method.DCR_ID);
 
-        ArrayList<Integer> tables=new ArrayList<>();
-        tables.add(-1);
 
-        progress1.setMessage("Please Wait.. \n" +
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCR_DAYPLAN_LOAD_1", request)
+                        .setDescription("Please Wait....\nChecking your DCR Status..").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+                                parser_dcr_plan(message);
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) throws JSONException {
+                            }
+
+                            @Override
+                            public void onError(String title, String description) {
+                                AppAlert.getInstance().getAlert(context,title,description);
+                            }
+
+
+                        })
+                );
+        /*progress1.setMessage("Please Wait.. \n" +
                 "Checking your DCR Status");
         progress1.setCancelable(false);
         progress1.show();
 
         new CboServices(context,mHandler).customMethodForAllServices(request,"DCR_DAYPLAN_LOAD_1",MESSAGE_INTERNET_DCR_PLAN,tables);
-
+*/
         //End of call to service
     }
 
 
 
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_INTERNET_DCR_PLAN:
-                    progress1.dismiss();
-                    if ((null != msg.getData())) {
-
-                        parser_dcr_plan(msg.getData());
-
-                    }
-                    break;
-                case MESSAGE_INTERNET_IS_CALL_UNLOCKED:
-                    progress1.dismiss();
-                    if ((null != msg.getData())) {
-
-                        parser_is_call_unlocked(msg.getData());
-
-                    }
-                    break;
-
-                case 99:
-                    progress1.dismiss();
-                    if ((null != msg.getData())) {
-                        customVariablesAndMethod.msgBox(context,msg.getData().getString("Error"));
-                        //Toast.makeText(getApplicationContext(),msg.getData().getString("Error"),Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                default:
-                    progress1.dismiss();
-
-            }
-        }
-    };
 
     private void parser_dcr_plan(Bundle result) {
 
@@ -665,10 +668,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                     public void onPositiveClicked(View item, String result1) {
                                         try {
                                             if (!jsonArray0.getJSONObject(0).getString("URL").equalsIgnoreCase("")){
-                                                /*Intent i = new Intent(getActivity(), CustomWebView.class);
-                                                i.putExtra("A_TP", jsonArray0.getJSONObject(0).getString("URL"));
-                                                i.putExtra("Title", jsonArray0.getJSONObject(0).getString("TITLE"));
-                                                startActivity(i);*/
+
                                                 MyCustumApplication.getInstance().LoadURL(jsonArray0.getJSONObject(0).getString("TITLE"),jsonArray0.getJSONObject(0).getString("URL"));
                                             }else{
                                                 openDCR(result);
@@ -695,12 +695,24 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
 
                 }else if(jsonArray0.length()>0 && jsonArray0.getJSONObject(0).getString("STATUS_CODE").equals("R")){
-                    new ResetTaskResinedEmp().execute();
+                    //new ResetTaskResinedEmp().execute();
+
+                    new Service_Call_From_Multiple_Classes().resetDCR(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            //customVariablesAndMethod.msgBox(context,"Data Downloded Sucessfully...");
+                        }
+
+                        @Override
+                        public void onError(String message, String description) {
+                            AppAlert.getInstance().getAlert(context,message,description);
+                        }
+                    });
                 }else{
                     customVariablesAndMethod.getAlert(context,jsonArray0.getJSONObject(0).getString("TITLE"),jsonArray0.getJSONObject(0).getString("STATUS"),jsonArray0.getJSONObject(0).getString("URL"));
                 }
 
-                progress1.dismiss();
+                //progress1.dismiss();
             } catch (JSONException e) {
                 Log.d("MYAPP", "objects are: " + e.toString());
                 CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
@@ -769,10 +781,10 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[DIVERT_UNLOCK]")) {
 
                         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DIVERTLOCKYN","" );
-                        customVariablesAndMethod.getAlert(context, "Approved !!!", "Your Calls have been Approved \nYou can please proceed");
+                        AppAlert.getInstance().getAlert(context, "Approved !!!", "Your Calls have been Approved \nYou can please proceed");
                     } else {
 
-                        customVariablesAndMethod.getAlert(context, "Approval !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+                        AppAlert.getInstance().getAlert(context, "Approval !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
                                 "APPROVAL_MSG","Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
                                         "Please contact your Head-Office for APPROVAL"));
                         // customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
@@ -780,25 +792,25 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 }else {
                     if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[CALL_UNLOCK]")) {
                         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "CALL_UNLOCK_STATUS", "[CALL_UNLOCK]");
-                        customVariablesAndMethod.getAlert(context, "CALL UNLOCKED", "Your Calls have been Unlocked \nYou can please proceed");
+                        AppAlert.getInstance().getAlert(context, "CALL UNLOCKED", "Your Calls have been Unlocked \nYou can please proceed");
                     } else {
                         Float FIRST_CALL_LOCK_TIME = Float.valueOf(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "FIRST_CALL_LOCK_TIME", "0"));
-                        customVariablesAndMethod.getAlert(context, "CALL LOCKED", "Your Calls has been Locked... \nYou must have made your first Call before " + FIRST_CALL_LOCK_TIME + " O'clock\n" +
+                        AppAlert.getInstance().getAlert(context, "CALL LOCKED", "Your Calls has been Locked... \nYou must have made your first Call before " + FIRST_CALL_LOCK_TIME + " O'clock\n" +
                                 "Please contact your Head-Office to UNLOCK");
                         // customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
                     }
                 }
 
-                progress1.dismiss();
+                //progress1.dismiss();
             } catch (JSONException e) {
                 Log.d("MYAPP", "objects are: " + e.toString());
-                CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
+                AppAlert.getInstance().getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
                 e.printStackTrace();
             }
 
         }
         //Log.d("MYAPP", "objects are1: " + result);
-        progress1.dismiss();
+        //progress1.dismiss();
 
     }
 
@@ -1470,6 +1482,211 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
     }
 
+
+
+    //// check the condition for all the menus in dcr
+
+    private void IfDrConditionFulfiled(Response listener){
+
+        String Hide_status = Constants.getSIDE_STATUS(getActivity());
+
+        ArrayList<String>  drInLocal = cboDbHelper.tempDrListForFinalSubmit();
+        int dr_call_size = drInLocal.size();
+        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code", "W").equals("OCC")||
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("OSC")||
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("CSC")||
+                (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")
+                        && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("W"))){
+            dr_call_size=1;
+        }
+
+        if (drInLocal.size() <= 0 &&
+                (cboDbHelper.getmenu_count("chemisttemp") == 0 && (cboDbHelper.getmenu_count("phdcrstk") == 0))
+                && (cboDbHelper.getCountphdairy_dcr("D") == 0 && (cboDbHelper.getCountphdairy_dcr("P") == 0))) {
+            if (listener != null) {
+                listener.onError("No Calls found !!!", "Please make atleast One Call....");
+            }
+
+        }else if (dr_call_size <= 0 && Hide_status.equalsIgnoreCase("N")) {
+            if (listener != null) {
+                listener.onError("No Doctor Called!!!!", "Please make atleast One Doctor Call.... ");
+            }
+        }else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfChemistConditionFulfiled(Response listener){
+
+        String Hide_status = Constants.getSIDE_STATUS(getActivity());
+        String chemist_status = getmydata().get(0);
+        String menuName = cboDbHelper.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL");
+
+        if ((chemist_status.equals("")) && (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED").equals("Y"))) {
+            if (listener != null) {
+                listener.onError("No "+menuName+"!!!","Please Select Not Visited In " + menuName);
+            }
+        }else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfStokistConditionFulfiled(Response listener){
+
+        String stockist_status = getmydata().get(1);
+
+        if ((stockist_status.equals("")) && (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED").equals("Y"))) {
+            if (listener != null) {
+                listener.onError("No Stockist Called!!!!", "Please Select Not Visited In Stockist Call");
+            }
+        } else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfFarmerConditionFulfiled(Response listener){
+
+        ArrayList farmer_Visited  = cboDbHelper.collect_all_data();
+        String menuName = cboDbHelper.getMenu("DCR", "D_FAR").get("D_FAR");
+
+        if (farmer_Visited.size() == 0 && (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"FARMERREGISTERYN").equals("Y"))) {
+            if (listener != null) {
+                listener.onError("No " + menuName + "!!!", "Please Visit atleast One " + menuName);
+            }
+        }  else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfApprasialConditionFulfiled(Response listener){
+
+
+        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"APPRAISALMANDATORY").equals("Y") && Appraisal_list.size() != 0) {
+
+            String pending_list="";
+            for (int i = 0; i < Appraisal_list.size(); i++) {
+                pending_list+=Appraisal_list.get(i).get("PA_NAME")+"\n";
+            }
+            if (listener != null) {
+                listener.onError("Appraisal Pending!!!", pending_list);
+            }
+
+        }  else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfExpenseConditionFulfiled(Response listener){
+
+        String expence_status = getmydata().get(2);
+
+        if (expence_status.equals("") && (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Expense_NOT_REQUIRED").equals("Y"))) {
+            if (listener != null) {
+                listener.onError("Expense Pending!!!","Please submit Your Expense First... ");
+            }
+        } else if ( mandatory_pending_exp_head.size() != 0) {
+
+            String pending_list = "";
+            for (int i = 0; i < mandatory_pending_exp_head.size(); i++) {
+                pending_list += mandatory_pending_exp_head.get(i).get("PA_NAME") + "\n";
+            }
+            if (listener != null) {
+                listener.onError("Expenses Pending", pending_list);
+            }
+        }else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfRxConditionFulfiled(Response listener){
+
+        if (IsTeniviaMenuAvilable() && Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("1")) {
+            if (listener != null) {
+                listener.onError("Expense Pending!!!","Please submit Your Expense First... ");
+            }
+        } else if ( mandatory_pending_exp_head.size() != 0) {
+
+            String pending_list = "";
+            for (int i = 0; i < mandatory_pending_exp_head.size(); i++) {
+                pending_list += mandatory_pending_exp_head.get(i).get("PA_NAME") + "\n";
+            }
+            if (listener != null) {
+                listener.onError("Expenses Pending", pending_list);
+            }
+        }else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+
+    private Boolean IsTeniviaMenuAvilable(){
+        return customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N") ||
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N");
+    }
+
+    private Boolean IsExpCriteriaFulfiled(int NoOfDrCalled){
+        String NO_DR_CALL_REQ= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NO_DR_CALL_REQ","0");
+        if (NO_DR_CALL_REQ.equals("0")) return true;
+
+        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code", "W").equals("OCC")||
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("OSC")||
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("CSC")||
+                (
+                        customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")
+                                && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("W")
+                )
+                ){
+            return true;
+        }
+        if (NoOfDrCalled < Integer.parseInt(NO_DR_CALL_REQ)) {
+
+            AppAlert.getInstance().setNagativeTxt("Cancel").setPositiveTxt("OK").DecisionAlert(context,
+                    "Incomplete Dr Calls !!!", "You have not completed "+NO_DR_CALL_REQ+" Dr. call of this route\nSo you are not eligible for TA/DA !!!",
+                    new AppAlert.OnClickListener() {
+                        @Override
+                        public void onPositiveClicked(View item, String result) {
+                            startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
+                            getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
+                        }
+
+                        @Override
+                        public void onNegativeClicked(View item, String result) {
+
+                        }
+                    });
+
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+
+
+    ////====================================================================x
+
     public ArrayList<String> getmydata() {
         ArrayList<String> raw = new ArrayList<String>();
         StringBuilder chm = new StringBuilder();
@@ -1957,7 +2174,25 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
 
     private void ShowAlertforNOFarmerMeetingCalls(){
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+        AppAlert.getInstance().setNagativeTxt("Ok").setPositiveTxt("Postpond ?").DecisionAlert(context,
+                "Activity found !!!", "Today You have an activity for "+cboDbHelper.getMenu("DCR", "D_FAR").get("D_FAR"),
+                new AppAlert.OnClickListener() {
+                    @Override
+                    public void onPositiveClicked(View item, String result) {
+                        Intent i = new Intent(context, PospondFarmerMeeting.class);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onNegativeClicked(View item, String result) {
+
+                    }
+                });
+
+
+        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //customVariablesAndMethod.msgBox(context,"Please Visit atleast One " +cboDbHelper.getMenu("DCR", "D_FAR").get("D_FAR"));
         final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
         final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
@@ -1989,11 +2224,30 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
             }
         });
         dialog.setCancelable(false);
-        dialog.show();
+        dialog.show();*/
     }
 
     private void ShowAlertforNOCalls(){
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+        AppAlert.getInstance().setNagativeTxt("NO").setPositiveTxt("YES").DecisionAlert(context,
+                "No Calls found !!!", "Your DCR has-been Locked, Do You want to reset your DCR?",
+                new AppAlert.OnClickListener() {
+                    @Override
+                    public void onPositiveClicked(View item, String result) {
+                        Intent i = new Intent(context, DCR_Summary_new.class);
+                        i.putExtra("who", 2);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onNegativeClicked(View item, String result) {
+
+                    }
+                });
+
+
+        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
         final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
@@ -2026,7 +2280,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
             }
         });
         dialog.setCancelable(false);
-        dialog.show();
+        dialog.show();*/
     }
 
     private Boolean IsAllowedToCallAtThisTime(){
@@ -2038,7 +2292,22 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
         if (current_time>FIRST_CALL_LOCK_TIME && !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CALL_UNLOCK_STATUS","[CALL_UNLOCK]").contains("[CALL_UNLOCK]")){
             if (!networkUtil.internetConneted(getActivity())) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                AppAlert.getInstance().setNagativeTxt("Cancel").setPositiveTxt("Check").DecisionAlert(context,
+                        "Call Locked", "Your Calls have been Locked... \nYou must have made your first Call before " + FIRST_CALL_LOCK_TIME + " O'Clock\n" +
+                                "Switch ON your Internet and Check if Unlocked...",
+                        new AppAlert.OnClickListener() {
+                            @Override
+                            public void onPositiveClicked(View item, String result) {
+                                CheckIfCallsUnlocked("C");
+                            }
+
+                            @Override
+                            public void onNegativeClicked(View item, String result) {
+
+                            }
+                        });
+                /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
                 final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
@@ -2070,7 +2339,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     }
                 });
                 dialog.setCancelable(false);
-                dialog.show();
+                dialog.show();*/
             }else{
                 CheckIfCallsUnlocked("C");
             }
@@ -2082,70 +2351,31 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
 
 
-    private Boolean IsTeniviaMenuAvilable(){
-       return customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N") ||
-               customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N");
-    }
 
-    private Boolean IsExpCriteriaFulfiled(int NoOfDrCalled){
-        String NO_DR_CALL_REQ= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NO_DR_CALL_REQ","0");
-        if (NO_DR_CALL_REQ.equals("0")) return true;
-
-        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code", "W").equals("OCC")||
-                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("OSC")||
-                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("CSC")||
-                (
-                        customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")
-                        && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("W")
-                )
-                ){
-            return true;
-        }
-        if (NoOfDrCalled < Integer.parseInt(NO_DR_CALL_REQ)) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-            final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
-            final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
-            final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-            final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.nagative);
-            Alert_Nagative.setText("Cancel");
-            Alert_Positive.setText("OK");
-            Alert_title.setText("Incomplete Dr Calls !!!");
-            Alert_message.setText("You have not completed "+NO_DR_CALL_REQ+" Dr. call of this route\nSo you are not eligible for TA/DA !!!");
-
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-            final AlertDialog dialog = builder1.create();
-
-            dialog.setView(dialogLayout);
-            Alert_Positive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
-                    getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
-                    dialog.dismiss();
-                }
-            });
-            Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.setCancelable(false);
-            dialog.show();
-            return false;
-        }else{
-            return true;
-        }
-    }
 
     private Boolean IsRouteApproved(){
         String DIVERTLOCKYN= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTLOCKYN","");
         if (!DIVERTLOCKYN.equals("Y")) return true;
             if (!networkUtil.internetConneted(getActivity())) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                AppAlert.getInstance().setNagativeTxt("Cancel").setPositiveTxt("Check").DecisionAlert(context,
+                        "Incomplete Dr Calls !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+                                "APPROVAL_MSG","Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
+                                        "Switch ON your Internet and Check if Approved..."),
+                        new AppAlert.OnClickListener() {
+                            @Override
+                            public void onPositiveClicked(View item, String result) {
+                                CheckIfCallsUnlocked("A");
+                            }
+
+                            @Override
+                            public void onNegativeClicked(View item, String result) {
+
+                            }
+                        });
+
+
+               /* LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
                 final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
@@ -2155,8 +2385,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 Alert_Nagative.setText("Cancel");
                 Alert_Positive.setText("Check");
                 Alert_title.setText("Approval !!!");
-                /*Alert_message.setText("Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
-                        "Switch ON your Internet and Check if Approved...");*/
+                *//*Alert_message.setText("Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
+                        "Switch ON your Internet and Check if Approved...");*//*
 
                 Alert_message.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
                         "APPROVAL_MSG","Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
@@ -2181,7 +2411,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     }
                 });
                 dialog.setCancelable(false);
-                dialog.show();
+                dialog.show();*/
             }else{
                 CheckIfCallsUnlocked("A");
             }
@@ -2204,12 +2434,35 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(0);
 
-        progress1.setMessage("Please Wait.. \n Fetching your worktype");
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCR_DAYPLAN_LOAD_1", request)
+                        .setTables(tables)
+                        .setDescription("Please Wait....\nChecking your DCR Status..").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+                                parser_is_call_unlocked(message);
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) throws JSONException {
+                            }
+
+                            @Override
+                            public void onError(String title, String description) {
+                                AppAlert.getInstance().getAlert(context,title,description);
+                            }
+
+
+                        })
+                );
+
+        /*progress1.setMessage("Please Wait.. \n Fetching your worktype");
         progress1.setCancelable(false);
         progress1.show();
 
         new CboServices(context, mHandler).customMethodForAllServices(request, "CallUnlockStatus", MESSAGE_INTERNET_IS_CALL_UNLOCKED, tables);
-
+*/
         //End of call to service
     }
 

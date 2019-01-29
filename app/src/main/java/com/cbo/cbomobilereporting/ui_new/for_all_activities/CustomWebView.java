@@ -236,13 +236,27 @@ public class CustomWebView extends AppCompatActivity {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.cbo.cbomobilereporting&hl=en"));
             startActivity(i);
             finish();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
         }else if (url.toLowerCase().contains("play.google.com/store/apps/")) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(i);
             finish();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
         }else if (textView.getText().toString().equalsIgnoreCase("Salary Slip") && (url.toLowerCase().contains(".pdf"))){
-            webView.loadUrl("http://docs.google.com/gview?embedded=true&url=" + url);}
-        else {
+            webView.loadUrl("http://docs.google.com/gview?embedded=true&url=" + url);
+        } else if ( (url.toLowerCase().contains(".pdf"))){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(url), "application/pdf");
+            startActivity(intent);
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+
+        } else  {
 
             if(!url.toLowerCase().contains("http://") && !url.toLowerCase().contains("emulated/0")){
                 url="http://"+url;

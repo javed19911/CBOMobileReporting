@@ -35,6 +35,7 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
+import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,11 +50,13 @@ import utils.CBOUtils.SystemArchitecture;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
 import utils.clearAppData.MyCustumApplication;
+import utils_new.AppAlert;
 import utils_new.Area_Dialog;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Route_Dialog;
+import utils_new.Service_Call_From_Multiple_Classes;
 import utils_new.Work_With_Dialog;
 
 public class DCR_Root_new extends AppCompatActivity {
@@ -1256,7 +1259,7 @@ public class DCR_Root_new extends AppCompatActivity {
                             c.getString("CLASS"), c.getString("PANE_TYPE"),c.getString("POTENCY_AMT"),
                             c.getString("ITEM_NAME"), c.getString("ITEM_POB"), c.getString("ITEM_SALE"),c.getString("AREA"),c.getString("DR_LAT_LONG")
                             , c.getString("FREQ"),c.getString("NO_VISITED") , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("COLORYN")
-                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"));
+                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"),c.getString("RXGENYN"));
 
                 }
 
@@ -1498,7 +1501,7 @@ public class DCR_Root_new extends AppCompatActivity {
             cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
             Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
 
-            //Start of call to service
+            /*//Start of call to service
 
             HashMap<String,String> request=new HashMap<>();
             request.put("sCompanyFolder",cbo_helper.getCompanyCode());
@@ -1530,7 +1533,33 @@ public class DCR_Root_new extends AppCompatActivity {
 
             new CboServices(this,mHandler).customMethodForAllServices(request,"DCRCOMMIT_DOWNLOADALL",MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL,tables);
 
-            //End of call to service
+            //End of call to service*/
+
+           new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
+                @Override
+                public void onSuccess(Bundle bundle) {
+                    customVariablesAndMethod.SetLastCallLocation(context);
+
+                    switch (work_type_Selected){
+                        case "w":
+                            finish();
+                            break;
+                        case "l":
+                            Intent intent = new Intent(getApplicationContext(), FinalSubmitDcr_new.class);
+                            startActivity(intent);
+                            break;
+                        case "n":
+                            setReultForNonWork();
+                            break;
+                    }
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_type_Selected",work_type_Selected);
+                }
+
+                @Override
+                public void onError(String s, String s1) {
+                    AppAlert.getInstance().getAlert(context,s,s1);
+                }
+            });
 
 
             if ((fmcg_Live_Km.equalsIgnoreCase("Y")) || (fmcg_Live_Km.equalsIgnoreCase("5"))||(fmcg_Live_Km.equalsIgnoreCase("Y5"))) {

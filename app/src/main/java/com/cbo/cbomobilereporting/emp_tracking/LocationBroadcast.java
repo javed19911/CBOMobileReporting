@@ -43,8 +43,9 @@ public class LocationBroadcast extends BroadcastReceiver {
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking","Y");
 
-          ComponentName comp = new ComponentName(context.getPackageName(), MyLoctionService.class.getName());
+         // ComponentName comp = new ComponentName(context.getPackageName(), MyLoctionService.class.getName());
             //ComponentName service = context.startService(new Intent().setComponent(comp));
+        Log.d(TAG, "location update by timmer");
 
         MyCustumApplication.getInstance().startLoctionService();
         /*Intent intent1 = new Intent().setComponent(comp);
