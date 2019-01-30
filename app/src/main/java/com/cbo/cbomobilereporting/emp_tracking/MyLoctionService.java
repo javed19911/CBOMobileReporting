@@ -131,6 +131,9 @@ public class MyLoctionService extends Service implements
     }
 
     private void startForgroungService(Intent intent){
+        if (intent.getAction()==null) {
+            Log.i(LOG_TAG, "null : "+ intent);
+        }
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
             /*if (!mGoogleApiClient.isConnected())
                 return;*/

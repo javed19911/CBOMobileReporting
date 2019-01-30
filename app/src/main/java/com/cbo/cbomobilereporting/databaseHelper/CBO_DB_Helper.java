@@ -738,7 +738,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         SQLiteDatabase sd = this.getWritableDatabase();
         //return sd.query("phdcrdr", null, null, null, null, null, null);
         String extraQry = "";
-        if (RXGENYN.equalsIgnoreCase("2")){
+        if (!RXGENYN.equalsIgnoreCase("0")){
             extraQry = "and phdoctor.RXGENYN ='"+ "1" +"'";
         }
         return sd.rawQuery("select * from tempdr " +

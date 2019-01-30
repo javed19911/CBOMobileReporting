@@ -971,6 +971,8 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         pob.setText("");
                         Custom_Variables_And_Method.STOCKIST_NOT_VISITED = "Y";
 
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","N");
+
                         new Service_Call_From_Multiple_Classes().SendFCMOnCall(context, mHandler, MESSAGE_INTERNET_SEND_FCM,"S",stk_id,Custom_Variables_And_Method.GLOBAL_LATLON);
 
 

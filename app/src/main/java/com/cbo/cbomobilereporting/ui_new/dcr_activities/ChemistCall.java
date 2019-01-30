@@ -920,6 +920,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                             customVariablesAndMethod.msgBox(context,"Retailer Added Successfully");
                         }
 
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED","N");
                         pob.setText("");
                         Custom_Variables_And_Method.CHEMIST_NOT_VISITED = "Y";
 

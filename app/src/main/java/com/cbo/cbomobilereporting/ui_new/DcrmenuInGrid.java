@@ -1645,25 +1645,29 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
             String RxValidateCondition = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_RXGEN_VALIDATE","0");
             int NoRxCalls = cboDbHelper.getmenu_count("Tenivia_traker");
-            int NoRxCallsReqd = cboDbHelper.getDoctorName(RxValidateCondition).getCount();
+            int NoRxCallsReqd = 0;//cboDbHelper.getDoctorName(RxValidateCondition).getCount();
+
             switch (RxValidateCondition){
-                case "0":
-                    if (listener != null){
-                        listener.onSuccess(null);
-                    }
+                case "2":
+                    NoRxCallsReqd = 1;
+                    break;
+                case "1":
+                    NoRxCallsReqd = cboDbHelper.getDoctorName(RxValidateCondition).getCount();
                     break;
                 default:
-                    if (NoRxCalls>= NoRxCallsReqd) {
-                        if (listener != null){
-                            listener.onSuccess(null);
-                        }
-                    }else{
-                        if (listener != null) {
-                            listener.onError(MyCustumApplication.getInstance().getTaniviaTrakerMenuName() + " Pending!!!","Please Visit "+ MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+"..");
-                        }
-                    }
+                    NoRxCallsReqd = 0;
             }
 
+
+            if (NoRxCalls>= NoRxCallsReqd) {
+                if (listener != null){
+                    listener.onSuccess(null);
+                }
+            }else{
+                if (listener != null) {
+                    listener.onError(MyCustumApplication.getInstance().getTaniviaTrakerMenuName() + " Pending!!!","Please Visit "+ MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+"..");
+                }
+            }
 
         }else{
             if (listener != null){
@@ -2053,50 +2057,42 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
     }
 
     private int get_count(String menu){
-        int result=0;
+        int result=-1;
         String table="";
         Boolean flag=false;
         switch (menu){
             case "D_RCCALL":
                 flag=true;
                 table="phdcrdr_rc";
-                result=1;
                 break;
             case "D_DRCALL":
                 flag=true;
                 table="tempdr";
-                result=1;
                 break;
             case "D_CHEMCALL":
                 flag=true;
                 table="chemisttemp";
-                result=1;
                 break;
             case "D_RETCALL":
                 flag=true;
                 table="chemisttemp";
-                result=1;
                 break;
             case "D_STK_CALL":
                 flag=true;
                 table="phdcrstk";
-                result=1;
                 break;
             case "D_NLC_CALL":
                 flag=true;
                 table="NonListed_call";
-                result=1;
                 break;
             case "D_EXP":
                 flag=true;
                 table="Expenses";
-                result=1;
                 break;
             case "D_DR_RX":
             case "D_RX_GEN":
                 flag=true;
                 table="Tenivia_traker";
-                result=1;
                 break;
             case "D_AP":
                 flag=false;
@@ -2118,6 +2114,29 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         }
         if(flag && !table.equals("")){
             result=cboDbHelper.getmenu_count(table);
+        }
+        if (result == 0 ){
+            switch (table){
+                case "chemisttemp":
+                    if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED").equals("Y")){
+                        result = -1;
+                    }
+                    break;
+                case "phdcrstk":
+                    if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED").equals("Y")){
+                        result = -1;
+                    }
+                    break;
+                default:
+                    result = -1;
+            }
+        }
+
+        if (table.equalsIgnoreCase("Tenivia_traker") && result == 1){
+            HashMap<String, ArrayList<String>> tenivia_traker = cboDbHelper.getCallDetail ("tenivia_traker", "-1", "1");
+            if (!tenivia_traker.isEmpty () && ( tenivia_traker.get ("id").contains ("-1"))) {
+                result = 0;
+            }
         }
         return result;
     }

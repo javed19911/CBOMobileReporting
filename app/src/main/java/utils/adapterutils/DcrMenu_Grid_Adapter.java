@@ -63,7 +63,7 @@ public class DcrMenu_Grid_Adapter extends BaseAdapter {
         textView.setText(listOfTab.get(position));
 
         final TextView count_tv = (TextView) gridView.findViewById(R.id.count);
-        if(count.get(position)>0){
+        if(count.get(position)>-1){
             count_tv.setText(""+count.get(position));
             count_tv.setVisibility(View.VISIBLE);
         }else {

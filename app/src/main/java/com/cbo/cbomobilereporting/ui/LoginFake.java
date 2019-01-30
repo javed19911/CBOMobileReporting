@@ -399,6 +399,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                         startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
                                         finish();
                                     } else {*/
+
+                            MyCustumApplication.getInstance().startLoctionService();
                             String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                             switch (work_type_Selected){
                                 case "l":
@@ -437,6 +439,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                         startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
                                         finish();
                                     } else {*/
+
+                            MyCustumApplication.getInstance().startLoctionService();
                             String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                             switch (work_type_Selected){
                                 case "l":
@@ -759,8 +763,6 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                                 break;
                             default:
-                                startActivity(new Intent(context, ViewPager_2016.class));
-                                startActivity(new Intent(context, ViewPager_2016.class));
                                 startActivity(new Intent(context, ViewPager_2016.class));
                                 finish();
                         }
