@@ -94,6 +94,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
     private HashMap<String, ArrayList<String>> tenivia_traker;
 
     private HashMap<String, HashMap<String, ArrayList<String>>> summary_list=new HashMap<>();
+    private String RxReqdType = "0";
 
 
     ExpandableListAdapter listAdapter;
@@ -154,6 +155,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
         }
 
+        RxReqdType = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_RXGEN_VALIDATE","0");
         getDoctorList();
         new Doback().execute();
 
@@ -172,6 +174,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
             header_title.add(main_menu);
             //visible_status.add(0);
         }
+
 
 
 
@@ -464,7 +467,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
 
      public void getDoctorList() {
          docList = new ArrayList<SpinnerModel>();
-         Cursor c = cbohelp.getDoctorName(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_RXGEN_VALIDATE","0"));
+         Cursor c = cbohelp.getDoctorName(RxReqdType);
          docList.add(new SpinnerModel("--Select--", "0"));
          if (c.moveToFirst()) {
              do {
@@ -496,9 +499,11 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
         sbamt_caption = new StringBuilder();
         if (who==1){
             qtyInput = true;
-            dr_id = "-1";
-            doc_name = "No "+head;
-            drNameBt.setText(doc_name);
+            if (!RxReqdType.equalsIgnoreCase("1")) {
+                dr_id = "-1";
+                doc_name = "No " + head;
+                drNameBt.setText(doc_name);
+            }
             sbId.append("-1");
             sbQty.append("0");
             sbamt.append("0");

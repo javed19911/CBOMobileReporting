@@ -25,7 +25,7 @@ public abstract class FirebaseDbhelper<T> extends FirebsaeDB<T> {
 
     private Boolean isSessionActive(){
         mUser user = MyCustumApplication.getInstance().getUser();
-        if (user!= null){
+        if (user!= null && MyCustumApplication.getInstance().FirebaseSyncYN.equalsIgnoreCase("Y")){
             if (
                     !(getCheckForSuppotLoggin() && user.getLoggedInAsSupport()) &&
                     (!user.getID().trim().equalsIgnoreCase("0") && !user.getCompanyCode().trim().equalsIgnoreCase(""))

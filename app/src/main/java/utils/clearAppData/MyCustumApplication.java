@@ -34,11 +34,13 @@ public class MyCustumApplication extends MultiDexApplication {
     private mUser user = null;
     static String TAG = "MyCustumApplication";
     public UserDB userDB = null;
+    public String FirebaseSyncYN = "Y";
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        FirebaseSyncYN = Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"FirebaseSyncYN","Y");
         userDB = new UserDB();
         getbattrypercentage();
         registerActivityLifecycleCallbacks(new AppLifecycleTracker());
