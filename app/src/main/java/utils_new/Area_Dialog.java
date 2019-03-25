@@ -74,22 +74,11 @@ public class Area_Dialog {
     private int textlength=0;
     private  static final int MESSAGE_INTERNET_AREA=1;
     private String[] selected_list;
+    private int MaxAreaAllowed=0;
+    private Boolean freeze = false;
 
     Dialog dialog;
 
-    /*private ArrayList<String>getMrId()
-    {
-        ArrayList<String>mrid=new ArrayList<String>();
-        Cursor c=cbohelp.getDR_Workwith();
-        if(c.moveToFirst())
-        {
-            do{
-                mrid.add(c.getString(c.getColumnIndex("wwid")));
-            }while(c.moveToNext());
-        }
-        return mrid;
-    }
-*/
     private void setMrids()
     {
         String[] selected_list=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_id","").replace("+",",").split(",");
@@ -224,6 +213,8 @@ public class Area_Dialog {
         progess=(ProgressBar)view.findViewById(R.id.progess);
 
         String sAllYn = Msg.getString("sAllYn");
+        MaxAreaAllowed = Integer.parseInt( Msg.getString("max"));
+        freeze = Msg.getBoolean("freeze");
         Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_DATE");
 
         setMrids();
@@ -262,9 +253,6 @@ public class Area_Dialog {
         Custom_Variables_And_Method.work_with_area_id="";
 
 
-       /* InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(filter, InputMethodManager.SHOW_IMPLICIT);*/
-
         filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -285,7 +273,7 @@ public class Area_Dialog {
                         }
                     }
                 }
-                mylist.setAdapter(new Dcr_Workwith_Adapter((Activity) context,array_sort,selected_list));
+                mylist.setAdapter(new Dcr_Workwith_Adapter((Activity) context,array_sort,selected_list,freeze));
 
             }
 
@@ -301,7 +289,8 @@ public class Area_Dialog {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-
+                data.clear();
+                data1.clear();
                 for(int i=0;i<list.size();i++){
                     boolean check=list.get(i).isSelected();
                     if(check){
@@ -314,183 +303,36 @@ public class Area_Dialog {
                         data1.remove(list.get(i));
                     }
                 }
-                for(int i=0;i<data.size();i++){
-                    sb2.append(data1.get(i)).append("+");
-                    sb.append(data.get(i)).append(",");
+                if (MaxAreaAllowed == 0){
+                    MaxAreaAllowed = data.size();
+                }
+                if (data.size()  <= MaxAreaAllowed ) {
+                    for (int i = 0; i < data.size(); i++) {
+                        sb2.append(data1.get(i)).append("+");
+                        sb.append(data.get(i)).append(",");
 
+                    }
+
+
+                    Bundle i = new Bundle();
+                    i.putString("area", sb.toString());
+                    i.putString("area_name", sb2.toString());
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "area_name", sb2.toString());
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "area_id", sb.toString());
+                    //setResult(RESULT_OK, i);
+                    threadMsg(i);
+                    dialog.dismiss();
+                }else{
+                    AppAlert.getInstance().getAlert(context,"Alert!!!","You are only allowed to select " + MaxAreaAllowed+" Area from the list..." );
                 }
 
-
-                Bundle i = new Bundle();
-                i.putString("area", sb.toString());
-                i.putString("area_name", sb2.toString());
-
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_name", sb2.toString());
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_id", sb.toString());
-                //setResult(RESULT_OK, i);
-                threadMsg(i);
-                dialog.dismiss();
 
             }
         });
         dialog.show();
 
     }
-
-  //  @Override
- /*   protected void onCreate(Bundle savedInstanceState) {
-
-      *//*  requestWindowFeature(Window.FEATURE_NO_TITLE);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.dcr_area);
-        getWindow().setBackgroundDrawable(null);*//*
-
-      *//*  Window window = getWindow();
-        Point size = new Point();
-        // Store dimensions of the screen in `size`
-        Display display = window.getWindowManager().getDefaultDisplay();
-        display.getSize(size);
-        // Set the width of the dialog proportional to 75% of the screen width
-        window.setLayout((int) (size.x * 0.90), (int) (size.y * 0.75));//WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setGravity(Gravity.CENTER);
-*//*
-       // getWindow().setSoftInputMode(
-               // WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-        TextView textView =(TextView) findViewById(R.id.hadder_text_1);
-        textView.setText( Msg.getString("header"));
-
-        mylist=(ListView)findViewById(R.id.dcr_area_list);
-        Button done = (Button) findViewById(R.id.dcr_area_save);
-        filter=(EditText)findViewById(R.id.myfilter);
-        customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
-        cbohelp=new CBO_DB_Helper(context);
-        data=new ArrayList<String>();
-        data1=new ArrayList<String>();
-        sb=new StringBuilder();
-        sb2=new StringBuilder();
-
-        progess=(ProgressBar)findViewById(R.id.progess);
-
-        String sAllYn = Msg.getString("sAllYn");
-        Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_DATE");
-
-        setMrids();
-
-        selected_list=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"area_name").replace("+",",").split(",");
-
-        //Start of call to service
-
-        HashMap<String, String> request = new HashMap<>();
-        request.put("sCompanyFolder", cbohelp.getCompanyCode());
-        request.put("iPA_ID", "" + Custom_Variables_And_Method.PA_ID);
-        request.put("iMR_ID1", mr_id1);
-        request.put("iMR_ID2", mr_id2);
-        request.put("iMR_ID3", mr_id3);
-        request.put("iMR_ID4", mr_id4);
-        request.put("iMR_ID5", mr_id5);
-        request.put("iMR_ID6", mr_id6);
-        request.put("iMR_ID7", mr_id7);
-        request.put("iMR_ID8", mr_id8);
-        request.put("sWorkType", Custom_Variables_And_Method.work_val);
-        request.put("sDcrDate", Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT);
-        request.put("iDivertYn", sAllYn);
-
-        ArrayList<Integer> tables = new ArrayList<>();
-        tables.add(0);
-
-        progess.setVisibility(View.VISIBLE);
-       *//* progress1.setMessage("Please Wait.. \n Fetching Area");
-        progress1.setCancelable(false);
-        progress1.show();*//*
-
-        new CboServices(context, mHandler).customMethodForAllServices(request, "DCRAREADDL_2", MESSAGE_INTERNET_AREA, tables);
-
-        //End of call to service
-
-        Custom_Variables_And_Method.work_with_area_id="";
-
-
-       *//* InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(filter, InputMethodManager.SHOW_IMPLICIT);*//*
-
-        filter.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                textlength = filter.getText().length();
-                //getDoctor(PA_ID).clear_2();
-                array_sort.clear();
-                for (Dcr_Workwith_Model aTitleName : TitleName) {
-                    if (textlength <= aTitleName.getName().length()) {
-
-                        if (aTitleName.getName().toLowerCase().contains(filter.getText().toString().toLowerCase().trim())) {
-                            array_sort.add(aTitleName);
-                        }
-                    }
-                }
-                mylist.setAdapter(new Dcr_Workwith_Adapter((Activity) context,array_sort,selected_list));
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        assert done != null;
-        done.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-
-                for(int i=0;i<display_item_list.size();i++){
-                    boolean check=display_item_list.get(i).isSelected();
-                    if(check){
-                        data.add(display_item_list.get(i).getId());
-                        data1.add(display_item_list.get(i).getName());
-                    }
-                    else
-                    {
-                        data.remove(display_item_list.get(i));
-                        data1.remove(display_item_list.get(i));
-                    }
-                }
-                for(int i=0;i<data.size();i++){
-                    sb2.append(data1.get(i)).append("+");
-                    sb.append(data.get(i)).append(",");
-
-                }
-
-
-                Bundle i = new Bundle();
-                i.putString("area", sb.toString());
-                i.putString("area_name", sb2.toString());
-
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_name", sb2.toString());
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_id", sb.toString());
-                //setResult(RESULT_OK, i);
-                threadMsg(i);
-                dismiss();
-
-            }
-        });
-    }*/
-
-   /* @Override
-    protected void onStart() {
-        super.onStart();
-        *//* InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);*//*
-    }*/
 
     private void threadMsg(Bundle Msg) {
         Message msgObj = h1.obtainMessage(response_code);
@@ -547,7 +389,7 @@ public class Area_Dialog {
                 }
 
                 array_sort = new ArrayList<Dcr_Workwith_Model>(Arrays.asList(TitleName));
-                ArrayAdapter<Dcr_Workwith_Model> adapter = new Dcr_Workwith_Adapter((Activity) context, array_sort, selected_list);
+                ArrayAdapter<Dcr_Workwith_Model> adapter = new Dcr_Workwith_Adapter((Activity) context, array_sort, selected_list,freeze);
                 adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
                 mylist.setAdapter(adapter);
 

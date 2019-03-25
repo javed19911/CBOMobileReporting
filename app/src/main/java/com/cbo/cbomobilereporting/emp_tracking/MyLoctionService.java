@@ -2,7 +2,6 @@ package com.cbo.cbomobilereporting.emp_tracking;
 
 
 import android.Manifest;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,7 +17,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -31,11 +29,9 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.databaseHelper.Location.mLocation;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.SplashScreen_2016;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
@@ -43,38 +39,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.File;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import android.content.IntentSender;
-import android.location.Location;
-import android.os.Bundle;
-
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.firebase.messaging.RemoteMessage;
 
 
 import utils.CBOUtils.Constants;
-import utils.MyConnection;
-import utils.clearAppData.MyCustumApplication;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 public class MyLoctionService extends Service implements
@@ -131,8 +102,9 @@ public class MyLoctionService extends Service implements
     }
 
     private void startForgroungService(Intent intent){
-        if (intent.getAction()==null) {
+        if (intent == null) {
             Log.i(LOG_TAG, "null : "+ intent);
+            return;
         }
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
             /*if (!mGoogleApiClient.isConnected())
@@ -244,19 +216,35 @@ public class MyLoctionService extends Service implements
         } else if (intent.getAction().equals(
                 Constants.ACTION.STOPFOREGROUND_ACTION)) {
 
+
+            /////******************************************************************
+            /// do not relay on this code its ab error
+
+
+
             /**/
 
-            if (serviceStarted) {
+            /*if (serviceStarted) {
                 Log.i(LOG_TAG, "Received Stop Foreground Intent");
                 serviceStarted = false;
-                if (!mGoogleApiClient.isConnected()) {
+                *//*if (!mGoogleApiClient.isConnected()) {
                     intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                     startForgroungService(intent);
                 }
-                serviceStarted = false;
-                stopLocationUpdates();
+                serviceStarted = false;*//*
 
-                stopForeground(true);
+            }*/
+
+            Log.i(LOG_TAG, "Received Stop Foreground Intent");
+            stopLocationUpdates();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (serviceStarted) {
+                    serviceStarted = false;
+                    stopForeground(true);
+                }
+                //stopSelf();
+            } else {
                 stopSelf();
             }
         }
@@ -497,9 +485,11 @@ public class MyLoctionService extends Service implements
     }
 
     protected void stopLocationUpdates() {
-        if (mGoogleApiClient.isConnected())
-            LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        if (mGoogleApiClient != null) {
+            if (mGoogleApiClient.isConnected())
+                LocationServices.FusedLocationApi.removeLocationUpdates(
+                        mGoogleApiClient, this);
+        }
         Log.d("", "Location update stopped .......................");
     }
 

@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,24 +22,27 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import services.MyAPIService;
 import services.ServiceHandler;
 import utils.MyConnection;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
-public class MapsActivity extends Activity implements OnMapReadyCallback {
+public class MapsActivity extends CustomActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     String paid ;
     String date ;
-    String companyCode ;
-    ServiceHandler myService;
 
 
     Custom_Variables_And_Method customVariablesAndMethod;
@@ -58,12 +63,11 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
 
 
-        context = MapsActivity.this;
+        context = this;
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         myDb = new CBO_DB_Helper(context);
         paid = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"FM_PA_ID");
         date = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real");
-        companyCode = myDb.getCompanyCode();
         Bundle bundle = getIntent().getExtras();
         emp_num = (TextView) findViewById(R.id.number_of_emp);
 
@@ -72,23 +76,74 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         ak_DateMMDDYY = bundle.getString("ak_DateMMDDYY");
         setSatelite = bundle.getString("akCheckMap");
 
-        myService = new ServiceHandler(context);
-        new DoBack().execute();
+
+    }
+
+    private void fetchUsers(){
+
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
+        request.put("iPA_ID", man_Id);
+        request.put("sDate", ak_DateMMDDYY);
+        request.put("iDivisionId", div_Id);
 
 
-       // new DoBack().execute();
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("MapDrCallMobile",request )
+                        .setMultiTable(false)
+                        .setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle bundle) throws Exception {
+                                if (pa_latLong.size() >0){
+                                    emp_num.setText(""+pa_name.size());
+                                    setUpMapIfNeeded();
+                                }
+                                else {
+                                    customVariablesAndMethod.msgBox(context,"NoBody Found try After Some time .......");
+                                    finish();
+
+                                }
+                            }
+
+                            @Override
+                            public void onResponse(Bundle bundle) throws Exception {
+
+                                pa_name = new ArrayList<String>();
+                                pa_latLong = new ArrayList<String>();
+                                pa_add = new ArrayList<String>();
+                                pa_time = new ArrayList<String>();
+
+                                String table0 = bundle.getString("Tables0");
+                                JSONArray jsonArray = new JSONArray(table0);
+                                for (int i =0; i<jsonArray.length();i++){
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                    pa_name.add(jsonObject1.getString("PA_NAME"));
+                                    pa_add.add(jsonObject1.getString("LOC1"));
+                                    pa_latLong.add(jsonObject1.getString("LATLONG"));
+                                    pa_time.add(jsonObject1.getString("IN_TIME"));
+
+                                }
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                AppAlert.getInstance().getAlert(context,s,s1);
+                            }
+                        }));
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
        // setUpMapIfNeeded();
+        fetchUsers();
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
         mMap=map;
-        setUpMap();
+        fetchUsers();
     }
 
     private void setUpMapIfNeeded() {
@@ -99,9 +154,11 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
             mapFragment.getMapAsync(this);
             //mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_activity)).getMap();
 
-            if (mMap != null) {
-                setUpMap();
-            }
+
+        }
+
+        if (mMap != null) {
+            setUpMap();
         }
     }
 
@@ -153,7 +210,7 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
     }
 
-    class DoBack extends AsyncTask<String,String,String> {
+   /* class DoBack extends AsyncTask<String,String,String> {
                 ProgressDialog pd = new ProgressDialog(MapsActivity.this);
                 @Override
                 protected String doInBackground(String... params) {
@@ -194,14 +251,7 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
                         else {
                             customVariablesAndMethod.msgBox(context,"NoBody Found try After Some time .......");
 
-                            Intent i = new Intent(context,ViewPager_2016.class);
-
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                            i.putExtra("Id", Custom_Variables_And_Method.CURRENTTAB);
-
-                            startActivity(i);
+                           finish();
 
                         }
 
@@ -220,5 +270,5 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
                     pd.show();
 
                 }
-    }
+    }*/
 }

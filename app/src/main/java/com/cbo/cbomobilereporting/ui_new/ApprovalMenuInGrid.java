@@ -2,7 +2,6 @@ package com.cbo.cbomobilereporting.ui_new;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,7 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.Approval_Adapter;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 

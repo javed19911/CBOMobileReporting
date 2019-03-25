@@ -11,8 +11,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:layout_margin="5dp"
-        android:padding="3dp"
         android:layout_weight="1"
         android:background="@drawable/custom_square_transparent_bg">
 
@@ -25,86 +23,162 @@
                 android:orientation="vertical"
                 android:id="@+id/mainLayout"
                 >
+
+
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:id="@+id/locLayoutDopen"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/custom_headder_bg">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Location"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+
 
                     <utils.font_package.Text_view_Regular
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="Location"
-                        android:textColor="@color/navigationBarColor"
-                        android:textSize="17sp"/>
-                    <utils.font_package.Edit_text_Regular
+                        android:id="@+id/loc_dcropen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/loc_dcropen"
+                        android:hint="Location"
                         android:textColor="@color/navigationBarColor"
                         android:textSize="17sp"
-                        android:inputType="textMultiLine|textNoSuggestions"
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"/>
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:textStyle="bold"
+
+                        />
+
+
                 </LinearLayout>
 
 
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:id="@+id/pending_dcr_dates_layouts_area"
-                    >
+                    android:background="@drawable/custom_headder_bg">
+
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <utils.font_package.Text_view_Regular
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Dcr Pending Dates"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="#800000"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+
+
+                    <utils.font_package.Text_view_Regular
+                        android:id="@+id/dcr_pending_dates_area"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Dcr Pending Dates"
+                        android:textColor="#800000"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="DCR Date"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="Dcr Pending Dates:"
+                            android:text=":"
                             android:textStyle="bold"
-                            android:textColor="@color/navigationBarColor"
-                            android:textSize="17sp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="17sp"/>
 
-                            /></LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-
-
-
-                        >
-
-
-                        <utils.font_package.Text_view_Regular
-                            android:id="@+id/dcr_pending_dates_area"
-                            android:singleLine="true"
-                            android:ellipsize="marquee"
-                            android:marqueeRepeatLimit="marquee_forever"
-                            android:scrollHorizontally="true"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:layout_width="170dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
-                            android:text="Dcr Pending Dates:"
-                            android:textColor="@color/navigationBarColor"
-                            android:textSize="17sp"
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="DCR Date"
+                            android:textSize="17dp"
+                            android:gravity="right"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="5dp"
+                            android:paddingBottom="2dp"
                             android:textStyle="bold"
-
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-
-                            />
+                            android:textColor="@color/colorPrimaryDark"
+                            android:layout_weight="1" />
 
 
                     </LinearLayout>
@@ -114,97 +188,166 @@
 
 
 
-
                 </LinearLayout>
 
 
-
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
-                    <utils.font_package.Text_view_Regular
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_marginLeft="5dp"
-                        android:text="Date"
-                        android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg">
 
-                        android:textColor="@color/navigationBarColor"
-                        android:textSize="17sp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"/>
-                    <utils.font_package.Edit_text_Regular
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:id="@+id/date"
-                        android:textColor="@color/navigationBarColor"
-                        android:textSize="17sp"
-                        android:layout_marginTop="13dp"
-                        android:clickable="false"
-                        android:cursorVisible="false"
 
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="75dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    >
-
-                    <utils.font_package.Text_view_Regular
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_marginLeft="5dp"
-                        android:text="Working Type"
-                        android:gravity="center"
-                        android:textColor="@color/navigationBarColor"
-                        android:textSize="17sp"
-                        />
                     <LinearLayout
-                        android:layout_marginLeft="5dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Working Type"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+                    <!--<View-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:background="@color/colorPrimaryDark"/>-->
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/drop_bg"
                         android:orientation="horizontal">
 
                         <Spinner
-
                             android:id="@+id/worktype"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:minHeight="40dp"
                             android:layout_weight="1"
-                            android:layout_margin="3dp"
                             android:background="@android:color/transparent"
                             android:prompt="@string/spinner_title4"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginBottom="2dp"
                             android:textColor="@color/navigationBarColor"
 
                             />
                         <View
                             android:layout_width="1.5dp"
                             android:layout_height="match_parent"
-                            android:layout_marginBottom="3.5dp"
-                            android:background="@color/colorPrimaryDark"
-                            android:layout_marginTop="3.5dp"/>
+                            android:background="@color/colorPrimaryDark"/>
 
                         <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
                             android:layout_margin="1dp"
-                            android:layout_weight="4"
-                            android:src="@drawable/drop_icon"
-                            android:padding="6.5dp"
+
+                            android:padding="4.5dp"
                             android:id="@+id/spinner_img_area_open"
+                            android:src="@drawable/drop_icon" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg"
+                    android:id="@+id/dopen_layout1">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:textColor="@color/colorPrimaryDark"
+                            android:background="@color/transparent"
+                            android:id="@+id/get"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:text="+"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="23sp" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Work-With"
+                            android:id="@+id/work_with_title"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Divert WorkWith"
+                            android:gravity="right"
+                            android:id="@+id/DIVERTWWYN_TXT"
+                            android:padding="3dp"
+                            android:visibility="gone"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/DIVERTWWYN"
+                            android:text=""
+                            android:visibility="gone"
+                            android:layout_gravity="center_vertical"
+                            android:buttonTint="@color/colorPrimaryDark"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+
+
+                        <TextView
+                            android:textSize="15dp"
+                            android:id="@+id/workwith"
+                            android:padding="2dp"
+                            android:layout_marginLeft="26dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Click  + sign for WorkWith"
+                            android:textColor="@color/colorPrimaryDark"
                             />
+
+
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -214,124 +357,173 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/dopen_layout1"
-                    android:layout_marginTop="10dp">
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg"
+                    android:id="@+id/areaLayoutDopen">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:textColor="@color/colorPrimaryDark"
+                            android:background="@color/transparent"
+                            android:id="@+id/get1"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:text="+"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="23sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Area"
+                            android:id="@+id/Area_title"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Divert Area"
+                            android:gravity="right"
+                            android:id="@+id/ROUTEDIVERTYN_TXT"
+                            android:padding="3dp"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                            android:textStyle="bold"/>
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:id="@+id/ROUTEDIVERTYN"
+                            android:visibility="gone"
+                            android:buttonTint="@color/colorPrimaryDark"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
 
 
 
 
-                    <utils.font_package.Edit_text_Regular
-                        android:textColor="@color/navigationBarColor"
-                        android:textSize="17sp"
-                        android:id="@+id/workwith"
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:textSize="15dp"
+                            android:id="@+id/area"
+                            android:padding="2dp"
+                            android:layout_marginLeft="26dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Click+ sign for Area"
+                            android:textColor="@color/colorPrimaryDark"
+                            />
+
+
+
+
+                    </LinearLayout>
+
+
+                    <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Divert Remark"-->
+                    <!--android:gravity="right"-->
+                    <!--android:padding="3dp"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:textSize="12sp"-->
+                    <!--android:textStyle="bold"/>-->
+
+                    <EditText
+                        android:id="@+id/Divert_remark"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_weight="1"
+                        android:layout_marginLeft="26dp"
+                        android:hint="Please Enter Divert Remark"
+                        android:textSize="17dp"
+                        android:ems="15"
+                        android:visibility="gone"
                         android:inputType="textMultiLine|textNoSuggestions"
-                        android:hint="Click  + sign for WorkWith"
-                        android:layout_marginTop="20dip"
-                        android:layout_marginLeft="5dip"
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:layout_marginRight="8dip"
                         />
 
-                    <utils.font_package.Button_Bold
-
-                        android:textColor="@color/textColorPrimary"
-                        android:background="@drawable/button_text_view_selector"
-                        android:id="@+id/get"
-                        android:layout_width="40dp"
-                        android:layout_height="35dp"
-                        android:layout_marginTop="20dip"
-                        android:layout_marginRight="14dp"
-                        android:onClick="get"
-                        android:text="+"
-                        android:textSize="22sp" />
-
                 </LinearLayout>
 
-                <CheckBox
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Divert Area"
-                    android:id="@+id/ROUTEDIVERTYN"
-                    android:layout_marginTop="10dp"
-                    android:textSize="17sp"
-                    android:visibility="gone"
-                    android:textStyle="bold"/>
 
-                <EditText
-                    android:id="@+id/Divert_remark"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="8dip"
-                    android:visibility="gone"
-                    android:layout_marginRight="8dip"
-                    android:layout_marginTop="20dip"
-                    android:layout_weight="1"
-                    android:hint="Please Divert Remark"
-                    android:ems="15"
-                    android:inputType="textMultiLine|textNoSuggestions"
-                    />
+
+
+
 
                 <LinearLayout
-                    android:id="@+id/areaLayoutDopen"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal" >
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg"
+                    android:id="@+id/late_remarkLayout">
 
-                    <utils.font_package.Edit_text_Regular
-                        android:textColor="@color/navigationBarColor"
-                        android:textSize="17sp"
-                        android:id="@+id/area"
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:id="@+id/lay_late_remark"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Late Remark (DCR Back-Date Entry) "
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+
+
+                    <EditText
+                        android:id="@+id/late_remark"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="5dip"
-                        android:layout_marginRight="8dip"
                         android:layout_weight="1"
-                        android:clickable="false"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:hint="Click+ sign for Area"
-                        android:inputType="textMultiLine|textNoSuggestions" >
+                        android:hint="Please Late Remark"
+                        android:textSize="17dp"
+                        android:ems="15"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        />
 
-                        <requestFocus />
-                    </utils.font_package.Edit_text_Regular>
 
-                    <utils.font_package.Button_Bold
-                        android:textColor="@color/textColorPrimary"
-                        android:background="@drawable/button_text_view_selector"
-                        android:id="@+id/get1"
-                        android:layout_width="40dp"
-                        android:layout_height="35dp"
-                        android:layout_marginRight="14dp"
-                        android:onClick="get1"
-                        android:text="+"
-                        android:textSize="20sp" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/late_remark"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="8dip"
-                    android:layout_marginRight="8dip"
-                    android:layout_marginTop="10dip"
-                    android:layout_weight="1"
-                    android:hint="Please Late Remark"
-                    android:ems="15"
-                    android:inputType="textMultiLine|textNoSuggestions"
-                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -433,17 +625,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="5dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         >
 
         <utils.font_package.Button_Bold
             android:id="@+id/save"
             android:layout_width="fill_parent"
             android:layout_weight="2"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:layout_marginRight="8dp"
             android:layout_gravity="center"
             android:text="Submit"
@@ -454,7 +646,7 @@
         <utils.font_package.Button_Bold
             android:id="@+id/back"
             android:layout_width="fill_parent"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:text="Back"
             android:layout_weight="2"
             android:textColor="#fff"

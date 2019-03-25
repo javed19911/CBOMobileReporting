@@ -33,7 +33,7 @@ import utils.adapterutils.ExpandableListAdapter
 import utils.adapterutils.SpinAdapter
 import utils.adapterutils.SpinAdapter_new
 import utils.adapterutils.SpinnerModel
-import utils.clearAppData.MyCustumApplication
+import com.cbo.cbomobilereporting.MyCustumApplication
 import utils.networkUtil.NetworkUtil
 import utils_new.*
 import java.io.File
@@ -1162,9 +1162,10 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
 
             if (doctor_list["remark"]!!.get(0) != "") {
                 var remark = doctor_list["remark"]?.get(0)
-                if (remark!!.contains("\u20B9"))
+                if (remark!!.contains("\u20B9")) {
                     mdairyCall?.setPOBAmt(remark.split("\\n".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[0])
                     remark = remark.split("\\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+                }
 
                 if (remark_list.contains(remark)) {
                     btn_remark.text = remark

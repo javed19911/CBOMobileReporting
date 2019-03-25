@@ -25,29 +25,39 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.MapsActivity;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import services.CboServices;
+import services.MyAPIService;
 import services.ServiceHandler;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
+import utils.model.DropDownModel;
+import utils_new.CustomDatePicker;
+import utils_new.CustomDialog.Spinner_Dialog;
 import utils_new.Custom_Variables_And_Method;
 
 /**
  * Created by Akshit on 11/2/2015.
  */
 public class DivisionWise_Map extends AppCompatActivity {
-    Button bt_ViewMap,bt_Back,bt_divisionName,bt_ManagerName,bt_cal;
+    Button bt_ViewMap,bt_Back,bt_divisionName,bt_ManagerName,edt_Date;
+    ImageView bt_cal;
     String userId_man,userName,userId_div;
     private AlertDialog myalertDialog=null;
 
@@ -60,9 +70,10 @@ public class DivisionWise_Map extends AppCompatActivity {
     public String monthData,DivisionName;
     static final int Dialog_id = 0;
     int ak_year,ak_month,ak_day;
-    EditText edt_Date;
     String ak_DateMMDDYY;
     Context context;
+
+    public static String mIddate;
 
     CBO_DB_Helper cboDbHelper;
     public ProgressDialog progress1;
@@ -91,8 +102,8 @@ public class DivisionWise_Map extends AppCompatActivity {
         bt_ViewMap = (Button) findViewById(R.id.view_map_division);
         bt_divisionName = (Button) findViewById(R.id.bt_division_name);
         bt_ManagerName = (Button) findViewById(R.id.bt_managerName);
-        edt_Date =(EditText) findViewById(R.id.edt_div_wise_map_date);
-        bt_cal =(Button) findViewById(R.id.bt_div_wise_map_calender_btn);
+        edt_Date =(Button) findViewById(R.id.edt_div_wise_map_date);
+        bt_cal =(ImageView) findViewById(R.id.bt_div_wise_map_calender_btn);
         checkSatelite =(CheckBox) findViewById(R.id.check_satelite);
 
 
@@ -100,33 +111,18 @@ public class DivisionWise_Map extends AppCompatActivity {
         cboDbHelper = new CBO_DB_Helper(this);
         progress1 = new ProgressDialog(this);
 
-        edt_Date.setText("--Select Date--");
+
+        edt_Date.setText(CustomDatePicker.currentDate( CustomDatePicker.ShowFormat));
+        mIddate=(CustomDatePicker.currentDate( CustomDatePicker.CommitFormat));
+
+       // edt_Date.setText("--Select Date--");
         bt_divisionName.setText("---Select---");
         bt_ManagerName.setText("---Select---");
         ak_day = ak_cal.get(Calendar.DAY_OF_MONTH);
         ak_month = ak_cal.get(Calendar.MONTH);
         ak_year = ak_cal.get(Calendar.YEAR);
 
-        //Start of call to service
 
-        HashMap<String,String> request=new HashMap<>();
-        request.put("sCompanyFolder",cboDbHelper.getCompanyCode());
-        request.put("sPaId", "" + Custom_Variables_And_Method.PA_ID);
-        request.put("sMonthType","");
-
-        ArrayList<Integer> tables=new ArrayList<>();
-        tables.add(0);
-        tables.add(1);
-        tables.add(2);
-
-        progress1.setMessage("Please Wait..\n" +
-                " Fetching data");
-        progress1.setCancelable(false);
-        progress1.show();
-
-        new CboServices(this,mHandler).customMethodForAllServices(request,"TEAMMONTHDIVISION_MOBILE",MESSAGE_INTERNET,tables);
-
-        //End of call to service
 
         ImageView spinImg1 = (ImageView) findViewById(R.id.spinner_img_dision_map);
         spinImg1.setOnClickListener(new View.OnClickListener() {
@@ -144,19 +140,35 @@ public class DivisionWise_Map extends AppCompatActivity {
             }
         });
 
-        edt_Date.setOnTouchListener(new View.OnTouchListener() {
+
+        edt_Date.setOnClickListener (new View.OnClickListener () {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
+                try {
+                    new CustomDatePicker(context, null,
+                            CustomDatePicker.getDate(edt_Date.getText().toString(), CustomDatePicker.ShowFormat)
+                    ).Show(CustomDatePicker.getDate(edt_Date.getText().toString(),  CustomDatePicker.ShowFormat)
+                            , new CustomDatePicker.ICustomDatePicker() {
+                                @Override
+                                public void onDateSet(Date date) {
+                                    edt_Date.setText(CustomDatePicker.formatDate(date,CustomDatePicker.ShowFormat));
+                                    mIddate=(CustomDatePicker.formatDate(date,CustomDatePicker.CommitFormat));
+                                }
+                            });
 
-              showDialog(Dialog_id);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
-                return false;
             }
+
         });
         bt_cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(Dialog_id);
+
+                edt_Date.performClick ();
+              //  showDialog(Dialog_id);
             }
         });
 
@@ -184,7 +196,7 @@ public class DivisionWise_Map extends AppCompatActivity {
             public void onClick(View v) {
                String name1=bt_divisionName.getText().toString();
                String name2= bt_ManagerName.getText().toString();
-                String date3 = edt_Date.getText().toString();
+               // String date3 = edt_Date.getText().toString();
                 Boolean akCheckMap = checkSatelite.isChecked();
 
 
@@ -196,13 +208,13 @@ public class DivisionWise_Map extends AppCompatActivity {
                 }
 
 
-                if (date3.equalsIgnoreCase("--Select Date--")) {
+                if (mIddate.equalsIgnoreCase("--Select Date--")) {
                     customVariablesAndMethod.msgBox(context,"Please Select Date First");
                 }else {
               Intent map_Activity = new Intent(getApplicationContext(),MapsActivity.class);
                 map_Activity.putExtra("userId_man",userId_man);
                 map_Activity.putExtra("userId_div",userId_div);
-                map_Activity.putExtra("ak_DateMMDDYY",ak_DateMMDDYY);
+                map_Activity.putExtra("ak_DateMMDDYY",mIddate);
                     map_Activity.putExtra("akCheckMap",akCheckMap.toString());
                 startActivity(map_Activity);}
             }
@@ -215,50 +227,72 @@ public class DivisionWise_Map extends AppCompatActivity {
             }
         });
 
+        getTeam();
+
     }
 
 
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_INTERNET:
-                    progress1.dismiss();
-                    if ((null != msg.getData())) {
+    public void getTeam(){
+        //Start of call to service
 
-                        parser_worktype(msg.getData());
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
+        request.put("sPaId", MyCustumApplication.getInstance().getUser().getID());
+        request.put("sMonthType","");
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+        tables.add(1);
+        tables.add(2);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("TEAMMONTHDIVISION_MOBILE",request)
+                        .setTables(tables)
+                        .setDescription("Please Wait..\n" +
+                                "Fetching data")
+                .setResponse(new CBOServices.APIResponse() {
+                    @Override
+                    public void onComplete(Bundle bundle) throws Exception {
+                        if (rptName.size()==1){
+                            userId_man=rptName.get(0).getId();
+                            userName=rptName.get(0).getName();
+                            bt_ManagerName.setText(userName);
+                            bt_ManagerName.setPadding(1,0,5,0);
+                        }
+
+                        if (divisionNameLsit.size()==1){
+                            userId_div=divisionNameLsit.get(0).getId();
+                            userName=divisionNameLsit.get(0).getName();
+                            bt_divisionName.setText(userName);
+                            bt_divisionName.setPadding(1,0,5,0);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(Bundle bundle) throws Exception {
+                        parser_worktype(bundle);
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
 
                     }
-                    break;
-                case 99:
-                    progress1.dismiss();
-                    if ((null != msg.getData())) {
-                        customVariablesAndMethod.msgBox(context,msg.getData().getString("Error"));
-                    }
-                    break;
-                default:
-                    progress1.dismiss();
+                }));
 
-            }
-        }
-    };
+        //End of call to service
+    }
 
-    public void parser_worktype(Bundle result) {
-        if (result!=null ) {
 
-            try {
+
+
+    public void parser_worktype(Bundle result) throws JSONException {
                 String table0 = result.getString("Tables0");
                 JSONArray jsonArray1 = new JSONArray(table0);
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject c = jsonArray1.getJSONObject(i);
                     rptName.add(new SpinnerModel(c.getString("PA_NAME"),c.getString("PA_ID")));
                 }
-                if (rptName.size()==1){
-                    userId_man=rptName.get(0).getId();
-                    userName=rptName.get(0).getName();
-                    bt_ManagerName.setText(userName);
-                    bt_ManagerName.setPadding(1,0,5,0);
-                }
+
 
 
                 String table1 = result.getString("Tables1");
@@ -267,31 +301,17 @@ public class DivisionWise_Map extends AppCompatActivity {
                     JSONObject c = jsonArray3.getJSONObject(i);
                     divisionNameLsit.add(new SpinnerModel(c.getString("PA_NAME"),c.getString("PA_ID")));
                 }
-                if (divisionNameLsit.size()==1){
-                    userId_div=divisionNameLsit.get(0).getId();
-                    userName=divisionNameLsit.get(0).getName();
-                    bt_divisionName.setText(userName);
-                    bt_divisionName.setPadding(1,0,5,0);
-                }
 
 
-                String table2 = result.getString("Tables2");
+
+               /* String table2 = result.getString("Tables2");
                 JSONArray jsonArray2 = new JSONArray(table2);
                 for (int i = 0; i < jsonArray2.length(); i++) {
                     JSONObject c = jsonArray2.getJSONObject(i);
                     monthname.add(new SpinnerModel(c.getString("MONTH_NAME"),c.getString("MONTH")));
-                }
+                }*/
 
-                progress1.dismiss();
-            } catch (JSONException e) {
-                Log.d("MYAPP", "objects are: " + e.toString());
-                CboServices.getAlert(this,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
-                e.printStackTrace();
-            }
 
-        }
-        //Log.d("MYAPP", "objects are1: " + result);
-        progress1.dismiss();
 
     }
 
@@ -339,58 +359,31 @@ public class DivisionWise_Map extends AppCompatActivity {
 
     public void divisionClick(){
 
-        AlertDialog.Builder myDialog = new AlertDialog.Builder(DivisionWise_Map.this);
-        final ListView listview=new ListView(DivisionWise_Map.this);
-        LinearLayout layout = new LinearLayout(DivisionWise_Map.this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.addView(listview);
-        myDialog.setView(layout);
-        SpinAdapter arrayAdapter=new SpinAdapter(DivisionWise_Map.this, R.layout.spin_row,divisionNameLsit);
-        listview.setAdapter(arrayAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+        new Spinner_Dialog (context, divisionNameLsit, new Spinner_Dialog.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                myalertDialog.dismiss();
-                //String strName=TitleName[position];
-
-
-                userId_div=((TextView)view.findViewById(R.id.spin_id)).getText().toString();
-                userName=((TextView)view.findViewById(R.id.spin_name)).getText().toString();
-
+            public void ItemSelected(DropDownModel item) {
+                userId_div = item.getId();
+                userName = item.getName();
                 bt_divisionName.setText(userName);
-                bt_divisionName.setPadding(1,0,5,0);
-
+                bt_divisionName.setPadding(1, 0, 5, 0);
             }
-        });
-        myalertDialog=myDialog.show();
+        }).show();
 
     }
 
     public void managerOnclick(){
-
-   AlertDialog.Builder myDialog = new AlertDialog.Builder(DivisionWise_Map.this);
-        final ListView listview=new ListView(DivisionWise_Map.this);
-        LinearLayout layout = new LinearLayout(DivisionWise_Map.this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.addView(listview);
-        myDialog.setView(layout);
-        SpinAdapter arrayAdapter=new SpinAdapter(DivisionWise_Map.this, R.layout.spin_row,rptName);
-        listview.setAdapter(arrayAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        new Spinner_Dialog (context, rptName, new Spinner_Dialog.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                myalertDialog.dismiss();
-                //String strName=TitleName[position];
-
-
-                userId_man=((TextView)view.findViewById(R.id.spin_id)).getText().toString();
-                userName=((TextView)view.findViewById(R.id.spin_name)).getText().toString();
+            public void ItemSelected(DropDownModel item) {
+                userId_man = item.getId();
+                userName = item.getName();
                 bt_ManagerName.setText(userName);
-                bt_ManagerName.setPadding(1,0,5,0);
-
+                bt_ManagerName.setPadding(1, 0, 5, 0);
             }
-        });
-        myalertDialog=myDialog.show();
+        }).show();
+
 
     }
 }

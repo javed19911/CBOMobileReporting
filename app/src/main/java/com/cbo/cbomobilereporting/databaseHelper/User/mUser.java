@@ -23,7 +23,7 @@ public class mUser {
     private String IMEI;
     private String OS;
     private String battery;
-    private String AppVersion = "20190129";
+    private String AppVersion = "20190319";
     private String time;
     private Location location;
     private Boolean LoggedInAsSupport = false;
@@ -54,7 +54,7 @@ public class mUser {
     }
 
     public String getCompanyCode() {
-        return CompanyCode;
+        return CompanyCode.toUpperCase();
     }
 
     public String getHQ() {

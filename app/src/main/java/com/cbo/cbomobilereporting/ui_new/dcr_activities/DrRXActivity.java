@@ -123,7 +123,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
 
 
         mylist.setItemsCanFocus(true);
-        drNameBt.setText("-- Select --");
+        drNameBt.setText("--Select--");
         no_prescription= (CheckBox) findViewById(R.id.no_prescription);
         date_name_img= (ImageView) findViewById(R.id.date_name_img);
 
@@ -540,6 +540,10 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
     }
 
     private void SaveTask() {
+        if (dr_id.equalsIgnoreCase("-1")){
+            onRxCommit();
+            return;
+        }
 
         HashMap<String, String> request = new HashMap<>();
         request.put("sCompanyFolder", cbohelp.getCompanyCode());
@@ -556,22 +560,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
                             @Override
                             public void onComplete(Bundle message) {
 
-                                String remark="";
-                                if (sbId.toString().equals("-1")){
-                                    remark= no_prescription.getText().toString();
-                                }
-                               if(!tenivia_traker.isEmpty() && tenivia_traker.get("name").contains(doc_name)) {
-                                   cbohelp.Update_tenivia_traker(dr_id, doc_name, sbQty.toString()
-                                           ,  sbamt.toString(), sbQty_caption.toString(), sbId.toString(), sbamt_caption.toString(),  customVariablesAndMethod.currentTime(context), remark);
-
-                               }else{
-                                   cbohelp.Insert_tenivia_traker(dr_id, doc_name, sbQty.toString()
-                                           ,  sbamt.toString(), sbQty_caption.toString(), sbId.toString(), sbamt_caption.toString(),  customVariablesAndMethod.currentTime(context), remark);
-
-                               }
-                                  customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"D_DR_RX_VISITED","Y");
-                                customVariablesAndMethod.msgBox(context,"Successfully Submitted...");
-                                finish();
+                                onRxCommit();
                             }
 
                             @Override
@@ -589,12 +578,32 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
 
     }
 
+    private void onRxCommit(){
+        String remark="";
+        if (sbId.toString().equals("-1")){
+            remark= no_prescription.getText().toString();
+        }
+        if(!tenivia_traker.isEmpty() && tenivia_traker.get("name").contains(doc_name)) {
+            cbohelp.Update_tenivia_traker(dr_id, doc_name, sbQty.toString()
+                    ,  sbamt.toString(), sbQty_caption.toString(), sbId.toString(), sbamt_caption.toString(),  customVariablesAndMethod.currentTime(context), remark);
+
+        }else{
+            cbohelp.Insert_tenivia_traker(dr_id, doc_name, sbQty.toString()
+                    ,  sbamt.toString(), sbQty_caption.toString(), sbId.toString(), sbamt_caption.toString(),  customVariablesAndMethod.currentTime(context), remark);
+
+        }
+        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"D_DR_RX_VISITED","Y");
+        customVariablesAndMethod.msgBox(context,"Successfully Submitted...");
+        finish();
+    }
+
     private void DeleteRx(String dr_id,String dr_name) {
-        String DCR_DATE= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_DATE");
+       // String DCR_DATE= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_DATE");
         HashMap<String, String> request = new HashMap<>();
         request.put("sCompanyFolder", cbohelp.getCompanyCode());
         request.put("iPA_ID", ""+Custom_Variables_And_Method.PA_ID);
-        request.put("DOC_DATE",   DCR_DATE);
+        request.put("DOC_DATE",   customVariablesAndMethod.currentDate());
+        request.put("iDCRID", Custom_Variables_And_Method.DCR_ID); /// not in current app
         request.put("iDR_ID",  ""+dr_id);
         new MyAPIService(context)
                 .execute(new ResponseBuilder("DCRRX_DELETE", request)

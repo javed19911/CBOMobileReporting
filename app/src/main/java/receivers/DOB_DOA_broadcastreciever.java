@@ -1,23 +1,16 @@
 package receivers;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Mail;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;
-import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Update_Avilable;
-
-import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Created by pc24 on 22/09/2016.

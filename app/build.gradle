@@ -7,8 +7,8 @@ android {
         applicationId "com.cbo.cbomobilereporting"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 303
-        versionName "3.03"
+        versionCode 311
+        versionName "3.11"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        jackOptions {
@@ -45,9 +45,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/ftp4j-1.7.2.jar')
-    /*implementation files('libs/activation.jar')
-    implementation files('libs/mail.jar')
-    implementation files('libs/additionnal.jar')*/
+//    implementation files('libs/activation.jar')
+//    implementation files('libs/mail.jar')
+//    implementation files('libs/additionnal.jar')
     implementation files('libs/jtds-1.2.7.jar')
     implementation files('libs/okio-1.8.0.jar')
     implementation files('libs/okhttp-2.5.0.jar')
@@ -60,6 +60,8 @@ dependencies {
     //to check the version
     implementation project(path: ':ShortcutBadger')
     implementation project(path: ':CBOLibrary')
+    implementation project(path: ':cboorder')
+    implementation project(path: ':dbhelper')
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
 
     implementation 'com.google.android.gms:play-services-location:11.8.0'
@@ -78,6 +80,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.android.support:customtabs:28.0.0'
+    implementation 'com.sun.mail:android-mail:1.6.0'
+    implementation 'com.sun.mail:android-activation:1.6.0'
 }
 
 

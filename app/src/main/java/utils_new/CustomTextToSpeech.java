@@ -13,7 +13,7 @@ import android.util.Log;
 import java.util.Calendar;
 import java.util.Locale;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 import static android.content.Context.POWER_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -53,7 +53,7 @@ public class CustomTextToSpeech extends BroadcastReceiver  {
             calSet.set(Calendar.MINUTE, miniute);
         }else {
             calSet.set(Calendar.HOUR_OF_DAY, calNow.getTime().getHours());
-            calSet.set(Calendar.MINUTE, calNow.getTime().getMinutes() + 10);
+            calSet.set(Calendar.MINUTE, calNow.getTime().getMinutes() + 1);
         }
 
         calSet.set(Calendar.SECOND, 0);
@@ -61,7 +61,7 @@ public class CustomTextToSpeech extends BroadcastReceiver  {
 
         if (calSet.compareTo(calNow) <= 0) {
             // Today Set time passed, count to tomorrow
-            calSet.add(Calendar.DATE, 1);
+            calSet.add(Calendar.DATE, 10);
         }
 
         setAlarm(calSet);

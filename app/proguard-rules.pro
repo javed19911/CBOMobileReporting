@@ -15,3 +15,5 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+#-keep class com.sun.mail.handlers.**
+#-dontwarn com.sun.mail.handlers.handler_base

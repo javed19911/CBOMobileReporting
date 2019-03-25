@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 /**
  * Created by Akshit on 11/28/2015.

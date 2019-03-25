@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 
-import utils.clearAppData.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 public class SystemAlertActivity extends AppCompatActivity {
@@ -34,6 +33,8 @@ public class SystemAlertActivity extends AppCompatActivity {
         title.setText(getIntent().getStringExtra("title"));
         message.setText(getIntent().getStringExtra("message"));
         Pa_id.setText(""+Custom_Variables_And_Method.PA_ID);
+
+
 
         //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ShowSystemAlert","N");
 

@@ -9,9 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.VM_MissedGrid_Mobile;
-import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.mMissedGrid;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,9 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import services.CboServices;
-import utils.clearAppData.MyCustumApplication;
-import utils_new.AppAlert;
-import utils_new.CustomError;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+
 import utils_new.Custom_Variables_And_Method;
 
 /**

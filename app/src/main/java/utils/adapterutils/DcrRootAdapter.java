@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -25,11 +26,13 @@ public class DcrRootAdapter extends ArrayAdapter<RootModel>{
 	RootModel model;
 	public String name="";
 	public String id;
+	private Boolean allowMultipleRoute = false;
 	
-	public DcrRootAdapter(Context context,List<RootModel> list2){
+	public DcrRootAdapter(Context context,List<RootModel> list2,Boolean allowMultipleRoute){
 		super(context, R.layout.dcr_root_row,list2);
 		this.context=context;
 		this.list=list2;
+		//this.allowMultipleRoute = allowMultipleRoute;
 		
 	}
 	
@@ -56,11 +59,31 @@ public class DcrRootAdapter extends ArrayAdapter<RootModel>{
 		 holder.tvname.setText(model.getRootName());
 		 holder.tvId.setText(model.getRootId());
 		 holder.rdbtn = (RadioButton)v.findViewById(R.id.rootselector);
-		 holder.rdbtn.setChecked(position == selectedPosition);
-		 //holder.rdbtn.setTag(position);
+		if (!allowMultipleRoute) {
+			holder.rdbtn.setChecked(position == selectedPosition);
+		}else{
+			holder.rdbtn.setChecked(model.isSelected);
+		}
+
+		 holder.rdbtn.setTag(position);
+
+		/*holder.rdbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				int position = (int) buttonView.getTag();
+				if (!allowMultipleRoute){
+					selectedPosition=position;
+					notifyDataSetChanged();
+				}else {
+					getItem(position).setSelected(isChecked);
+				}
+			}
+		});*/
+
 		 holder.rdbtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
+				 int position = (int) view.getTag();
             	 //holder.rdbtn.setEnabled(false);
                 // selectedPosition = (Integer)view.getTag();
             	 selectedPosition=position;

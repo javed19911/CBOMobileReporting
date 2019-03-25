@@ -3,7 +3,6 @@ package utils.adapterutils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import com.cbo.cbomobilereporting.ui_new.mail_activities.Notification;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 /**

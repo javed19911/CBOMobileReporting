@@ -14,7 +14,6 @@ import android.widget.GridView;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
-import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.Personal_info_Adapter;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 

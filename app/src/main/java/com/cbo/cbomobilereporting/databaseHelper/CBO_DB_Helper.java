@@ -29,7 +29,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 39;
+    private static final int DATABASE_VERSION = 41;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -143,7 +143,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_DOCTOR_SAMPLE = "CREATE TABLE " + DOCTOR_ITEM_TABLE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text, updated text, noc  text DEFAULT '0')";
         String CREATE_DR_RX_TABLE = "CREATE TABLE " + DR_RX_TABLE + "(id integer primary key, dr_id text,item_id text)";
         String CREATE_DOCTOR_PRESCRIBE = "CREATE TABLE " + Dr_PRESCRIBE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text)";
-        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer)";
+        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer,GENERIC_NAME text)";
         String PH_DOCTOR_IETM = "CREATE TABLE " + PH_DOCTOR_ITEM_TABLE + "( id integer primary key,dr_id integer,item_id integer,item_name text)";
 
         String ALLMST = "CREATE TABLE phallmst ( id integer primary key,allmst_id integer,table_name text,field_name text,remark text )";
@@ -187,7 +187,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_TABLE_NonListed_call = "CREATE TABLE " + NonListed_call + "(id Integer PRIMARY KEY AUTOINCREMENT,sDocType text,sDrName text,sAdd1 text,sMobileNo text,sRemark text,iSplId text,iSpl text,iQflId text,iQfl text,iSrno text,loc text,time text,CLASS text,POTENCY_AMT text,AREA text)";
         String MASTER_DOCTOR = "CREATE TABLE phdoctor ( id integer primary key,dr_id integer,dr_name text,dr_code text,area text,spl_id integer,LAST_VISIT_DATE text" +
                 ",CLASS text,PANE_TYPE text,POTENCY_AMT text,ITEM_NAME text,ITEM_POB text,ITEM_SALE text,DR_AREA text,DR_LAT_LONG text,FREQ text,NO_VISITED text" +
-                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text,RXGENYN text)";
+                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text,RXGENYN text,APP_PENDING_YN text)";
         String DOCTOR_IN_LOCAL = "CREATE TABLE phdcrdr_more ( id integer primary key,dr_id text,dr_name text,ww1 text,ww2 text,ww3 text,loc text,time text)";
 
         String CREATE_TABLE_LAT_LON_TEN = "CREATE TABLE " + latLong10Minute + "(id Integer PRIMARY KEY AUTOINCREMENT,lat text,lon text,time text,km text,updated text ,LOC_EXTRA text)";
@@ -501,6 +501,10 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE "+"ftpdetail"+" ADD COLUMN port_download text DEFAULT '21'");
             case 38:
                 db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN RXGENYN text DEFAULT '0'");
+            case 39:
+                db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN APP_PENDING_YN text DEFAULT '0'");
+            case 40:
+                db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN GENERIC_NAME text DEFAULT '0'");
 
 
         }
@@ -508,96 +512,140 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public void insertdata(String mycode, String uname, String pw, String pin) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("code", mycode);
-        cv.put("username", uname);
-        cv.put("password", pw);
-        cv.put("pin", pin);
-        sd.insert(LOGIN_TABLE, null, cv);
+
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("code", mycode);
+            cv.put("username", uname);
+            cv.put("password", pw);
+            cv.put("pin", pin);
+            sd.insert(LOGIN_TABLE, null, cv);
+        }finally {
+            sd.close();
+        }
+
     }
 
     public String getCompanyCode() {
-       sd = this.getWritableDatabase();
+        Cursor c = null;
         String code = "";
-        Cursor c = sd.rawQuery("select code from cbo_login", null);
-        if (c.moveToFirst()) {
-            do {
-                code = c.getString(c.getColumnIndex("code"));
-            } while (c.moveToNext());
+        try {
+            sd = this.getWritableDatabase();
+
+            c = sd.rawQuery("select code from cbo_login", null);
+            if (c.moveToFirst()) {
+                do {
+                    code = c.getString(c.getColumnIndex("code"));
+                } while (c.moveToNext());
+            }
+
+        }finally {
+            c.close();
+            sd.close();
         }
-        c.close();
         return code;
     }
 
     public String getUserName() {
-        sd = this.getWritableDatabase();
+        Cursor c = null;
         String username = "";
-        Cursor c = sd.rawQuery("select username from cbo_login", null);
-        if (c.moveToFirst()) {
-            do {
-                username = c.getString(c.getColumnIndex("username"));
-            } while (c.moveToNext());
+        try {
+            sd = this.getWritableDatabase();
+            c = sd.rawQuery("select username from cbo_login", null);
+            if (c.moveToFirst()) {
+                do {
+                    username = c.getString(c.getColumnIndex("username"));
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
         }
-        c.close();
         return username;
     }
 
     public String getPin() {
         sd = this.getWritableDatabase();
         String mypin = "";
-
-        Cursor c = sd.query(LOGIN_TABLE, null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            do {
-                mypin = c.getString(c.getColumnIndex("pin"));
-            } while (c.moveToNext());
+        Cursor c = null;
+        try {
+            c = sd.query(LOGIN_TABLE, null, null, null, null, null, null);
+            if (c.moveToFirst()) {
+                do {
+                    mypin = c.getString(c.getColumnIndex("pin"));
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
         }
-        c.close();
         return mypin;
     }
 
     public void deleteLogin() {
-        sd = this.getWritableDatabase();
-        sd.delete(LOGIN_TABLE, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(LOGIN_TABLE, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public Cursor getLoginDetail() {
-        sd = this.getWritableDatabase();
-        return sd.query(LOGIN_TABLE, null, null, null, null, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.query(LOGIN_TABLE, null, null, null, null, null, null);
+        }finally {
+           // sd.close();
+        }
     }
 
     //===========================================================Login Finish====================================================================================
     public long insertDoctorInLocal(String dr_id, String dr_name, String ww1, String ww2, String ww3, String loc, String time, String LOC_EXTRA) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", dr_id);
-        cv.put("dr_name", dr_name);
-        cv.put("work_with1", ww1);
-        cv.put("work_with2", ww2);
-        cv.put("work_with3", ww3);
-        cv.put("location", loc);
-        cv.put("time", time);
-        cv.put("LOC_EXTRA", LOC_EXTRA);
-        long l= sd.insert("phdcrdr", null, cv);
+        long l = 0;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", dr_id);
+            cv.put("dr_name", dr_name);
+            cv.put("work_with1", ww1);
+            cv.put("work_with2", ww2);
+            cv.put("work_with3", ww3);
+            cv.put("location", loc);
+            cv.put("time", time);
+            cv.put("LOC_EXTRA", LOC_EXTRA);
+            l= sd.insert("phdcrdr", null, cv);
+        }finally {
+            sd.close();
+        }
+
 
         return l;
     }
 
 
     public void updateDr_Location(String loc, String drId) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("location", loc);
-        long result = sd.update("phdcrdr", cv, "dr_id =" + drId, null);
+
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("location", loc);
+            long result = sd.update("phdcrdr", cv, "dr_id =" + drId, null);
+        }finally {
+            sd.close();
+        }
 
     }
     public void updateDr_LocExtra(String LOC_EXTRA, String drId) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("LOC_EXTRA", LOC_EXTRA);
-        long result = sd.update("phdcrdr", cv, "dr_id =" + drId, null);
-
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("LOC_EXTRA", LOC_EXTRA);
+            long result = sd.update("phdcrdr", cv, "dr_id =" + drId, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public String getDoctorLocationFromSqlite(String drid) {
@@ -612,6 +660,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return drname;
     }
@@ -629,6 +678,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return drname;
     }
@@ -649,6 +699,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return drname;
     }
@@ -669,6 +720,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
         } finally {
             c.close();
+           sd.close();
         }
         return drname;
     }
@@ -689,6 +741,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+             sd.close();
         }
         return drname;
     }
@@ -705,6 +758,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return drname;
     }
@@ -725,6 +779,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return doclist;
     }
@@ -736,6 +791,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public Cursor getDoctorName(String RXGENYN) {
         SQLiteDatabase sd = this.getWritableDatabase();
+
         //return sd.query("phdcrdr", null, null, null, null, null, null);
         String extraQry = "";
         if (!RXGENYN.equalsIgnoreCase("0")){
@@ -749,21 +805,29 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public void deleteDoctor() {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcrdr", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrdr", null, null);
+        }finally {
+                sd.close();
+        }
     }
     ///////////////////////DR_RX_TABLE ////////////////////////
 
 //		String CREATE_DR_RX_TABLE ="CREATE TABLE "+DR_RX_TABLE +"(id integer primary key, dr_id text,item_id text)";
 
     public void insert_drRx_Data(String drid, String item) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", drid);
-        cv.put("item_id", item);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", drid);
+            cv.put("item_id", item);
 
 
-        long result = sd.insert(DR_RX_TABLE, null, cv);
+            long result = sd.insert(DR_RX_TABLE, null, cv);
+        }finally {
+            sd.close();
+        }
     }
 
     public ArrayList<String> getDr_Rx_id(String updated) {
@@ -788,6 +852,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dr_id;
     }
@@ -809,26 +874,33 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return item_id;
     }
 
 
     public void updateDr_Rx_Data(String dr_id, String item_id) {
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", dr_id);
+            cv.put("item_id", item_id);
+            sd = this.getWritableDatabase();
 
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", dr_id);
-        cv.put("item_id", item_id);
-       sd = this.getWritableDatabase();
-
-        long result = sd.update(DR_RX_TABLE, cv, "dr_id =" + dr_id, null);
+            long result = sd.update(DR_RX_TABLE, cv, "dr_id =" + dr_id, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void delete_Rx_Table() {
-
-        sd = this.getWritableDatabase();
-        long result = sd.delete(DR_RX_TABLE, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            long result = sd.delete(DR_RX_TABLE, null, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -837,88 +909,114 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public void insertdata(String drid, String item, String item_name, String qty, String pob, String stk_rate, String visual, String noc) {
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", drid);
-        cv.put("item_id", item);
-        cv.put("item_name", item_name);
-        cv.put("qty", qty);
-        cv.put("pob", pob);
-        cv.put("stk_rate", stk_rate);
-        cv.put("visual", visual);
-        cv.put("noc", noc);
-        cv.put("updated", "0");
-        sd = this.getWritableDatabase();
-        sd.insert(DOCTOR_ITEM_TABLE, null, cv);
 
-        delete_DCR_Item(drid,item,stk_rate.equals("")?"SAMPLE" : "GIFT","DR");
-        insert_DCR_Item(drid,item,qty,stk_rate.equals("")?"SAMPLE" : "GIFT","DR");
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", drid);
+            cv.put("item_id", item);
+            cv.put("item_name", item_name);
+            cv.put("qty", qty);
+            cv.put("pob", pob);
+            cv.put("stk_rate", stk_rate);
+            cv.put("visual", visual);
+            cv.put("noc", noc);
+            cv.put("updated", "0");
+            sd = this.getWritableDatabase();
+            sd.insert(DOCTOR_ITEM_TABLE, null, cv);
+
+            delete_DCR_Item(drid,item,stk_rate.equals("")?"SAMPLE" : "GIFT","DR");
+            insert_DCR_Item(drid,item,qty,stk_rate.equals("")?"SAMPLE" : "GIFT","DR");
+        }finally {
+            sd.close();
+        }
+
+
 
     }
 
     public void updateDr_item( String id) {
 
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("updated", "1");
-        int result = sd.update(DOCTOR_ITEM_TABLE, cv, "dr_id =" + id, null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("updated", "1");
+            int result = sd.update(DOCTOR_ITEM_TABLE, cv, "dr_id =" + id, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public void deletedata(String drid,String Rate) {
 
         sd = this.getWritableDatabase();
-
-        if(Rate.equals("")) {
-            //query = "DELETE FROM  " + DOCTOR_ITEM_TABLE +" WHERE dr_id='" + drid + "'" ;
-            sd.delete(DOCTOR_ITEM_TABLE, "dr_id='" + drid + "' and stk_rate!='x'", null);
-            delete_DCR_Item(drid,null,"SAMPLE","DR");
-        }else{
-            String query = "DELETE FROM  " + DOCTOR_ITEM_TABLE +" WHERE dr_id='" + drid + "' and stk_rate='x'" ;
-            sd.rawQuery(query, null);
-            delete_DCR_Item(drid,null,"GIFT","DR");
+        try {
+            if(Rate.equals("")) {
+                //query = "DELETE FROM  " + DOCTOR_ITEM_TABLE +" WHERE dr_id='" + drid + "'" ;
+                sd.delete(DOCTOR_ITEM_TABLE, "dr_id='" + drid + "' and stk_rate!='x'", null);
+                delete_DCR_Item(drid,null,"SAMPLE","DR");
+            }else{
+               /* String query = "DELETE FROM  " + DOCTOR_ITEM_TABLE +" WHERE dr_id='" + drid + "' and stk_rate='x'" ;
+                sd.rawQuery(query, null);*/
+                sd.delete(DOCTOR_ITEM_TABLE, "dr_id='" + drid + "' and stk_rate ='x'", null);
+                delete_DCR_Item(drid,null,"GIFT","DR");
+            }
+        }finally {
+            sd.close();
         }
-
     }
 
 /////////////////////////// DOCOTR_pRESCRIBE_TABLE;//////////////
 
     public void insertdataPrescribe(String drid, String item, String item_name, String qty, String pob, String stk_rate, String visual) {
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", drid);
-        cv.put("item_id", item);
-        cv.put("item_name", item_name);
-        cv.put("qty", qty);
-        cv.put("pob", pob);
-        cv.put("stk_rate", stk_rate);
-        cv.put("visual", visual);
-        sd = this.getWritableDatabase();
-        sd.insert(Dr_PRESCRIBE, null, cv);
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", drid);
+            cv.put("item_id", item);
+            cv.put("item_name", item_name);
+            cv.put("qty", qty);
+            cv.put("pob", pob);
+            cv.put("stk_rate", stk_rate);
+            cv.put("visual", visual);
+            sd = this.getWritableDatabase();
+            sd.insert(Dr_PRESCRIBE, null, cv);
+        }finally {
+            sd.close();
+        }
     }
 
 
     public void insertVisuals(String drid, String item, String item_name, String qty, String pob, String stk_rate, String visual) {
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", drid);
-        cv.put("item_id", item);
-        cv.put("item_name", item_name);
-        cv.put("qty", qty);
-        cv.put("pob", pob);
-        cv.put("stk_rate", stk_rate);
-        cv.put("visual", visual);
-        sd = this.getWritableDatabase();
-        sd.insert(DOCTOR_ITEM_TABLE, null, cv);
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", drid);
+            cv.put("item_id", item);
+            cv.put("item_name", item_name);
+            cv.put("qty", qty);
+            cv.put("pob", pob);
+            cv.put("stk_rate", stk_rate);
+            cv.put("visual", visual);
+            sd = this.getWritableDatabase();
+            sd.insert(DOCTOR_ITEM_TABLE, null, cv);
+        }finally {
+            sd.close();
+        }
     }
 
     public void updateVisuals(String drid, String item, String item_name, String qty, String pob, String stk_rate, String visual) {
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", drid);
-        cv.put("item_id", item);
-        cv.put("item_name", item_name);
-        cv.put("qty", qty);
-        cv.put("pob", pob);
-        cv.put("stk_rate", stk_rate);
-        cv.put("visual", visual);
-        sd = this.getWritableDatabase();
-        sd.update(DOCTOR_ITEM_TABLE, cv, "item_id='" + item + "'", null);
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", drid);
+            cv.put("item_id", item);
+            cv.put("item_name", item_name);
+            cv.put("qty", qty);
+            cv.put("pob", pob);
+            cv.put("stk_rate", stk_rate);
+            cv.put("visual", visual);
+            sd = this.getWritableDatabase();
+            sd.update(DOCTOR_ITEM_TABLE, cv, "item_id='" + item + "'", null);
+        }finally {
+            sd.close();
+        }
     }
 
     public ArrayList<String> getDoctorList() {
@@ -933,6 +1031,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
 
         return doclist;
@@ -950,6 +1049,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
 
         return doclist;
@@ -967,22 +1067,31 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
 
         return doclist;
     }
 
     public void deleteDoctorItem() {
-        sd = this.getWritableDatabase();
-        sd.delete(DOCTOR_ITEM_TABLE, null, null);
-        Log.e("deleted", "deleted");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(DOCTOR_ITEM_TABLE, null, null);
+            Log.e("deleted", "deleted");
+        } finally {
+            sd.close();
+        }
     }
 
     ///////////////Delete DrItem _prescribe////////////
     public void deleteDoctorItemPrescribe() {
-        sd = this.getWritableDatabase();
-        sd.delete(Dr_PRESCRIBE, null, null);
-        Log.e("deleted Prescribe item", "deleted");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Dr_PRESCRIBE, null, null);
+            Log.e("deleted Prescribe item", "deleted");
+        } finally {
+            sd.close();
+        }
     }
 
     public ArrayList<String> getDocItem(String mdrid) {
@@ -1012,6 +1121,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         } catch (Exception e) {
         } finally {
             c.close();
+            sd.close();
         }
         if (sb.toString().equals("")) {
             sb.append("0");
@@ -1062,6 +1172,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
 
         preScribeItem.add(sb_sItem.toString());
@@ -1078,40 +1189,71 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     //=============================================================Doctor Products=======================================================================================
-    public long insertProducts(String id, String name, double stk_rate, String gift,String SHOW_ON_TOP,String SHOW_YN,int SPL_ID) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("item_id", id);
-        cv.put("item_name", name);
-        cv.put("stk_rate", stk_rate);
-        cv.put("gift_type", gift);
-        cv.put("SHOW_ON_TOP", SHOW_ON_TOP);
-        cv.put("SHOW_YN", SHOW_YN);
-        cv.put("SPL_ID", SPL_ID);
-        Long l=sd.insert(DOCTOR_PRODUCTS_TABLE, null, cv);
+    public long insertProducts(String id, String name, double stk_rate, String gift,
+                               String SHOW_ON_TOP,String SHOW_YN,int SPL_ID,String GENERIC_NAME) {
+
+        Long l = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("item_id", id);
+            cv.put("item_name", name);
+            cv.put("stk_rate", stk_rate);
+            cv.put("gift_type", gift);
+            cv.put("SHOW_ON_TOP", SHOW_ON_TOP);
+            cv.put("SHOW_YN", SHOW_YN);
+            cv.put("SPL_ID", SPL_ID);
+            cv.put("GENERIC_NAME", GENERIC_NAME);
+            l=sd.insert(DOCTOR_PRODUCTS_TABLE, null, cv);
+
+        } finally {
+            sd.close();
+        }
         return l;
     }
 
     public Cursor getAllVisualAdd(String itemidnotin,String SHOW_ON_TOP) {
-        sd = this.getWritableDatabase();
+        try {
+            sd = this.getWritableDatabase();
 
-        return sd.rawQuery("select item_id, item_name,stk_rate from phitem where (gift_type='ORIGINAL' or  gift_type='OTHER') and SHOW_YN = '1' and SHOW_ON_TOP='"+SHOW_ON_TOP+"' and item_id not in(" + itemidnotin + ")", null);
+            return sd.rawQuery("select item_id, item_name,stk_rate from phitem where (gift_type='ORIGINAL' or  gift_type='OTHER') and SHOW_YN = '1' and SHOW_ON_TOP='"+SHOW_ON_TOP+"' and item_id not in(" + itemidnotin + ")", null);
+        } finally {
+            //sd.close();
+        }
     }
 
-    public Cursor getAllProducts(String itemidnotin) {
+    public Cursor getAllLeadProducts(String itemidnotin) {
         sd = this.getWritableDatabase();
-        return sd.rawQuery(" Select  T.item_id, item_name,ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
-               " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
+        return sd.rawQuery(" Select  T.item_id, ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID,T.GENERIC_NAME as item_name from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID,GENERIC_NAME from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
+               " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID,phitem.GENERIC_NAME from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
                 "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
-                "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"'", null);
+                "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' "+
+                "where T.GENERIC_NAME != '' ", null);
         // phitem.SHOW_YN = '1' and
         //return sd.rawQuery("select item_id, item_name,'0' as stk_rate, '0' as sn from phdoctoritem where dr_id='"+itemidnotin+"'", null);
     }
 
+    public Cursor getAllProducts(String itemidnotin) {
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery(" Select  T.item_id, item_name,ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
+                    " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
+                    "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
+                    "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"'", null);
+            // phitem.SHOW_YN = '1' and
+            //return sd.rawQuery("select item_id, item_name,'0' as stk_rate, '0' as sn from phdoctoritem where dr_id='"+itemidnotin+"'", null);
+        } finally {
+           // sd.close();
+        }
+    }
 
     public Cursor getDoctorSpecialityCodeByDrId(String dr_id) {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select phallmst.remark  from phdoctor inner join phallmst on phdoctor.spl_id = phallmst.allmst_id where phdoctor.dr_id=" + dr_id, null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select phallmst.remark  from phdoctor inner join phallmst on phdoctor.spl_id = phallmst.allmst_id where phdoctor.dr_id=" + dr_id, null);
+        } finally {
+           // sd.close();
+        }
     }
 
     public Cursor getDoctorSpecialityIdByDrId(String dr_id) {
@@ -1120,63 +1262,112 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     public void giftDelete() {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcritem", "dr_id=" + Custom_Variables_And_Method.DR_ID + " and item_id in(select item_id from phitem where gift_type='GIFT')", null);
-        delete_DCR_Item(""+Custom_Variables_And_Method.DR_ID,null,"GIFT","DR");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcritem", "dr_id=" + Custom_Variables_And_Method.DR_ID + " and item_id in(select item_id from phitem where gift_type='GIFT')", null);
+            delete_DCR_Item(""+Custom_Variables_And_Method.DR_ID,null,"GIFT","DR");
+        } finally {
+            sd.close();
+        }
+
     }
 
     public Cursor getAllGifts(String ItemIdNotIn) {
-        sd = this.getWritableDatabase();
-        //return sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='GIFT' ", null);
-        return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE,phitem.SPL_ID from phitem"
-                + " left join VSTOCK on VSTOCK.ITEM_ID = phitem.item_id"
-                + " where gift_type='GIFT' ", null);
+        try {
+            sd = this.getWritableDatabase();
+            //return sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='GIFT' ", null);
+            return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE,phitem.SPL_ID from phitem"
+                    + " left join VSTOCK on VSTOCK.ITEM_ID = phitem.item_id"
+                    + " where gift_type='GIFT' ", null);
+        } finally {
+           // sd.close();
+        }
     }
 
 
     public void delete_phitem() {
-        sd = this.getWritableDatabase();
-        sd.delete("phitem", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phitem", null, null);
+        } finally {
+            sd.close();
+        }
     }
 
     public void delete_phdoctoritem() {
-        sd = this.getWritableDatabase();
-        sd.delete("phdoctoritem", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdoctoritem", null, null);
+        } finally {
+            sd.close();
+        }
     }
 
-    public void delete_phdoctor() {
-        sd = this.getWritableDatabase();
-        sd.delete("phdoctor", null, null);
+    public void delete_phdoctor(Boolean DoNotDeleteCalledDrs) {
+        try {
+            sd = this.getWritableDatabase();
+
+            if (DoNotDeleteCalledDrs){
+                String Query = "DELETE FROM  phdoctor where not EXISTS(Select 1 FROM tempdr WHERE phdoctor.DR_ID=tempdr.DR_ID)";
+                sd.execSQL(Query);
+
+            }else {
+                sd.delete("phdoctor", null, null);
+            }
+        } finally {
+            sd.close();
+        }
     }
 
     public void delete_phallmst() {
-        sd = this.getWritableDatabase();
-        sd.delete("phallmst", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phallmst", null, null);
+        } finally {
+            sd.close();
+        }
     }
 
     public void delete_phparty() {
-        sd = this.getWritableDatabase();
-        sd.delete("phparty", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phparty", null, null);
+        } finally {
+            sd.close();
+        }
     }
 
     public void delete_phrelation() {
-        sd = this.getWritableDatabase();
-        sd.delete("phrelation", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phrelation", null, null);
+        } finally {
+            sd.close();
+        }
     }
 
 
     public Cursor getSelectedFromDr(String dr_id) {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select item_name,item_id from phdoctoritem where dr_id=" + dr_id + "", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select item_name,item_id from phdoctoritem where dr_id=" + dr_id + "", null);
+        } finally {
+            //sd.close();
+        }
     }
 
     public long insertDoctorData(int dr_id, int item_id, String item_name) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", dr_id);
-        cv.put("item_id", item_id);
-        cv.put("item_name", item_name);
-        long l= sd.insert("phdoctoritem", null, cv);
+        long l = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", dr_id);
+            cv.put("item_id", item_id);
+            cv.put("item_name", item_name);
+             l= sd.insert("phdoctoritem", null, cv);
+        } finally {
+            sd.close();
+        }
         return l;
     }
 
@@ -1186,102 +1377,153 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             , String CLASS, String PANE_TYPE, String POTENCY_AMT,String ITEM_NAME
             , String ITEM_POB, String ITEM_SALE, String DR_AREA, String DR_LAT_LONG, String FREQ, String NO_VISITED
             ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN,int MAX_REG,
-                                String RXGENYN) {
+                                String RXGENYN,String APP_PENDING_YN) {
 
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", dr_id);
-        cv.put("dr_name", dr_name);
-        cv.put("dr_code", dr_code);
-        cv.put("area", area);
-        cv.put("spl_id", spl_id);
-        cv.put("LAST_VISIT_DATE", LAST_VISIT_DATE);
+        long l = 0l;
+        Cursor c = null;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", dr_id);
+            cv.put("dr_name", dr_name);
+            cv.put("dr_code", dr_code);
+            cv.put("area", area);
+            cv.put("spl_id", spl_id);
+            cv.put("LAST_VISIT_DATE", LAST_VISIT_DATE);
 
-         cv.put("CLASS", CLASS);
-        cv.put("PANE_TYPE", PANE_TYPE);
-        cv.put("POTENCY_AMT", POTENCY_AMT);
-        cv.put("ITEM_NAME", ITEM_NAME);
-        cv.put("ITEM_POB", ITEM_POB);
-        cv.put("ITEM_SALE", ITEM_SALE);
+             cv.put("CLASS", CLASS);
+            cv.put("PANE_TYPE", PANE_TYPE);
+            cv.put("POTENCY_AMT", POTENCY_AMT);
+            cv.put("ITEM_NAME", ITEM_NAME);
+            cv.put("ITEM_POB", ITEM_POB);
+            cv.put("ITEM_SALE", ITEM_SALE);
 
-        cv.put("DR_AREA", DR_AREA);
-        cv.put("DR_LAT_LONG", DR_LAT_LONG);
+            cv.put("DR_AREA", DR_AREA);
+            cv.put("DR_LAT_LONG", DR_LAT_LONG);
 
-        cv.put("FREQ", FREQ);
-        cv.put("NO_VISITED", NO_VISITED);
+            cv.put("FREQ", FREQ);
+            cv.put("NO_VISITED", NO_VISITED);
 
-        cv.put("DR_LAT_LONG2", MAX_REG >1? DR_LAT_LONG2:DR_LAT_LONG);
-        cv.put("DR_LAT_LONG3", MAX_REG >2? DR_LAT_LONG3:DR_LAT_LONG);
-        cv.put("COLORYN", COLORYN);
+            cv.put("DR_LAT_LONG2", MAX_REG >1? DR_LAT_LONG2:DR_LAT_LONG);
+            cv.put("DR_LAT_LONG3", MAX_REG >2? DR_LAT_LONG3:DR_LAT_LONG);
+            cv.put("COLORYN", COLORYN);
 
-        cv.put("CRM_COUNT", CRM_COUNT);
-        cv.put("DRCAPM_GROUP", DRCAPM_GROUP);
-        cv.put("SHOWYN", SHOWYN);
+            cv.put("CRM_COUNT", CRM_COUNT);
+            cv.put("DRCAPM_GROUP", DRCAPM_GROUP);
+            cv.put("SHOWYN", SHOWYN);
 
-        cv.put("RXGENYN", RXGENYN);
-
-        long l=sd.insert("phdoctor", null, cv);
+            cv.put("RXGENYN", RXGENYN);
+            cv.put("APP_PENDING_YN", APP_PENDING_YN);
+            c = sd.rawQuery("Select * from phdoctor where dr_id='"+dr_id+"'",null);
+            if (c.moveToFirst()) {
+                l=sd.update("phdoctor",  cv,"dr_id='"+dr_id+"'",null);
+            } else {
+                l=sd.insert("phdoctor", null, cv);
+            }
+            //l=sd.insert("phdoctor", null, cv);
+        } finally {
+            c.close();
+            sd.close();
+        }
         return l;
     }
 
+    public void doctorApproved(String APP_PENDING_YN) {
+        try {
+            // APP_PENDING_YN 0- approved
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("APP_PENDING_YN", APP_PENDING_YN);
+            long l=sd.update("phdoctor",  cv,"",null);
+        } finally {
+            sd.close();
+        }
+    }
+
     public Cursor getDoctorListLocal() {
-        sd = this.getWritableDatabase();
-        //Cursor c=sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_code,phdoctor.dr_name  from phdoctor left outer join phallmst on phdoctor.spl_id = phallmst.id where phdoctor.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phdoctor.dr_name", null);
-        return sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_name,phdoctor.LAST_VISIT_DATE," +
-                "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
-                "phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ," +
-                " phdoctor.NO_VISITED,phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN," +
-                "phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP,phdoctor.SHOWYN,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
-                " CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  from phdoctor " +
-                "LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID where SHOWYN = '1' " +
-                "order by PANE_TYPE1 DESC", null);
+        try {
+            sd = this.getWritableDatabase();
+            //Cursor c=sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_code,phdoctor.dr_name  from phdoctor left outer join phallmst on phdoctor.spl_id = phallmst.id where phdoctor.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phdoctor.dr_name", null);
+            return sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_name,phdoctor.LAST_VISIT_DATE," +
+                    "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
+                    "phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ," +
+                    " phdoctor.NO_VISITED,phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN," +
+                    "phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP,phdoctor.SHOWYN,phdoctor.APP_PENDING_YN," +
+                    "cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
+                    " CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  from phdoctor " +
+                    "LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID where SHOWYN = '1' " +
+                    "order by PANE_TYPE1 DESC", null);
+        } finally {
+            //sd.close();
+        }
     }
 
     public Cursor getRcDoctorListLocal() {
-        sd = this.getWritableDatabase();
-        //Cursor c=sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_code,phdoctor.dr_name  from phdoctor left outer join phallmst on phdoctor.spl_id = phallmst.id where phdoctor.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phdoctor.dr_name", null);
-        return sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_name,phdoctor.LAST_VISIT_DATE," +
-                "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE" +
-                ",phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ, phdoctor.NO_VISITED," +
-                "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
-                "phdoctor.SHOWYN,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
-                " CASE WHEN IFNull(phdcrdr_rc.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
-                "from phdoctor LEFT OUTER JOIN phdcrdr_rc  ON phdoctor.DR_ID=phdcrdr_rc.DR_ID " +
-                "where SHOWYN = '1' order by PANE_TYPE1 DESC", null);
+        try {
+            sd = this.getWritableDatabase();
+            //Cursor c=sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_code,phdoctor.dr_name  from phdoctor left outer join phallmst on phdoctor.spl_id = phallmst.id where phdoctor.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phdoctor.dr_name", null);
+            return sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_name,phdoctor.LAST_VISIT_DATE," +
+                    "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE" +
+                    ",phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ, phdoctor.NO_VISITED," +
+                    "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
+                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
+                    " CASE WHEN IFNull(phdcrdr_rc.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
+                    "from phdoctor LEFT OUTER JOIN phdcrdr_rc  ON phdoctor.DR_ID=phdcrdr_rc.DR_ID " +
+                    "where SHOWYN = '1' order by PANE_TYPE1 DESC", null);
+        } finally {
+            //sd.close();
+        }
+
     }
 
     public Cursor getDoctorListLocal(String plan_type,String caltype) {
-        sd = this.getWritableDatabase();
-        String extraQuery = "";
-        if (caltype != null){
-            extraQuery = " and CALLYN = " +  caltype ;
+        try {
+            sd = this.getWritableDatabase();
+            String extraQuery = "";
+            if (plan_type != null){
+                extraQuery = " and PANE_TYPE='"+plan_type+"'";
+            }
+            if (caltype != null){
+                extraQuery = extraQuery + " and CALLYN = " +  caltype ;
+            }
+            //Cursor c=sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_code,phdoctor.dr_name  from phdoctor left outer join phallmst on phdoctor.spl_id = phallmst.id where phdoctor.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phdoctor.dr_name", null);
+            return sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_name,phdoctor.LAST_VISIT_DATE," +
+                    "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
+                    "phdoctor.DR_AREA,phdoctor.PANE_TYPE,phdoctor.DR_LAT_LONG,phdoctor.FREQ,phdoctor.NO_VISITED," +
+                    "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
+                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN, CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
+                    "from phdoctor LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID" +
+                    " where SHOWYN = '1' " + extraQuery  , null);
+        } finally {
+            //sd.close();
         }
-        //Cursor c=sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_code,phdoctor.dr_name  from phdoctor left outer join phallmst on phdoctor.spl_id = phallmst.id where phdoctor.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phdoctor.dr_name", null);
-        return sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_name,phdoctor.LAST_VISIT_DATE," +
-                "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
-                "phdoctor.DR_AREA,phdoctor.PANE_TYPE,phdoctor.DR_LAT_LONG,phdoctor.FREQ,phdoctor.NO_VISITED," +
-                "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
-                "phdoctor.SHOWYN, CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
-                "from phdoctor LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID" +
-                " where SHOWYN = '1' and PANE_TYPE='"+plan_type+"'" + extraQuery  , null);
     }
 
     public Cursor getWorkWithLocal() {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select pa_name,pa_id from phparty where desig_id >=1 and desig_id <=10 order by pa_name", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select pa_name,pa_id from phparty where desig_id >=1 and desig_id <=10 order by pa_name", null);
+        } finally {
+            //sd.close();
+        }
     }
 
 
     //=========================================================================phallmst===============================================================================
 
     public long insert_phallmst(int allmst_id, String table_name, String field_name, String remark) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("allmst_id", allmst_id);
-        cv.put("table_name", table_name);
-        cv.put("field_name", field_name);
-        cv.put("remark", remark);
-        long l=sd.insert("phallmst", null, cv);
+        long l =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("allmst_id", allmst_id);
+            cv.put("table_name", table_name);
+            cv.put("field_name", field_name);
+            cv.put("remark", remark);
+            l=sd.insert("phallmst", null, cv);
+        } finally {
+            //sd.close();
+        }
         return l;
     }
 
@@ -1308,6 +1550,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -1316,48 +1559,67 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public long insert_phparty(int pa_id, String pa_name, int desig_id, String category,
                                int hqid,String PA_LAT_LONG,String PA_LAT_LONG2,
                                String PA_LAT_LONG3,String SHOWYN) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("pa_id", pa_id);
-        cv.put("pa_name", pa_name);
-        cv.put("desig_id", desig_id);
-        cv.put("category", category);
-        cv.put("hq_id", hqid);
-        cv.put("PA_LAT_LONG", PA_LAT_LONG);
-        cv.put("PA_LAT_LONG2", PA_LAT_LONG2);
-        cv.put("PA_LAT_LONG3", PA_LAT_LONG3);
-        cv.put("SHOWYN", SHOWYN);
-        long l= sd.insert("phparty", null, cv);
+        long l =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("pa_id", pa_id);
+            cv.put("pa_name", pa_name);
+            cv.put("desig_id", desig_id);
+            cv.put("category", category);
+            cv.put("hq_id", hqid);
+            cv.put("PA_LAT_LONG", PA_LAT_LONG);
+            cv.put("PA_LAT_LONG2", PA_LAT_LONG2);
+            cv.put("PA_LAT_LONG3", PA_LAT_LONG3);
+            cv.put("SHOWYN", SHOWYN);
+             l= sd.insert("phparty", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     //=========================================================================phrelation===============================================================================
 
     public long insert_phrelation(int pa_id, int under_id, int rank) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("pa_id", pa_id);
-        cv.put("under_id", under_id);
-        cv.put("rank", rank);
-        long l= sd.insert("phrelation", null, cv);
+        long l =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("pa_id", pa_id);
+            cv.put("under_id", under_id);
+            cv.put("rank", rank);
+            l= sd.insert("phrelation", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     //=========================================================================ph-item_pl===============================================================================
 
     public long insert_phitempl(String item_id, String dr_spl_id, int srno) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("item_id", item_id);
-        cv.put("dr_spl_id", dr_spl_id);
-        cv.put("srno", srno);
-        long l= sd.insert("phitemspl", null, cv);
+        long l =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("item_id", item_id);
+            cv.put("dr_spl_id", dr_spl_id);
+            cv.put("srno", srno);
+            l= sd.insert("phitemspl", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     public void delete_phitemspl() {
-        sd = this.getWritableDatabase();
-        sd.delete("phitemspl", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phitemspl", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
 
@@ -1365,88 +1627,124 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         sd = this.getWritableDatabase();
         //Cursor c=sd.rawQuery("select phitem.item_name,phitem.item_id from phitemspl inner join phitem phitem on phitem.item_id=phitemspl.item_id where phitemspl.dr_spl_id="+MyConnection.DOCTOR_SPL_ID+" order by phitem.item_name", null);
         return sd.rawQuery("select phitem.item_name,phitem.item_id from phitemspl inner join phitem phitem on phitem.item_id=phitemspl.item_id where  SHOW_YN = '1' and phitemspl.dr_spl_id=" + Custom_Variables_And_Method.DOCTOR_SPL_ID + " order by phitemspl.srno", null);
+
     }
 
     //=========================================================================Final_dcr_check===============================================================================
 
     public long insertfinalTest(String chemist, String stockist, String exp) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("chemist", chemist);
-        cv.put("stockist", stockist);
-        cv.put("exp", exp);
-        long l= sd.insert("finaldcrcheck", null, cv);
+        Long l=0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("chemist", chemist);
+            cv.put("stockist", stockist);
+            cv.put("exp", exp);
+             l= sd.insert("finaldcrcheck", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     public void updatefinalTest(String chemist, String stockist, String exp) {
-        ContentValues cv = new ContentValues();
-        cv.put("chemist", chemist);
-        cv.put("chemist", chemist);
-        cv.put("chemist", chemist);
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("chemist", chemist);
+            cv.put("chemist", chemist);
+            cv.put("chemist", chemist);
 
-        sd = this.getWritableDatabase();
-        sd.update("finaldcrcheck", cv, null, null);
+            sd = this.getWritableDatabase();
+            sd.update("finaldcrcheck", cv, null, null);
+        }finally {
+            sd.close();
+        }
+
     }
 
     public Cursor getFinalSubmit() {
-
-        sd = this.getWritableDatabase();
-        return sd.query("finaldcrcheck", null, null, null, null, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.query("finaldcrcheck", null, null, null, null, null, null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public void deleteFinalDcr() {
-        sd = this.getWritableDatabase();
-        sd.delete("finaldcrcheck", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("finaldcrcheck", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     //===========================================FTP TABLE======================================================================================================
 
     public long insert_FtpData(String ip, String user, String pass, String port, String path,
                                String ip_download, String user_download, String pass_download, String port_download) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("ftpip", ip);
-        cv.put("username", user);
-        cv.put("password", pass);
-        cv.put("port", port);
-        cv.put("path", path);
-        cv.put("ftpip_download", ip_download);
-        cv.put("username_download", user_download);
-        cv.put("password_download", pass_download);
-        cv.put("port_download", port_download);
-        long l= sd.insert("ftpdetail", null, cv);
+        long l = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("ftpip", ip);
+            cv.put("username", user);
+            cv.put("password", pass);
+            cv.put("port", port);
+            cv.put("path", path);
+            cv.put("ftpip_download", ip_download);
+            cv.put("username_download", user_download);
+            cv.put("password_download", pass_download);
+            cv.put("port_download", port_download);
+            l= sd.insert("ftpdetail", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     public Cursor getFTPDATA() {
-
-        sd = this.getWritableDatabase();
-        return sd.query("ftpdetail", null, null, null, null, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.query("ftpdetail", null, null, null, null, null, null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public void deleteFTPTABLE() {
-        sd = this.getWritableDatabase();
-        sd.delete("ftpdetail", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("ftpdetail", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     //======================================================================chemist table=============================================================================
 
     public long insert_Chemist(int chid, String chname, String area, String chem_code,String LAST_VISIT_DATE,
                                String DR_LAT_LONG,String DR_LAT_LONG2,String DR_LAT_LONG3,String SHOWYN){
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("chem_id", chid);
-        cv.put("chem_name", chname);
-        cv.put("chem_code", chem_code);
-        cv.put("area", area);
-        cv.put("LAST_VISIT_DATE", LAST_VISIT_DATE);
-        cv.put("DR_LAT_LONG", DR_LAT_LONG);
-        cv.put("DR_LAT_LONG2", DR_LAT_LONG2);
-        cv.put("DR_LAT_LONG3", DR_LAT_LONG3);
-        cv.put("SHOWYN", SHOWYN);
 
-        long l= sd.insert("phchemist", null, cv);
+        long l = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("chem_id", chid);
+            cv.put("chem_name", chname);
+            cv.put("chem_code", chem_code);
+            cv.put("area", area);
+            cv.put("LAST_VISIT_DATE", LAST_VISIT_DATE);
+            cv.put("DR_LAT_LONG", DR_LAT_LONG);
+            cv.put("DR_LAT_LONG2", DR_LAT_LONG2);
+            cv.put("DR_LAT_LONG3", DR_LAT_LONG3);
+            cv.put("SHOWYN", SHOWYN);
+
+            l= sd.insert("phchemist", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
@@ -1455,37 +1753,40 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         sd = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
+        try {
+            if (type.equals("C")) {
+                cv.put("DR_LAT_LONG"+index, latlong);
+                if(index.equalsIgnoreCase("")){
+                    cv.put("DR_LAT_LONG2", latlong);
+                    cv.put("DR_LAT_LONG3", latlong);
+                }
+                sd.update("phchemist", cv, "chem_id =" + id, null);
+            }else if (type.equals("D")) {
+                cv.put("DR_LAT_LONG"+index, latlong);
+                if(index.equalsIgnoreCase("")){
+                    cv.put("DR_LAT_LONG3", latlong);
+                    cv.put("DR_LAT_LONG2", latlong);
+                }
+                sd.update("phdoctor", cv, "dr_id =" + id, null);
+            }else if (type.equals("DP")) {
+                cv.put("DR_LAT_LONG"+index, latlong);
+                if(index.equalsIgnoreCase("")){
+                    cv.put("DR_LAT_LONG3", latlong);
+                    cv.put("DR_LAT_LONG2", latlong);
+                }
+                sd.update(PH_DAIRY, cv, "DAIRY_ID =" + id, null);
+            }else if (type.equals("S")) {
+                cv.put("PA_LAT_LONG"+index, latlong);
+                if(index.equalsIgnoreCase("")){
+                    cv.put("PA_LAT_LONG3", latlong);
+                    cv.put("PA_LAT_LONG2", latlong);
+                }
+                sd.update("phparty", cv, "pa_id =" + id, null);
+            }
 
-        if (type.equals("C")) {
-            cv.put("DR_LAT_LONG"+index, latlong);
-            if(index.equalsIgnoreCase("")){
-                cv.put("DR_LAT_LONG2", latlong);
-                cv.put("DR_LAT_LONG3", latlong);
-            }
-            sd.update("phchemist", cv, "chem_id =" + id, null);
-        }else if (type.equals("D")) {
-            cv.put("DR_LAT_LONG"+index, latlong);
-            if(index.equalsIgnoreCase("")){
-                cv.put("DR_LAT_LONG3", latlong);
-                cv.put("DR_LAT_LONG2", latlong);
-            }
-            sd.update("phdoctor", cv, "dr_id =" + id, null);
-        }else if (type.equals("DP")) {
-            cv.put("DR_LAT_LONG"+index, latlong);
-            if(index.equalsIgnoreCase("")){
-                cv.put("DR_LAT_LONG3", latlong);
-                cv.put("DR_LAT_LONG2", latlong);
-            }
-            sd.update(PH_DAIRY, cv, "DAIRY_ID =" + id, null);
-        }else if (type.equals("S")) {
-            cv.put("PA_LAT_LONG"+index, latlong);
-            if(index.equalsIgnoreCase("")){
-                cv.put("PA_LAT_LONG3", latlong);
-                cv.put("PA_LAT_LONG2", latlong);
-            }
-            sd.update("phparty", cv, "pa_id =" + id, null);
+        }finally {
+            sd.close();
         }
-
         insertLat_Long_Reg(id,latlong,type,"",index);
 
     }
@@ -1527,21 +1828,24 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public String getLatLong(String type, String id ) {
-
-        sd = this.getWritableDatabase();
-
-
         String latlong = "";
+        try {
+            sd = this.getWritableDatabase();
 
-        if (type.equals("C")) {
-            latlong = getChemistLatLong(id);
-        }else if (type.equals("D")) {
-            latlong = getDrCall_latLong(id);
-        }else if (type.equals("S")) {
-            latlong = stockistAllItemLatLong(id);
+
+
+
+            if (type.equals("C")) {
+                latlong = getChemistLatLong(id);
+            } else if (type.equals("D")) {
+                latlong = getDrCall_latLong(id);
+            } else if (type.equals("S")) {
+                latlong = stockistAllItemLatLong(id);
+            }
+
+        }finally {
+            sd.close();
         }
-
-
 
         return latlong;
 
@@ -1549,50 +1853,68 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     public Cursor getChemistListLocal() {
-        sd = this.getWritableDatabase();
+        try {
+            sd = this.getWritableDatabase();
 
-        //Cursor c=sd.rawQuery("select phchemist.chem_id,phchemist.chem_name from phchemist where phchemist.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phchemist.chem_name ", null);
-        return sd.rawQuery("select phchemist.chem_id,phchemist.chem_name,phchemist.LAST_VISIT_DATE," +
-                "DR_LAT_LONG,DR_LAT_LONG2,DR_LAT_LONG3,SHOWYN, CASE WHEN IFNull(phdcrchem.chem_id,0) >0 THEN 1 ELSE 0 END AS CALLYN" +
+            //Cursor c=sd.rawQuery("select phchemist.chem_id,phchemist.chem_name from phchemist where phchemist.area in("+MyConnection.pub_area.toUpperCase(Locale.getDefault())+") order by phchemist.chem_name ", null);
+            return sd.rawQuery("select phchemist.chem_id,phchemist.chem_name,phchemist.LAST_VISIT_DATE," +
+                    "DR_LAT_LONG,DR_LAT_LONG2,DR_LAT_LONG3,SHOWYN, CASE WHEN IFNull(phdcrchem.chem_id,0) >0 THEN 1 ELSE 0 END AS CALLYN" +
                 " from phchemist LEFT OUTER JOIN phdcrchem  ON phchemist.chem_id=phdcrchem.chem_id" +
                 " where SHOWYN = '1' ", null);
+        }finally {
+            //sd.close();
+        }
     }
 
 
     public void deleteChemist() {
-        sd = this.getWritableDatabase();
-        sd.delete("phchemist", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phchemist", null, null);
+        }finally {
+            sd.close();
+        }
     }
 //============================================================Add Chemist Table================================================================================
 
     public long addChemistInLocal(String chemid, String chemname, String visit_time, String chem_latLong, String chem_address, String updated, String chem_km,String srno,String LOC_EXTRA) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("chem_id", chemid);
-        cv.put("chem_name", chemname);
-        cv.put("visit_time", visit_time);
-        cv.put("chem_latLong", chem_latLong);
-        cv.put("chem_address", chem_address);
-        cv.put("updated", updated);
-        cv.put("chem_km", chem_km);
-        cv.put("srno", srno);
-        cv.put("LOC_EXTRA", LOC_EXTRA);
+
+        long l = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("chem_id", chemid);
+            cv.put("chem_name", chemname);
+            cv.put("visit_time", visit_time);
+            cv.put("chem_latLong", chem_latLong);
+            cv.put("chem_address", chem_address);
+            cv.put("updated", updated);
+            cv.put("chem_km", chem_km);
+            cv.put("srno", srno);
+            cv.put("LOC_EXTRA", LOC_EXTRA);
 
 
-        long l= sd.insert("chemisttemp", null, cv);
+            l= sd.insert("chemisttemp", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
 
     public void updateChemistKilo(String km, String id) {
 
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("updated", "1");
-        cv.put("chem_km", km);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("updated", "1");
+            cv.put("chem_km", km);
 
-        int result = sd.update("chemisttemp", cv, "chem_id =" + id, null);
-        Log.e("Inserted into Chemist", "" + km + "Result" + result);
+            int result = sd.update("chemisttemp", cv, "chem_id =" + id, null);
+            Log.e("Inserted into Chemist", "" + km + "Result" + result);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -1609,6 +1931,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mychem;
     }
@@ -1625,6 +1948,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mychem;
     }
@@ -1641,6 +1965,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mychem;
     }
@@ -1657,6 +1982,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mychem;
     }
@@ -1672,6 +1998,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mychem;
     }
@@ -1688,16 +2015,22 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mychem;
     }
 
     public long getUpdateChemistAddress(String chem_id, String chem_address) {
-        ContentValues cv = new ContentValues();
-        sd = this.getWritableDatabase();
+        long l =0l;
+        try {
+            ContentValues cv = new ContentValues();
+            sd = this.getWritableDatabase();
 
-        cv.put("chem_address", chem_address);
-        long l= sd.update("chemisttemp", cv, "chem_id =" + chem_id, null);
+            cv.put("chem_address", chem_address);
+            l = sd.update("chemisttemp", cv, "chem_id =" + chem_id, null);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
@@ -1714,6 +2047,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+             sd.close();
         }
         return mychem;
     }
@@ -1731,6 +2065,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+             sd.close();
         }
         return mychem;
     }
@@ -1746,6 +2081,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mychem;
     }
@@ -1773,6 +2109,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chem_list;
     }
@@ -1793,12 +2130,17 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public long addStockistInLocal(String stkid, String stkname) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("stk_id", stkid);
-        cv.put("stk_name", stkname);
+        long l =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("stk_id", stkid);
+            cv.put("stk_name", stkname);
 
-        long l= sd.insert("tempstockist", null, cv);
+             l = sd.insert("tempstockist", null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
@@ -1824,75 +2166,111 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chem_list;
     }
 
 
     public void deleteTempStockist() {
-        sd = this.getWritableDatabase();
-        sd.delete("tempstockist", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("tempstockist", null, null);
+        }finally {
+            sd.close();
+        }
     }
     //=================================================================login_detail  table==========================================================================
 
     public long insertLoginDetail(String comp_code, String db_ip, String db_name, String user, String password, String ver) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("company_code", comp_code);
-        cv.put("ols_ip", db_ip);
-        cv.put("ols_db_name", db_name);
-        cv.put("ols_db_user", user);
-        cv.put("ols_db_password", password);
-        cv.put("ver", ver);
-
-        long l= sd.insert("logindetail", null, cv);
-        return l;
+        long l =0l;
+        try {
+           sd = this.getWritableDatabase();
+           ContentValues cv = new ContentValues();
+           cv.put("company_code", comp_code);
+           cv.put("ols_ip", db_ip);
+           cv.put("ols_db_name", db_name);
+           cv.put("ols_db_user", user);
+           cv.put("ols_db_password", password);
+           cv.put("ver", ver);
+            l = sd.insert("logindetail", null, cv);
+       }finally {
+           sd.close();
+       }
+       return l;
     }
 
     public Cursor getDatabaseDetail() {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select * from logindetail", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select * from logindetail", null);
+        }finally {
+            //sd.close();
+        }
+
     }
 
 
     public void deleteLoginDetail() {
-        sd = this.getWritableDatabase();
-        sd.delete("logindetail", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("logindetail", null, null);
+        }finally {
+            sd.close();
+        }
     }
     //===============================================================login user details=====================================================================================
 
 
     public long insertUserDetails(int paid, String paname, String hqtr, String desid, String pubdesid, String compname, String weburl) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("pa_id", paid);
-        cv.put("pa_name", paname);
-        cv.put("head_qtr", hqtr);
-        cv.put("desid", desid);
-        cv.put("pub_desig_id", pubdesid);
-        cv.put("compny_name", compname);
-        cv.put("web_url", weburl);
-        Long a=sd.insert("userdetail", null, cv);
+        Long a =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("pa_id", paid);
+            cv.put("pa_name", paname);
+            cv.put("head_qtr", hqtr);
+            cv.put("desid", desid);
+            cv.put("pub_desig_id", pubdesid);
+            cv.put("compny_name", compname);
+            cv.put("web_url", weburl);
+            a = sd.insert("userdetail", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
     public long insertUserDetail22(String loc, String visual) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("location_required", loc);
-        cv.put("visual_required", visual);
-        Long a=sd.insert("userdetail2", null, cv);
+        Long a =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("location_required", loc);
+            cv.put("visual_required", visual);
+            a = sd.insert("userdetail2", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
     public Cursor getUserDetailLogin() {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select * from userdetail", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select * from userdetail", null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public Cursor getOtherUserDetail() {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select * from userdetail2", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select * from userdetail2", null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public String getLocationDetail() {
@@ -1907,6 +2285,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return loc;
     }
@@ -1923,44 +2302,62 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return loc;
     }
 
-    public void deleteUserDetail()
-
-    {
-        sd = this.getWritableDatabase();
-        sd.delete("userdetail", null, null);
+    public void deleteUserDetail() {
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("userdetail", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
-    public void deleteUserDetail2()
-
-    {
-        sd = this.getWritableDatabase();
-        sd.delete("userdetail2", null, null);
+    public void deleteUserDetail2() {
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("userdetail2", null, null);
+        }finally {
+            sd.close();
+        }
     }
     //================================================================dcr detail============================================================================================
 
 
     public long insertDcrDetails(String dcrid, String pubarea) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dcr_id", dcrid);
-        cv.put("pub_area", pubarea);
-        Long a= sd.insert("dcrdetail", null, cv);
+        Long a=0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dcr_id", dcrid);
+            cv.put("pub_area", pubarea);
+            a = sd.insert("dcrdetail", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
     public Cursor getDCRDetails() {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select * from dcrdetail", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select * from dcrdetail", null);
+        }finally {
+            //sd.close();
+        }
     }
 
 
     public void deleteDCRDetails() {
-        sd = this.getWritableDatabase();
-        sd.delete("dcrdetail", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("dcrdetail", null, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -1969,30 +2366,36 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public long submitChemistInLocal(String dcrid, String chemid, String pobamt, String allitemid, String allitemqty, String address,
                                      String allgiftid, String allgiftqty, String time, String battryLevel, String sample,String remark,
                                      String file,String LOC_EXTRA,String Ref_latlong,String rate) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dcr_id", dcrid);
-        cv.put("chem_id", chemid);
-        cv.put("pob_amt", pobamt);
-        cv.put("allitemid", allitemid);
-        cv.put("allitemqty", allitemqty);
-        cv.put("address", address);
-        cv.put("allgiftid", allgiftid);
-        cv.put("allgiftqty", allgiftqty);
-        cv.put("time", time);
-        cv.put("battery_level", battryLevel);
-        cv.put("sample", sample);
-        cv.put("remark", remark);
-        cv.put("file", file);
-        cv.put("LOC_EXTRA", LOC_EXTRA);
-        cv.put("Ref_latlong", Ref_latlong);
-        cv.put("rate", rate);
+        Long a =0l;
+        try {
 
-        Long a=sd.insert("phdcrchem", null, cv);
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dcr_id", dcrid);
+            cv.put("chem_id", chemid);
+            cv.put("pob_amt", pobamt);
+            cv.put("allitemid", allitemid);
+            cv.put("allitemqty", allitemqty);
+            cv.put("address", address);
+            cv.put("allgiftid", allgiftid);
+            cv.put("allgiftqty", allgiftqty);
+            cv.put("time", time);
+            cv.put("battery_level", battryLevel);
+            cv.put("sample", sample);
+            cv.put("remark", remark);
+            cv.put("file", file);
+            cv.put("LOC_EXTRA", LOC_EXTRA);
+            cv.put("Ref_latlong", Ref_latlong);
+            cv.put("rate", rate);
 
-        delete_DCR_Item(chemid,null,null,"CHEM");
-        insert_DCR_Item(chemid,allitemid,sample,"SAMPLE","CHEM");
-        insert_DCR_Item(chemid,allgiftid,allgiftqty,"GIFT","CHEM");
+             a = sd.insert("phdcrchem", null, cv);
+
+            delete_DCR_Item(chemid, null, null, "CHEM");
+            insert_DCR_Item(chemid, allitemid, sample, "SAMPLE", "CHEM");
+            insert_DCR_Item(chemid, allgiftid, allgiftqty, "GIFT", "CHEM");
+        }finally {
+            sd.close();
+        }
 
         return a;
     }
@@ -2000,31 +2403,37 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public int updateChemistInLocal(String dcrid, String chemid, String pobamt, String allitemid, String allitemqty,
                                     String address, String allgiftid, String allgiftqty, String time, String sample,
                                     String remark,String file,String rate) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dcr_id", dcrid);
-        cv.put("chem_id", chemid);
+        int a = 0;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dcr_id", dcrid);
+            cv.put("chem_id", chemid);
 
-        if(!allitemid.equals("")) {
-            cv.put("pob_amt", pobamt);
-            cv.put("allitemid", allitemid);
-            cv.put("allitemqty", allitemqty);
-            cv.put("sample", sample);
+            if(!allitemid.equals("")) {
+                cv.put("pob_amt", pobamt);
+                cv.put("allitemid", allitemid);
+                cv.put("allitemqty", allitemqty);
+                cv.put("sample", sample);
+            }
+            //cv.put("address", address);
+            if(!allgiftid.equals("")) {
+                cv.put("allgiftid", allgiftid);
+                cv.put("allgiftqty", allgiftqty);
+            }
+
+            cv.put("remark", remark);
+            cv.put("file", file);
+            cv.put("rate", rate);
+            a = sd.update("phdcrchem", cv, "chem_id=" + chemid + "", null);
+
+            delete_DCR_Item(chemid,null,null,"CHEM");
+            insert_DCR_Item(chemid,allitemid,sample,"SAMPLE","CHEM");
+            insert_DCR_Item(chemid,allgiftid,allgiftqty,"GIFT","CHEM");
+
+        }finally {
+            sd.close();
         }
-        //cv.put("address", address);
-        if(!allgiftid.equals("")) {
-            cv.put("allgiftid", allgiftid);
-            cv.put("allgiftqty", allgiftqty);
-        }
-
-        cv.put("remark", remark);
-        cv.put("file", file);
-        cv.put("rate", rate);
-        int a=sd.update("phdcrchem", cv, "chem_id=" + chemid + "", null);
-
-        delete_DCR_Item(chemid,null,null,"CHEM");
-        insert_DCR_Item(chemid,allitemid,sample,"SAMPLE","CHEM");
-        insert_DCR_Item(chemid,allgiftid,allgiftqty,"GIFT","CHEM");
         return a;
 
     }
@@ -2042,6 +2451,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
 
         return chem_list;
@@ -2075,6 +2485,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         docItems.add(sb.toString());
         docItems.add(sb_qty.toString());
@@ -2099,6 +2510,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
 
@@ -2116,6 +2528,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2132,6 +2545,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2139,25 +2553,32 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public void upDateChemistAddressFinal(String chem_id, String address) {
 
-        ContentValues cv = new ContentValues();
-        sd = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            sd = this.getWritableDatabase();
 
-        cv.put("address", address);
+            cv.put("address", address);
 
-        long result = sd.update("phdcrchem", cv, "chem_id =" + chem_id, null);
+            long result = sd.update("phdcrchem", cv, "chem_id =" + chem_id, null);
+        }finally {
+            sd.close();
+        }
 
 
     }
 
     public void upDateChemistLocExtra(String chem_id, String address) {
 
-        ContentValues cv = new ContentValues();
-        sd = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            sd = this.getWritableDatabase();
 
-        cv.put("LOC_EXTRA", address);
+            cv.put("LOC_EXTRA", address);
 
-        long result = sd.update("phdcrchem", cv, "chem_id =" + chem_id, null);
-
+            long result = sd.update("phdcrchem", cv, "chem_id =" + chem_id, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -2174,6 +2595,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2190,6 +2612,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2209,6 +2632,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2226,6 +2650,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2243,6 +2668,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return sample;
     }
@@ -2259,6 +2685,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+             sd.close();
         }
         return chtem;
     }
@@ -2275,26 +2702,36 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return level;
     }
 
 
     public void deleteChemistRecordsTable() {
-       sd = this.getWritableDatabase();
-        sd.delete("phdcrchem", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrchem", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public long insertChemistSample(String chem_id, String item_id, String item_name, String qty, String sample) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("chem_id", chem_id);
-        cv.put("item_id", item_id);
-        cv.put("item_name", item_name);
-        cv.put("qty", qty);
-        cv.put("sample", sample);
-        long val = sd.insert("chemistsample", null, cv);
-        Log.e("chemist sample inserted", "" + val);
+        long val =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("chem_id", chem_id);
+            cv.put("item_id", item_id);
+            cv.put("item_name", item_name);
+            cv.put("qty", qty);
+            cv.put("sample", sample);
+            val = sd.insert("chemistsample", null, cv);
+            Log.e("chemist sample inserted", "" + val);
+        }finally {
+            sd.close();
+        }
         return val;
 
     }
@@ -2311,13 +2748,18 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chem_id;
     }
 
     public void deleteChemistSample() {
-        sd = this.getWritableDatabase();
-        sd.delete("chemistsample", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("chemistsample", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
 
@@ -2328,33 +2770,39 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                      String latLong, String updated, String stk_km,String srno,String sample,
                                      String remark,String file, String LOC_EXTRA,String allgiftid,String allgiftqty,
                                      String Ref_latlong,String rate) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dcr_id", dcrid);
-        cv.put("stk_id", stkid);
-        cv.put("pob_amt", pobamt);
-        cv.put("allitemid", allitemid);
-        cv.put("allitemqty", allitemqty);
-        cv.put("address", address);
-        cv.put("time", time);
-        cv.put("battery_level", battery_level);
-        cv.put("latLong", latLong);
-        cv.put("updated", updated);
-        cv.put("stk_km", stk_km);
-        cv.put("srno", srno);
-        cv.put("sample", sample);
-        cv.put("remark", remark);
-        cv.put("file", file);
-        cv.put("LOC_EXTRA", LOC_EXTRA);
-        cv.put("allgiftid", allgiftid);
-        cv.put("allgiftqty", allgiftqty);
-        cv.put("Ref_latlong", Ref_latlong);
-        cv.put("rate", rate);
-        Long a=sd.insert("phdcrstk", null, cv);
 
-        delete_DCR_Item(stkid,null,null,"STK");
-        insert_DCR_Item(stkid,allitemid,sample,"SAMPLE","STK");
-        insert_DCR_Item(stkid,allgiftid,allgiftqty,"GIFT","STK");
+       Long a =0l;
+       try {
+           sd = this.getWritableDatabase();
+           ContentValues cv = new ContentValues();
+           cv.put("dcr_id", dcrid);
+           cv.put("stk_id", stkid);
+           cv.put("pob_amt", pobamt);
+           cv.put("allitemid", allitemid);
+           cv.put("allitemqty", allitemqty);
+           cv.put("address", address);
+           cv.put("time", time);
+           cv.put("battery_level", battery_level);
+           cv.put("latLong", latLong);
+           cv.put("updated", updated);
+           cv.put("stk_km", stk_km);
+           cv.put("srno", srno);
+           cv.put("sample", sample);
+           cv.put("remark", remark);
+           cv.put("file", file);
+           cv.put("LOC_EXTRA", LOC_EXTRA);
+           cv.put("allgiftid", allgiftid);
+           cv.put("allgiftqty", allgiftqty);
+           cv.put("Ref_latlong", Ref_latlong);
+           cv.put("rate", rate);
+           a = sd.insert("phdcrstk", null, cv);
+
+           delete_DCR_Item(stkid, null, null, "STK");
+           insert_DCR_Item(stkid, allitemid, sample, "SAMPLE", "STK");
+           insert_DCR_Item(stkid, allgiftid, allgiftqty, "GIFT", "STK");
+       }finally {
+           sd.close();
+       }
 
         return a;
     }
@@ -2362,34 +2810,39 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public int updateStockistInLocal(int dcrid, String stkid, String pobamt, String allitemid, String allitemqty,
                                      String address, String time,String sample,String remark,String file,String allgiftid,
                                      String allgiftqty,String rate) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dcr_id", dcrid);
-        cv.put("stk_id", stkid);
 
-        if(!allitemid.equals("")) {
-            cv.put("pob_amt", pobamt);
-            cv.put("allitemid", allitemid);
-            cv.put("allitemqty", allitemqty);
-            //cv.put("address", address);
-            cv.put("sample", sample);
+        int a =0;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dcr_id", dcrid);
+            cv.put("stk_id", stkid);
+
+            if (!allitemid.equals("")) {
+                cv.put("pob_amt", pobamt);
+                cv.put("allitemid", allitemid);
+                cv.put("allitemqty", allitemqty);
+                //cv.put("address", address);
+                cv.put("sample", sample);
+            }
+            cv.put("remark", remark);
+            cv.put("file", file);
+            //cv.put("time", time);
+
+            if (!allgiftid.equals("")) {
+                cv.put("allgiftid", allgiftid);
+                cv.put("allgiftqty", allgiftqty);
+            }
+            cv.put("rate", rate);
+
+            a = sd.update("phdcrstk", cv, "stk_id=" + stkid + "", null);
+
+            delete_DCR_Item(stkid, null, null, "STK");
+            insert_DCR_Item(stkid, allitemid, sample, "SAMPLE", "STK");
+            insert_DCR_Item(stkid, allgiftid, allgiftqty, "GIFT", "STK");
+        }finally {
+            sd.close();
         }
-        cv.put("remark", remark);
-        cv.put("file", file);
-        //cv.put("time", time);
-
-        if(!allgiftid.equals("")) {
-            cv.put("allgiftid", allgiftid);
-            cv.put("allgiftqty", allgiftqty);
-        }
-        cv.put("rate", rate);
-
-        int a=sd.update("phdcrstk", cv, "stk_id=" + stkid + "", null);
-
-        delete_DCR_Item(stkid,null,null,"STK");
-        insert_DCR_Item(stkid,allitemid,sample,"SAMPLE","STK");
-        insert_DCR_Item(stkid,allgiftid,allgiftqty,"GIFT","STK");
-
         return a;
 
     }
@@ -2397,13 +2850,17 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public void updateStk_Km(String km, String id) {
 
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("updated", "1");
-        cv.put("stk_km", km);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("updated", "1");
+            cv.put("stk_km", km);
 
-        int result = sd.update("phdcrstk", cv, "stk_id =" + id, null);
-        Log.e("Stk Km Inserted", km + "...." + result);
+            int result = sd.update("phdcrstk", cv, "stk_id =" + id, null);
+            Log.e("Stk Km Inserted", km + "...." + result);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -2420,6 +2877,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2436,6 +2894,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2452,6 +2911,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2467,6 +2927,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2482,6 +2943,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2498,6 +2960,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2515,6 +2978,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chem_list;
     }
@@ -2532,6 +2996,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2548,6 +3013,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2564,31 +3030,38 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
 
     public void stockistupdateAllItemAddress(String stk_id, String address) {
 
-        ContentValues cv = new ContentValues();
-        sd = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            sd = this.getWritableDatabase();
 
-        cv.put("address", address);
+            cv.put("address", address);
 
-        long result = sd.update("phdcrstk", cv, "stk_id =" + stk_id, null);
+            long result = sd.update("phdcrstk", cv, "stk_id =" + stk_id, null);
 
-
+        }finally {
+            sd.close();
+        }
     }
 
     public void stockistupdateAllItemLocExtra(String stk_id, String address) {
 
-        ContentValues cv = new ContentValues();
-        sd = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            sd = this.getWritableDatabase();
 
-        cv.put("address", address);
+            cv.put("address", address);
 
-        long result = sd.update("phdcrstk", cv, "stk_id =" + stk_id, null);
-
+            long result = sd.update("phdcrstk", cv, "stk_id =" + stk_id, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -2604,6 +3077,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2620,6 +3094,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2637,6 +3112,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2654,6 +3130,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chtem;
     }
@@ -2671,6 +3148,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2688,6 +3166,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2704,6 +3183,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
         } finally {
             c.close();
+           sd.close();
         }
         return value;
     }
@@ -2720,70 +3200,97 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
 
     public void deleteStockistRecordsTable() {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcrstk", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrstk", null, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
     //================================================================Util Table======================================================================================
 
     public long insertUtils(String area) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("pub_area", area);
-        Long a=sd.insert("utils", null, cv);
+        long a = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("pub_area", area);
+            a = sd.insert("utils", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
     public Cursor getUtils() {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select * from utils", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select * from utils", null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public void deleteUtils() {
-        sd = this.getWritableDatabase();
-        sd.delete("utils", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("utils", null, null);
+        }finally {
+            sd.close();
+        }
     }
     //===============================================================dr-Reminder Table==================================================================================
     //String RC_DOCTOR="CREATE TABLE phdcrdr_rc ( id integer primary key,dcr_id text,dr_id text,address text,time text)";
 
     public long insertDrRem(String dcrid, String drid, String address, String time, String latLong, String updated,
                             String rc_km,String srno,String batteryLevel,String remark,String file,String LOC_EXTRA,String Ref_latlong) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dcr_id", dcrid);
-        cv.put("dr_id", drid);
-        cv.put("address", address);
-        cv.put("time", time);
-        cv.put("latLong", latLong);
-        cv.put("updated", updated);
-        cv.put("rc_km", rc_km);
-        cv.put("srno", srno);
-        cv.put("batteryLevel", batteryLevel);
-        cv.put("remark", remark);
-        cv.put("file", file);
-        cv.put("LOC_EXTRA", LOC_EXTRA);
-        cv.put("Ref_latlong", Ref_latlong);
-        Long a=sd.insert("phdcrdr_rc", null, cv);
+        Long a = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dcr_id", dcrid);
+            cv.put("dr_id", drid);
+            cv.put("address", address);
+            cv.put("time", time);
+            cv.put("latLong", latLong);
+            cv.put("updated", updated);
+            cv.put("rc_km", rc_km);
+            cv.put("srno", srno);
+            cv.put("batteryLevel", batteryLevel);
+            cv.put("remark", remark);
+            cv.put("file", file);
+            cv.put("LOC_EXTRA", LOC_EXTRA);
+            cv.put("Ref_latlong", Ref_latlong);
+            a = sd.insert("phdcrdr_rc", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
     public void updateKm_RC(String km, String id) {
 
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
 
-        if (!id.equals("")) {
-            cv.put("updated", "" + 1);
-            cv.put("rc_km", km);
+            if (!id.equals("")) {
+                cv.put("updated", "" + 1);
+                cv.put("rc_km", km);
 
-            int result = sd.update("phdcrdr_rc", cv, "dr_id =" + id, null);
-            Log.e("Km inserted Reminder", km + "....." + result);
+                int result = sd.update("phdcrdr_rc", cv, "dr_id =" + id, null);
+                Log.e("Km inserted Reminder", km + "....." + result);
+            }
+        }finally {
+            sd.close();
         }
     }
 
@@ -2809,6 +3316,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return drlist;
     }
@@ -2825,6 +3333,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -2843,6 +3352,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+             sd.close();
         }
         return dcrid;
     }
@@ -2859,6 +3369,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2875,6 +3386,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2891,6 +3403,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2907,6 +3420,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return value;
     }
@@ -2922,6 +3436,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
         } finally {
             c.close();
+           sd.close();
         }
         return dcrid;
     }
@@ -2938,6 +3453,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+             sd.close();
         }
         return dcrid;
     }
@@ -2953,6 +3469,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -2968,33 +3485,46 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
 
     public void Dr_RCupdateAllItemAddress(String drid, String address) {
 
-        ContentValues cv = new ContentValues();
-        sd = this.getWritableDatabase();
+        try {
+            ContentValues cv = new ContentValues();
+            sd = this.getWritableDatabase();
 
-        cv.put("address", address);
+            cv.put("address", address);
 
-        long result = sd.update("phdcrdr_rc", cv, "dr_id =" + drid, null);
-
+            long result = sd.update("phdcrdr_rc", cv, "dr_id =" + drid, null);
+        }finally {
+            sd.close();
+        }
 
     }
     public void deleteDoctorRc() {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcrdr_rc", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrdr_rc", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     //==============================================================================VERSION TABLE==========================================================================
 
     public long insertVersionInLocal(String ver) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("ver", ver);
-        Long a=sd.insert("version", null, cv);
+        Long a =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("ver", ver);
+            a = sd.insert("version", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
@@ -3011,6 +3541,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return version;
     }
@@ -3024,18 +3555,27 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     String WORK_WITH_TABLE = "CREATE TABLE dr_workwith ( id integer primary key,workwith text,wwid text)";
 
     public long insertDrWorkWith(String wwname, String wwid) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("workwith", wwname);
-        cv.put("wwid", wwid);
-        Long a=sd.insert("dr_workwith", null, cv);
+        Long a =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("workwith", wwname);
+            cv.put("wwid", wwid);
+             a = sd.insert("dr_workwith", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
 
     public Cursor getDR_Workwith() {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select workwith,wwid from dr_workwith ", null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select workwith,wwid from dr_workwith ", null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public void deleteDRWorkWith() {
@@ -3048,35 +3588,47 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     String DOCTOR_IN_LOCAL = "CREATE TABLE phdcrdr_more ( id integer primary key,dr_id text,dr_name text,ww1 text,ww2 text,ww3 text,loc text,time text)";
 
     public long AddedDoctorMore(String drid, String drname, String time, String ww1, String ww2, String ww3, String loc) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", drid);
-        cv.put("dr_name", drname);
-        cv.put("time", time);
-        cv.put("ww1", ww1);
-        cv.put("ww2", ww2);
-        cv.put("ww3", ww3);
-        cv.put("loc", loc);
-        Long a=sd.insert("phdcrdr_more", null, cv);
+        Long a =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", drid);
+            cv.put("dr_name", drname);
+            cv.put("time", time);
+            cv.put("ww1", ww1);
+            cv.put("ww2", ww2);
+            cv.put("ww3", ww3);
+            cv.put("loc", loc);
+             a = sd.insert("phdcrdr_more", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
 
     public Cursor getDoctorName1() {
-        sd = this.getWritableDatabase();
-        return sd.query("phdcrdr_more", null, null, null, null, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.query("phdcrdr_more", null, null, null, null, null, null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public void deleteDoctormore() {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcrdr_more", null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrdr_more", null, null);
+        }finally {
+            sd.close();
+        }
     }
 
 
     public ArrayList<String> getdoctormoreLit(String updated) {
         ArrayList<String> mylist = new ArrayList<String>();
         sd = this.getWritableDatabase();
-       // Cursor c = sd.rawQuery("select dr_id from phdcrdr_more", null);
         Cursor c = null;
         if (updated==null) {
             c = sd.rawQuery("select distinct dr_id from "+DOCTOR_ITEM_TABLE, null);
@@ -3091,6 +3643,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return mylist;
     }
@@ -3099,10 +3652,15 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     String DCR_ID = "CREATE TABLE mydcr ( id integer primary key,dcr_id text)";
 
     public long putDcrId(String dcrid) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dcr_id", dcrid);
-        Long a=sd.insert("mydcr", null, cv);
+        Long a =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dcr_id", dcrid);
+            a = sd.insert("mydcr", null, cv);
+        }finally {
+            sd.close();
+        }
         return a;
     }
 
@@ -3118,14 +3676,19 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         } finally {
             c.close();
+             sd.close();
         }
         return dcrid;
     }
 
     public void deletedcrFromSqlite() {
-        sd = this.getWritableDatabase();
-        sd.delete("mydcr", null, null);
-        Log.e("dcr id has been deleted", "dcr id deleted");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("mydcr", null, null);
+            Log.e("dcr id has been deleted", "dcr id deleted");
+        }finally {
+            sd.close();
+        }
     }
 
     //=======================================================================Resigned Table=================================================================================
@@ -3146,6 +3709,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
        } finally {
             c.close();
+           sd.close();
         }
         return dcrid;
     }
@@ -3163,6 +3727,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3179,15 +3744,20 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
 
 
     public void deleteResigned() {
-        sd = this.getWritableDatabase();
-        sd.delete("resigned", null, null);
-        Log.e("resigned  deleted", "resigned deleted");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("resigned", null, null);
+            Log.e("resigned  deleted", "resigned deleted");
+        }finally {
+            sd.close();
+        }
     }
 
     //====================================================Doctor Table for final submit==================================================================================
@@ -3195,63 +3765,81 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public long addTempDrInLocal(String drid, String drname, String visit_time, String batteryLevel, String dr_latLong, String dr_address,
                                  String dr_remark, String updated, String dr_Km,String srno,String work_with_name,String DR_AREA,
                                  String file,String call_type, String LOC_EXTRA,String Ref_latlong) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dr_id", drid);
-        cv.put("dr_name", drname);
-        cv.put("visit_time", visit_time);
-        cv.put("batteryLevel", batteryLevel);
-        cv.put("dr_latLong", dr_latLong);
-        cv.put("dr_address", dr_address);
-        cv.put("dr_remark", dr_remark);
-        cv.put("updated", updated);
-        cv.put("dr_km", dr_Km);
-        cv.put("srno", srno);
-        cv.put("work_with_name",work_with_name);
-        cv.put("DR_AREA", DR_AREA);
-        cv.put("file", file);
-        cv.put("call_type", call_type);
-        cv.put("LOC_EXTRA", LOC_EXTRA);
-        cv.put("Ref_latlong",Ref_latlong);
 
-        Long a=sd.insert("tempdr", null, cv);
+        Long a = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dr_id", drid);
+            cv.put("dr_name", drname);
+            cv.put("visit_time", visit_time);
+            cv.put("batteryLevel", batteryLevel);
+            cv.put("dr_latLong", dr_latLong);
+            cv.put("dr_address", dr_address);
+            cv.put("dr_remark", dr_remark);
+            cv.put("updated", updated);
+            cv.put("dr_km", dr_Km);
+            cv.put("srno", srno);
+            cv.put("work_with_name", work_with_name);
+            cv.put("DR_AREA", DR_AREA);
+            cv.put("file", file);
+            cv.put("call_type", call_type);
+            cv.put("LOC_EXTRA", LOC_EXTRA);
+            cv.put("Ref_latlong", Ref_latlong);
+
+             a = sd.insert("tempdr", null, cv);
+        }finally {
+            sd.close();
+        }
         //Log.d("javed SRNO table",srno);
         return a;
     }
 
 
     public void updateRemark_TempDrInLocal(String drid, String dr_remark) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("dr_remark", dr_remark);
-        sd.update("tempdr", cv, "dr_id =" + drid, null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dr_remark", dr_remark);
+            sd.update("tempdr", cv, "dr_id =" + drid, null);
+        }finally {
+            sd.close();
+        }
         //Log.d("javed SRNO table",srno);
     }
 
     public void setUpdateAllZero() {
 
-        sd = this.getWritableDatabase();
-        String drUpdate = "update tempdr set updated ='0'";
-        sd.execSQL(drUpdate);
-        String chemUpdate = "update chemisttemp set updated ='0'";
-        sd.execSQL(chemUpdate);
-        String stkUpdate = "update phdcrstk set updated ='0'";
-        sd.execSQL(stkUpdate);
-        String drRcUpdate = "update phdcrdr_rc set updated ='0'";
-        sd.execSQL(drRcUpdate);
+        try {
+            sd = this.getWritableDatabase();
+            String drUpdate = "update tempdr set updated ='0'";
+            sd.execSQL(drUpdate);
+            String chemUpdate = "update chemisttemp set updated ='0'";
+            sd.execSQL(chemUpdate);
+            String stkUpdate = "update phdcrstk set updated ='0'";
+            sd.execSQL(stkUpdate);
+            String drRcUpdate = "update phdcrdr_rc set updated ='0'";
+            sd.execSQL(drRcUpdate);
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void updateDrKilo(String km, String id) {
 
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("updated", "1");
-        cv.put("dr_km", km);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("updated", "1");
+            cv.put("dr_km", km);
 
-        int result = sd.update("tempdr", cv, "dr_id =" + id, null);
+            int result = sd.update("tempdr", cv, "dr_id =" + id, null);
 
-        Log.e("Inserted into Dr", "" + km + "Result" + result);
+            Log.e("Inserted into Dr", "" + km + "Result" + result);
+        }finally {
+            sd.close();
+        }
     }
 
     public ArrayList<String> tempDrListForFinalSubmit() {
@@ -3275,6 +3863,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return chem_list;
     }
@@ -3296,6 +3885,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3312,6 +3902,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3329,6 +3920,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3346,6 +3938,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3363,6 +3956,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3379,6 +3973,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3395,6 +3990,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
         } finally {
             c.close();
+           sd.close();
         }
         return dcrid;
     }
@@ -3402,10 +3998,14 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public String updateDrCall_Address(String dr_Address, String drId) {
         String dcrid = "";
-        ContentValues contentValues = new ContentValues();
-        sd = this.getWritableDatabase();
-        contentValues.put("dr_address", dr_Address);
-        long result = sd.update("tempdr", contentValues, "dr_id =" + drId, null);
+        try {
+            ContentValues contentValues = new ContentValues();
+            sd = this.getWritableDatabase();
+            contentValues.put("dr_address", dr_Address);
+            long result = sd.update("tempdr", contentValues, "dr_id =" + drId, null);
+        }finally {
+            sd.close();
+        }
         return dcrid;
     }
 
@@ -3422,6 +4022,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3438,6 +4039,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3454,6 +4056,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return dcrid;
     }
@@ -3476,6 +4079,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         } finally {
             c.close();
+            sd.close();
         }
         return doclist1;
     }
@@ -3508,6 +4112,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
+            sd.close();
         }
 
         return 0;
@@ -3534,6 +4139,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             e.printStackTrace();
         }finally {
             c.close();
+            sd.close();
         }
         return idList;
     }
@@ -3556,6 +4162,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             cursor.close();
+            sd.close();
         }
 
         return date;
@@ -3576,6 +4183,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             cursor.close();;
+           sd.close();
         }
 
         return remark;
@@ -3594,6 +4202,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             cursor.close();
+            sd.close();
         }
 
         return owner_name;
@@ -3612,6 +4221,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             cursor.close();
+            sd.close();
         }
         return owner_no;
     }
@@ -3627,6 +4237,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             cursor.close();
+            sd.close();
         }
         return farmer_atnd;
     }
@@ -3642,6 +4253,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             cursor.close();
+            sd.close();
         }
         return meeting_place;
     }
@@ -3658,6 +4270,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             cursor.close();
+           sd.close();
         }
         return product;
     }
@@ -3672,6 +4285,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             cursor.close();
+            sd.close();
         }
         return ih_staff;
     }
@@ -3687,6 +4301,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             cursor.close();
+            sd.close();
         }
         return sale_farmer;
     }
@@ -3702,13 +4317,18 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
         }finally {
             cursor.close();
+           sd.close();
         }
         return order_book;
     }
 
     public void deleteFarmar_Table() {
-        sd = this.getWritableDatabase();
-        sd.delete(PH_Farmer, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(PH_Farmer, null, null);
+        }finally {
+            sd.close();
+        }
 
 
     }
@@ -3722,25 +4342,33 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public void insertDataRcpa(String dcrid, String paid, String drid, String chemid, String month, String itemid, String qty) {
 
-        sd = this.getWritableDatabase();
+        try {
+            sd = this.getWritableDatabase();
 
-        ContentValues cv = new ContentValues();
+            ContentValues cv = new ContentValues();
 
-        cv.put("dcr_id", dcrid);
-        cv.put("paid", paid);
-        cv.put("drid", drid);
-        cv.put("chemid", chemid);
-        cv.put("month", month);
-        cv.put("itemid", itemid);
-        cv.put("qty", qty);
-        sd.insert(PH_RCPA, null, cv);
+            cv.put("dcr_id", dcrid);
+            cv.put("paid", paid);
+            cv.put("drid", drid);
+            cv.put("chemid", chemid);
+            cv.put("month", month);
+            cv.put("itemid", itemid);
+            cv.put("qty", qty);
+            sd.insert(PH_RCPA, null, cv);
+        }finally {
+            sd.close();
+        }
     }
 
 
 
     public void deleteRcpa_Table() {
-        sd = this.getWritableDatabase();
-        sd.delete(PH_RCPA, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(PH_RCPA, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
 /////////////////////////////////////////////////Emp Tracking/////////////////
@@ -3749,41 +4377,54 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public void deleteAllRecord() {
 
+        try {
 
-        sd = getWritableDatabase();
+            sd = getWritableDatabase();
        /*
         String query = "Delete * from "+myTable;
 
         sd.execSQL(query);*/
-        sd.delete(myTable, null, null);
+            sd.delete(myTable, null, null);
+        }finally {
+            sd.close();
+        }
 
     }
 /////////////////////////////////////////////////Emp Tracking data 10 minutes/////////////////
 
     public Long insertData_latLon10(String lat, String lon, String time, String km,String LOC_EXTRA) {
 
-        sd = this.getWritableDatabase();
+        Long a =0l;
+        try{
+            sd = this.getWritableDatabase();
 
-        if(sd.rawQuery("select * from "+latLong10Minute +" where time='"+time+"'", null).getCount()==0) {
+            if(sd.rawQuery("select * from "+latLong10Minute +" where time='"+time+"'", null).getCount()==0) {
 
-            ContentValues cv = new ContentValues();
-            cv.put("lat", lat);
-            cv.put("lon", lon);
-            cv.put("time", time);
-            cv.put("km", km);
-            cv.put("updated", "0");
-            cv.put("LOC_EXTRA", LOC_EXTRA);
-            Long a = sd.insert(latLong10Minute, null, cv);
-            return a;
+                ContentValues cv = new ContentValues();
+                cv.put("lat", lat);
+                cv.put("lon", lon);
+                cv.put("time", time);
+                cv.put("km", km);
+                cv.put("updated", "0");
+                cv.put("LOC_EXTRA", LOC_EXTRA);
+                a = sd.insert(latLong10Minute, null, cv);
+            }
+        }finally {
+            sd.close();
         }
-        return 0L;
+
+        return a;
     }
 
     public void latLon10_updated(String id){
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("updated", "1");
-        sd.update(latLong10Minute, cv, "id =" + id, null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("updated", "1");
+            sd.update(latLong10Minute, cv, "id =" + id, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public Map getDataFromlatLon10(String updated) {
@@ -3839,6 +4480,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             c.close();
+            sd.close();
         }
 
         return DataInMap;
@@ -3846,25 +4488,32 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public void deleteAllRecord10() {
 
+        try {
 
-        sd = getWritableDatabase();
+            sd = getWritableDatabase();
        /*
         String query = "Delete * from "+myTable;
 
         sd.execSQL(query);*/
-        sd.delete(latLong10Minute, null, null);
+            sd.delete(latLong10Minute, null, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void deleteRecord10(String id) {
 
+        try {
+            sd = getWritableDatabase();
+               /*
+                String query = "Delete * from "+myTable;
 
-        sd = getWritableDatabase();
-       /*
-        String query = "Delete * from "+myTable;
-
-        sd.execSQL(query);*/
-        sd.delete(latLong10Minute, "id =" + id, null);
+                sd.execSQL(query);*/
+            sd.delete(latLong10Minute, "id =" + id, null);
+        }finally {
+            sd.close();
+        }
 
     }
 ////////////////////////////////////ONEmINUTElATlONG////////////////
@@ -3909,6 +4558,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             c.close();
+           sd.close();
         }
 
 
@@ -3943,6 +4593,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             c.close();
+            sd.close();
         }
 
         return paid;
@@ -3961,6 +4612,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         }finally {
             c.close();
+            sd.close();
         }
         return paname;
     }
@@ -3976,6 +4628,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         }finally {
             c.close();
+             sd.close();
         }
         return paname;
     }
@@ -3991,6 +4644,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return paname;
     }
@@ -4006,6 +4660,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return paname;
     }
@@ -4021,6 +4676,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         }finally {
             c.close();
+             sd.close();
         }
         return paname;
     }
@@ -4036,6 +4692,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
         }finally {
             c.close();
+           sd.close();
         }
         return paname;
     }
@@ -4051,6 +4708,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return paname;
     }
@@ -4066,6 +4724,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
              }
         }finally {
             c.close();
+             sd.close();
         }
         return paname;
     }
@@ -4074,33 +4733,40 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public Cursor dataFromAllTables() {
 
-        Cursor resultSet;
-        sd = this.getReadableDatabase();
-        String query = "select id,'tempdr' as Doc_Type, cast(visit_time as float) as tm, dr_latLong as latLong,updated , cast (srno as int) as srno from tempdr Union all select id,'chemisttemp' as Doc_Type, cast(visit_time as float) as tm, chem_latLong as latLong,updated , cast (srno as int) as srno from chemisttemp Union all select id, 'phdcrstk' as Doc_Type,cast(time as float) as tm, latLong as latLong ,updated , cast (srno as int) as srno from phdcrstk Union all select id, 'phdcrdr_rc' as Doc_Type,cast (time as float) as tm, latLong as latLong ,updated , cast (srno as int) as srno from phdcrdr_rc order by  srno  asc";
-        // String query = "select id,'tempdr' as Doc_Type,visit_time as tm, dr_latLong as latLong,updated from tempdr Union all select id,'chemisttemp' as Doc_Type,visit_time as tm, chem_latLong as latLong,updated from chemisttemp Union all select id, 'phdcrstk' as Doc_Type,time as tm, latLong as latLong ,updated from phdcrstk Union all select id, 'phdcrdr_rc' as Doc_Type,time as tm, latLong as latLong ,updated from phdcrdr_rc order by tm asc";
-        resultSet = sd.rawQuery(query, null);
+        Cursor resultSet = null;
+        try {
+            sd = this.getReadableDatabase();
+            String query = "select id,'tempdr' as Doc_Type, cast(visit_time as float) as tm, dr_latLong as latLong,updated , cast (srno as int) as srno from tempdr Union all select id,'chemisttemp' as Doc_Type, cast(visit_time as float) as tm, chem_latLong as latLong,updated , cast (srno as int) as srno from chemisttemp Union all select id, 'phdcrstk' as Doc_Type,cast(time as float) as tm, latLong as latLong ,updated , cast (srno as int) as srno from phdcrstk Union all select id, 'phdcrdr_rc' as Doc_Type,cast (time as float) as tm, latLong as latLong ,updated , cast (srno as int) as srno from phdcrdr_rc order by  srno  asc";
+            // String query = "select id,'tempdr' as Doc_Type,visit_time as tm, dr_latLong as latLong,updated from tempdr Union all select id,'chemisttemp' as Doc_Type,visit_time as tm, chem_latLong as latLong,updated from chemisttemp Union all select id, 'phdcrstk' as Doc_Type,time as tm, latLong as latLong ,updated from phdcrstk Union all select id, 'phdcrdr_rc' as Doc_Type,time as tm, latLong as latLong ,updated from phdcrdr_rc order by tm asc";
+            resultSet = sd.rawQuery(query, null);
 
-        if (resultSet.moveToFirst()) {
-            return resultSet;
-        } else {
-            return null;
+            if (!resultSet.moveToFirst()) {
+                resultSet =  null;
+            }
+        }finally {
+            //sd.close();
         }
 
+        return resultSet;
 
     }
 //   "CREATE TABLE " + MenuControl + "(id Integer PRIMARY KEY AUTOINCREMENT,menu text,menu_code text,menu_name text)";
 
 
     public void insertMenu(String menu, String menu_code, String menu_name, String menu_url, String main_menu_srno) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
 
-        cv.put("menu", menu);
-        cv.put("menu_code", menu_code);
-        cv.put("menu_name", menu_name);
-        cv.put("menu_url", menu_url);
-        cv.put("main_menu_srno", main_menu_srno);
-        long i = sd.insert(MenuControl, null, cv);
+            cv.put("menu", menu);
+            cv.put("menu_code", menu_code);
+            cv.put("menu_name", menu_name);
+            cv.put("menu_url", menu_url);
+            cv.put("main_menu_srno", main_menu_srno);
+            long i = sd.insert(MenuControl, null, cv);
+        }finally {
+            sd.close();
+        }
 
 
     }
@@ -4128,6 +4794,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            }
         }finally {
             c.close();
+           sd.close();
         }
         return MenuDataInMap;
     }
@@ -4149,6 +4816,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return Tabs;
     }
@@ -4168,6 +4836,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return url;
     }
@@ -4178,6 +4847,34 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         long cnt  = DatabaseUtils.queryNumEntries(sd, table);
         return Integer.parseInt(""+cnt);
 
+    }
+
+    public ArrayList<String> getCalledArea(){
+        sd = this.getWritableDatabase();
+        ArrayList<String> areaList = new ArrayList<>();
+        String Query ="select DISTINCT area from (" +
+                "Select phchemist.area from chemisttemp left join phchemist on chemisttemp.chem_id= phchemist.chem_id "+
+                "UNION All " +
+                "Select DR_AREA as area from tempdr"+
+                ")T where T.area != ''";
+
+        Cursor c = null ;
+        try {
+            c = sd.rawQuery(Query, null);
+            if (c.moveToFirst()) {
+                do {
+                    areaList.add(c.getString(c.getColumnIndex("area")));
+                } while (c.moveToNext());
+
+            }
+        }catch (Exception e){
+           e.printStackTrace();
+        }finally {
+            c.close();
+            sd.close();
+        }
+
+        return areaList;
     }
 
     public HashMap<String, ArrayList<String>> getCallDetail(String table,String look_for_id,String show_edit_delete) {
@@ -4225,7 +4922,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select  chem_id,chem_name,visit_time from " + table + " " + where_cluse + " order by srno";
+                query = "Select  chem_id,chem_name,visit_time from " + table + " " + where_cluse + " order by id";
             } else if (table.equals("tempdr")) {
                 id = "dr_id";
                 name = "dr_name";
@@ -4233,7 +4930,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select  dr_id,dr_name,visit_time,dr_remark,work_with_name,DR_AREA,call_type from " + table + " " + where_cluse + " order by srno";
+                query = "Select  dr_id,dr_name,visit_time,dr_remark,work_with_name,DR_AREA,call_type from " + table + " " + where_cluse + " order by id";
             } else if (table.equals("phdcrstk")) {
                 id = "stk_id";
                 name = "stk_id";
@@ -4241,7 +4938,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select  stk_id,time,remark from " + table + " " + where_cluse + " order by srno";
+                query = "Select  stk_id,time,remark from " + table + " " + where_cluse + " order by id";
             } else if (table.equals("phdcrdr_rc")) {
                 id = "dr_id";
                 name = "dr_id";
@@ -4249,7 +4946,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select  dr_id,time,remark from " + table + " " + where_cluse + " order by srno";
+                query = "Select  dr_id,time,remark from " + table + " " + where_cluse + " order by id";
             } else if (table.equals("Expenses")) {
                 id = "exp_head_id";
                 name = "exp_head";
@@ -4257,7 +4954,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select * from " + Expenses ;
+                query = "Select * from " + Expenses + " order by id";
             }else if (table.equals("nonListed_call")) {
                 id = "sRemark";
                 name = "sDrName";
@@ -4265,7 +4962,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select * from " + NonListed_call ;
+                query = "Select * from " + NonListed_call + " order by id";
             }else if (table.equals("appraisal")) {
                 id = "PA_ID";
                 name = "PA_NAME";
@@ -4273,7 +4970,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select * from " + Appraisal +" where FLAG=1";
+                query = "Select * from " + Appraisal +" where FLAG=1" + " order by id";
             }else if (table.equals("tenivia_traker")) {
                 id = "DR_ID";
                 name = "DR_NAME";
@@ -4281,7 +4978,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
-                query = "Select * from " + Tenivia_traker +" " +where_cluse;
+                query = "Select * from " + Tenivia_traker +" " +where_cluse + " order by id";
             }else if (table.equals("Dairy") || table.equals("Poultry")) {
                 id = "DAIRY_ID";
                 name = "DAIRY_NAME";
@@ -4296,7 +4993,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 if (!look_for_id.equals("")) {
                     where_cluse = where_cluse + " and " + id + "='" + look_for_id + "'";
                 }
-                query = "Select * from " + PH_DAIRY_DCR +" " +where_cluse;
+                query = "Select * from " + PH_DAIRY_DCR +" " +where_cluse + " order by id";
             }
 
             Cursor c = sd.rawQuery(query, null);
@@ -4695,6 +5392,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 }
             } finally {
                 c.close();
+                sd.close();
             }
 
         if (nameList.size() == 0 && !table.equals("Expenses")) {
@@ -4748,34 +5446,49 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     public int getNotification_count() {
-        String countQuery = "SELECT  read_status FROM " + Notification + " Where read_status=0";
-         sd = this.getReadableDatabase();
-        Cursor cursor = sd.rawQuery(countQuery, null);
-        int cnt = cursor.getCount();
-        cursor.close();
+        Cursor cursor = null;
+        int cnt =0;
+        try {
+            String countQuery = "SELECT  read_status FROM " + Notification + " Where read_status=0";
+            sd = this.getReadableDatabase();
+            cursor = sd.rawQuery(countQuery, null);
+            cnt = cursor.getCount();
+
+        }finally {
+            cursor.close();
+            sd.close();
+        }
         return cnt;
 
     }
     ////////////////////////////////
 
     public void deleteMenu() {
-        sd = this.getWritableDatabase();
-        sd.delete(MenuControl, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(MenuControl, null, null);
+        }finally {
+            sd.close();
+        }
     }
     //////////////////////////////
 
     public void insert_Notification(String Title, String msg, String logo, String content, String status, String date, String time) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("Title", Title);
-        cv.put("msg", msg);
-        cv.put("logo_url", logo);
-        cv.put("content_url", content);
-        cv.put("read_status", status);
-        cv.put("date", date);
-        cv.put("time", time);
-        sd.insert(Notification, null, cv);
-        Log.v("javed","Notification inserted successfully");
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("Title", Title);
+            cv.put("msg", msg);
+            cv.put("logo_url", logo);
+            cv.put("content_url", content);
+            cv.put("read_status", status);
+            cv.put("date", date);
+            cv.put("time", time);
+            sd.insert(Notification, null, cv);
+            Log.v("javed", "Notification inserted successfully");
+        }finally {
+            sd.close();
+        }
 
     }
     public HashMap<String, ArrayList<String>> getNotificationMsg() {
@@ -4812,6 +5525,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         data.put("Title",Title);
         data.put("Des",des);
@@ -4826,19 +5540,27 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     public void notificationDeletebyID(String id) {
-        sd = this.getWritableDatabase();
-        if (id !=null) {
-            sd.delete(Notification, "ID =" + id, null);
-        }else{
-            sd.delete(Notification, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            if (id != null) {
+                sd.delete(Notification, "ID =" + id, null);
+            } else {
+                sd.delete(Notification, null, null);
+            }
+        }finally {
+            sd.close();
         }
     }
 
     public void updateNotificationStatus(String id,String status) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("read_status", status);
-        sd.update(Notification,cv ,"ID =" + id,null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("read_status", status);
+            sd.update(Notification, cv, "ID =" + id, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public void delete_weakOld_Notification(Calendar calendar1) {
@@ -4868,16 +5590,21 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             e.printStackTrace();
         } finally {
             c.close();
+            sd.close();
         }
     }
 
     public void insert_Approval_count(String approval_menu_code, String approval_count) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("approval_menu_code", approval_menu_code);
-        cv.put("approval_count", approval_count);
-        sd.insert(Approval_count, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("approval_menu_code", approval_menu_code);
+            cv.put("approval_count", approval_count);
+            sd.insert(Approval_count, null, cv);
        /* Log.v("javed","Approval_count inserted successfully");*/
+        }finally {
+            sd.close();
+        }
 
     }
     public void delete_Approval_count() {
@@ -4901,33 +5628,46 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return approval_count;
     }
 
     public void insert_Expense(String exp_head_id, String exp_head,String amount, String remark,String FILE_NAME, String ID, String time) {
-        sd = this.getWritableDatabase();
-        sd.delete(Expenses, "exp_head_id='"+exp_head_id+"'", null);
-        ContentValues cv = new ContentValues();
-        cv.put("exp_head_id", exp_head_id);
-        cv.put("exp_head", exp_head);
-        cv.put("amount", amount);
-        cv.put("remark", remark);
-        cv.put("FILE_NAME", FILE_NAME);
-        cv.put("exp_ID", ID);
-        cv.put("time", time);
-        sd.insert(Expenses, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Expenses, "exp_head_id='" + exp_head_id + "'", null);
+            ContentValues cv = new ContentValues();
+            cv.put("exp_head_id", exp_head_id);
+            cv.put("exp_head", exp_head);
+            cv.put("amount", amount);
+            cv.put("remark", remark);
+            cv.put("FILE_NAME", FILE_NAME);
+            cv.put("exp_ID", ID);
+            cv.put("time", time);
+            sd.insert(Expenses, null, cv);
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void delete_Expense_withID(String exp_ID) {
-        sd = this.getWritableDatabase();
-        sd.delete(Expenses, "exp_ID='"+exp_ID+"'", null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Expenses, "exp_ID='" + exp_ID + "'", null);
+        }finally {
+            sd.close();
+        }
     }
 
     public void delete_Expense() {
-        sd = this.getWritableDatabase();
-        sd.delete(Expenses, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Expenses, null, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -4952,25 +5692,34 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
 
     public void insert_DOB_DOA(String PA_NAME, String DOB,String DOA, String MOBILE,String TYPE) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("PA_NAME", PA_NAME);
-        cv.put("DOB", DOB);
-        cv.put("DOA", DOA);
-        cv.put("MOBILE", MOBILE);
-        cv.put("TYPE", TYPE);
-        sd.insert(dob_doa, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("PA_NAME", PA_NAME);
+            cv.put("DOB", DOB);
+            cv.put("DOA", DOA);
+            cv.put("MOBILE", MOBILE);
+            cv.put("TYPE", TYPE);
+            sd.insert(dob_doa, null, cv);
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void delete_DOB_DOA() {
-        sd = this.getWritableDatabase();
-        sd.delete(dob_doa, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(dob_doa, null, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -4997,6 +5746,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -5005,93 +5755,128 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public void insert_NonListed_Call(String sDocType, String sDrName,String sAdd1, String sMobileNo
             ,String sRemark, String iSplId,String iSpl,String iQflId, String iQfl
             ,String iSrno, String loc, String time, String CLASS, String POTENCY_AMT, String AREA) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("sDocType", sDocType);
-        cv.put("sDrName", sDrName);
-        cv.put("sAdd1", sAdd1);
-        cv.put("sMobileNo", sMobileNo);
-        cv.put("sRemark", sRemark);
-        cv.put("iSplId", iSplId);
-        cv.put("iSpl", iSpl);
-        cv.put("iQflId", iQflId);
-        cv.put("iQfl", iQfl);
-        cv.put("iSrno", iSrno);
-        cv.put("loc", loc);
-        cv.put("time", time);
-        cv.put("CLASS", CLASS);
-        cv.put("POTENCY_AMT", POTENCY_AMT);
-        cv.put("AREA", AREA);
-        sd.insert(NonListed_call, null, cv);
+
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("sDocType", sDocType);
+            cv.put("sDrName", sDrName);
+            cv.put("sAdd1", sAdd1);
+            cv.put("sMobileNo", sMobileNo);
+            cv.put("sRemark", sRemark);
+            cv.put("iSplId", iSplId);
+            cv.put("iSpl", iSpl);
+            cv.put("iQflId", iQflId);
+            cv.put("iQfl", iQfl);
+            cv.put("iSrno", iSrno);
+            cv.put("loc", loc);
+            cv.put("time", time);
+            cv.put("CLASS", CLASS);
+            cv.put("POTENCY_AMT", POTENCY_AMT);
+            cv.put("AREA", AREA);
+            sd.insert(NonListed_call, null, cv);
+        }finally {
+            sd.close();
+        }
 
     }
 
 
     public void delete_Nonlisted_calls() {
-        sd = this.getWritableDatabase();
-        sd.delete(NonListed_call, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(NonListed_call, null, null);
+        }finally {
+            sd.close();
+        }
 
     }
     public void delete_Doctor_from_local_all(String dr_id) {
-        sd = this.getWritableDatabase();
-        sd.delete("tempdr", "dr_id='"+dr_id+"'", null);
-        sd.delete("phdcrdr_more", "dr_id='"+dr_id+"'", null);
-        sd.delete("phdcrdr", "dr_id='"+dr_id+"'", null);
-        sd.delete(DOCTOR_ITEM_TABLE, "dr_id='"+dr_id+"'", null);
-        delete_DCR_Item(dr_id,null,null,"DR");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("tempdr", "dr_id='" + dr_id + "'", null);
+            sd.delete("phdcrdr_more", "dr_id='" + dr_id + "'", null);
+            sd.delete("phdcrdr", "dr_id='" + dr_id + "'", null);
+            sd.delete(DOCTOR_ITEM_TABLE, "dr_id='" + dr_id + "'", null);
+            delete_DCR_Item(dr_id, null, null, "DR");
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void delete_Stokist_from_local_all(String dr_id) {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcrstk", "stk_id='"+dr_id+"'", null);
-        delete_DCR_Item(dr_id,null,null,"STK");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrstk", "stk_id='" + dr_id + "'", null);
+            delete_DCR_Item(dr_id, null, null, "STK");
+        }finally {
+            sd.close();
+        }
 
     }
     public void delete_DoctorRemainder_from_local_all(String dr_id) {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcrdr_rc", "dr_id='"+dr_id+"'", null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrdr_rc", "dr_id='" + dr_id + "'", null);
+        }finally {
+            sd.close();
+        }
 
     }
+
     public void delete_Chemist_from_local_all(String dr_id) {
-        sd = this.getWritableDatabase();
-        sd.delete("phdcrchem", "chem_id='"+dr_id+"'", null);
-        sd.delete("chemisttemp", "chem_id='"+dr_id+"'", null);
-        delete_DCR_Item(dr_id,null,null,"CHEM");
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrchem", "chem_id='" + dr_id + "'", null);
+            sd.delete("chemisttemp", "chem_id='" + dr_id + "'", null);
+            delete_DCR_Item(dr_id, null, null, "CHEM");
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void insert_Mail(int mail_id, String who_id,String who_name, String date
             ,String time, String is_read,String category,String type, String subject
             ,String remark, String file_name, String file_path) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("mail_id", mail_id);
-        cv.put("who_id", who_id);
-        cv.put("who_name", who_name);
-        cv.put("date", date);
-        cv.put("time", time);
-        cv.put("category", category);
-        cv.put("type", type);
-        cv.put("subject", subject);
-        cv.put("remark", remark);
-        cv.put("file_name", file_name);
-        cv.put("file_path", file_path);
 
-        if(get_Mail(category,""+mail_id).size()>0){
-            sd.update(Mail, cv,"mail_id="+mail_id,null);
-        }else {
-            cv.put("is_read", is_read);
-            sd.insert(Mail, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("mail_id", mail_id);
+            cv.put("who_id", who_id);
+            cv.put("who_name", who_name);
+            cv.put("date", date);
+            cv.put("time", time);
+            cv.put("category", category);
+            cv.put("type", type);
+            cv.put("subject", subject);
+            cv.put("remark", remark);
+            cv.put("file_name", file_name);
+            cv.put("file_path", file_path);
+
+            if (get_Mail(category, "" + mail_id).size() > 0) {
+                sd.update(Mail, cv, "mail_id=" + mail_id, null);
+            } else {
+                cv.put("is_read", is_read);
+                sd.insert(Mail, null, cv);
+            }
+        }finally {
+            sd.close();
         }
 
     }
 
     public void update_Mail(String mail_id, String is_read) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("is_read", is_read);
-        sd.update(Mail, cv,"mail_id="+mail_id,null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("is_read", is_read);
+            sd.update(Mail, cv, "mail_id=" + mail_id, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -5137,6 +5922,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -5144,6 +5930,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public String getMaxMailId(String mail_category){
         int  mail_id=0;
+        sd = this.getWritableDatabase();
         Cursor c = sd.rawQuery("SELECT MAX(mail_id) as mail_id FROM "+Mail+" where category='"+mail_category+"'", null);
         try {
             if (c.moveToFirst()) {
@@ -5154,11 +5941,13 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return ""+mail_id;
     }
 
     public int getNoOfUnreadMail(String mail_category){
+        sd = this.getWritableDatabase();
         int  mail_id=0;
         Cursor c = sd.rawQuery("SELECT * FROM "+Mail+" where category='"+mail_category+"' and is_read='0'", null);
         try {
@@ -5170,16 +5959,21 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return mail_id;
     }
 
     public void delete_Mail(String mail_id) {
-        sd = this.getWritableDatabase();
-        if (mail_id.equals("")) {
-            sd.delete(Mail, null, null);
-        }else{
-            sd.delete(Mail,"id='"+mail_id+"'",null);
+        try {
+            sd = this.getWritableDatabase();
+            if (mail_id.equals("")) {
+                sd.delete(Mail, null, null);
+            } else {
+                sd.delete(Mail, "id='" + mail_id + "'", null);
+            }
+        }finally {
+            sd.close();
         }
 
     }
@@ -5191,36 +5985,44 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     public void setDcrAppraisal(String PA_ID, String PA_NAME,String DR_CALL, String DR_AVG,String CHEM_CALL
             , String CHEM_AVG,String FLAG, String sAPPRAISAL_ID_STR, String sAPPRAISAL_NAME_STR
             ,String sGRADE_STR,String sGRADE_NAME_STR, String sOBSERVATION, String sACTION_TAKEN) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("PA_ID", PA_ID);
-        cv.put("PA_NAME", PA_NAME);
-        cv.put("DR_CALL", DR_CALL);
-        cv.put("DR_AVG", DR_AVG);
-        cv.put("CHEM_CALL", CHEM_CALL);
-        cv.put("CHEM_AVG", CHEM_AVG);
-        cv.put("FLAG", FLAG);
-        cv.put("sAPPRAISAL_ID_STR", sAPPRAISAL_ID_STR);
-        cv.put("sAPPRAISAL_NAME_STR", sAPPRAISAL_NAME_STR);
-        cv.put("sGRADE_STR", sGRADE_STR);
-        cv.put("sGRADE_NAME_STR", sGRADE_NAME_STR);
-        cv.put("sOBSERVATION", sOBSERVATION);
-        cv.put("sACTION_TAKEN", sACTION_TAKEN);
-        sd.insert(Appraisal, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("PA_ID", PA_ID);
+            cv.put("PA_NAME", PA_NAME);
+            cv.put("DR_CALL", DR_CALL);
+            cv.put("DR_AVG", DR_AVG);
+            cv.put("CHEM_CALL", CHEM_CALL);
+            cv.put("CHEM_AVG", CHEM_AVG);
+            cv.put("FLAG", FLAG);
+            cv.put("sAPPRAISAL_ID_STR", sAPPRAISAL_ID_STR);
+            cv.put("sAPPRAISAL_NAME_STR", sAPPRAISAL_NAME_STR);
+            cv.put("sGRADE_STR", sGRADE_STR);
+            cv.put("sGRADE_NAME_STR", sGRADE_NAME_STR);
+            cv.put("sOBSERVATION", sOBSERVATION);
+            cv.put("sACTION_TAKEN", sACTION_TAKEN);
+            sd.insert(Appraisal, null, cv);
+        }finally {
+            sd.close();
+        }
 
     }
     public void update_Apraisal(String pa_id,String FLAG, String sAPPRAISAL_ID_STR, String sAPPRAISAL_NAME_STR
             ,String sGRADE_STR,String sGRADE_NAME_STR, String sOBSERVATION, String sACTION_TAKEN) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("FLAG", FLAG);
-        cv.put("sAPPRAISAL_ID_STR", sAPPRAISAL_ID_STR);
-        cv.put("sAPPRAISAL_NAME_STR", sAPPRAISAL_NAME_STR);
-        cv.put("sGRADE_STR", sGRADE_STR);
-        cv.put("sGRADE_NAME_STR", sGRADE_NAME_STR);
-        cv.put("sOBSERVATION", sOBSERVATION);
-        cv.put("sACTION_TAKEN", sACTION_TAKEN);
-        sd.update(Appraisal, cv,"PA_ID="+pa_id,null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("FLAG", FLAG);
+            cv.put("sAPPRAISAL_ID_STR", sAPPRAISAL_ID_STR);
+            cv.put("sAPPRAISAL_NAME_STR", sAPPRAISAL_NAME_STR);
+            cv.put("sGRADE_STR", sGRADE_STR);
+            cv.put("sGRADE_NAME_STR", sGRADE_NAME_STR);
+            cv.put("sOBSERVATION", sOBSERVATION);
+            cv.put("sACTION_TAKEN", sACTION_TAKEN);
+            sd.update(Appraisal, cv, "PA_ID=" + pa_id, null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -5258,29 +6060,42 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
 
     public void deleteDcrAppraisal() {
-        sd = this.getWritableDatabase();
-        sd.delete(Appraisal, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Appraisal, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     ///=================================================exp head==========================================
 
     public void Insert_EXP_Head(String FIELD_NAME, String FIELD_ID,String MANDATORY,String DA_ACTION) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("FIELD_NAME", FIELD_NAME);
-        cv.put("FIELD_ID", FIELD_ID);
-        cv.put("MANDATORY", MANDATORY);
-        cv.put("DA_ACTION", DA_ACTION);
-        sd.insert(Expenses_head, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("FIELD_NAME", FIELD_NAME);
+            cv.put("FIELD_ID", FIELD_ID);
+            cv.put("MANDATORY", MANDATORY);
+            cv.put("DA_ACTION", DA_ACTION);
+            sd.insert(Expenses_head, null, cv);
+        }finally {
+            sd.close();
+        }
     }
     public void delete_EXP_Head() {
-        sd = this.getWritableDatabase();
-        sd.delete(Expenses_head, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Expenses_head, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public ArrayList<Map<String, String>> get_mandatory_pending_exp_head() {
@@ -5300,6 +6115,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -5320,6 +6136,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -5328,54 +6145,74 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public void Insert_tenivia_traker(String DR_ID, String DR_NAME,String QTY
             ,String AMOUNT, String QTY_CAPTION,String ITEM_ID,String AMOUN_CAPTION, String TIME,String REMARK) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("DR_ID", DR_ID);
-        cv.put("DR_NAME", DR_NAME);
-        cv.put("QTY", QTY);
-        cv.put("AMOUNT", AMOUNT);
-        cv.put("QTY_CAPTION", QTY_CAPTION);
-        cv.put("ITEM_ID", ITEM_ID);
-        cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
-        cv.put("TIME", TIME);
-        cv.put("REMARK", REMARK);
-        sd.insert(Tenivia_traker, null, cv);
-        if (!DR_ID.equalsIgnoreCase("-1")){
-            delete_tenivia_traker("-1");
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("DR_ID", DR_ID);
+            cv.put("DR_NAME", DR_NAME);
+            cv.put("QTY", QTY);
+            cv.put("AMOUNT", AMOUNT);
+            cv.put("QTY_CAPTION", QTY_CAPTION);
+            cv.put("ITEM_ID", ITEM_ID);
+            cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
+            cv.put("TIME", TIME);
+            cv.put("REMARK", REMARK);
+            sd.insert(Tenivia_traker, null, cv);
+            if (!DR_ID.equalsIgnoreCase("-1")) {
+                delete_tenivia_traker("-1");
+            }
+        }finally {
+            sd.close();
         }
     }
 
     public void Update_tenivia_traker(String DR_ID, String DR_NAME,String QTY
             ,String AMOUNT, String QTY_CAPTION,String ITEM_ID,String AMOUN_CAPTION, String TIME,String REMARK) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("DR_ID", DR_ID);
-        cv.put("DR_NAME", DR_NAME);
-        cv.put("QTY", QTY);
-        cv.put("AMOUNT", AMOUNT);
-        cv.put("QTY_CAPTION", QTY_CAPTION);
-        cv.put("ITEM_ID", ITEM_ID);
-        cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
-        cv.put("TIME", TIME);
-        cv.put("REMARK", REMARK);
-        sd.update(Tenivia_traker, cv, "DR_ID ='" + DR_ID+"'", null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("DR_ID", DR_ID);
+            cv.put("DR_NAME", DR_NAME);
+            cv.put("QTY", QTY);
+            cv.put("AMOUNT", AMOUNT);
+            cv.put("QTY_CAPTION", QTY_CAPTION);
+            cv.put("ITEM_ID", ITEM_ID);
+            cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
+            cv.put("TIME", TIME);
+            cv.put("REMARK", REMARK);
+            sd.update(Tenivia_traker, cv, "DR_ID ='" + DR_ID + "'", null);
+        }finally {
+            sd.close();
+        }
     }
 
     public void delete_tenivia_traker(String DR_ID) {
-        sd = this.getWritableDatabase();
-        sd.delete(Tenivia_traker, "DR_ID ='" + DR_ID+"'", null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Tenivia_traker, "DR_ID ='" + DR_ID + "'", null);
+        }finally {
+            sd.close();
+        }
     }
     public void delete_tenivia_traker() {
-        sd = this.getWritableDatabase();
-        sd.delete(Tenivia_traker, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Tenivia_traker, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
 
     ///=================================================exp head==========================================
 
     public void delete_Doctor_Call_Remark() {
-        sd = this.getWritableDatabase();
-        sd.delete(Doctor_Call_Remark, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Doctor_Call_Remark, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public ArrayList<String> get_Doctor_Call_Remark() {
@@ -5395,6 +6232,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         if (data.size()==0){
             data.add("Other");
@@ -5402,11 +6240,15 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return data;
     }
     public void insertDoctorCallRemark(String item_id, String item_name) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("FIELD_NAME", item_name);
-        cv.put("FIELD_ID", item_id);
-        sd.insert(Doctor_Call_Remark, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("FIELD_NAME", item_name);
+            cv.put("FIELD_ID", item_id);
+            sd.insert(Doctor_Call_Remark, null, cv);
+        }finally {
+            sd.close();
+        }
     }
 
 
@@ -5420,28 +6262,41 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public void insertLat_Long_Reg(String DCS_ID, String LAT_LONG,String DCS_TYPE, String DCS_ADD,String DCS_INDES) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("DCS_ID", DCS_ID);
-        cv.put("LAT_LONG", LAT_LONG);
-        cv.put("DCS_TYPE", DCS_TYPE);
-        cv.put("DCS_ADD", DCS_ADD);
-        cv.put("DCS_INDES", DCS_INDES);
-        cv.put("UPDATED", "0");
-        sd.insert(Lat_Long_Reg, null, cv);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("DCS_ID", DCS_ID);
+            cv.put("LAT_LONG", LAT_LONG);
+            cv.put("DCS_TYPE", DCS_TYPE);
+            cv.put("DCS_ADD", DCS_ADD);
+            cv.put("DCS_INDES", DCS_INDES);
+            cv.put("UPDATED", "0");
+            sd.insert(Lat_Long_Reg, null, cv);
+        }finally {
+            sd.close();
+            sd.close();
+        }
     }
 
     public void updatedLat_Long_Reg(String DCS_ID) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("UPDATED", "1");
-        int result = sd.update(Lat_Long_Reg, cv, "DCS_ID ='" + DCS_ID+"'", null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("UPDATED", "1");
+            int result = sd.update(Lat_Long_Reg, cv, "DCS_ID ='" + DCS_ID + "'", null);
+        }finally {
+            sd.close();
+        }
 
     }
 
     public void delete_Lat_Long_Reg() {
-        sd = this.getWritableDatabase();
-        sd.delete(Lat_Long_Reg, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(Lat_Long_Reg, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public ArrayList<HashMap<String,String>>  get_Lat_Long_Reg(String updated) {
@@ -5463,6 +6318,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -5475,23 +6331,33 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public long insert_phdairy(int DAIRY_ID, String DAIRY_NAME, String DOC_TYPE, String LAST_VISIT_DATE, String DR_LAT_LONG,String DR_LAT_LONG2,String DR_LAT_LONG3) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("DAIRY_ID", DAIRY_ID);
-        cv.put("DAIRY_NAME", DAIRY_NAME);
-        cv.put("DOC_TYPE", DOC_TYPE);
-        cv.put("LAST_VISIT_DATE", LAST_VISIT_DATE);
-        cv.put("DR_LAT_LONG", DR_LAT_LONG);
-        cv.put("DR_LAT_LONG2", DR_LAT_LONG2);
-        cv.put("DR_LAT_LONG3", DR_LAT_LONG3);
-        long l= sd.insert(PH_DAIRY, null, cv);
+        Long l =0l;
+
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("DAIRY_ID", DAIRY_ID);
+            cv.put("DAIRY_NAME", DAIRY_NAME);
+            cv.put("DOC_TYPE", DOC_TYPE);
+            cv.put("LAST_VISIT_DATE", LAST_VISIT_DATE);
+            cv.put("DR_LAT_LONG", DR_LAT_LONG);
+            cv.put("DR_LAT_LONG2", DR_LAT_LONG2);
+            cv.put("DR_LAT_LONG3", DR_LAT_LONG3);
+            l = sd.insert(PH_DAIRY, null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
 
     public Cursor getphdairy(String DOC_TYPE) {
-        sd = this.getWritableDatabase();
-        return sd.rawQuery("select PHDAIRY.DAIRY_ID,PHDAIRY.DAIRY_NAME,PHDAIRY.LAST_VISIT_DATE,DR_LAT_LONG,DR_LAT_LONG2,DR_LAT_LONG3, CASE WHEN IFNull(PHDAIRY_DCR.DAIRY_ID,0) >0 THEN 1 ELSE 0 END AS CALLYN from PHDAIRY LEFT OUTER JOIN PHDAIRY_DCR  ON PHDAIRY.DAIRY_ID=PHDAIRY_DCR.DAIRY_ID  where PHDAIRY.DOC_TYPE='"+DOC_TYPE+"'" , null);
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select PHDAIRY.DAIRY_ID,PHDAIRY.DAIRY_NAME,PHDAIRY.LAST_VISIT_DATE,DR_LAT_LONG,DR_LAT_LONG2,DR_LAT_LONG3, CASE WHEN IFNull(PHDAIRY_DCR.DAIRY_ID,0) >0 THEN 1 ELSE 0 END AS CALLYN from PHDAIRY LEFT OUTER JOIN PHDAIRY_DCR  ON PHDAIRY.DAIRY_ID=PHDAIRY_DCR.DAIRY_ID  where PHDAIRY.DOC_TYPE='" + DOC_TYPE + "'", null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public ArrayList<HashMap<String,String>>  get_phdairy(String DOC_TYPE) {
@@ -5514,6 +6380,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -5526,25 +6393,38 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public long insert_phdairy_person(int DAIRY_ID, int PERSON_ID, String PERSON_NAME) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("DAIRY_ID", DAIRY_ID);
-        cv.put("PERSON_ID", PERSON_ID);
-        cv.put("PERSON_NAME", PERSON_NAME);
-        long l= sd.insert(PH_DAIRY_PERSON, null, cv);
+        Long l = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("DAIRY_ID", DAIRY_ID);
+            cv.put("PERSON_ID", PERSON_ID);
+            cv.put("PERSON_NAME", PERSON_NAME);
+            l = sd.insert(PH_DAIRY_PERSON, null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     public Cursor get_phdairy_person(String DAIRY_ID) {
-        ArrayList<HashMap<String,String>>  data = new ArrayList<HashMap<String,String>> ();
-        sd = this.getWritableDatabase();
-        String query ="select * from "+PH_DAIRY_PERSON +" where DAIRY_ID='"+DAIRY_ID+"'";
-        return sd.rawQuery(query, null);
+        try {
+            ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+            sd = this.getWritableDatabase();
+            String query = "select * from " + PH_DAIRY_PERSON + " where DAIRY_ID='" + DAIRY_ID + "'";
+            return sd.rawQuery(query, null);
+        }finally {
+            //sd.close();
+        }
     }
 
     public void delete_phdairy_person() {
-        sd = this.getWritableDatabase();
-        sd.delete(PH_DAIRY_PERSON, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(PH_DAIRY_PERSON, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     public long insert_phdairy_reason( int PA_ID, String PA_NAME) {
@@ -5569,6 +6449,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         if (data.size()==0){
             data.add("Other");
@@ -5578,8 +6459,12 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public void delete_phdairy_reason() {
-        sd = this.getWritableDatabase();
-        sd.delete(PH_DAIRY_REASON, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(PH_DAIRY_REASON, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
 //     String DAIRY_DCR_TABLE = "CREATE TABLE "+PH_DAIRY_DCR +" ( id integer primary key,DAIRY_ID text,DOC_TYPE text,DAIRY_NAME text,
@@ -5592,96 +6477,112 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                    String person_id,String pob_amt,
                                    String allitemid, String allitemqty, String sample, String allgiftid, String allgiftqty,
                                    String file,String LOC_EXTRA,String IS_INTRESTED,String Ref_latlong) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("DAIRY_ID", DAIRY_ID);
-        cv.put("DAIRY_NAME", DAIRY_NAME);
-        cv.put("DOC_TYPE", DOC_TYPE);
-        cv.put("visit_time", visit_time);
-        cv.put("dr_latLong", DR_LAT_LONG);
-        cv.put("batteryLevel", batteryLevel);
-        cv.put("dr_address", dr_address);
+       Long l =0l;
+        try {
+           sd = this.getWritableDatabase();
+           ContentValues cv = new ContentValues();
+           cv.put("DAIRY_ID", DAIRY_ID);
+           cv.put("DAIRY_NAME", DAIRY_NAME);
+           cv.put("DOC_TYPE", DOC_TYPE);
+           cv.put("visit_time", visit_time);
+           cv.put("dr_latLong", DR_LAT_LONG);
+           cv.put("batteryLevel", batteryLevel);
+           cv.put("dr_address", dr_address);
 
-        cv.put("dr_remark", dr_remark);
-        cv.put("updated", "0");
-        cv.put("dr_km", dr_km);
-        cv.put("srno", srno);
-        cv.put("person_name", person_name);
-        cv.put("person_id", person_id);
-        cv.put("pob_amt", pob_amt);
+           cv.put("dr_remark", dr_remark);
+           cv.put("updated", "0");
+           cv.put("dr_km", dr_km);
+           cv.put("srno", srno);
+           cv.put("person_name", person_name);
+           cv.put("person_id", person_id);
+           cv.put("pob_amt", pob_amt);
 
-        cv.put("allitemid", allitemid);
-        cv.put("allitemqty", allitemqty);
-        cv.put("sample", sample);
-        cv.put("allgiftid", allgiftid);
-        cv.put("allgiftqty", allgiftqty);
-        cv.put("file", file);
-        cv.put("LOC_EXTRA", LOC_EXTRA);
-        cv.put("IS_INTRESTED", IS_INTRESTED);
-        cv.put("Ref_latlong", Ref_latlong);
-
-
-        delete_DCR_Item(DAIRY_ID,null,null,"DAIRY");
-        insert_DCR_Item(DAIRY_ID,allitemid,sample,"SAMPLE","DAIRY");
-        insert_DCR_Item(DAIRY_ID,allgiftid,allgiftqty,"GIFT","DAIRY");
+           cv.put("allitemid", allitemid);
+           cv.put("allitemqty", allitemqty);
+           cv.put("sample", sample);
+           cv.put("allgiftid", allgiftid);
+           cv.put("allgiftqty", allgiftqty);
+           cv.put("file", file);
+           cv.put("LOC_EXTRA", LOC_EXTRA);
+           cv.put("IS_INTRESTED", IS_INTRESTED);
+           cv.put("Ref_latlong", Ref_latlong);
 
 
-        return sd.insert(PH_DAIRY_DCR, null, cv);
+           delete_DCR_Item(DAIRY_ID, null, null, "DAIRY");
+           insert_DCR_Item(DAIRY_ID, allitemid, sample, "SAMPLE", "DAIRY");
+           insert_DCR_Item(DAIRY_ID, allgiftid, allgiftqty, "GIFT", "DAIRY");
+
+
+           l= sd.insert(PH_DAIRY_DCR, null, cv);
+       }finally {
+           sd.close();
+       }
+       return l;
     }
 
 
-    public long update_phdairy_dcr(String DAIRY_ID, String DAIRY_NAME, String DOC_TYPE,
+    public Long update_phdairy_dcr(String DAIRY_ID, String DAIRY_NAME, String DOC_TYPE,
                                    String dr_remark, String person_name,
                                    String person_id,String pob_amt,
                                    String allitemid, String allitemqty, String sample, String allgiftid, String allgiftqty,
                                    String file,String IS_INTRESTED) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("DAIRY_ID", DAIRY_ID);
-        cv.put("DAIRY_NAME", DAIRY_NAME);
-        cv.put("DOC_TYPE", DOC_TYPE);
-        //cv.put("visit_time", visit_time);
-        //cv.put("dr_latLong", DR_LAT_LONG);
-        //cv.put("batteryLevel", batteryLevel);
-        //cv.put("dr_address", dr_address);
+        Long l =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("DAIRY_ID", DAIRY_ID);
+            cv.put("DAIRY_NAME", DAIRY_NAME);
+            cv.put("DOC_TYPE", DOC_TYPE);
+            //cv.put("visit_time", visit_time);
+            //cv.put("dr_latLong", DR_LAT_LONG);
+            //cv.put("batteryLevel", batteryLevel);
+            //cv.put("dr_address", dr_address);
 
-        cv.put("dr_remark", dr_remark);
-        cv.put("updated", "0");
-        //cv.put("dr_km", dr_km);
-       // cv.put("srno", srno);
-        if(!person_id.equals("")) {
-            cv.put("person_name", person_name);
-            cv.put("person_id", person_id);
+            cv.put("dr_remark", dr_remark);
+            cv.put("updated", "0");
+            //cv.put("dr_km", dr_km);
+            // cv.put("srno", srno);
+            if (!person_id.equals("")) {
+                cv.put("person_name", person_name);
+                cv.put("person_id", person_id);
+            }
+
+            if (!allitemid.equals("") || !IS_INTRESTED.equals("1")) {
+                cv.put("pob_amt", pob_amt);
+
+                cv.put("allitemid", allitemid);
+                cv.put("allitemqty", allitemqty);
+                cv.put("sample", sample);
+            }
+            if (!allgiftid.equals("") || !IS_INTRESTED.equals("1")) {
+                cv.put("allgiftid", allgiftid);
+                cv.put("allgiftqty", allgiftqty);
+            }
+            cv.put("file", file);
+            cv.put("IS_INTRESTED", IS_INTRESTED);
+            //cv.put("LOC_EXTRA", LOC_EXTRA);
+
+
+            delete_DCR_Item(DAIRY_ID, null, null, "DAIRY");
+            insert_DCR_Item(DAIRY_ID, allitemid, sample, "SAMPLE", "DAIRY");
+            insert_DCR_Item(DAIRY_ID, allgiftid, allgiftqty, "GIFT", "DAIRY");
+
+            sd.update(PH_DAIRY_DCR, cv, "DAIRY_ID ='" + DAIRY_ID + "'", null);
+        }finally {
+            sd.close();
         }
-
-        if(!allitemid.equals("") || !IS_INTRESTED.equals("1")) {
-            cv.put("pob_amt", pob_amt);
-
-            cv.put("allitemid", allitemid);
-            cv.put("allitemqty", allitemqty);
-            cv.put("sample", sample);
-        }
-        if(!allgiftid.equals("") || !IS_INTRESTED.equals("1")) {
-            cv.put("allgiftid", allgiftid);
-            cv.put("allgiftqty", allgiftqty);
-        }
-        cv.put("file", file);
-        cv.put("IS_INTRESTED", IS_INTRESTED);
-        //cv.put("LOC_EXTRA", LOC_EXTRA);
-
-
-        delete_DCR_Item(DAIRY_ID,null,null,"DAIRY");
-        insert_DCR_Item(DAIRY_ID,allitemid,sample,"SAMPLE","DAIRY");
-        insert_DCR_Item(DAIRY_ID,allgiftid,allgiftqty,"GIFT","DAIRY");
-
-        return sd.update(PH_DAIRY_DCR, cv, "DAIRY_ID ='" + DAIRY_ID+"'", null);
+        return l;
     }
 
     public void updatedphdairy_dcr(String DAIRY_ID) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("UPDATED", "1");
-        int result = sd.update(PH_DAIRY_DCR, cv, "DAIRY_ID ='" + DAIRY_ID+"'", null);
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("UPDATED", "1");
+            int result = sd.update(PH_DAIRY_DCR, cv, "DAIRY_ID ='" + DAIRY_ID + "'", null);
+        }finally {
+            sd.close();
+        }
 
     }
 
@@ -5732,6 +6633,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
         return data;
     }
@@ -5752,36 +6654,49 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
         }finally {
             c.close();
+            sd.close();
         }
 
         return  result;
     }
 
     public void delete_phdairy_dcr(String DAIRY_ID) {
-        sd = this.getWritableDatabase();
-        if (DAIRY_ID==null) {
-            sd.delete(PH_DAIRY_DCR, null, null);
-            delete_DCR_Item(null,null,null,"DAIRY");
-        }else{
-            sd.delete(PH_DAIRY_DCR, "DAIRY_ID ='"+DAIRY_ID+"'", null);
-            delete_DCR_Item(DAIRY_ID,null,null,"DAIRY");
+        try {
+            sd = this.getWritableDatabase();
+            if (DAIRY_ID == null) {
+                sd.delete(PH_DAIRY_DCR, null, null);
+                delete_DCR_Item(null, null, null, "DAIRY");
+            } else {
+                sd.delete(PH_DAIRY_DCR, "DAIRY_ID ='" + DAIRY_ID + "'", null);
+                delete_DCR_Item(DAIRY_ID, null, null, "DAIRY");
+            }
+        }finally {
+            sd.close();
         }
-
     }
 
 
     public long insert_Item_Stock( String ITEM_ID, int STOCK_QTY) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("STOCK_QTY", STOCK_QTY);
-        cv.put("ITEM_ID", ITEM_ID);
-        long l= sd.insert(PH_ITEM_STOCK_DCR, null, cv);
+        Long l =0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("STOCK_QTY", STOCK_QTY);
+            cv.put("ITEM_ID", ITEM_ID);
+            l = sd.insert(PH_ITEM_STOCK_DCR, null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     public void delete_Item_Stock() {
-        sd = this.getWritableDatabase();
-        sd.delete(PH_ITEM_STOCK_DCR, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(PH_ITEM_STOCK_DCR, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
     private String GetStock(){
@@ -5792,65 +6707,82 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public long insert_STk_Item (String STK_ID,String ITEM_ID, String RATE) {
-        sd = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("STK_ID", STK_ID);
-        cv.put("ITEM_ID", ITEM_ID);
-        cv.put("RATE", RATE);
-        long l= sd.insert(PH_STK_ITEM_RATE, null, cv);
+        Long l=0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("STK_ID", STK_ID);
+            cv.put("ITEM_ID", ITEM_ID);
+            cv.put("RATE", RATE);
+             l = sd.insert(PH_STK_ITEM_RATE, null, cv);
+        }finally {
+            sd.close();
+        }
         return l;
     }
 
     public void delete_STk_Item() {
-        sd = this.getWritableDatabase();
-        sd.delete(PH_STK_ITEM_RATE, null, null);
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete(PH_STK_ITEM_RATE, null, null);
+        }finally {
+            sd.close();
+        }
     }
 
 
     public void delete_DCR_Item(String ID,String item_id,String ItemType,String Category) {
-        sd = this.getWritableDatabase();
-        String whereClause = "";
+        try {
+            sd = this.getWritableDatabase();
+            String whereClause = "";
 
-        if(ID != null){
-            whereClause =  "CategoryID = '" + ID + "'";
-        }
-        if(ItemType != null){
-            if(!whereClause.isEmpty()){
-                whereClause = whereClause + " AND ";
+            if (ID != null) {
+                whereClause = "CategoryID = '" + ID + "'";
             }
-            whereClause =  whereClause +  "Category = '" + Category + "'";
-        }
-        if(item_id != null){
-            if(!whereClause.isEmpty()){
-                whereClause = whereClause + " AND ";
+            if (ItemType != null) {
+                if (!whereClause.isEmpty()) {
+                    whereClause = whereClause + " AND ";
+                }
+                whereClause = whereClause + "Category = '" + Category + "'";
             }
-            whereClause =  whereClause +  "ITEM_ID = '" + item_id + "'";
-        }
+            if (item_id != null) {
+                if (!whereClause.isEmpty()) {
+                    whereClause = whereClause + " AND ";
+                }
+                whereClause = whereClause + "ITEM_ID = '" + item_id + "'";
+            }
 
-        if(ItemType != null){
-            if(!whereClause.isEmpty()){
-                whereClause = whereClause + " AND ";
+            if (ItemType != null) {
+                if (!whereClause.isEmpty()) {
+                    whereClause = whereClause + " AND ";
+                }
+                whereClause = whereClause + "ItemType = '" + ItemType + "'";
             }
-            whereClause =  whereClause + "ItemType = '" + ItemType + "'";
+            sd.delete(PH_DCR_ITEM, whereClause, null);
+        }finally {
+            sd.close();
         }
-        sd.delete(PH_DCR_ITEM, whereClause, null);
     }
 
 
     public void insert_DCR_Item(String ID, String ArrITEM_ID, String ArrQTY,String ItemType, String Category) {
-        sd = this.getWritableDatabase();
+        try {
+            sd = this.getWritableDatabase();
 
-        String item_id[] = ArrITEM_ID.split(",");
-        String Qty[] = ArrQTY.split(",");
+            String item_id[] = ArrITEM_ID.split(",");
+            String Qty[] = ArrQTY.split(",");
 
-        for( int i = 0;i< item_id.length;i++) {
-            ContentValues cv = new ContentValues();
-            cv.put("CategoryID", ID);
-            cv.put("QTY", Qty[i]);
-            cv.put("ITEM_ID", item_id[i]);
-            cv.put("ItemType", ItemType);
-            cv.put("Category", Category);
-            sd.insert(PH_DCR_ITEM, null, cv);
+            for (int i = 0; i < item_id.length; i++) {
+                ContentValues cv = new ContentValues();
+                cv.put("CategoryID", ID);
+                cv.put("QTY", Qty[i]);
+                cv.put("ITEM_ID", item_id[i]);
+                cv.put("ItemType", ItemType);
+                cv.put("Category", Category);
+                sd.insert(PH_DCR_ITEM, null, cv);
+            }
+        }finally {
+            sd.close();
         }
     }
 

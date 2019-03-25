@@ -38,7 +38,7 @@ import org.json.JSONObject;
 
 import services.CboServices;
 import utils.adapterutils.MailDetails_Adapter;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 

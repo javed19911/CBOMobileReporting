@@ -126,10 +126,10 @@ public class Work_With_Dialog {
         filter=(EditText) view.findViewById(R.id.myfilter);
         progess=(ProgressBar) view.findViewById(R.id.progess);
 
-        Toolbar toolbar =(Toolbar) view.findViewById(R.id.toolbar_hadder);
+        /*Toolbar toolbar =(Toolbar) view.findViewById(R.id.toolbar_hadder);
         if (toolbar != null) {
             toolbar.setVisibility(View.GONE);
-        }
+        }*/
 
         if (!Custom_Variables_And_Method.pub_desig_id.equals(""+1)) {
             LinearLayout header = (LinearLayout) view.findViewById(R.id.header);

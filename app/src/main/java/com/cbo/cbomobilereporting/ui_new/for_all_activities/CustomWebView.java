@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +46,9 @@ import java.util.ArrayList;
 
 import services.CboServices;
 import utils.adapterutils.SpinnerModel;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 /**
  * Created by Akshit on 08/03/16.
@@ -392,9 +395,28 @@ public class CustomWebView extends AppCompatActivity {
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            if(consoleMessage.message().toLowerCase().equals("window.close();")){
-                finish();
+            switch (consoleMessage.message().toLowerCase()){
+                case "window.close();" :
+                    finish();
+                    break;
+                case "sync" :
+                    new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(String s, String s1) {
+                            AppAlert.getInstance().getAlert(context,s,s1);
+                        }
+                    });
+                    break;
+                default:
+                    Log.d("web",consoleMessage.message().toLowerCase());
+
             }
+
             return super.onConsoleMessage(consoleMessage);
         }
 

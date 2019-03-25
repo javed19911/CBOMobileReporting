@@ -4,8 +4,7 @@ package com.cbo.cbomobilereporting.databaseHelper;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 
 import FirebaseDatabase.FirebsaeDB;
-import utils.clearAppData.MyCustumApplication;
-import utils_new.Custom_Variables_And_Method;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 public abstract class FirebaseDbhelper<T> extends FirebsaeDB<T> {
 

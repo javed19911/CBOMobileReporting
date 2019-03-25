@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 public class DraftMail_Adapter extends BaseAdapter {
 

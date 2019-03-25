@@ -38,8 +38,8 @@ import com.uenics.javed.CBOLibrary.Response;
 
 import utils.adapterutils.DocSampleModel;
 import utils.adapterutils.LazyAdapter;
-import utils.clearAppData.MyCustumApplication;
-import utils.networkUtil.NetworkUtil;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;

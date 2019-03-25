@@ -5,27 +5,18 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -40,14 +31,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -56,44 +45,29 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrRcCallDB;
-import com.cbo.cbomobilereporting.databaseHelper.Call.Db.StockistCallDB;
-import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall;
-import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
 import com.uenics.javed.CBOLibrary.Response;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 
 import locationpkg.Const;
-import services.ServiceHandler;
 import services.Sync_service;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -175,7 +149,8 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 								  c.getString(c.getColumnIndex("FREQ")), c.getString(c.getColumnIndex("NO_VISITED")),
 								  c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
 								  c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN")),
-								  c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP"))));
+								  c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
+								  c.getString(c.getColumnIndex("APP_PENDING_YN"))));
 
 					  }while(c.moveToNext());
 					 
@@ -979,7 +954,32 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 				drname.setText(doc_name);
 				latLong = "";
 				ref_latLong = "";
-				if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...")){
+				if (!model.getAPP_PENDING_YN().equalsIgnoreCase("0")){
+					drname.setText("---Select---");
+					dr_id="";
+					doc_name="";
+					if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
+						//customVariablesAndMethod.Connect_to_Internet_Msg(context);
+						AppAlert.getInstance().setNagativeTxt("Cancel").setPositiveTxt("Check").DecisionAlert(context,
+								"Approval Pending !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+										"DCRDRADDAREA_APP_MSG","Your Additional Area Approval is Pending... \nYou Additional Area must be approved first !!!\n" +
+												"Please contact your Head-Office for APPROVAL"),
+								new AppAlert.OnClickListener() {
+									@Override
+									public void onPositiveClicked(View item, String result) {
+										new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,"ADDAREA");
+									}
+
+									@Override
+									public void onNegativeClicked(View item, String result) {
+
+									}
+								});
+
+					} else {
+						new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,"ADDAREA");
+					}
+				}else if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...")){
 
 					if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
 						customVariablesAndMethod.Connect_to_Internet_Msg(context);

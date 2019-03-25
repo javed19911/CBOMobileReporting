@@ -73,7 +73,7 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -598,7 +598,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
     public ArrayList<String> remAdded() {
         ArrayList<String> drlist = new ArrayList<String>();
         drlist.clear();
-        Cursor c = cbohelp.getDoctorName1();
+        Cursor c = cbohelp.getDoctorListLocal(plan_type,"1");  //getDoctorName1();
         if (c.moveToFirst()) {
             do {
                 drlist.add(c.getString(c.getColumnIndex("dr_id")));
@@ -742,10 +742,13 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                 }
             });
         }else{
-            customVariablesAndMethod.getAlert(context, MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +"!!!",
+            /*customVariablesAndMethod.getAlert(context, MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +"!!!",
                     "You can't delete from here.\n " + MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ " for "+
                             Dr_name +" Found...\n" +
-                            "To delete, first remove " +Dr_name+" from "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ " in DCR...");
+                            "To delete, first remove " +Dr_name+" from "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ " in DCR...");*/
+            customVariablesAndMethod.getAlert(context, MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +"!!!",
+                    "You can't delete from here.\n Because you have " + MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ ".\n"+
+                            "If you want to delete then first delete from "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +".");
         }
 
 
@@ -777,11 +780,12 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                                 c.getString(c.getColumnIndex("CLASS")), c.getString(c.getColumnIndex("POTENCY_AMT")),
                                 c.getString(c.getColumnIndex("ITEM_NAME")),c.getString(c.getColumnIndex("ITEM_POB")),
                                 c.getString(c.getColumnIndex("ITEM_SALE")), c.getString(c.getColumnIndex("DR_AREA")),
-                                c.getString(c.getColumnIndex("PANE_TYPE")), c.getString(c.getColumnIndex("DR_LAT_LONG"))
-                                , c.getString(c.getColumnIndex("FREQ")), c.getString(c.getColumnIndex("NO_VISITED")),
-                                c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3"))
-                                , c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN"))
-                                , c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP"))));
+                                c.getString(c.getColumnIndex("PANE_TYPE")), c.getString(c.getColumnIndex("DR_LAT_LONG")),
+                                c.getString(c.getColumnIndex("FREQ")), c.getString(c.getColumnIndex("NO_VISITED")),
+                                c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
+                                c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN")),
+                                c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
+                                c.getString(c.getColumnIndex("APP_PENDING_YN"))));
                     } while (c.moveToNext());
 
                 }
@@ -1238,7 +1242,32 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                 ref_latLong = "";
                 latLong  = "";
 
-                if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...")){
+                if (!model.getAPP_PENDING_YN().equalsIgnoreCase("0")){
+                    drname.setText("---Select---");
+                    dr_id="";
+                    doc_name="";
+                    if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
+                        //customVariablesAndMethod.Connect_to_Internet_Msg(context);
+                        AppAlert.getInstance().setNagativeTxt("Cancel").setPositiveTxt("Check").DecisionAlert(context,
+                                "Approval Pending !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+                                        "DCRDRADDAREA_APP_MSG","Your Additional Area Approval is Pending... \nYou Additional Area must be approved first !!!\n" +
+                                                "Please contact your Head-Office for APPROVAL"),
+                                new AppAlert.OnClickListener() {
+                                    @Override
+                                    public void onPositiveClicked(View item, String result) {
+                                        new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,"ADDAREA");
+                                    }
+
+                                    @Override
+                                    public void onNegativeClicked(View item, String result) {
+
+                                    }
+                                });
+
+                    } else {
+                        new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,"ADDAREA");
+                    }
+                }else if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...")){
                     if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
                         customVariablesAndMethod.Connect_to_Internet_Msg(context);
                         drname.setText("---Select---");
@@ -1313,10 +1342,20 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
                         if (!doctor_list.get("remark").get(0).equals("")) {
                             String remark=doctor_list.get("remark").get(0);
-                            if (remark.contains("\u20B9"))
+                            if (remark.contains("\u20B9")) {
 
-                                mdrCall.setPOBAmt(remark.split("\\n")[0]);
-                                remark=remark.split("\\n")[1];
+                                /*mdrCall.setPOBAmt(remark.split("\n")[0].replace("\u20B9",""));
+                                if (remark.split("\n").length>1) {
+                                    remark = remark.split("\n")[1];
+                                } else {
+                                    remark = "";
+                                }*/
+
+                                mdrCall.setPOBAmt(remark.substring(remark.indexOf("\u20B9") + 1, remark.indexOf("\n")));
+                                //pob.setText(mchemistCall.getPOBAmt());
+                                remark = remark.substring(remark.indexOf("\n"));
+                            }
+
 
                             if (remark_list.contains(remark)){
                                 btn_remark.setText(remark);

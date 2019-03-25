@@ -17,13 +17,13 @@ import android.widget.GridView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport.DcrReportsNew;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DashboardReport;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DcrReports;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DrWiseVisit;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Logged_UnLogged;
 import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.MissedDoctorActivity;
-import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Spo_Report;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TpReports;
 
@@ -33,7 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.ReportMenu_Grid_Adapter;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -251,7 +251,7 @@ public class ReportMenuInGrid extends Fragment {
         if (!networkUtil.internetConneted(context)) {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
         } else {
-            Intent i = new Intent(getActivity(), DcrReports.class);
+            Intent i = new Intent(getActivity(), DcrReportsNew.class);
             startActivity(i);
         }
 

@@ -94,7 +94,7 @@ public class RptAdapter extends BaseAdapter{
             holder.poltary_layout=(LinearLayout) convertView.findViewById(R.id.poltary_layout);
             holder.Dairy_layout=(LinearLayout) convertView.findViewById(R.id.Dairy_layout);
 
-            holder.totalDr_text =(TextView) convertView.findViewById(R.id.totalDr_text);
+            holder.totalChem_text =(TextView) convertView.findViewById(R.id.totalChem_text);
             holder.totalTenivia_text =(TextView) convertView.findViewById(R.id.tenivia_name);
 
             holder.chem =(LinearLayout) convertView.findViewById(R.id.chem);
@@ -123,19 +123,19 @@ public class RptAdapter extends BaseAdapter{
            // holder.totalDr_text.setText("Total Retailer :");
 
         }
-        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("N")) {
-            holder.totalDr_text.setText("Total " + cbohelp.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL").split(" ")[0] + " :");
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED","Y").equals("N")) {
+            holder.totalChem_text.setText("Total " + cbohelp.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL").split(" ")[0] + " :");
         }
 
-        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N")) {
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED","Y").equals("N")) {
             holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_DR_RX").get("D_DR_RX"));
         }
 
-        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N")) {
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED","Y").equals("N")) {
             holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN"));
         }
 
-        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NA_NOT_REQUIRED").equals("N")) {
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NA_NOT_REQUIRED","Y").equals("N")) {
             holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA"));
         }
 
@@ -201,6 +201,8 @@ public class RptAdapter extends BaseAdapter{
             holder.TttlTenivia.setBackgroundResource(R.drawable.button_text_view_selector_green);
 
         }
+
+
         holder.ttldr.setTag(position);
         holder.TTlchm.setTag(position);
         holder.TTlstk.setTag(position);
@@ -362,7 +364,7 @@ class ViewHolder {
     LinearLayout lLayoutMissed_call;
     LinearLayout lLayoutDeRiminder,chem,lLayoutDoctor,lLayoutSTK,lLayoutTenivia;
     LinearLayout lLayoutDr,Dairy_layout,poltary_layout;
-    TextView totalDr_text,totalTenivia_text;
+    TextView totalChem_text,totalTenivia_text;
 
 
 }

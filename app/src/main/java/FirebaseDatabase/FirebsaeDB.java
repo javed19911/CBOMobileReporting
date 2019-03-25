@@ -102,7 +102,7 @@ public abstract class FirebsaeDB<T> {
     }
 
     public String getBaseURL() {
-        return BaseURL;
+        return BaseURL.toUpperCase();
     }
 
     public void setBaseURL(String baseURL) {
@@ -159,7 +159,7 @@ public abstract class FirebsaeDB<T> {
         //if (user != null){
             mfirebaseDatabase = FirebaseDatabase.getInstance ();
             rootRef = mfirebaseDatabase.getReference ();
-            rootRef = FirebaseDatabase.getInstance ().getReference (BaseURL);
+            rootRef = FirebaseDatabase.getInstance ().getReference (getBaseURL());
             rootRef= rootRef.child (getTable ());
 
             response.onSuccess (rootRef);

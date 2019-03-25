@@ -37,6 +37,8 @@ import utils.adapterutils.SpoModel;
 import utils.adapterutils.SpoRptAdapter;
 import utils_new.Custom_Variables_And_Method;
 
+import static com.cbo.cbomobilereporting.ui.LayoutZoomer.CurrencyType;
+
 /**
  * Created by Akshit udainiya on 9/10/15.
  */
@@ -169,7 +171,7 @@ public class SpoHeadquarterWise extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             String  resultHeadquator = myService.getResponse_SpoCNFGrid(cboDbHelper.getCompanyCode(),""+ Custom_Variables_And_Method.PA_ID, LayoutZoomer.extraFrom,
-                    LayoutZoomer.extraTo,"h",spoIdExtra,"0");
+                    LayoutZoomer.extraTo,"h",spoIdExtra,"0",CurrencyType);
             return resultHeadquator;
         }
 

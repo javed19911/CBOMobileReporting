@@ -22,8 +22,7 @@ public class CBOFinalTask_New {
         private CBO_DB_Helper cbohelp;
         Custom_Variables_And_Method customVariablesAndMethod;
 
-        private String dcr_id,AllItemQty,AllPob,AllGiftId,AllGiftQty;
-        private ArrayList<String> doc_id;
+
 
 
         public CBOFinalTask_New(Context context){
@@ -147,9 +146,12 @@ public class CBOFinalTask_New {
             StringBuilder sb_sDCRITEM_NOC_ARR = new StringBuilder();
             StringBuilder sb_DCRDR_RATE = new StringBuilder();
 
+            String AllItemQty,AllPob,AllGiftId,AllGiftQty;
+            ArrayList<String> doc_id;
             cbohelp=new CBO_DB_Helper(mContext);
-            doc_id=cbohelp.getdoctormoreLit(updated);
-            //doc_id=cbohelp.tempDrListForFinalSubmit(updated);
+            //doc_id=cbohelp.getdoctormoreLit(updated);
+            doc_id=cbohelp.tempDrListForFinalSubmit(updated);
+            //cbohelp.getDoctorListLocal(null,"1")
             if(doc_id.size()>0) {
                 String visual_items = "0";
                 String noc_value = "0";
@@ -222,7 +224,7 @@ public class CBOFinalTask_New {
 
 
         cbohelp=new CBO_DB_Helper(mContext);
-        doc_id=cbohelp.getDr_Rx_id(updated);
+        ArrayList<String> doc_id=cbohelp.getDr_Rx_id(updated);
         if(doc_id.size()>0) {
 
             String Pob_Value="";

@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    app:ignore="NamespaceTypo">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardElevation="2dp"
+        android:layout_margin="10dp"
+        card_view:cardUseCompatPadding="true"
+      >
+
+
+
+
+
+        <FrameLayout
+            android:background="@drawable/card_edge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_margin="1dp"
+            android:padding="8dp"
+
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+
+                android:id="@+id/wer">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:layout_weight="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mail From: "
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:id="@+id/filldate"
+                    android:layout_marginRight="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+            </LinearLayout>
+             <View
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"
+                 android:background="#000"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:weightSum="3"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Worked Station"
+                    android:layout_weight="2"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    android:id="@+id/text_view_Bold_16" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mail From: "
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:id="@+id/worked_station"
+                    android:layout_marginRight="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000"/>
+
+         <!--   <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:drawableLeft="@drawable/search"/>-->
+            <LinearLayout
+                android:id="@+id/cborpt_dr_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Doctor Call"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Mail From"
+                    android:textAllCaps="false"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorPrimary" android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/totaaldr"
+                    android:onClick="totalDr"
+
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+
+                android:id="@+id/nolisted_Stk_layout"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dr. Riminder"
+                    android:textSize="14sp"
+                    android:layout_weight="1.5"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1.5"
+                    android:text="Mail From"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorPrimary"                        android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_distributor"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/chem"
+                android:layout_marginTop="5dp"
+                android:weightSum="3"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:id="@+id/totalChem_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Chemist Call"
+                    android:textSize="14sp"
+                    android:layout_weight="1.5"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Mail from"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorPrimary"
+                    android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_chmist"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/mob_loc"
+                android:weightSum="3"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Stockist Call"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="MAIL FROM"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorPrimary" android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_stckst"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Dairy_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dairy Call"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:text="Mail From"
+                    android:textColor="@color/textColorPrimary"
+                    android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_dairy"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/poltary_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Polutry Call"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:text="Mail From"
+                    android:textColor="@color/textColorPrimary"
+                    android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_poltary"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/nonlisted_doctor_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Non Listed Call"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:text="Mail From"
+                    android:textColor="@color/textColorPrimary"
+                    android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_doctor"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/missed_call_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Missed Call"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Mail From"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorPrimary"
+                    android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_missed_call"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Tenivia_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tenivia Call"
+                    android:id="@+id/tenivia_name"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Mail From"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorPrimary"
+                    android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_tenivia_call"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/mob_locdfd"
+                android:weightSum="3"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="DA Type"
+                    android:layout_weight="1.5"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Mail From"
+                    android:layout_weight="1.5"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorPrimary"
+                    android:background="@drawable/button_text_view_selector"
+                    android:id="@+id/ttl_exp"
+                    android:layout_marginRight="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:weightSum="3"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Remark"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1.5"
+                    android:textColor="@color/navigationBarColor"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:textSize="15sp"
+                    android:id="@+id/ttl_remark"
+                    android:layout_marginRight="3dp"
+                    android:textColor="@color/navigationBarColor"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

@@ -659,7 +659,8 @@ public class ServiceHandler {
 
 
 
-    public String getResponse_SpoCNFGrid(String sCompanyFolder, String iPA_ID, String sFDATE, String sTDATE, String sType, String iCompanyId, String iHqId) {
+    public String getResponse_SpoCNFGrid(String sCompanyFolder, String iPA_ID, String sFDATE, String sTDATE,
+                                         String sType, String iCompanyId, String iHqId,String sCurrencyType) {
 
         //Start of call to service
 
@@ -673,15 +674,16 @@ public class ServiceHandler {
         request.put("sType", sType);
         request.put("iCompanyId", iCompanyId);
         request.put("iHqId", iHqId);
+        request.put("sCurrencyType", sCurrencyType);
 
         //End of call to service
 
-        return customMethodForAllServices(request,"SpoCNFGrid");
+        return customMethodForAllServices(request,"SpoCNFGrid_1");
 
     }
 
     public String getResponse_SPOCNFViewGrid(String sCompanyFolder, String sCompanyName, String sFdate, String sTdate,
-                                             String iLoginPaId, String iType) {
+                                             String iLoginPaId, String iType,String sCurrencyType) {
         //Start of call to service
 
         HashMap<String,String> request=new HashMap<>();
@@ -692,10 +694,11 @@ public class ServiceHandler {
         request.put("sTdate", sTdate);
         request.put("iLoginPaId", iLoginPaId);
         request.put("iType", iType);
+        request.put("sCurrencyType", sCurrencyType);
 
         //End of call to service
 
-        return customMethodForAllServices(request,"SPOCNFViewGrid");
+        return customMethodForAllServices(request,"SPOCNFViewGrid_1");
 
 
     }

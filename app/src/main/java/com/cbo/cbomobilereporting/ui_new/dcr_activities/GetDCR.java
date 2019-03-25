@@ -203,7 +203,7 @@ public class GetDCR extends AppCompatActivity {
                     Alert_Positive.setText("Replan");
                     Alert_title.setText("Call Found");
                     Alert_message.setText("Are you sure to Replan ? \nSome Calls found in your Day Summary.\n" +
-                            "Else Reset your Day Plan from Constants");
+                            "Else Reset your Day Plan from Utility");
 
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
@@ -258,7 +258,7 @@ public class GetDCR extends AppCompatActivity {
 
     private Boolean checkforCalls(){
         int result=0;
-        //result+=cbo_helper.getmenu_count("phdcrdr_rc");
+        result+=cbo_helper.getmenu_count("phdcrdr_rc");
         result+=cbo_helper.getmenu_count("tempdr");
         result+=cbo_helper.getmenu_count("chemisttemp");
         //result+=cbo_helper.getmenu_count("phdcrstk");
@@ -270,23 +270,8 @@ public class GetDCR extends AppCompatActivity {
     }
 
     private void openForReplan(){
-        SharedPreferences pref = GetDCR.this.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, MODE_PRIVATE);
-        Custom_Variables_And_Method.ROOT_NEEDED = pref.getString("root_needed", null);
-        if (Custom_Variables_And_Method.ROOT_NEEDED != null) {
-            if (Custom_Variables_And_Method.ROOT_NEEDED.equals("Y")) {
-                Intent intent=new Intent(context, DCR_Root_new.class);
-                intent.putExtra("plan_type","r");
-                startActivity(intent);
-                finish();
-            } else {
-                Intent intent=new Intent(context, Dcr_Open_New.class);
-                intent.putExtra("plan_type","r");
-                startActivity(intent);
-                finish();
-            }
-        } else if (DCR_ID != "0") {
-            // TODO Auto-generated method stub
-            Intent intent=new Intent(context, Dcr_Open_New.class);
+        if ( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed","Y").equalsIgnoreCase("Y")) {
+            Intent intent=new Intent(context, DCR_Root_new.class);
             intent.putExtra("plan_type","r");
             startActivity(intent);
             finish();

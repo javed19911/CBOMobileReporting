@@ -15,9 +15,9 @@ import android.widget.TextView;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.SystemAlertActivity;
 
-import org.json.JSONException;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
-import utils.clearAppData.MyCustumApplication;
+import org.json.JSONException;
 
 
 /**

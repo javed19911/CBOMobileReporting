@@ -155,11 +155,11 @@ public abstract class CustomActivity extends AppCompatActivity {
             intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Log.d(TAG, "Running on Android O");
-                startForegroundService(intent);
+                stopService(intent);
                 //startService(intent);
             } else {
                 Log.d(TAG, "Running on Android N or lower");
-                startService(intent);
+                stopService(intent);
             }
         }
     }

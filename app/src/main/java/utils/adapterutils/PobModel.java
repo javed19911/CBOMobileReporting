@@ -1,6 +1,8 @@
 package utils.adapterutils;
 
-public class PobModel {
+import java.io.Serializable;
+
+public class PobModel implements Serializable{
 
     private String name = "";
     private String id = "";

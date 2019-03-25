@@ -2,35 +2,27 @@ package com.cbo.cbomobilereporting.ui_new;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
@@ -38,6 +30,7 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.ChemistCall;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer.CustomerCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DairyCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Doctor_Sample;
@@ -50,7 +43,6 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Expense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
-import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.NonListedCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.ReminderCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.StockistCall;
@@ -60,6 +52,7 @@ import com.cbo.cbomobilereporting.ui_new.transaction_activities.Farmer_registrat
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsStates;
+import com.uenics.javed.CBOLibrary.CBOException;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -75,11 +68,10 @@ import java.util.Map;
 
 
 import locationpkg.Const;
-import services.CboServices;
 import services.MyAPIService;
 import services.ServiceHandler;
 import utils.CBOUtils.Constants;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GetVersionCode;
@@ -195,6 +187,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
             case "D_DP": {
                 if(customVariablesAndMethod.checkIfCallLocationValid(context,true,SkipLocationVarification)) {
                     setLetLong(nameOnClick);
+                    MyCustumApplication.getInstance().startLoctionService(true);
                     onClickDayPlanning();
                     if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "ASKUPDATEYN", "N").equals("Y")) {
                         new GetVersionCode(getActivity()).execute();
@@ -328,7 +321,15 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 }
                 break;
             }
-
+            case "D_CUST_CALL": {
+                if (IsCallAllowed(true)){
+                    setLetLong(nameOnClick);
+                    Intent i = new Intent(getActivity(), CustomerCall.class);
+                    i.putExtra("title",cboDbHelper.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL"));
+                    startActivity(i);
+                }
+                break;
+            }
             case "D_STK_CALL": {
                 if (DCR_ID.equals("0")  || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
                     customVariablesAndMethod.msgBox(context, "Please open your DCR Days first....");
@@ -573,7 +574,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 .execute(new ResponseBuilder("DCR_DAYPLAN_LOAD_1", request)
                         .setDescription("Please Wait....\nChecking your DCR Status..").setResponse(new CBOServices.APIResponse() {
                             @Override
-                            public void onComplete(Bundle message) {
+                            public void onComplete(Bundle message) throws JSONException {
                                 parser_dcr_plan(message);
 
                             }
@@ -597,11 +598,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
 
 
-    private void parser_dcr_plan(Bundle result) {
+    private void parser_dcr_plan(Bundle result) throws JSONException {
 
         if (result!=null ) {
 
-            try {
+//            try {
                 String table0 = result.getString("Tables0");
                 JSONArray jsonArray0 = new JSONArray(table0);
 
@@ -614,7 +615,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                 jsonArray0.getJSONObject(0).getString("MSG"),
                                 new AppAlert.OnClickListener() {
                                     @Override
-                                    public void onPositiveClicked(View item, String result1) {
+                                    public void onPositiveClicked(View item, String result1)  {
                                         try {
                                             if (!jsonArray0.getJSONObject(0).getString("URL").equalsIgnoreCase("")){
 
@@ -623,19 +624,16 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                                 openDCR(result);
                                             }
                                         } catch (JSONException e) {
-                                            CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
                                             e.printStackTrace();
+                                            throw new CBOException("Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
+                                            //CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
+
                                         }
                                     }
 
                                     @Override
-                                    public void onNegativeClicked(View item, String result1) {
-                                        try {
+                                    public void onNegativeClicked(View item, String result1){
                                             openDCR(result);
-                                        } catch (JSONException e) {
-                                            CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
-                                            e.printStackTrace();
-                                        }
                                     }
                                 });
                     }else{
@@ -662,106 +660,88 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 }
 
                 //progress1.dismiss();
-            } catch (JSONException e) {
-                Log.d("MYAPP", "objects are: " + e.toString());
-                CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
-                e.printStackTrace();
-            }
+//            } catch (JSONException e) {
+//                Log.d("MYAPP", "objects are: " + e.toString());
+//                CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
+//                e.printStackTrace();
+//            }
 
         }
         //Log.d("MYAPP", "objects are1: " + result);
-        progress1.dismiss();
+       // progress1.dismiss();
 
     }
 
-    private void openDCR( Bundle result)throws JSONException {
-        String table0 = result.getString("Tables0");
-        JSONArray jsonArray0 = new JSONArray(table0);
-        if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
+    private void openDCR( Bundle result) {
 
-            for (int j = 0; j < jsonArray0.length(); j++) {
-                JSONObject c = jsonArray0.getJSONObject(j);
-                Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT = c.getString("DCR_DATE");
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DCR_DATE", c.getString("DCR_DATE"));
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DATE_NAME", c.getString("DATE_NAME"));
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "CUR_DATE", c.getString("CUR_DATE"));
-                Custom_Variables_And_Method.DCR_DATE = c.getString("DATE_NAME");
-                //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DATE_NAME",c.getString("DATE_NAME"));
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "mark", c.getString("NewFlash"));
-            }
+        try {
+            String table2 = result.getString("Tables2");
+            JSONArray jsonArray2 = new JSONArray(table2);
+            for (int i = 0; i < jsonArray2.length(); i++) {
+                JSONObject c = jsonArray2.getJSONObject(i);
 
-            String table1 = result.getString("Tables1");
-            JSONArray jsonArray1 = new JSONArray(table1);
-            Custom_Variables_And_Method.DcrPending_datesList.clear();
-            for (int i = 0; i < jsonArray1.length(); i++) {
-                JSONObject jsonObjectPendingDates = jsonArray1.getJSONObject(i);
-                Custom_Variables_And_Method.DcrPending_datesList.add(jsonObjectPendingDates.getString("DATE_NAME"));
+                MyCustumApplication.getInstance().getDCR()
+                        .setShowRouteAsPerTP(c.getString("DCR_TP_AREA_AUTOYN"))
+                        .setShowWorkWithAsPerTP(c.getString("DCR_LOCKWW"))
+                        .setNoOfAddAreaAlowed(c.getString("DCR_NOADDAREA"))
+                        .setWorkWithTitle(c.getString("WW_TITLE"))
+                        .setRouteTitle(c.getString("ROUTE_TITLE"))
+                        .setAreaTitle(c.getString("AREA_TITLE"))
+                        .setAdditionalAreaApprovalReqd(c.getString("ADDAREA_APPYN"));
             }
 
 
-            Custom_Variables_And_Method.ROOT_NEEDED = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed", "N");
-            if (Custom_Variables_And_Method.ROOT_NEEDED.equals("Y")) {
 
-                Intent intent = new Intent(getActivity(), DCR_Root_new.class);
-                intent.putExtra("plan_type", "p");
-                startActivity(intent);
-            } else {
+            String table0 = result.getString("Tables0");
+            JSONArray jsonArray0 = new JSONArray(table0);
+            if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
 
-                Intent intent = new Intent(getActivity(), Dcr_Open_New.class);
-                intent.putExtra("plan_type", "p");
-                startActivity(intent);
-            }
-
-
-        } else {
-            //if data or dcr are pending
-            startActivity(new Intent(getActivity(), GetDCR.class));
-        }
-    }
-
-    private void parser_is_call_unlocked(Bundle result) {
-
-        if (result!=null ) {
-
-            try {
-                String table0 = result.getString("Tables0");
-                JSONArray jsonArray0 = new JSONArray(table0);
-                if (CheckType.equals("A")){
-                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[DIVERT_UNLOCK]")) {
-
-                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DIVERTLOCKYN","" );
-                        AppAlert.getInstance().getAlert(context, "Approved !!!", "Your Calls have been Approved \nYou can please proceed");
-                    } else {
-
-                        AppAlert.getInstance().getAlert(context, "Approval !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
-                                "APPROVAL_MSG","Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
-                                        "Please contact your Head-Office for APPROVAL"));
-                        // customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
-                    }
-                }else {
-                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[CALL_UNLOCK]")) {
-                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "CALL_UNLOCK_STATUS", "[CALL_UNLOCK]");
-                        AppAlert.getInstance().getAlert(context, "CALL UNLOCKED", "Your Calls have been Unlocked \nYou can please proceed");
-                    } else {
-                        Float FIRST_CALL_LOCK_TIME = Float.valueOf(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "FIRST_CALL_LOCK_TIME", "0"));
-                        AppAlert.getInstance().getAlert(context, "CALL LOCKED", "Your Calls has been Locked... \nYou must have made your first Call before " + FIRST_CALL_LOCK_TIME + " O'clock\n" +
-                                "Please contact your Head-Office to UNLOCK");
-                        // customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
-                    }
+                for (int j = 0; j < jsonArray0.length(); j++) {
+                    JSONObject c = jsonArray0.getJSONObject(j);
+                    Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT = c.getString("DCR_DATE");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DCR_DATE", c.getString("DCR_DATE"));
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DATE_NAME", c.getString("DATE_NAME"));
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "CUR_DATE", c.getString("CUR_DATE"));
+                    Custom_Variables_And_Method.DCR_DATE = c.getString("DATE_NAME");
+                    //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DATE_NAME",c.getString("DATE_NAME"));
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "mark", c.getString("NewFlash"));
                 }
 
-                //progress1.dismiss();
-            } catch (JSONException e) {
-                Log.d("MYAPP", "objects are: " + e.toString());
-                AppAlert.getInstance().getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
-                e.printStackTrace();
-            }
+                String table1 = result.getString("Tables1");
+                JSONArray jsonArray1 = new JSONArray(table1);
+                Custom_Variables_And_Method.DcrPending_datesList.clear();
+                for (int i = 0; i < jsonArray1.length(); i++) {
+                    JSONObject jsonObjectPendingDates = jsonArray1.getJSONObject(i);
+                    Custom_Variables_And_Method.DcrPending_datesList.add(jsonObjectPendingDates.getString("DATE_NAME"));
+                }
 
+
+
+                Custom_Variables_And_Method.ROOT_NEEDED = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed", "N");
+                if (Custom_Variables_And_Method.ROOT_NEEDED.equals("Y")) {
+
+                    Intent intent = new Intent(getActivity(), DCR_Root_new.class);
+                    intent.putExtra("plan_type", "p");
+                    startActivity(intent);
+                } else {
+
+                    Intent intent = new Intent(getActivity(), Dcr_Open_New.class);
+                    intent.putExtra("plan_type", "p");
+                    startActivity(intent);
+                }
+
+
+            } else {
+                //if data or dcr are pending
+                startActivity(new Intent(getActivity(), GetDCR.class));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new CBOException("Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
         }
-        //Log.d("MYAPP", "objects are1: " + result);
-        //progress1.dismiss();
 
     }
+
 
 
 
@@ -774,8 +754,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         }
 
     }
-
     private Boolean IsCallAllowed(){
+        return IsCallAllowed(false);
+    }
+
+    private Boolean IsCallAllowed(Boolean ckeckForMobileData){
         if (!customVariablesAndMethod.IsCallAllowedToday(context)) {
             if (DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
 
@@ -783,7 +766,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
             } else {
                 customVariablesAndMethod.msgBox(context,"You Need to Final submit Your Pending Dcr First" + "\n" + "...Then Visit Again....");
             }
-        }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"MOBILEDATAYN", "N").equals("Y") &&!networkUtil.internetConneted(getActivity())) {
+        }else if ((customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"MOBILEDATAYN", "N").equals("Y") ||
+                ckeckForMobileData ) &&!networkUtil.internetConneted(getActivity())) {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
@@ -1010,9 +994,10 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     // TODO Auto-generated method stub
                     try {
 
-                        SharedPreferences pref = getActivity().getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, getActivity().MODE_PRIVATE);
-                        Custom_Variables_And_Method.ROOT_NEEDED = pref.getString("root_needed", null);
-                        if (Custom_Variables_And_Method.ROOT_NEEDED != null) {
+//                        SharedPreferences pref = getActivity().getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, getActivity().MODE_PRIVATE);
+//                        Custom_Variables_And_Method.ROOT_NEEDED = pref.getString("root_needed", null);
+                        Custom_Variables_And_Method.ROOT_NEEDED =  customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed","Y");
+                        //if (Custom_Variables_And_Method.ROOT_NEEDED != null) {
                             if (Custom_Variables_And_Method.ROOT_NEEDED.equals("Y")) {
                                 startActivity(new Intent(getActivity(), ExpenseRoot.class));
                             } else {
@@ -1020,7 +1005,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                             }
 
 
-                        }
+                        //}
                     } catch (Exception e) {
 
                     }
@@ -1369,15 +1354,15 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                         IfApprasialConditionFulfiled(new Response() {
                                             @Override
                                             public void onSuccess(Bundle bundle) {
-                                                IfExpenseConditionFulfiled(new Response() {
+
+                                                IfRxConditionFulfiled(new Response() {
                                                     @Override
                                                     public void onSuccess(Bundle bundle) {
-                                                        IfRxConditionFulfiled(new Response() {
+                                                        IfExpenseConditionFulfiled(new Response() {
                                                             @Override
                                                             public void onSuccess(Bundle bundle) {
                                                                 if( IsExpCriteriaFulfiled(cboDbHelper.tempDrListForFinalSubmit().size())){
                                                                     startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
-                                                                    getActivity().finish();
                                                                     getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
                                                                 }
                                                             }
@@ -1387,7 +1372,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                                                 AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                                                                     @Override
                                                                     public void onPositiveClicked(View item, String result) {
-                                                                        OnGridItemClick(MyCustumApplication.getInstance().getTaniviaTrakerMenuCode(),true);
+                                                                        OnGridItemClick("D_EXP",true);
                                                                     }
 
                                                                     @Override
@@ -1404,7 +1389,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                                                         AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                                                             @Override
                                                             public void onPositiveClicked(View item, String result) {
-                                                                OnGridItemClick("D_EXP",true);
+
+                                                                OnGridItemClick(MyCustumApplication.getInstance().getTaniviaTrakerMenuCode(),true);
                                                             }
 
                                                             @Override
@@ -1489,7 +1475,9 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                     @Override
                     public void onPositiveClicked(View item, String result) {
-                        OnGridItemClick("D_DRCALL",true);
+                        if (!s1.equalsIgnoreCase("Please make atleast One Call....")) {
+                            OnGridItemClick("D_DRCALL", true);
+                        }
                     }
 
                     @Override
@@ -1519,14 +1507,20 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
             dr_call_size=1;
         }
 
-        if (drInLocal.size() <= 0 &&
+        // valid for only  working_code that contains NR i.e its for only new concept of working type
+        // new concept of working type is if any validation for final submit is to be skiped for a menu then
+        //workingcode = NR
+        //
+        if (drInLocal.size() <= 0 && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")  &&
                 (cboDbHelper.getmenu_count("chemisttemp") == 0 && (cboDbHelper.getmenu_count("phdcrstk") == 0))
                 && (cboDbHelper.getCountphdairy_dcr("D") == 0 && (cboDbHelper.getCountphdairy_dcr("P") == 0))) {
             if (listener != null) {
                 listener.onError("No Calls found !!!", "Please make atleast One Call....");
             }
 
-        }else if (dr_call_size <= 0 && Hide_status.equalsIgnoreCase("N")) {
+        }else if (dr_call_size <= 0 &&
+                (Hide_status.equalsIgnoreCase("N") &&
+                        !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Doctor_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
                 listener.onError("No Doctor Called!!!!", "Please make atleast One Doctor Call.... ");
             }
@@ -1537,14 +1531,14 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         }
     }
 
-
     private void IfChemistConditionFulfiled(Response listener){
 
-        String Hide_status = Constants.getSIDE_STATUS(getActivity());
-        String chemist_status = getmydata().get(0);
+        int chemist_status = cboDbHelper.getmenu_count("chemisttemp");
         String menuName = cboDbHelper.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL");
 
-        if ((chemist_status.equals("")) && (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED").equals("Y"))) {
+        if ((chemist_status == 0) &&
+                (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED").equals("Y") &&
+                        !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
                 listener.onError("No "+menuName+"!!!","Please Select Not Visited In " + menuName);
             }
@@ -1558,9 +1552,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
     private void IfStokistConditionFulfiled(Response listener){
 
-        String stockist_status = getmydata().get(1);
+        int stockist_count = cboDbHelper.getmenu_count("phdcrstk");
 
-        if ((stockist_status.equals("")) && (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED").equals("Y"))) {
+        if ((stockist_count == 0) &&
+                (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED").equals("Y") &&
+                        !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
                 listener.onError("No Stockist Called!!!!", "Please Select Not Visited In Stockist Call");
             }
@@ -1650,6 +1646,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
             switch (RxValidateCondition){
                 case "2":
                     NoRxCallsReqd = 1;
+
                     break;
                 case "1":
                     NoRxCallsReqd = cboDbHelper.getDoctorName(RxValidateCondition).getCount();
@@ -1658,6 +1655,16 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                     NoRxCallsReqd = 0;
             }
 
+            if (NoRxCalls == 0) {
+                if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "working_code", "W").equals("OCC") ||
+                        customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "working_code", "W").equals("OSC") ||
+                        customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "working_code", "W").equals("CSC") ||
+                        (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "working_code", "W").contains("NR")
+                                && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "working_code", "W").contains("W"))) {
+
+                    NoRxCalls = NoRxCallsReqd;
+                }
+            }
 
             if (NoRxCalls>= NoRxCallsReqd) {
                 if (listener != null){
@@ -1679,8 +1686,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
 
     private Boolean IsTeniviaMenuAvilable(){
-        return customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N") ||
-                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N");
+        return customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED","Y").equals("N") ||
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED","Y").equals("N");
     }
 
     private Boolean IsExpCriteriaFulfiled(int NoOfDrCalled){
@@ -1988,13 +1995,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
             count.add(get_count(key));
         }
         if(!getKeyList.contains("D_CHEMCALL") && !getKeyList.contains("D_RETCALL")){
-            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED","Y");
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED","Y");
         }else{
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED","N");
         }
         if(!getKeyList.contains("D_STK_CALL")){
-            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","Y");
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED","Y");
         }else{
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED","N");
@@ -2069,6 +2074,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 flag=true;
                 table="tempdr";
                 break;
+            case "D_CUST_CALL":
             case "D_CHEMCALL":
                 flag=true;
                 table="chemisttemp";
@@ -2118,12 +2124,12 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         if (result == 0 ){
             switch (table){
                 case "chemisttemp":
-                    if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED").equals("Y")){
+                    if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED","N").equals("Y")){
                         result = -1;
                     }
                     break;
                 case "phdcrstk":
-                    if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED").equals("Y")){
+                    if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","N").equals("Y")){
                         result = -1;
                     }
                     break;
@@ -2340,43 +2346,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
     private void CheckIfCallsUnlocked(String type) {
 
-
-        //Start of call to service
-
-        HashMap<String, String> request = new HashMap<>();
-        request.put("sCompanyFolder", cboDbHelper.getCompanyCode());
-        request.put("iPA_ID", "" + Custom_Variables_And_Method.PA_ID);
-        request.put("iDCR_ID", "" + Custom_Variables_And_Method.DCR_ID);
-        request.put("sTYPE",type);
-        CheckType=type;
-        ArrayList<Integer> tables = new ArrayList<>();
-        tables.add(0);
-
-        new MyAPIService(context)
-                .execute(new ResponseBuilder("DCR_DAYPLAN_LOAD_1", request)
-                        .setTables(tables)
-                        .setDescription("Please Wait....\nChecking your DCR Status..").setResponse(new CBOServices.APIResponse() {
-                            @Override
-                            public void onComplete(Bundle message) {
-                                parser_is_call_unlocked(message);
-
-                            }
-
-                            @Override
-                            public void onResponse(Bundle response) throws JSONException {
-                            }
-
-                            @Override
-                            public void onError(String title, String description) {
-                                AppAlert.getInstance().getAlert(context,title,description);
-                            }
-
-
-                        })
-                );
-
-
-        //End of call to service
+        new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,type);
     }
 
 

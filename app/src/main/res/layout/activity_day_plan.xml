@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical" >
+
+    <include layout="@layout/hadder_2016"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:background="@drawable/custom_square_transparent_bg">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/mainLayout"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/locLayoutDopen"
+                    android:background="@drawable/custom_headder_bg">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Location"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+
+
+                    <utils.font_package.Text_view_Regular
+                        android:id="@+id/loc_dcropen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Location"
+                        android:textColor="@color/navigationBarColor"
+                        android:textSize="17sp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:textStyle="bold"
+
+                        />
+
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/pending_dcr_dates_layouts_area"
+                    android:background="@drawable/custom_headder_bg">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Dcr Pending Dates"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="#800000"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+
+
+                    <utils.font_package.Text_view_Regular
+                        android:id="@+id/dcr_pending_dates_area"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Dcr Pending Dates"
+                        android:textColor="#800000"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="DCR Date"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textStyle="bold"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="17sp"/>
+
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="DCR Date"
+                            android:textSize="17dp"
+                            android:gravity="right"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="5dp"
+                            android:paddingBottom="2dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:layout_weight="1" />
+
+
+                    </LinearLayout>
+
+
+
+
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Working Type"
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+                    <!--<View-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:background="@color/colorPrimaryDark"/>-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/worktype"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:prompt="@string/spinner_title4"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginBottom="2dp"
+                            android:textColor="@color/navigationBarColor"
+
+                            />
+                        <View
+                            android:layout_width="1.5dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorPrimaryDark"/>
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="1dp"
+
+                            android:padding="4.5dp"
+                            android:id="@+id/spinner_img_area_open"
+                            android:src="@drawable/drop_icon" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg"
+                    android:id="@+id/dopen_layout1">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:textColor="@color/colorPrimaryDark"
+                            android:background="@color/transparent"
+                            android:id="@+id/get"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:text="+"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="23sp" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Work-With"
+                            android:id="@+id/work_with_title"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Divert WorkWith"
+                            android:gravity="right"
+                            android:id="@+id/DIVERTWWYN_TXT"
+                            android:padding="3dp"
+                            android:visibility="gone"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/DIVERTWWYN"
+                            android:text=""
+                            android:visibility="gone"
+                            android:layout_gravity="center_vertical"
+                            android:buttonTint="@color/colorPrimaryDark"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+
+
+                        <TextView
+                            android:textSize="15dp"
+                            android:id="@+id/workwith"
+                            android:padding="2dp"
+                            android:layout_marginLeft="26dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Click  + sign for WorkWith"
+                            android:textColor="@color/colorPrimaryDark"
+                            />
+
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg"
+                    android:id="@+id/areaLayoutDopen">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:textColor="@color/colorPrimaryDark"
+                            android:background="@color/transparent"
+                            android:id="@+id/get1"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:text="+"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="23sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Area"
+                            android:id="@+id/Area_title"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Divert Area"
+                            android:gravity="right"
+                            android:id="@+id/ROUTEDIVERTYN_TXT"
+                            android:padding="3dp"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                            android:textStyle="bold"/>
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:id="@+id/ROUTEDIVERTYN"
+                            android:visibility="gone"
+                            android:buttonTint="@color/colorPrimaryDark"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:textSize="15dp"
+                            android:id="@+id/area"
+                            android:padding="2dp"
+                            android:layout_marginLeft="26dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Click+ sign for Area"
+                            android:textColor="@color/colorPrimaryDark"
+                            />
+
+
+
+
+                    </LinearLayout>
+
+
+                    <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Divert Remark"-->
+                    <!--android:gravity="right"-->
+                    <!--android:padding="3dp"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:textSize="12sp"-->
+                    <!--android:textStyle="bold"/>-->
+
+                    <EditText
+                        android:id="@+id/Divert_remark"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="26dp"
+                        android:hint="Please Enter Divert Remark"
+                        android:textSize="17dp"
+                        android:ems="15"
+                        android:visibility="gone"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        />
+
+                </LinearLayout>
+
+
+
+
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/custom_headder_bg"
+                    android:id="@+id/late_remarkLayout">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/underline_bg"
+                        android:id="@+id/lay_late_remark"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Late Remark (DCR Back-Date Entry) "
+                            android:padding="3dp"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+
+                    </LinearLayout>
+
+
+
+                    <EditText
+                        android:id="@+id/late_remark"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_weight="1"
+                        android:hint="Please Late Remark"
+                        android:textSize="17dp"
+                        android:ems="15"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/rootLayoutDopen"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+
+
+                    >
+
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        >
+                        <EditText
+                            android:id="@+id/root"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="8dip"
+                            android:layout_marginRight="8dip"
+                            android:layout_marginTop="20dip"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="            Click  + sign for Root"
+                            android:ems="15"
+                            android:inputType="textMultiLine|textNoSuggestions"
+                            />
+
+                        <Button
+                            android:id="@+id/getroot"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="20dip"
+                            android:layout_marginRight="14dp"
+                            android:onClick="get1"
+                            android:text="+"
+                            android:textSize="20sp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/areaLayoutDopen_root"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+
+                        >
+
+                        <EditText
+                            android:id="@+id/edt_get_area"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="8dip"
+                            android:layout_marginRight="8dip"
+                            android:layout_marginTop="20dip"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="            Click  + sign for Area"
+                            android:inputType="textMultiLine|textNoSuggestions"
+                            android:ems="7"
+
+                            >
+
+                            <requestFocus />
+                        </EditText>
+
+                        <Button
+                            android:id="@+id/get_ara_again"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginRight="14dp"
+                            android:layout_marginTop="20dip"
+                            android:onClick="get1"
+                            android:text="+"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        >
+
+        <utils.font_package.Button_Bold
+            android:id="@+id/save"
+            android:layout_width="fill_parent"
+            android:layout_weight="2"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:layout_gravity="center"
+            android:text="Submit"
+            android:textColor="#fff"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button_text_view_selector" />
+
+        <utils.font_package.Button_Bold
+            android:id="@+id/back"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:text="Back"
+            android:layout_weight="2"
+            android:textColor="#fff"
+            android:background="@drawable/button_text_view_selector"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center"
+            android:layout_alignParentEnd="true" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

@@ -53,6 +53,7 @@ import com.cbo.cbomobilereporting.ui.Contact_Us;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -68,6 +69,7 @@ import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 public class ViewPager_2016 extends CustomActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -177,7 +179,18 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
             if (!networkUtil.internetConneted(ViewPager_2016.this)) {
                 customVariablesAndMethod.getAlert(this,"Turn ON your Internet","Menu not found. Turn NO your INTERNET and TRY AGAIN");
             } else {
-                new GetFMCGandMENU().execute();
+                //new GetFMCGandMENU().execute();
+                new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                    @Override
+                    public void onSuccess(Bundle bundle) {
+                        initiate();
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+
+                    }
+                });
             }
 
         }else {

@@ -16,10 +16,12 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
+import com.cbo.cbomobilereporting.ui_new.approval_activities.BackgroundNotification.BackGroundAppAlert;
 import com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder.FloatingRemainderApproval;
 import com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder.RemainderActivity;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
@@ -143,7 +145,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String tag=msgtyp.substring(3);
                 new generateInboxStyleNotification(this,tag).execute();
             }
-
             else if (msgtyp.equals("MSG")) {
                 intent = new Intent(this, com.cbo.cbomobilereporting.ui_new.mail_activities.Notification.class);
                 JSONObject jsonObject1 = jsonArray.getJSONObject(1);
@@ -158,6 +159,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("msg", "1");
                     intent.putExtra("msg_ho", url);
+                }
+                // new generateInboxStyleNotification(this,tag).execute();
+                big_table_Style(requestCode,intent);
+            }
+            else if (msgtyp.equals("REPLAN")) {
+                intent = new Intent(this, com.cbo.cbomobilereporting.ui_new.mail_activities.Notification.class);
+                JSONObject jsonObject1 = jsonArray.getJSONObject(1);
+                title = jsonObject1.getString("tilte");
+                JSONObject jsonObject2 = jsonArray.getJSONObject(2);
+                msg = jsonObject2.getString("msg");
+                JSONObject jsonObject3 = jsonArray.getJSONObject(3);
+                url = jsonObject3.getString("url");
+                if (url!=null && !url.equals("") ){
+                    flag_info=false;
+                    intent = new Intent(this, Msg_ho.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("msg", "1");
+                    intent.putExtra("msg_ho", url);
+                }
+                if (!MyCustumApplication.getInstance().getDCR().getId().equalsIgnoreCase("0")) {
+                    BackGroundAppAlert.getInstance().setCode("DCRDOWNLOADALL").getAlert(context, title, msg);
                 }
                 // new generateInboxStyleNotification(this,tag).execute();
                 big_table_Style(requestCode,intent);
@@ -277,6 +299,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     intent.putExtra("A_TP", url);
                     intent.putExtra("Title", title);
                 }
+
+                big_table_Style(requestCode,intent);
+                insert=false;
+            }else if (msgtyp.equals("DCRDRADDAREA_APP")) {
+
+                JSONObject jsonObject1 = jsonArray.getJSONObject(1);
+                title = jsonObject1.getString("tilte");
+                JSONObject jsonObject2 = jsonArray.getJSONObject(2);
+                msg = jsonObject2.getString("msg");
+                JSONObject jsonObject3 = jsonArray.getJSONObject(3);
+                url = jsonObject3.getString("url");
+
+                if(url!=null && !url.equals("") ) {
+                    intent = new Intent(context, CustomWebView.class);
+                    intent.putExtra("A_TP", url);
+                    intent.putExtra("Title", title);
+                }
+
+                cboDbHelper.doctorApproved("0");
 
                 big_table_Style(requestCode,intent);
                 //insert=false;

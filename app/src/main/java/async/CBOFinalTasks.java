@@ -67,6 +67,15 @@ public class CBOFinalTasks {
         customVariablesAndMethod.deleteFmcg_ByKey(mContext,"Dcr_Planed_Date");
         customVariablesAndMethod.deleteFmcg_ByKey(mContext,"CUR_DATE");
 
+//        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"DCR_ID","");
+//        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"DcrPlantime","");
+//        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"D_DR_RX_VISITED","N");
+        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"CHEMIST_NOT_VISITED","N");
+        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"STOCKIST_NOT_VISITED","N");
+//        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"dcr_date_real","");
+//        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"Dcr_Planed_Date","");
+//        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"CUR_DATE","");
+
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"myKm1", "0.0");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"OveAllKm","0.0");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(mContext,"final_km","0.0");

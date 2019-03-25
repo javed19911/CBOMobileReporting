@@ -1,8 +1,10 @@
 package utils.adapterutils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
@@ -73,6 +76,8 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
 
         TextView distance     = (TextView)row.findViewById(R.id.distance);
         ImageView loc_icon    = (ImageView)row.findViewById(R.id.loc_icon);
+
+        LinearLayout distanceLayout = row.findViewById(R.id.distanceLayout);
         
         
         {
@@ -83,7 +88,11 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
                 latLong = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(activity,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
                 label.setText(tempValues.getName());
                 sub.setText(tempValues.getId());
-                if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(activity,"GEO_FANCING_KM","0").equals("0") || show==0){
+                if(!tempValues.getAPP_PENDING_YN().equals("0")){
+                    loc_icon.setVisibility(View.GONE);
+                    distance.setText("Additional Area Approval pending...");
+                    distance.setBackgroundColor(0xffE2571F);
+                }else if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(activity,"GEO_FANCING_KM","0").equals("0") || show==0){
                     loc_icon.setVisibility(View.GONE);
                     distance.setVisibility(View.GONE);
                 }else if(tempValues.getLoc().equals("")){
@@ -115,6 +124,7 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
                     Double km=getShortestDistance(km1,km2,km3);
 
                     if (km>Double.valueOf(geo_fancing_km)){
+                        loc_icon.setVisibility(View.VISIBLE);
                         distance.setText(String.format("%.2f", km) +" Km Away");
                         distance.setBackgroundColor(0xffE2921F);
                     }else{
@@ -134,8 +144,22 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
                     }
                 }
 
+
+
                 if (tempValues.getCALLYN().equals("0")){
-                    row.setBackgroundColor(0xFFFFFFFF);
+                    //row.setBackgroundColor(0xFFFFFFFF);
+                    if (tempValues.getAPP_PENDING_YN().equals("0")){
+                        row.setBackgroundColor(0xFFFFFFFF);
+                        if (show == 0){
+                            distance.setVisibility(View.GONE);
+                        }
+                    }else{
+                        distance.setText("Additional Area Approval pending...");
+                        distance.setBackgroundColor(0xffE2571F);
+                        row.setBackgroundColor(0xffE2571F);
+                        label.setTextColor(0xFFFFFFFF);
+                        distance.setVisibility(View.VISIBLE);
+                    }
                 }else{
                     distance.setText("Call Done.");
                     distance.setBackgroundColor(0xFFC0C0C0);
@@ -164,6 +188,26 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
                     //label.setTextColor(0xFF000000);
                 }*/
 
+                distanceLayout.setTag(position);
+
+                distanceLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (loc_icon.getVisibility() == View.VISIBLE) {
+                            SpinnerModel tempValues1 = (SpinnerModel) data.get((Integer) distanceLayout.getTag());
+                            //+ "&mode=d"
+                            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + tempValues1.getREF_LAT_LONG() );
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            activity.startActivity(mapIntent);
+
+                            /*d for driving
+                            w for walking
+                            b for bicycling*/
+                        }
+
+                    }
+                });
 
             }catch(Exception e){
                 e.printStackTrace();

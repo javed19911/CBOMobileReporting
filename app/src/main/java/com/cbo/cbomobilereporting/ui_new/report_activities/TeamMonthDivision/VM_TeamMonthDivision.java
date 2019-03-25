@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -48,6 +49,61 @@ public class VM_TeamMonthDivision extends ViewModel{
     mDivision division;
     mMissedFilter missedFilter;
 
+    private Boolean DP_UserReq = true;
+    private Boolean DP_MonthReq = true;
+    private Boolean DP_DivisionReq = true;
+    private Boolean DP_MissedTypeReq = true;
+
+    public Boolean getDP_UserReq() {
+        return DP_UserReq;
+    }
+
+    public VM_TeamMonthDivision setDP_UserReq(Boolean DP_UserReq) {
+        this.DP_UserReq = DP_UserReq;
+        if(iTeam!=null){
+            iTeam.onNameVisibilityChanged( !DP_UserReq ? View.GONE : View.VISIBLE);
+        }
+        return this;
+    }
+
+    public Boolean getDP_MonthReq() {
+        return DP_MonthReq;
+    }
+
+    public VM_TeamMonthDivision setDP_MonthReq(Boolean DP_MonthReq) {
+        this.DP_MonthReq = DP_MonthReq;
+        if(iTeam!=null){
+            iTeam.onMonthVisibilityChanged( !DP_MonthReq ? View.GONE : View.VISIBLE);
+        }
+        return this;
+    }
+
+    public Boolean getDP_DivisionReq() {
+        return DP_DivisionReq;
+    }
+
+    public VM_TeamMonthDivision setDP_DivisionReq(Boolean DP_DivisionReq) {
+        this.DP_DivisionReq = DP_DivisionReq;
+        if(iTeam!=null){
+            iTeam.onDivisionVisibilityChanged( !DP_DivisionReq ? View.GONE : View.VISIBLE);
+        }
+       return this;
+    }
+
+    public Boolean getDP_MissedTypeReq() {
+        return DP_MissedTypeReq;
+
+    }
+
+    public VM_TeamMonthDivision setDP_MissedTypeReq(Boolean DP_MissedTypeReq) {
+        this.DP_MissedTypeReq = DP_MissedTypeReq;
+        if(iTeam!=null){
+            iTeam.onMissedTypeVisibilityChanged( !DP_MissedTypeReq ? View.GONE : View.VISIBLE);
+        }
+        return this;
+    }
+
+
 
 
     public ProgressDialog progress1;
@@ -60,6 +116,11 @@ public class VM_TeamMonthDivision extends ViewModel{
         
     }
     public  interface  ITeam{
+        void onNameVisibilityChanged(int visibility);
+        void onMonthVisibilityChanged(int visibility);
+        void onMissedTypeVisibilityChanged(int visibility);
+        void onDivisionVisibilityChanged(int visibility);
+
         void OnMonthSelected(mMonth mmonth);
         void OnNameSelected(mUser muser);
         void OnMissedTypeSelected(mMissedFilter missedFilter);

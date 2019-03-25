@@ -7,7 +7,7 @@ import com.uenics.javed.CBOLibrary.SendMail;
 
 import java.util.ArrayList;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 /**

@@ -190,7 +190,7 @@ public class Dr_Workwith_Dialog {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             String[] selected_list={};
-            adapter=new Dcr_Workwith_Adapter((Activity) context,result,selected_list);
+            adapter=new Dcr_Workwith_Adapter((Activity) context,result,selected_list,false);
             mylist.setAdapter(adapter);
             pd.dismiss();
 

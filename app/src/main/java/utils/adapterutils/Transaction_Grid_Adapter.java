@@ -78,7 +78,7 @@ public class Transaction_Grid_Adapter extends BaseAdapter {
             imgView.setImageResource(R.drawable.request_leave_white);
         } else if (arrayLevel.equals("T_LR1")) {
             imgView.setImageResource(R.drawable.request_leave_white);
-        } else  if (arrayLevel.equals("T_SS")) {
+        } else  if (arrayLevel.equals("T_SS") || arrayLevel.equalsIgnoreCase("T_SORD")) {
             imgView.setImageResource(R.drawable.secondary_sale);
         } else if (arrayLevel.equals("T_COMP")) {
             imgView.setImageResource(R.drawable.view_last_complaint_white);

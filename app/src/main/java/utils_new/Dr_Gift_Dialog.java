@@ -18,6 +18,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -57,6 +60,8 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
     String gift_name="",gift_qty="";
     Custom_Variables_And_Method customVariablesAndMethod;
     Context context;
+    LinearLayout noGiftLayout;
+    CheckBox noGift;
 
     Dialog dialog;
     public ProgressDialog progress1;
@@ -92,6 +97,12 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 
+        noGiftLayout = view.findViewById(R.id.noGiftLayout);
+        noGift = view.findViewById(R.id.noGift);
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE (context,"DRGIFTMANDATORY").contains ("D")){
+
+            noGiftLayout.setVisibility(View.VISIBLE);
+        }
 
         mylist=(ListView) view.findViewById(R.id.dr_gift_list);
         save=(Button) view.findViewById(R.id.dr_gift_save);
@@ -111,6 +122,39 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         adapter=new MyAdapter2((Activity) context,getModel());
 
 
+
+        noGift.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked){
+                    AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
+                            "Are you sure want to give NO  gift to the Doctor " ,
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    Nogift();
+
+                                    dialog.dismiss ();
+
+                                    // gift_added=true;
+                                    //(1);
+                                }
+
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+                                    noGift.setChecked(false);
+                                }
+
+                            });
+
+
+
+
+
+
+                }
+            }
+        });
         save.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -243,5 +287,21 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         return list;
     }
 
+    private  void Nogift(){
+        String POB="0";
+        String Rate="x";
+        String Qty="0";
+        cbohelp.deletedata(Custom_Variables_And_Method.DR_ID,Rate);
+        cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, "-1","No gift  for the Day", Qty, POB, Rate,"0","0");
+
+        Bundle i = new Bundle();
+        i.putString("giftid", "-1");
+        i.putString("giftqan", "0");
+
+
+        threadMsg(i);
+
+
+    }
 
 }

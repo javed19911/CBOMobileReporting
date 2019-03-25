@@ -1,16 +1,13 @@
 package locationpkg
 
-import android.app.Activity
 import android.app.ActivityManager
 import android.location.Location
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import com.cbo.cbomobilereporting.R
 
 import android.support.v4.content.LocalBroadcastManager
-import android.view.View
 import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -25,11 +22,9 @@ import android.support.v7.app.AlertDialog
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator
-import com.flurry.sdk.dp.i
-import utils.clearAppData.MyCustumApplication
+import com.cbo.cbomobilereporting.MyCustumApplication
 import utils_new.AppAlert
 import utils_new.Custom_Variables_And_Method
-import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 

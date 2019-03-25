@@ -27,8 +27,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import saleOrder.ClientActivity;
 import utils.adapterutils.Transaction_Grid_Adapter;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -126,7 +127,9 @@ public class TransactionMenuInGrid extends Fragment {
                             }
                             break;
                         }
-
+                        case "T_SORD":
+                            onClickSalesOrder();
+                            break;
                         /*case "T_ADDDOC": {
                             onClickAddDoctor(position);
                             break;
@@ -215,6 +218,15 @@ public class TransactionMenuInGrid extends Fragment {
                 }
     }
         });
+
+    }
+
+
+
+    private void onClickSalesOrder() {
+
+        Intent intent = new Intent(context, ClientActivity.class);
+        startActivity(intent);
 
     }
 ////////////////////////

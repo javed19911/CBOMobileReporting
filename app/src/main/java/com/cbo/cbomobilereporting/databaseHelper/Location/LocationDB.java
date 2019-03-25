@@ -1,12 +1,10 @@
 package com.cbo.cbomobilereporting.databaseHelper.Location;
 
-import android.location.Location;
-
 import com.cbo.cbomobilereporting.databaseHelper.Call.mCall;
 import com.cbo.cbomobilereporting.databaseHelper.FirebaseDbhelper;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 
 public class LocationDB extends FirebaseDbhelper<mLocation> {

@@ -72,7 +72,7 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
@@ -1037,8 +1037,12 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
 
                     String remarkWithPOB = chemist_list.get("remark").get(0);
-                    if (remarkWithPOB.contains("\u20B9"))
-                        remarkWithPOB = remarkWithPOB.substring(remarkWithPOB.indexOf("\n"));
+                    if (remarkWithPOB.contains("\u20B9")) {
+
+                        mchemistCall.setPOBAmt(remarkWithPOB.substring(remarkWithPOB.indexOf("\u20B9")+1,remarkWithPOB.indexOf("\n")));
+                        pob.setText(mchemistCall.getPOBAmt());
+                        remarkWithPOB = remarkWithPOB.substring(remarkWithPOB.indexOf("\n")+1);
+                    }
                     remark.setText(remarkWithPOB);
 
 
@@ -1366,11 +1370,14 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
                         String remarktxt=chemist_list.get("remark").get(0);
                         if (remarktxt.contains("\u20B9")) {
-                            if (remarktxt.split("\\n").length>1) {
-                                remarktxt = remarktxt.split("\\n")[1];
+                            /*if (remarktxt.split("\n").length>1) {
+                                remarktxt = remarktxt.split("\n")[1];
                             } else {
                                 remarktxt = "";
-                            }
+                            }*/
+                            mchemistCall.setPOBAmt(remarktxt.substring(remarktxt.indexOf("\u20B9")+1,remarktxt.indexOf("\n")));
+                            pob.setText(mchemistCall.getPOBAmt());
+                            remarktxt = remarktxt.substring(remarktxt.indexOf("\n")+1);
 
                         }
                         remark.setText(remarktxt);

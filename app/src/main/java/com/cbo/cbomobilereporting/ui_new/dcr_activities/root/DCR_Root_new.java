@@ -35,6 +35,7 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
+import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
@@ -46,10 +47,13 @@ import java.util.HashMap;
 
 import locationpkg.Const;
 import services.CboServices;
+import services.MyAPIService;
 import utils.CBOUtils.SystemArchitecture;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
+
 import utils_new.AppAlert;
 import utils_new.Area_Dialog;
 import utils_new.CustomTextToSpeech;
@@ -61,7 +65,7 @@ import utils_new.Work_With_Dialog;
 
 public class DCR_Root_new extends AppCompatActivity {
 
-    EditText date, wwith, loc, root, edt_get_area,late_remark,divert_remark;
+    EditText late_remark,divert_remark;
     Spinner work_type;
 
     Button save, Back, get_workwith, getRoot, get_area_again;
@@ -72,24 +76,26 @@ public class DCR_Root_new extends AppCompatActivity {
     CheckBox ROUTEDIVERTYN,DIVERTWWYN;
 
     LinearLayout lay1, areaLayout;
-    LinearLayout rootLayout;
+    LinearLayout rootLayout,lay_late_remark;
 
     String workwith1 = "", workwith2 = "", workwith34 = "", workWith4 = "", workWith5 = "", workWith6 = "", workWith7 = "", workWith8 = "", address = "", work_withme = "", work_name = "";
 
     String real_date = null;
     String work_val = "",work_type_code = "";
 
-    String work_with_name = "", work_with_id = "", area_name = "", area_id = "";
+    String work_with_name = "", work_with_id = "", area_name = "", area_id = "",root_id ="",root_name = "";
+    String TP_work_with_name = "", TP_work_with_id = "", TP_area_name = "", TP_area_id = "",TP_root_id ="",TP_root_name = "";
     LinearLayout locationLayout;
 
     CBO_DB_Helper cbo_helper;
     ArrayList<SpinnerModel> getworkingType = new ArrayList<SpinnerModel>();
     String paid1 = "";
-    String root_id = "";
-    String root_name = "", myArea;
+    String  myArea;
     String Root_Needed;
     LinearLayout dcrPendingDatesLayout;
-    TextView dcrpendingDates, hader_text;
+    TextView dcrpendingDates, hader_text,loc, wwith, root, edt_get_area,date;
+    TextView ROUTEDIVERTYN_TXT,DIVERTWWYN_TXT;
+    TextView work_with_title,Area_title,Route_Title;
     MyCustomMethod customMethod;
     android.support.v7.widget.Toolbar toolbar;
     Intent intent;
@@ -139,15 +145,24 @@ public class DCR_Root_new extends AppCompatActivity {
         }
         dcrpendingDates = (TextView) findViewById(R.id.dcr_pending_dates_route);
         dcrPendingDatesLayout = (LinearLayout) findViewById(R.id.pending_dcr_dates_layouts_route);
-        date = (EditText) findViewById(R.id.rootdate);
-        edt_get_area = (EditText) findViewById(R.id.edt_get_area);
+        date =  findViewById(R.id.rootdate);
+        edt_get_area =  findViewById(R.id.edt_get_area);
         late_remark = (EditText) findViewById(R.id.late_remark);
         divert_remark = (EditText) findViewById(R.id.Divert_remark);
-        wwith = (EditText) findViewById(R.id.rootworkwith);
-
-        loc = (EditText) findViewById(R.id.rootloc_dcr_open);
+        wwith = findViewById(R.id.rootworkwith);
 
 
+        work_with_title = findViewById(R.id.work_with_title);
+        Area_title= findViewById(R.id.Area_title);
+        Route_Title= findViewById(R.id.Route_title);
+
+
+        loc = (TextView) findViewById(R.id.rootloc_dcr_open);
+
+
+        lay_late_remark = findViewById(R.id.lay_late_remark);
+        ROUTEDIVERTYN_TXT = findViewById(R.id.ROUTEDIVERTYN_TXT);
+        DIVERTWWYN_TXT = findViewById(R.id.DIVERTWWYN_TXT);
 
         work_type = (Spinner) findViewById(R.id.root_worktype);
         save = (Button) findViewById(R.id.rootsave);
@@ -159,7 +174,7 @@ public class DCR_Root_new extends AppCompatActivity {
         DIVERTWWYN= (CheckBox) findViewById(R.id.DIVERTWWYN);
 
         rootLayout = (LinearLayout) findViewById(R.id.dopen_layout12);
-        root = (EditText) findViewById(R.id.rootroot);
+        root =  findViewById(R.id.rootroot);
         getRoot = (Button) findViewById(R.id.rootgetroot);
         get_area_again = (Button) findViewById(R.id.get_ara_again);
 
@@ -219,12 +234,54 @@ public class DCR_Root_new extends AppCompatActivity {
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN").equalsIgnoreCase("Y")){
             ROUTEDIVERTYN.setVisibility(View.VISIBLE);
+            ROUTEDIVERTYN_TXT.setVisibility(View.VISIBLE);
             //areaLayout.setVisibility(View.GONE);
         }
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN").equalsIgnoreCase("Y")){
             DIVERTWWYN.setVisibility(View.VISIBLE);
+            DIVERTWWYN_TXT.setVisibility(View.VISIBLE);
         }
+
+        DIVERTWWYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                setUITitles();
+                if (!b){
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name",TP_work_with_name);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id",TP_work_with_id);
+
+
+                    cbo_helper.deleteDRWorkWith();
+                    String[] TP_work_with_name_list = TP_work_with_name.split(",");
+                    String[] TP_work_with_id_list = TP_work_with_name.split(",");
+                    for (int i = 0; i < TP_work_with_id_list.length; i++) {
+//                        work_with_id =  TP_work_with_id_list[i] + "," + work_with_id ;
+//                        work_with_name = TP_work_with_name_list[i]  + "," + work_with_name;
+                        cbo_helper.insertDrWorkWith(TP_work_with_name_list[i], TP_work_with_id_list[i]);
+                    }
+                    cbo_helper.insertDrWorkWith("Independent", ""+PA_ID);
+
+                    work_with_name= TP_work_with_name;
+                    work_with_id=TP_work_with_id;
+//                    area_name=TP_area_name;
+//                    area_id=TP_area_id;
+//                    root_name=TP_root_name;
+//                    root_id=TP_root_id;
+
+                    setWorkwith(work_with_name);
+//                    root.setText(root_name);
+//                    edt_get_area.setText(area_name);
+                }else{
+                    get_workwith.performClick();
+                }
+
+
+            }
+        });
+
+
 
         divert_remark.setText("");
         ROUTEDIVERTYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -236,11 +293,44 @@ public class DCR_Root_new extends AppCompatActivity {
                 }else {
                     divert_remark.setVisibility(View.GONE);
                 }
+
+                setUITitles();
+
+
+
+                if (!b){
+//                    work_with_name= TP_work_with_name;
+//                    work_with_id=TP_work_with_id;
+
+
+//                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name","");
+//                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id","");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_Route_Name",TP_root_name);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_Route_ID",TP_root_id);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_name",TP_area_name);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_id",TP_area_id);
+
+
+                    area_name=TP_area_name;
+                    area_id=TP_area_id;
+                    root_name=TP_root_name;
+                    root_id=TP_root_id;
+
+//                    wwith.setText(work_with_name);
+                    setRoute(root_name);
+                    setArea(area_name);
+                }else{
+                    getRoot.performClick();
+                }
+
+
             }
         });
 
         if (Custom_Variables_And_Method.location_required.equals("Y")) {
             locationLayout.setVisibility(View.VISIBLE);
+        }else{
+            locationLayout.setVisibility(View.GONE);
         }
 
 
@@ -251,6 +341,7 @@ public class DCR_Root_new extends AppCompatActivity {
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name","");
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_individual_name","");
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_name","");
+
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"sDivert_Remark","");
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N");
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0");
@@ -271,13 +362,40 @@ public class DCR_Root_new extends AppCompatActivity {
             ArrayList<Integer> tables = new ArrayList<>();
             tables.add(0);
 
-            progress1.setMessage("Please Wait.. \n Fetching your worktype");
-            progress1.setCancelable(false);
-            progress1.show();
+//            progress1.setMessage("Please Wait.. \n Fetching your worktype");
+//            progress1.setCancelable(false);
+//            progress1.show();
+//
+//            new CboServices(this, mHandler).customMethodForAllServices(request, "DCRWORKINGTYPE_MOBILE_2", MESSAGE_INTERNET_WORKTYPE, tables);
+//
+//            //End of call to service
 
-            new CboServices(this, mHandler).customMethodForAllServices(request, "DCRWORKINGTYPE_MOBILE_2", MESSAGE_INTERNET_WORKTYPE, tables);
 
-            //End of call to service
+
+
+            new MyAPIService(context)
+                    .execute(new ResponseBuilder("DCRWORKINGTYPE_MOBILE_2", request)
+                            .setDescription("Please Wait.. \n Fetching your worktype")
+                            .setTables(tables)
+                            .setResponse(new CBOServices.APIResponse() {
+                                @Override
+                                public void onComplete(Bundle message) throws JSONException {
+                                    parser_worktype(message);
+                                }
+
+                                @Override
+                                public void onResponse(Bundle response) throws Exception {
+
+                                }
+
+                                @Override
+                                public void onError(String s, String s1) {
+                                    AppAlert.getInstance().getAlert(context,s,s1);
+                                }
+
+
+                            })
+                    );
         }else {
             hader_text.setText("Dcr Day Replan");
             work_val=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_head","Working" );
@@ -290,27 +408,54 @@ public class DCR_Root_new extends AppCompatActivity {
             work_type.setAdapter(adapter);
             work_type.setEnabled(false);
 
-            work_with_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_Ww_Name");
+            /*work_with_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_Ww_Name");
             work_with_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_Ww_ID");
             root_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_Route_Name");
             root_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_Route_ID");
             area_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_area_Name");
-            area_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_area_ID");
+            area_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_area_ID");*/
 
-            if((work_with_name !=null)&&(area_name !=null))
-            {
-                wwith.setText(work_with_name);
-                root.setText(root_name);
-                edt_get_area.setText(area_name);
-            }
+
+            work_with_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_name","");
+            work_with_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_id","");
+            root_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_Route_Name","");
+            root_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"route_Route_ID","");
+            area_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"area_name","");
+            area_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"area_id","");
+
+
+           /* TP_work_with_name= work_with_name;
+            TP_work_with_id=work_with_id;
+            TP_area_name=area_name;
+            TP_area_id=area_id;
+            TP_root_name=root_name;
+            TP_root_id=root_id;*/
+
+
+            TP_work_with_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_work_with_name",work_with_name);
+            TP_work_with_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_work_with_id",work_with_id);
+            TP_area_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_area_name",area_name);
+            TP_area_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_area_id",area_id);
+            TP_root_name=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_root_name",root_name);
+            TP_root_id=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_root_id",root_id);
+
+
+            setWorkwith(work_with_name);
+            setRoute(root_name);
+            setArea(area_name);
+
 
         }
+
+
 
         if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"IsBackDate","0").equals("1") ) {
             late_remark.setText("");
             late_remark.setVisibility(View.GONE);
+            lay_late_remark.setVisibility(View.GONE);
         }else{
             late_remark.setVisibility(View.VISIBLE);
+            lay_late_remark.setVisibility(View.VISIBLE);
             late_remark.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"BackDateReason",""));
         }
 
@@ -453,41 +598,65 @@ public class DCR_Root_new extends AppCompatActivity {
             }
         });
 
+        work_with_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                get_workwith.performClick();
+            }
+        });
         //===============================================insert====================================================================================
         get_workwith.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //showSelectColoursDialog1();
+                if (!MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")
+                        || DIVERTWWYN.isChecked() || TP_work_with_name.trim().isEmpty()) {
+                    // TODO Auto-generated method stub
+                    //showSelectColoursDialog1();
                 /*Intent i = new Intent(getApplicationContext(), Dcr_Workwith.class);
                 i.putExtra("sDCR_DATE", "" + real_date);
                 startActivityForResult(i, 0);*/
-                Bundle b=new Bundle();
-                b.putString("sDCR_DATE", "" + real_date);
-                b.putString("header", "Work-With");
-                b.putString("PlanType",intent.getStringExtra("plan_type"));
-                b.putString("DIVERTWWYN",DIVERTWWYN.isChecked() ? "1":"0");
-                b.putString("sWorking_Type",work_val);
+                    Bundle b = new Bundle();
+                    b.putString("sDCR_DATE", "" + real_date);
+                    b.putString("header", MyCustumApplication.getInstance().getDCR().getWorkWithTitle());
+                    b.putString("PlanType", intent.getStringExtra("plan_type"));
+                    b.putString("DIVERTWWYN", DIVERTWWYN.isChecked() ? "1" : "0");
+                    b.putString("sWorking_Type", work_val);
 
-                new Work_With_Dialog(context,mHandler,b,WORK_WITH_DILOG).show();
+                    new Work_With_Dialog(context, mHandler, b, WORK_WITH_DILOG).show();
+                }else{
+                    AppAlert.getInstance().getAlert(context,"Alert!!!","DCR is configured as per TP. To divert please select \"Divert WorkWith\"...");
+                }
             }
         });
 
 //====================================onclick of + sing for select  Area for work with area=================================================
 
+
+        Route_Title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getRoot.performClick();
+            }
+        });
         getRoot.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                work_name = wwith.getText().toString();
-                if (Custom_Variables_And_Method.pub_desig_id.equals("1") && checkforCalls()) {
+                work_name = getWorkwith();
+                Boolean allowMultipleRoute = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_MULTIPLE_ROUTEYN","N").equalsIgnoreCase("Y");
+                if (Custom_Variables_And_Method.pub_desig_id.equals("1") && checkforCalls() && !allowMultipleRoute) {
                     customVariablesAndMethod.getAlert(context,"Call Found","Can not change Route !!! \nSome Calls found in your Day Summary.\n" +
-                            "Else Reset your Day Plan from Constants");
-                }else if (work_name.equals("") &&  !work_type_code.contains("_W")) {
+                            "Else Reset your Day Plan from Utility");
+                }else if (work_name.equals("") &&  !work_type_code.contains("_W")
+                        && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                     customVariablesAndMethod.msgBox(context,"Please Select Work with First...");
-                } else {
+                }else  if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y")
+                        &&  !ROUTEDIVERTYN.isChecked() && !TP_root_name.trim().isEmpty()) {
+                    AppAlert.getInstance().getAlert(context,"Alert!!!","DCR is configured as per TP. To divert please select \"Divert Route\"...");
+
+                }else {
 
                     //Intent i = new Intent(context, DcrRoot.class);
                     String sAllYn="N",dcr_root_divert="0";
@@ -499,7 +668,8 @@ public class DCR_Root_new extends AppCompatActivity {
 
                     Bundle b=new Bundle();
                     b.putString("sAllYn", sAllYn);
-                    b.putString("header", "Route List");
+                    b.putString("header",MyCustumApplication.getInstance().getDCR().getRouteTitle() );
+                    b.putBoolean("allowMultipleRoute",allowMultipleRoute);
                     new Route_Dialog(context,mHandler,b,ROUTE_DILOG).show();
 
                     /*i.putExtra("sAllYn",sAllYn);
@@ -510,27 +680,48 @@ public class DCR_Root_new extends AppCompatActivity {
             }
         });
 
+        Area_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                get_area_again.performClick();
+            }
+        });
+
         get_area_again.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                work_name = wwith.getText().toString();
-                root_name = root.getText().toString();
-                if (work_name.equals("") && !work_type_code.contains("_W")) {
+                work_name = getWorkwith();
+                root_name = getRoute();
+                if (work_name.equals("") && !work_type_code.contains("_W")
+                        && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                     customVariablesAndMethod.msgBox(context,"Please Select Work with First...");
                 } else if (root_name.equals("")) {
                     customVariablesAndMethod.msgBox(context,"Please Select Route Fisrt .....");
-                } else {
-                    Bundle b=new Bundle();
-                    b.putString("sAllYn","0");
-                    b.putString("header", "Additional Area List");
-                    new Area_Dialog(context,mHandler,b,AREA_DILOG).show();
+                }else if (checkforCalls()) {
+                    AppAlert.getInstance().DecisionAlert(context, "Call Found!!!", "Some Calls found in your Day Summary.\nYou can only add Additional Areas \n" +
+                                    "Else Reset your Day Plan from Utility",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    openArea(true);
+                                }
+
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+
+                                }
+                            });
+                }  else {
+                    openArea(false);
                 }
 
 
             }
         });
+
+
         Back.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -549,9 +740,9 @@ public class DCR_Root_new extends AppCompatActivity {
                 if (loc.getText().toString().equals("")) {
                     loc.setText("UnKnown Location");
                 }
-                myArea = edt_get_area.getText().toString();
+                myArea = getArea();
                 if (myArea.equals("")) {
-                    myArea = root.getText().toString();
+                    myArea = getRoute();
                 }
                 address = loc.getText().toString();
                 if (address.equals("")) {
@@ -580,9 +771,49 @@ public class DCR_Root_new extends AppCompatActivity {
         });
 
 
+        // set ui
+        setUITitles();
+
+//        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y")){
+//            ROUTEDIVERTYN.setEnabled(false);
+//        }
+//
+//        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","N").equals("Y")){
+//            DIVERTWWYN.setEnabled(false);
+//        }
+
+
     }
 
 
+    private void openArea(Boolean freeze){
+        if (MyCustumApplication.getInstance().getDCR().getAdditionalAreaApprovalReqd().equalsIgnoreCase("Y")) {
+            AppAlert.getInstance().DecisionAlert(context, "Alert!!!", "Approval will be required for Doctor/Chemist",
+                    new AppAlert.OnClickListener() {
+                        @Override
+                        public void onPositiveClicked(View item, String result) {
+                            Bundle b = new Bundle();
+                            b.putString("sAllYn", "0");
+                            b.putString("header", Area_title.getText().toString());//"Additional Area List");
+                            b.putString("max", MyCustumApplication.getInstance().getDCR().getNoOfAddAreaAlowed());
+                            b.putBoolean("freeze", freeze);
+                            new Area_Dialog(context, mHandler, b, AREA_DILOG).show();
+                        }
+
+                        @Override
+                        public void onNegativeClicked(View item, String result) {
+
+                        }
+                    });
+        }else {
+            Bundle b = new Bundle();
+            b.putString("sAllYn", "0");
+            b.putString("header", Area_title.getText().toString());//"Additional Area List");
+            b.putString("max", MyCustumApplication.getInstance().getDCR().getNoOfAddAreaAlowed());
+            b.putBoolean("freeze", freeze);
+            new Area_Dialog(context, mHandler, b, AREA_DILOG).show();
+        }
+    }
     private void startSubmitDCR(){
         /*cbo_helper.deletedcrFromSqlite();
         cbo_helper.deleteUtils();
@@ -624,6 +855,7 @@ public class DCR_Root_new extends AppCompatActivity {
             if (f > 0) {
                 if (vis >= f) {
                     customVariablesAndMethod.msgBox(context,"Route Visit Frequency is -" + f + " \n You already Visited - " + vis);
+                    root_id = routeCheck;
                 } else {
                     new GPS_Timmer_Dialog(context,mHandler,"Day Plan in Process...",GPS_TIMMER).show();
                     //submitDCR();
@@ -649,7 +881,7 @@ public class DCR_Root_new extends AppCompatActivity {
 
     private Boolean checkforCalls(){
         int result=0;
-        //result+=cbo_helper.getmenu_count("phdcrdr_rc");
+        result+=cbo_helper.getmenu_count("phdcrdr_rc");
         result+=cbo_helper.getmenu_count("tempdr");
         result+=cbo_helper.getmenu_count("chemisttemp");
         //result+=cbo_helper.getmenu_count("phdcrstk");
@@ -725,68 +957,73 @@ public class DCR_Root_new extends AppCompatActivity {
 
         }
 
-        wwith.setText(work_with_name);
-        root.setText(root_name);
-        edt_get_area.setText(area_name);
+        setWorkwith(work_with_name);
+        setRoute(root_name);
+        setArea(area_name);
     }
 
     //=====================================================================================================================
-    public void getWorkWith() {
+    public void getWorkWithIDs() {
         String part1 = "", part2 = "", part3 = "", part4 = "", part5 = "", part6 = "", part7 = "", part8 = "";
         String[] parts = work_with_id.split(",");
-        if (parts.length == 1) {
-            part1 = parts[0];
-        }
-        if (parts.length == 2) {
-            part1 = parts[0];
-            part2 = parts[1];
-        }
-        if (parts.length == 3) {
-            part1 = parts[0];
-            part2 = parts[1];
-            part3 = parts[2];
-        }
-        if (parts.length == 4) {
-            part1 = parts[0];
-            part2 = parts[1];
-            part3 = parts[2];
-            part4 = parts[3];
-        }
-        if (parts.length == 5) {
-            part1 = parts[0];
-            part2 = parts[1];
-            part3 = parts[2];
-            part4 = parts[3];
-            part5 = parts[4];
-        }
-        if (parts.length == 6) {
-            part1 = parts[0];
-            part2 = parts[1];
-            part3 = parts[2];
-            part4 = parts[3];
-            part5 = parts[4];
-            part6 = parts[5];
-        }
-        if (parts.length == 7) {
-            part1 = parts[0];
-            part2 = parts[1];
-            part3 = parts[2];
-            part4 = parts[3];
-            part5 = parts[4];
-            part6 = parts[5];
-            part7 = parts[6];
-        }
-        if (parts.length == 8) {
-            part1 = parts[0];
-            part2 = parts[1];
-            part3 = parts[2];
-            part4 = parts[3];
-            part5 = parts[4];
-            part6 = parts[5];
-            part7 = parts[6];
-            part8 = parts[7];
-        }
 
+        if (getWorkwith().equalsIgnoreCase("")
+                && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
+            part1 = MyCustumApplication.getInstance().getUser().getID();
+        }else {
+            if (parts.length == 1) {
+                part1 = parts[0];
+            }
+            if (parts.length == 2) {
+                part1 = parts[0];
+                part2 = parts[1];
+            }
+            if (parts.length == 3) {
+                part1 = parts[0];
+                part2 = parts[1];
+                part3 = parts[2];
+            }
+            if (parts.length == 4) {
+                part1 = parts[0];
+                part2 = parts[1];
+                part3 = parts[2];
+                part4 = parts[3];
+            }
+            if (parts.length == 5) {
+                part1 = parts[0];
+                part2 = parts[1];
+                part3 = parts[2];
+                part4 = parts[3];
+                part5 = parts[4];
+            }
+            if (parts.length == 6) {
+                part1 = parts[0];
+                part2 = parts[1];
+                part3 = parts[2];
+                part4 = parts[3];
+                part5 = parts[4];
+                part6 = parts[5];
+            }
+            if (parts.length == 7) {
+                part1 = parts[0];
+                part2 = parts[1];
+                part3 = parts[2];
+                part4 = parts[3];
+                part5 = parts[4];
+                part6 = parts[5];
+                part7 = parts[6];
+            }
+            if (parts.length == 8) {
+                part1 = parts[0];
+                part2 = parts[1];
+                part3 = parts[2];
+                part4 = parts[3];
+                part5 = parts[4];
+                part6 = parts[5];
+                part7 = parts[6];
+                part8 = parts[7];
+            }
+        }
         workwith1 = part1;
 
         workwith2 = part2;
@@ -801,7 +1038,7 @@ public class DCR_Root_new extends AppCompatActivity {
 
     public void submitWorking() {
 
-            getWorkWith();
+            getWorkWithIDs();
             /*cbo_helper.delete_phdoctor();
             cbo_helper.deleteChemist();*/
 
@@ -846,8 +1083,22 @@ public class DCR_Root_new extends AppCompatActivity {
             request.put("sINDP_WW", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_individual_id",""));
             request.put("sDivert_Remark",divert_remark.getText().toString());
             request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
+            request.put("sSTAION_ADDAREA", getArea());
 
-            ArrayList<Integer> tables=new ArrayList<>();
+
+//            new Service_Call_From_Multiple_Classes().DCR_COMMIT_ROUTE(context, request, new Response() {
+//                @Override
+//                public void onSuccess(Bundle bundle) {
+//
+//                }
+//
+//                @Override
+//                public void onError(String s, String s1) {
+//
+//                }
+//            });
+
+             ArrayList<Integer> tables=new ArrayList<>();
             tables.add(0);
 
             progress1.setMessage("Please Wait.. \n" +
@@ -855,8 +1106,7 @@ public class DCR_Root_new extends AppCompatActivity {
             progress1.setCancelable(false);
             progress1.show();
 
-            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_9",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
-
+            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_10",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
             //End of call to service
             work_type_Selected="w";
 
@@ -906,6 +1156,7 @@ public class DCR_Root_new extends AppCompatActivity {
         request.put("sINDP_WW", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_individual_id",""));
         request.put("sDivert_Remark",divert_remark.getText().toString());
         request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
+        request.put("sSTAION_ADDAREA", getArea());
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -915,14 +1166,14 @@ public class DCR_Root_new extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_9",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_10",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="l";
     }
 
     public void submitforMeeting(){
-        getWorkWith();
+        getWorkWithIDs();
        /* cbo_helper.delete_phdoctor();
         cbo_helper.deleteChemist();*/
 
@@ -967,6 +1218,7 @@ public class DCR_Root_new extends AppCompatActivity {
         request.put("sINDP_WW", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_individual_id",""));
         request.put("sDivert_Remark",divert_remark.getText().toString());
         request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
+        request.put("sSTAION_ADDAREA", getArea());
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -976,7 +1228,7 @@ public class DCR_Root_new extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_9",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_10",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="n";
@@ -992,7 +1244,7 @@ public class DCR_Root_new extends AppCompatActivity {
     }
 
     public void submitDCR() {
-        work_name = wwith.getText().toString();
+        work_name = getWorkwith();
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked",ROUTEDIVERTYN.isChecked() ? "Y":"N") ;
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked",DIVERTWWYN.isChecked() ? "1":"0") ;
 
@@ -1006,7 +1258,7 @@ public class DCR_Root_new extends AppCompatActivity {
             case "OSC" :
             case "CSC" :
             case "W" :
-                if (work_name.equals("")) {
+                if (work_name.equals("") && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                     Toast.makeText(context, "Select Work With", Toast.LENGTH_SHORT).show();
                 } else if (root_name.equals("")) {
                     customVariablesAndMethod.msgBox(context,"Please Select Route Fisrt .....");
@@ -1020,34 +1272,34 @@ public class DCR_Root_new extends AppCompatActivity {
                 submitLeave();
                 break ;
             case "M" :
-                if (root.getText().toString().equals("")) {
+                if (getRoute().equals("")) {
                     customVariablesAndMethod.msgBox(context,"Select Your Route First...");
                 } else {
-                    getWorkWith();
+                    getWorkWithIDs();
                     submitforMeeting();
                 }
                 break ;
             /*case "WBZ" :
-                getWorkWith();
+                getWorkWithIDs();
                 Custom_Variables_And_Method.SELECTED_AREA = area.getText().toString();
                 submitNonWorking();
                 break ;*/
             default:
                 if (work_type_code.contains("_")){
-                    work_name = wwith.getText().toString();
-                    if (work_name.equals("") && !work_type_code.contains("_W")) {
+                    work_name = getWorkwith();
+                    if (work_name.equals("") && !work_type_code.contains("_W") && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                         Toast.makeText(context, "Select Work With", Toast.LENGTH_SHORT).show();
                     } else if (root_name.equals("") && !work_type_code.contains("_R")) {
                         customVariablesAndMethod.msgBox(context,"Please Select Route Fisrt .....");
                     } else {
-                        getWorkWith();
+                        getWorkWithIDs();
                         submitforMeeting();
                     }
                 }else{
-                    if (root.getText().toString().equals("")) {
+                    if (getRoute().equals("")) {
                         customVariablesAndMethod.msgBox(context,"Select Your Route First...");
                     } else {
-                        getWorkWith();
+                        getWorkWithIDs();
                         submitforMeeting();
                     }
                 }
@@ -1056,16 +1308,16 @@ public class DCR_Root_new extends AppCompatActivity {
 
     }
 
-    public String getArea() {
-        String ActArea = "";
-        if (work_val.equals("Working")) {
-
-            ActArea = root.getText().toString();
-        } else {
-            ActArea = work_val;
-        }
-        return ActArea;
-    }
+//    public String getArea() {
+//        String ActArea = "";
+//        if (work_val.equals("Working")) {
+//
+//            ActArea = root.getText().toString();
+//        } else {
+//            ActArea = work_val;
+//        }
+//        return ActArea;
+//    }
 
     public void setAddressToUI() {
 
@@ -1105,14 +1357,14 @@ public class DCR_Root_new extends AppCompatActivity {
         public void handleMessage(Message msg) {
             Bundle b1;
             switch (msg.what) {
-                case MESSAGE_INTERNET_WORKTYPE:
+                /*case MESSAGE_INTERNET_WORKTYPE:
 
                     if ((null != msg.getData())) {
 
                         parser_worktype(msg.getData());
 
                     }
-                    break;
+                    break;*/
                 case MESSAGE_INTERNET_SUBMIT_WORKING:
 
                     if ((null != msg.getData())) {
@@ -1121,14 +1373,14 @@ public class DCR_Root_new extends AppCompatActivity {
 
                     }
                     break;
-                case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
-
-                    if ((null != msg.getData())) {
-
-                        parser_DCRCOMMIT_DOWNLOADALL(msg.getData());
-
-                    }
-                    break;
+//                case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
+//
+//                    if ((null != msg.getData())) {
+//
+//                        parser_DCRCOMMIT_DOWNLOADALL(msg.getData());
+//
+//                    }
+//                    break;
                 case GPS_TIMMER:
                     submitDCR();
                     break;
@@ -1137,9 +1389,9 @@ public class DCR_Root_new extends AppCompatActivity {
                     work_with_name = b1.getString("workwith_name");
                     work_with_id = b1.getString("workwith_id");
 
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Ww_Name", work_with_name);
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Ww_ID", work_with_id);
-                    wwith.setText(work_with_name);
+                    /*customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Ww_Name", work_with_name);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Ww_ID", work_with_id);*/
+                    setWorkwith(work_with_name);
 
                     break;
                 case ROUTE_DILOG:
@@ -1154,7 +1406,7 @@ public class DCR_Root_new extends AppCompatActivity {
 
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Route_Name", root_name);
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Route_ID", root_id);
-                    root.setText(root_name);
+                    setRoute(root_name);
                     break;
                 case AREA_DILOG:
                     b1 = msg.getData();
@@ -1162,9 +1414,9 @@ public class DCR_Root_new extends AppCompatActivity {
                     area_id = b1.getString("area_id");
 
 
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_area_Name", area_name);
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_area_ID", area_id);
-                    edt_get_area.setText(area_name);
+                   /* customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_area_Name", area_name);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_area_ID", area_id);*/
+                    setArea(area_name);
 
                     break;
                 case 99:
@@ -1181,7 +1433,200 @@ public class DCR_Root_new extends AppCompatActivity {
         }
     };
 
-    public void parser_worktype(Bundle result) {
+
+    public void getDCRAsPerTP(){
+
+        if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y") ||
+                MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y") ) {
+            //Start of call to service
+
+            HashMap<String, String> request = new HashMap<>();
+            request.put("sCompanyFolder", cbo_helper.getCompanyCode());
+            request.put("iPaId", "" + Custom_Variables_And_Method.PA_ID);
+            request.put("sDCR_DATE", "" + real_date);
+            request.put("sRouteYN", MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP());
+            request.put("sWWYN", MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP());
+
+            ArrayList<Integer> tables = new ArrayList<>();
+            tables.add(0); //route
+            tables.add(1); //workwith
+
+
+            new MyAPIService(context)
+                    .execute(new ResponseBuilder("GET_DCR_ROUTEWW_TP", request)
+                            .setDescription("Please Wait.. \n Fetching your TP for the day")
+                            .setTables(tables)
+                            .setResponse(new CBOServices.APIResponse() {
+                                @Override
+                                public void onComplete(Bundle message) throws JSONException {
+                                    parser_DCRAsPerTP(message);
+                                }
+
+                                @Override
+                                public void onResponse(Bundle response) throws Exception {
+
+                                }
+
+                                @Override
+                                public void onError(String s, String s1) {
+                                    AppAlert.getInstance().getAlert(context, s, s1);
+                                }
+
+
+                            })
+                    );
+        }/*else {
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_work_with_name",TP_work_with_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_work_with_id",TP_work_with_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_area_name",TP_area_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_area_id",TP_area_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_root_name",TP_root_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_root_id",TP_root_id);
+        }*/
+    }
+
+
+    public void parser_DCRAsPerTP(Bundle result) throws JSONException {
+        if (result!=null ) {
+
+//            try {
+
+            work_with_name="";
+            work_with_id="";
+            root_name="";
+            root_id="";
+            area_name="";
+            area_id="";
+
+
+            String table0 = result.getString("Tables0");
+            JSONArray jsonArray1 = new JSONArray(table0);
+            for (int i = 0; i < jsonArray1.length(); i++) {
+                JSONObject c = jsonArray1.getJSONObject(i);
+                root_id = c.getString("DISTANCE_ID");
+                root_name = c.getString("ROUTE_NAME");
+            }
+
+            cbo_helper.deleteDRWorkWith();
+            String table1 = result.getString("Tables1");
+            JSONArray jsonArray2 = new JSONArray(table1);
+            for (int i = 0; i < jsonArray2.length(); i++) {
+                JSONObject c = jsonArray2.getJSONObject(i);
+                work_with_id =  c.getString("PA_ID") + "," + work_with_id ;
+                work_with_name = c.getString("PA_NAME")  + "," + work_with_name;
+                cbo_helper.insertDrWorkWith(c.getString("PA_NAME"), c.getString("PA_ID"));
+            }
+            cbo_helper.insertDrWorkWith("Independent", ""+PA_ID);
+
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name",work_with_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id",work_with_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_Route_Name",root_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_Route_ID",root_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_name",area_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_id",area_id);
+
+
+            TP_work_with_name= work_with_name;
+            TP_work_with_id=work_with_id;
+            TP_area_name=area_name;
+            TP_area_id=area_id;
+            TP_root_name=root_name;
+            TP_root_id=root_id;
+
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_work_with_name",TP_work_with_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_work_with_id",TP_work_with_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_area_name",TP_area_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_area_id",TP_area_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_root_name",TP_root_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_root_id",TP_root_id);
+
+            setWorkwith(work_with_name);
+            setRoute(root_name);
+            setArea(area_name);
+
+            setUITitles();
+
+
+        }
+
+
+    }
+
+
+    private void setUITitles(){
+
+        if (MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")
+                && !DIVERTWWYN.isChecked()){
+            //get_workwith.setEnabled(false);
+            work_with_title.setText("WorkWith (As per TP)");
+        }else{
+            work_with_title.setText("WorkWith");
+        }
+
+        if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y")
+                && !ROUTEDIVERTYN.isChecked()){
+            //get_area.setEnabled(false);
+            Route_Title.setText("Route (As per TP)");
+        }else{
+            Route_Title.setText("Route");
+        }
+
+        if (MyCustumApplication.getInstance().getDCR().getAdditionalAreaApprovalReqd().equalsIgnoreCase("Y")){
+            //get_area.setEnabled(false);
+            Area_title.setText("Additional Area (Approval Required)");
+        }
+    }
+
+
+    private void setArea(String area_name){
+
+        edt_get_area.setText("\u2022 "+area_name.replace("+","\n\u2022 "));
+    }
+
+    private void setWorkwith(String work_with_name){
+        wwith.setText("\u2022 "+work_with_name.replace(",","\n\u2022 "));
+    }
+
+    private void setRoute(String root_name){
+        root.setText(root_name);
+    }
+
+    private String getArea(){
+        return edt_get_area.getText().toString().replace("\u2022 ","").replace("\n","+");
+    }
+
+    private String getWorkwith(){
+        return   wwith.getText().toString().replace("\u2022 ","").replace("\n",",");
+    }
+
+    private String getRoute(){
+        return  root.getText().toString();
+    }
+
+
+
+    public void parser_worktype(Bundle result) throws JSONException {
+        if (result!=null ) {
+            ArrayList<SpinnerModel> newlist = new ArrayList<SpinnerModel>();
+            newlist.add(new SpinnerModel("--Select--", ""));
+
+            String table0 = result.getString("Tables0");
+            JSONArray jsonArray1 = new JSONArray(table0);
+            for (int i = 0; i < jsonArray1.length(); i++) {
+                JSONObject c = jsonArray1.getJSONObject(i);
+                getworkingType.add(new SpinnerModel(c.getString("FIELD_NAME"),c.getString("WORKING_TYPE")));
+            }
+
+
+            adapter = new SpinAdapter(context, R.layout.spin_row, getworkingType);
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+            work_type.setAdapter(adapter);
+
+            getDCRAsPerTP();
+        }
+
+    }
+   /* public void parser_worktype(Bundle result) {
         if (result!=null ) {
 
             try {
@@ -1212,174 +1657,8 @@ public class DCR_Root_new extends AppCompatActivity {
         //Log.d("MYAPP", "objects are1: " + result);
         progress1.dismiss();
 
-    }
+    }*/
 
-    public void parser_DCRCOMMIT_DOWNLOADALL(Bundle result) {
-
-        if(progress1 != null && progress1.isShowing()){ progress1.dismiss();}
-
-        if (result!=null ) {
-
-            try {
-                String table0 = result.getString("Tables0");
-                JSONArray jsonArray1 = new JSONArray(table0);
-
-                JSONObject one = jsonArray1.getJSONObject(0);
-
-                String MyDaType = one.getString("DA_TYPE");
-                String da_val="0";
-                Float rate = Float.parseFloat(one.getString("FARE_RATE"));
-                Float kms = Float.parseFloat(one.getString("KM"));
-
-                if (MyDaType.equals("L")) {
-                    da_val=one.getString("DA_L_RATE");
-                } else if (MyDaType.equals("EX") || MyDaType.equals("EXS")) {
-                    da_val=one.getString("DA_EX_RATE");
-                } else if (MyDaType.equals("NSD") || MyDaType.equals("NS")) {
-                    da_val=one.getString("DA_NS_RATE");
-                }
-                String distance_val="0";
-                if (MyDaType.equals("EX") || MyDaType.equals("NSD")) {
-                    distance_val="" + (kms * rate * 2);
-
-                } else {
-                    distance_val="" + (kms * rate);
-                }
-
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",distance_val);
-
-                String table1 = result.getString("Tables1");
-                cbo_helper.delete_phdoctor();
-                JSONArray jsonArray2 = new JSONArray(table1);
-                for (int i = 0; i < jsonArray2.length(); i++) {
-                    JSONObject c = jsonArray2.getJSONObject(i);
-                    cbo_helper.insert_phdoctor(c.getInt("DR_ID"), c.getString("DR_NAME"), "", "",c.getInt("SPL_ID"),c.getString("LASTCALL"),
-                            c.getString("CLASS"), c.getString("PANE_TYPE"),c.getString("POTENCY_AMT"),
-                            c.getString("ITEM_NAME"), c.getString("ITEM_POB"), c.getString("ITEM_SALE"),c.getString("AREA"),c.getString("DR_LAT_LONG")
-                            , c.getString("FREQ"),c.getString("NO_VISITED") , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("COLORYN")
-                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"),c.getString("RXGENYN"));
-
-                }
-
-                String table2 = result.getString("Tables2");
-                cbo_helper.deleteChemist();
-                JSONArray jsonArray3 = new JSONArray(table2);
-                for (int i = 0; i < jsonArray3.length(); i++) {
-                    JSONObject c = jsonArray3.getJSONObject(i);
-                    cbo_helper.insert_Chemist(c.getInt("CHEM_ID"), c.getString("CHEM_NAME"),
-                            "", "",c.getString("LAST_VISIT_DATE"),c.getString("DR_LAT_LONG")
-                            , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("SHOWYN"));
-
-                }
-
-                String table3 = result.getString("Tables3");
-                JSONArray jsonArray4 = new JSONArray(table3);
-                cbo_helper.deleteDcrAppraisal();
-                for (int i = 0; i < jsonArray4.length(); i++) {
-                    JSONObject c = jsonArray4.getJSONObject(i);
-                    cbo_helper.setDcrAppraisal(c.getString("PA_ID"), c.getString("PA_NAME"),c.getString("DR_CALL"), c.getString("DR_AVG"),c.getString("CHEM_CALL"), c.getString("CHEM_AVG"), "0", "", "", "", "", "","");
-
-                }
-
-                String table4 = result.getString("Tables4");
-                JSONArray jsonArray5 = new JSONArray(table4);
-                cbo_helper.delete_phdoctoritem();
-                for (int b = 0; b<jsonArray5.length();b++){
-                        JSONObject jasonObj2 = jsonArray5.getJSONObject(b);
-                        cbo_helper.insertDoctorData(jasonObj2.getInt("DR_ID"), jasonObj2.getInt("ITEM_ID"),jasonObj2.getString("ITEM_NAME"));
-                }
-
-                String table5 = result.getString("Tables5");
-                JSONArray jsonArray6 = new JSONArray(table5);
-                cbo_helper.delete_Doctor_Call_Remark();
-                for (int b = 0; b<jsonArray6.length();b++){
-                    JSONObject jasonObj2 = jsonArray6.getJSONObject(b);
-                    cbo_helper.insertDoctorCallRemark( jasonObj2.getString("PA_ID"),jasonObj2.getString("PA_NAME"));
-                }
-
-
-                String table6 = result.getString("Tables6");
-                JSONArray jsonArray7 = new JSONArray(table6);
-                cbo_helper.delete_phparty();
-                for (int b = 0; b<jsonArray7.length();b++){
-                    JSONObject jasonObj2 = jsonArray7.getJSONObject(b);
-                    cbo_helper.insert_phparty(jasonObj2.getInt("PA_ID"), jasonObj2.getString("PA_NAME"),
-                            jasonObj2.getInt("DESIG_ID"), jasonObj2.getString("CATEGORY"),
-                            jasonObj2.getInt("HQ_ID"), jasonObj2.getString("PA_LAT_LONG"),
-                            jasonObj2.getString("PA_LAT_LONG2"), jasonObj2.getString("PA_LAT_LONG3")
-                            ,jasonObj2.getString("SHOWYN"));
-                }
-
-                String table7 = result.getString("Tables7");
-                JSONArray jsonArray8 = new JSONArray(table7);
-                cbo_helper.delete_phdairy();
-                for (int b = 0; b<jsonArray8.length();b++){
-                    JSONObject jasonObj2 = jsonArray8.getJSONObject(b);
-                    cbo_helper.insert_phdairy(jasonObj2.getInt("ID"), jasonObj2.getString("DAIRY_NAME"),jasonObj2.getString("DOC_TYPE"),
-                            "", jasonObj2.getString("DAIRY_LAT_LONG"),jasonObj2.getString("DAIRY_LAT_LONG2"),jasonObj2.getString("DAIRY_LAT_LONG3"));
-                }
-
-
-                String table8 = result.getString("Tables8");
-                JSONArray jsonArray9 = new JSONArray(table8);
-                cbo_helper.delete_phdairy_person();
-                for (int b = 0; b<jsonArray9.length();b++){
-                    JSONObject jasonObj2 = jsonArray9.getJSONObject(b);
-                    cbo_helper.insert_phdairy_person( jasonObj2.getInt("DAIRY_ID"),jasonObj2.getInt("PERSON_ID"),jasonObj2.getString("PERSON_NAME"));
-                }
-
-                String table9 = result.getString("Tables9");
-                JSONArray jsonArray10 = new JSONArray(table9);
-                cbo_helper.delete_phdairy_reason();
-                for (int b = 0; b<jsonArray10.length();b++){
-                    JSONObject jasonObj2 = jsonArray10.getJSONObject(b);
-                    cbo_helper.insert_phdairy_reason( jasonObj2.getInt("PA_ID"),jasonObj2.getString("PA_NAME"));
-                }
-
-                String table10 = result.getString("Tables10");
-                JSONArray jsonArray11 = new JSONArray(table10);
-                cbo_helper.delete_Item_Stock();
-                for (int b = 0; b<jsonArray11.length();b++){
-                    JSONObject jasonObj2 = jsonArray11.getJSONObject(b);
-                    cbo_helper.insert_Item_Stock( jasonObj2.getString("ITEM_ID"),jasonObj2.getInt("STOCK_QTY"));
-                }
-
-                String table11 = result.getString("Tables11");
-                JSONArray jsonArray12 = new JSONArray(table11);
-                cbo_helper.delete_STk_Item();
-                for (int b = 0; b<jsonArray12.length();b++){
-                    JSONObject jasonObj2 = jsonArray12.getJSONObject(b);
-                    cbo_helper.insert_STk_Item( jasonObj2.getString("STK_ID"),jasonObj2.getString("ITEM_ID"),jasonObj2.getString("RATE"));
-                }
-                customVariablesAndMethod.SetLastCallLocation(context);
-
-                switch (work_type_Selected){
-                    case "w":
-                        finish();
-                        break;
-                    case "l":
-                        Intent intent = new Intent(getApplicationContext(), FinalSubmitDcr_new.class);
-                        startActivity(intent);
-                        break;
-                    case "n":
-                        setReultForNonWork();
-                        break;
-                }
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_type_Selected",work_type_Selected);
-
-            } catch (JSONException e) {
-                Log.d("MYAPP", "objects are: " + e.toString());
-                CboServices.getAlert(context,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
-                e.printStackTrace();
-            }
-
-        }
-        //Log.d("MYAPP", "objects are1: " + result);
-
-
-    }
 
     public void parser_submit_for_working(Bundle result) {
 
@@ -1501,39 +1780,6 @@ public class DCR_Root_new extends AppCompatActivity {
             cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
             Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
 
-            /*//Start of call to service
-
-            HashMap<String,String> request=new HashMap<>();
-            request.put("sCompanyFolder",cbo_helper.getCompanyCode());
-            request.put("iPA_ID", "" + Custom_Variables_And_Method.PA_ID);
-            request.put("sDcrId",Custom_Variables_And_Method.DCR_ID);
-            request.put("sRouteYn", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed"));
-            request.put("sGCM_TOKEN", Custom_Variables_And_Method.GCMToken);
-            request.put("sMobileId",SystemArchitecture.COMPLETE_DEVICE_INFO);
-            request.put("sVersion", Custom_Variables_And_Method.VERSION);
-
-            ArrayList<Integer> tables=new ArrayList<>();
-            tables.add(0);
-            tables.add(1);
-            tables.add(2);
-            tables.add(3);
-            tables.add(4);
-            tables.add(5);
-            tables.add(6);
-            tables.add(7);
-            tables.add(8);
-            tables.add(9);
-            tables.add(10);
-            tables.add(11);
-
-            progress1.setMessage("Please Wait..\n" +
-                    " Fetching your Utilitis for the day");
-            progress1.setCancelable(false);
-            progress1.show();
-
-            new CboServices(this,mHandler).customMethodForAllServices(request,"DCRCOMMIT_DOWNLOADALL",MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL,tables);
-
-            //End of call to service*/
 
            new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
                 @Override

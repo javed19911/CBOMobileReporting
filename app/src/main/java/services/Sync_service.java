@@ -463,21 +463,7 @@ public class Sync_service extends Service {
                 request.put("sDCRDAIRY_INTERSETEDYN", sDCRDAIRY_INTERSETEDYN);
 
 
-                /*sDAIRY_ID:
-                sSTRDAIRY_CPID:
-                sDCRDAIRY_LOC:
-                sDCRDAIRY_IN_TIME:
-                sDCRDAIRY_BATTERY_PERCENT:
-                sDCRDAIRY_REMARK:
-                sDCRDAIRY_KM:
-                sDCRDAIRY_SRNO:
-                sDCRDAIRYITEM_DAIRY_ID:
-                sDCRDAIRYITEM_ITEM_ID_ARR:
-                sDCRDAIRYITEM_QTY_ARR:
-                sDCRDAIRYITEM_ITEM_ID_GIFT_ARR:
-                sDCRDAIRYITEM_QTY_GIFT_ARR:
-                sDCRDAIRYITEM_POB_QTY:
-                sDAIRY_FILE*/
+
                 ArrayList<Integer> tables = new ArrayList<>();
                 if (ReplyYN.equals("N")){
                     tables.add(-2);

@@ -35,8 +35,6 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui.Dcr_Area;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -59,7 +59,7 @@ import java.util.List;
 import java.util.Locale;
 
 import locationpkg.LocationTest;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 
 /**
@@ -98,8 +98,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String ROOT_NEEDED;
     public static String CHEMIST_ID;
     public static String COMPANY_NAME;
-    public static String checkVersion = "20190129";
-    public static String VERSION = "20190129";
+    public static String checkVersion = "20190322";
+    public static String VERSION = "20190322";
     public static String RPT_DATE;
     public static String EMP_ID;
     public static String DCR_DATE;

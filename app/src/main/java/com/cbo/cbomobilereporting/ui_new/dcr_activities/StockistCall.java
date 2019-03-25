@@ -54,7 +54,6 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.uenics.javed.CBOLibrary.Response;
 
@@ -72,7 +71,7 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
@@ -709,6 +708,21 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                             .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
 
 
+                    String remarktxt=stockist_list.get("remark").get(0);
+                    if (remarktxt.contains("\u20B9")) {
+                        //mstockistCall.setPOBAmt(remarktxt.split("\n")[0].replace("\u20B9",""));
+
+                        /*if (remarktxt.split("\n").length>1) {
+                            remarktxt = remarktxt.split("\n")[1];
+                        } else {
+                            remarktxt = "";
+                        }*/
+                        mstockistCall.setPOBAmt(remarktxt.substring(remarktxt.indexOf("\u20B9")+1,remarktxt.indexOf("\n")));
+                        pob.setText(mstockistCall.getPOBAmt());
+                        remarktxt = remarktxt.substring(remarktxt.indexOf("\n")+1);
+
+                    }
+                    remark.setText(remarktxt);
 
                     if (!stockist_list.get("sample_name").get(0).equals("")) {
                         String[] sample_name1 = stockist_list.get("sample_name").get(0).split(",");
@@ -724,11 +738,6 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         sample_pob_previous=sample_pob;
                         sample_sample_previous=sample_sample;*/
 
-
-                        String remarkWithPOB = stockist_list.get("remark").get(0);
-                        if (remarkWithPOB.contains("\u20B9"))
-                            remarkWithPOB = remarkWithPOB.substring(remarkWithPOB.indexOf("\n"));
-                        remark.setText(remarkWithPOB);
 
                         init(sample_name1, sample_qty1, sample_pob1);
                     }else{
@@ -1298,12 +1307,16 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
                         String remarktxt=stockist_list.get("remark").get(0);
                         if (remarktxt.contains("\u20B9")) {
-                            if (remarktxt.split("\\n").length>1) {
-                                mstockistCall.setPOBAmt(remarktxt.split("\\n")[0]);
-                                remarktxt = remarktxt.split("\\n")[1];
+                            /*mstockistCall.setPOBAmt(remarktxt.split("\n")[0].replace("\u20B9",""));
+                            pob.setText(mstockistCall.getPOBAmt());
+                            if (remarktxt.split("\n").length>1) {
+                                remarktxt = remarktxt.split("\n")[1];
                             } else {
                                 remarktxt = "";
-                            }
+                            }*/
+                            mstockistCall.setPOBAmt(remarktxt.substring(remarktxt.indexOf("\u20B9")+1,remarktxt.indexOf("\n")));
+                            pob.setText(mstockistCall.getPOBAmt());
+                            remarktxt = remarktxt.substring(remarktxt.indexOf("\n")+1);
 
                         }
                         remark.setText(remarktxt);
@@ -1490,10 +1503,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                             rate = b1.getString("resultRate");
                             resultList = b1.getString("resultList");
                             DecimalFormat f = new DecimalFormat("#.00");
-                            if ("" + result != null) {
-                                String result3 = f.format(result);
-                                pob.setText(result3);
-                            }
+
+                            String result3 = f.format(result);
+                            pob.setText(result3);
+
 
                             sample_name=resultList;
                             sample_sample=sample;

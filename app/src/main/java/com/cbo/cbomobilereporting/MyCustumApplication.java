@@ -1,4 +1,4 @@
-package utils.clearAppData;
+package com.cbo.cbomobilereporting;
 
 import java.io.File;
 import android.annotation.SuppressLint;
@@ -19,6 +19,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.DCR.mDCR;
 import com.cbo.cbomobilereporting.databaseHelper.User.UserDB;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
@@ -32,6 +33,7 @@ import utils_new.Custom_Variables_And_Method;
 public class MyCustumApplication extends MultiDexApplication {
     private static MyCustumApplication instance;
     private mUser user = null;
+    private mDCR dcr = null;
     static String TAG = "MyCustumApplication";
     public UserDB userDB = null;
     public String FirebaseSyncYN = "Y";
@@ -40,7 +42,10 @@ public class MyCustumApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        FirebaseSyncYN = Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),"FirebaseSyncYN","Y");
+        FirebaseSyncYN = getDataFrom_FMCG_PREFRENCE("FIREBASE_SYNCYN","Y");
+        /*if (isLiveTrackingOn()){
+            FirebaseSyncYN = "Y";
+        }*/
         userDB = new UserDB();
         getbattrypercentage();
         registerActivityLifecycleCallbacks(new AppLifecycleTracker());
@@ -78,6 +83,25 @@ public class MyCustumApplication extends MultiDexApplication {
                 && !user.getCompanyCode().trim().equalsIgnoreCase("")) {
             userDB.insert(user);
         }
+    }
+
+    public mDCR getDCR(){
+        if (dcr != null){
+            return dcr;
+        }
+
+        dcr = new mDCR();
+//                .setId(getDataFrom_FMCG_PREFRENCE("DCR_ID","0"))
+//                .setDate(getDataFrom_FMCG_PREFRENCE("DCR_ID","0"));
+
+        return dcr;
+    }
+
+    public String getDataFrom_FMCG_PREFRENCE(String key,String default_value){
+        return Custom_Variables_And_Method.getInstance().getDataFrom_FMCG_PREFRENCE(getInstance(),key,default_value);
+    }
+    public void setDataInTo_FMCG_PREFRENCE(String key,String value){
+         Custom_Variables_And_Method.getInstance().setDataInTo_FMCG_PREFRENCE(getInstance(),key,value);
     }
 
     @SuppressLint("MissingPermission")
@@ -261,7 +285,7 @@ public class MyCustumApplication extends MultiDexApplication {
 
         }else {
 
-            if(!url.toLowerCase().contains("http://") && !url.toLowerCase().contains("emulated/0")){
+            /*if(!url.toLowerCase().contains("http://") && !url.toLowerCase().contains("emulated/0")){
                 url="http://"+url;
             }else if(url.toLowerCase().contains("emulated/0")){
                 url="file:///"+url;
@@ -280,7 +304,7 @@ public class MyCustumApplication extends MultiDexApplication {
             //customVariablesAndMethod.getAlert(context,"Url",url);
             String ALLOWED_URI_CHARS = "@#&=*-_.,:!?()/~'%";
             String url1 = Uri.encode(url, ALLOWED_URI_CHARS);
-
+*/
             if (showAs>0){
                 Intent intent1=new Intent(getInstance(),Msg_ho.class);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -477,11 +501,13 @@ public class MyCustumApplication extends MultiDexApplication {
             intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Log.d(TAG, "Running on Android O");
-                startForegroundService(intent);
+                stopService(intent);
+                //startForegroundService(intent);
                 //startService(intent);
             } else {
                 Log.d(TAG, "Running on Android N or lower");
                 startService(intent);
+                stopService(intent);
             }
         }
     }

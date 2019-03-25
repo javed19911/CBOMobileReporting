@@ -40,6 +40,7 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.Model.mAddress;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -52,12 +53,15 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -65,8 +69,10 @@ import java.util.List;
 
 import locationpkg.Const;
 import services.CboServices;
+import services.MyAPIService;
 import services.Sync_service;
 import utils.AddressToLatLong;
+import utils.LatLngToAddress;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
@@ -109,6 +115,7 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
     Double REG_ADDRESS_KM = 0.0;
+    mAddress maddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +133,7 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
         }
         context = this;
+        maddress = new mAddress();
         loc = (TextView) findViewById(R.id.loc);
         address = (TextView) findViewById(R.id.address);
         loc_img= (ImageView) findViewById(R.id.loc_img);
@@ -397,36 +405,36 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
     private void getLatLongFrom(String address) {
         new AddressToLatLong(context,address).execute(new AddressToLatLong.IAddressToLatLong() {
             @Override
-            public void onSucess(String LatLong) {
+            public void onSucess(mAddress maddress) {
                 Double km1;
-                km1= DistanceCalculator.distance(Double.valueOf(LatLong.split(",")[0]), Double.valueOf(LatLong.split(",")[1])
+                DecimalFormat f = new DecimalFormat("#.00");
+                km1= DistanceCalculator.distance(Double.valueOf(maddress.getLAT_LONG().split(",")[0]), Double.valueOf(maddress.getLAT_LONG().split(",")[1])
                         , Double.valueOf(lat_long.split(",")[0]), Double.valueOf(lat_long.split(",")[1]), "K");
                 if (km1>=REG_ADDRESS_KM){
-                    AppAlert.getInstance().getAlert(context, "Alert!!!","Entered Address does not seems to valid as per your address...." );
+                    AppAlert.getInstance().getAlert(context, "Invalid Address!!!","Entered Address does not seems to valid as per your current Loction"+
+                            "\n\nYou are "+f.format(km1) +" Kms away from the Address you entered" +
+                            "\nPlease Check your Address and Try again..."+"\n\nFormated Address :-\n"+maddress.getFORMATED_ADDRESS());
                 }else {
                     if (cbohelp.getCompanyCode().equalsIgnoreCase("DEMO") || cbohelp.getCompanyCode().equalsIgnoreCase("DEMOTEST")) {
-                        AppAlert.getInstance().Alert(context, "Alert!!!", "Distance : - " + km1, new View.OnClickListener() {
+                        AppAlert.getInstance().Alert(context, "Register???", "Distance : - " + km1
+                                +"\n\n"+drname.getText()+" is about to be registered at \n\n"+maddress.getFORMATED_ADDRESS(), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 //registerDoctorTEST(lat_long,LatLong,address,""+km1);
-                                registerDoctor();
+                                //registerDoctor();
+                                registerDoctorAddress(lat_long,maddress.getLAT_LONG(),maddress.getFORMATED_ADDRESS(),""+km1);
                             }
                         });
                     }else {
 
-                        registerDoctor();
+                        registerDoctorAddress(lat_long,maddress.getLAT_LONG(),maddress.getFORMATED_ADDRESS(),""+km1);
                     }
                 }
             }
 
             @Override
             public void onError(String message) {
-                AppAlert.getInstance().Alert(context, "Alert!!!", message, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
+                AppAlert.getInstance().getAlert(context, "Alert!!!", message);
             }
         });
     }
@@ -436,7 +444,13 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
         cbohelp.updateLatLong(lat_long,dr_id,doc_type,"");
 
         if (!networkUtil.internetConneted(context)) {
-            getAlert(context, "Registered", drname.getText() + "\nRegistration Successfully Completed... ");
+            AppAlert.getInstance().Alert(context, "Registered",
+                    drname.getText() + "\nRegistration Successfully Completed... ", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
         }else {
 
             LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, new IntentFilter("SyncComplete"));
@@ -449,11 +463,49 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
         }
     }
 
+    private void registerDoctorAddress(String MOBILE_LAT_LONG,String ADDRESS_LAT_LONG,String address,String KM){
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("sCompanyFolder", cbohelp.getCompanyCode());
+        request.put("iPa_Id", ""+Custom_Variables_And_Method.PA_ID);
+        request.put("iDCS_ID", dr_id);
+        request.put("sLANE1", lane1.getText().toString());
+        request.put("sLANE2", lane2.getText().toString());
+        request.put("sCITY", city.getText().toString());
+        request.put("sPIN", pincode.getText().toString());
+        request.put("sSTATE", state.getText().toString());
+        request.put("sCATEGORY", doc_type);
+        request.put("sLAT_LONG", MOBILE_LAT_LONG);
+        request.put("sLOC_EXTRA", ADDRESS_LAT_LONG +"_" + address);
+        request.put("sDiff_Km", KM);
+
+        new  MyAPIService(context).execute(new ResponseBuilder("DCSREG_COMMIT",request)
+                .setDescription("Please Wait..\n" +
+                        "Registration in progress......")
+                .setResponse(new CBOServices.APIResponse() {
+                    @Override
+                    public void onComplete(Bundle bundle) throws Exception {
+                        registerDoctor();
+                    }
+
+                    @Override
+                    public void onResponse(Bundle bundle) throws Exception {
+
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+                        AppAlert.getInstance().getAlert(context,s,s1);
+                    }
+                }));
+
+    }
+
     private void registerDoctorTEST(String MOBILE_LAT_LONG,String ADDRESS_LAT_LONG,String address,String KM){
 
 
         if (!networkUtil.internetConneted(context)) {
-            getAlert(context, "No Internet!!!", "Please connect to Internet....");
+            AppAlert.getInstance().getAlert(context, "No Internet!!!", "Please connect to Internet....");
         }else {
 
             HashMap<String, String> request = new HashMap<>();
@@ -530,7 +582,12 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
             }
 
             if (intent.getStringExtra("message").equals("Y")) {
-                getAlert(context, "Registered", drname.getText() + "\nRegistration Successfully Completed... ");
+                AppAlert.getInstance().Alert(context, "Registered", drname.getText() + "\nRegistration Successfully Completed... ", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
             }
             LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
         }
@@ -628,7 +685,8 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
                                     c.getString(c.getColumnIndex("FREQ")), c.getString(c.getColumnIndex("NO_VISITED")),
                                     c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
                                     c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN"))
-                                    , c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP"))));
+                                    , c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
+                                    c.getString(c.getColumnIndex("APP_PENDING_YN"))));
                         } while (c.moveToNext());
 
                     }
@@ -799,6 +857,54 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
             Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
             setLetLong(true);
             LocalBroadcastManager.getInstance(context).unregisterReceiver(mLocationUpdated);
+
+            if(addressLayout.getVisibility() == View.VISIBLE ) {
+                new LatLngToAddress(context, customVariablesAndMethod.get_best_latlong(contex))
+                        .execute(new LatLngToAddress.ILatLngToAddress() {
+                            @Override
+                            public void onSucess(mAddress address) {
+
+                                maddress = address;
+                                if (address != null){
+                                    if (!address.getCITY().trim().isEmpty()){
+                                        city.setText(address.getCITY());
+                                        //city.setEnabled(false);
+                                        city.setKeyListener(null);
+                                    }else  if (!address.getDISTRICT().trim().isEmpty()){
+                                        city.setText(address.getDISTRICT());
+                                        //city.setEnabled(false);
+                                        city.setKeyListener(null);
+                                    }else{
+                                        //city.setEnabled(true);
+                                        city.setText("");
+                                    }
+
+                                    if (!address.getSTATE().trim().isEmpty()){
+                                        state.setText(address.getSTATE());
+                                        //state.setEnabled(false);
+                                        state.setKeyListener(null);
+                                    }else{
+                                       // state.setEnabled(true);
+                                        state.setText("");
+                                    }
+
+                                    if (!address.getZIP().trim().isEmpty()){
+                                        pincode.setText(address.getZIP());
+                                        //pincode.setEnabled(false);
+                                        pincode.setKeyListener(null);
+                                    }else{
+                                        //pincode.setEnabled(true);
+                                        pincode.setText("");
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                AppAlert.getInstance().getAlert(contex,"Error!!!",message);
+                            }
+                        });
+            }
         }
     };
 
@@ -949,35 +1055,7 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
         }
     }
 
-    private class getAddress extends AsyncTask<String, String, String> {
-        ProgressDialog pd;
-        @Override
-        protected final String doInBackground(String[] params) {
 
-            //lat_long=customVariablesAndMethod.get_best_latlong(context);
-            //return lat_long;
-            return customVariablesAndMethod.getAddressByLatLong(context,lat_long);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(context);
-            pd.setTitle("CBO");
-            pd.setMessage("Scanning......." + "\n" + "please wait");
-            pd.setCancelable(false);
-            pd.show();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            pd.dismiss();
-            address.setText(s);
-            //address_verified.setChecked(false);
-
-        }
-    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -993,41 +1071,6 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
         return super.onOptionsItemSelected(item);
     }
 
-    public void getAlert(final Context context, final String title, final String massege ) {
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
-        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
-
-        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
-        final TableLayout Alert_message_list= (TableLayout) dialogLayout.findViewById(R.id.table_view);
-        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
-        Alert_title.setText(title);
-
-        final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
-        pa_id_txt.setText(""+Custom_Variables_And_Method.PA_ID);
-
-
-        Alert_message.setText(massege);
-        Alert_message_list.setVisibility(View.GONE);
-
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-
-        final AlertDialog dialog = builder1.create();
-
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-
-        dialog.setCancelable(false);
-        dialog.show();
-    }
 
 }

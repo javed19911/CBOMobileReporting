@@ -52,7 +52,7 @@ public class LayoutZoomer extends AppCompatActivity {
     Custom_Variables_And_Method customVariablesAndMethod;
     CBO_DB_Helper myCbo_help;
     String extraPID;
-    public static String extraFrom,extraTo;
+    public static String extraFrom,extraTo,CurrencyType;
     ArrayList<Map<String,String>> data = new ArrayList<Map<String, String>>();
     SpoRptAdapter spoRptAdapter;
     ArrayList<SpoModel> dataList = new ArrayList<SpoModel>();
@@ -90,6 +90,7 @@ public class LayoutZoomer extends AppCompatActivity {
         extraPID = intent.getStringExtra("uid");
         extraFrom = intent.getStringExtra("mIdFrom");
         extraTo = intent.getStringExtra("mIdTo");
+        CurrencyType = intent.getStringExtra("CurrencyType");
 
         //spoRptAdapter = new SpoRptAdapter(context,dataList);
 
@@ -273,7 +274,8 @@ public class LayoutZoomer extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String responseFromSpo = myService.getResponse_SpoCNFGrid(myCbo_help.getCompanyCode(),""+ Custom_Variables_And_Method.PA_ID,extraFrom,extraTo,"c","0","0");
+            String responseFromSpo = myService.getResponse_SpoCNFGrid(myCbo_help.getCompanyCode(),""+ Custom_Variables_And_Method.PA_ID,
+                    extraFrom,extraTo, "c","0","0",CurrencyType);
 
             return responseFromSpo;
         }

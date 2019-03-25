@@ -1,7 +1,6 @@
 package utils.adapterutils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -21,7 +20,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 /**
  * Created by Akshit on 11/28/2015.

@@ -1,17 +1,13 @@
 package com.cbo.cbomobilereporting.ui_new;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,28 +24,21 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.CaptureSignatureMain;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DivisionWise_Map;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
-import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity;
 import com.uenics.javed.CBOLibrary.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import async.CBOFinalTasks;
 import services.ServiceHandler;
 import utils.adapterutils.Util_Grid_Adapter;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
-import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
 

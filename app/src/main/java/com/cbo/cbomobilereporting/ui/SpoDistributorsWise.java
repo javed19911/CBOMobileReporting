@@ -37,6 +37,8 @@ import utils.adapterutils.SpoModel;
 import utils.adapterutils.SpoRptAdapter;
 import utils_new.Custom_Variables_And_Method;
 
+import static com.cbo.cbomobilereporting.ui.LayoutZoomer.CurrencyType;
+
 /**
  * Created by Akshit udainiya on 9/10/15.
  */
@@ -187,7 +189,7 @@ public class SpoDistributorsWise extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             String  resultDistributor = myService.getResponse_SpoCNFGrid(cboDbHelper.getCompanyCode(),""+ Custom_Variables_And_Method.PA_ID, LayoutZoomer.extraFrom,
-                    LayoutZoomer.extraTo,rpt_typ,"0",spoIdExtra);
+                    LayoutZoomer.extraTo,rpt_typ,"0",spoIdExtra,CurrencyType);
             return resultDistributor;
         }
 

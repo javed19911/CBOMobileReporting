@@ -1,7 +1,8 @@
 package utils.adapterutils;
 
-public class Dcr_Workwith_Model 
-	{
+import java.io.Serializable;
+
+public class Dcr_Workwith_Model implements Serializable{
 	
 		public String name="";
 		public String id="";

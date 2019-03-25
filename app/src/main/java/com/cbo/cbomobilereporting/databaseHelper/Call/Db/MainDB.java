@@ -3,7 +3,7 @@ package com.cbo.cbomobilereporting.databaseHelper.Call.Db;
 import com.cbo.cbomobilereporting.databaseHelper.FirebaseDbhelper;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 /**
  * Created by cboios on 25/01/19.
