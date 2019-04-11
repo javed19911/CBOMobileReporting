@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.SpoDistributorsWise;
@@ -134,7 +135,7 @@ public class SpoRptAdapter extends BaseAdapter {
                 }
 
 
-                if (clickCount == 1){
+            if (clickCount == 1){
                 if (!spoIdFromList.equals("0")) {
                 Intent spoHeadquarterWise = new Intent(context, SpoHeadquarterWise.class);
                     spoHeadquarterWise.putExtra("spoId", spoIdFromList);
@@ -158,8 +159,11 @@ public class SpoRptAdapter extends BaseAdapter {
                         spoDistributorsWise.putExtra("spoId", spoIdFromList);
 
                         v.getContext().startActivity(spoDistributorsWise);
-                    }
-                    else {
+                    } else if( !dataList.get(position).getSpo_bill_url ().trim().isEmpty()){
+
+                            MyCustumApplication.getInstance().LoadURL(dataList.get(position).getConsignee(),dataList.get(position).getSpo_bill_url ());
+
+                    } else {
                         customVariablesAndMethod.msgBox(context,dataList.get(position).getConsignee().toString());
                     }
                   //clickCount = clickCount--;
@@ -167,6 +171,7 @@ public class SpoRptAdapter extends BaseAdapter {
 
                 }}
         });
+
         holderSpo.stkAmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

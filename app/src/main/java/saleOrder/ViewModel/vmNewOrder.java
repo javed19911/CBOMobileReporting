@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.ViewModel;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,9 +14,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cbomobilereporting.cbo.com.cboorder.DBHelper.ItemDB;
+import cbomobilereporting.cbo.com.cboorder.DBHelper.discountDB;
+import cbomobilereporting.cbo.com.cboorder.Enum.eDiscount;
+import cbomobilereporting.cbo.com.cboorder.Enum.eTax;
+import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
+import cbomobilereporting.cbo.com.cboorder.Model.mTax;
+import cbomobilereporting.cbo.com.cboorder.Model.mTaxComponent;
 import cbomobilereporting.cbo.com.cboorder.View.iNewOrder;
+import saleOrder.MyOrderAPIService;
+import saleOrder.ViewModel.CBOViewModel;
 
 /**
  * Created by cboios on 04/03/19.
@@ -28,12 +36,15 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
     private String Kit_Type = "";
     private String filterQry ="";
     private ItemDB itemDB;
+    private discountDB discountDB;
     private ArrayList<mItem> items;
+    private Boolean syncItem = true;
 
     @Override
     public void onUpdateView(Activity context, iNewOrder view) {
         if (view != null){
             itemDB = new ItemDB(context);
+            discountDB = new discountDB(context);
             view.getReferencesById();
             //orderDB = new OrderDB(context);
             //setStatus("P");
@@ -54,6 +65,10 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
         if (view != null){
             view.onOrderChanged(getOrder());
         }
+    }
+
+    public void setSync(Boolean syncItem){
+        this.syncItem = syncItem;
     }
 
     public String getKit_Type() {
@@ -99,6 +114,9 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
 
     private mItem GetOrderItemWhere(mItem item){
 
+        if (getOrder() == null)
+            return null;
+
         if (getOrder().getItems().size() > 0) {
 
             for (mItem orderItem : getOrder().getItems()) {
@@ -115,7 +133,7 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
         if (orderItem != null){
             getOrder().getItems().remove(orderItem);
         }
-        if (!item.getQty().equalsIgnoreCase("0")) {
+        if (item.getQty() != 0.0) {
             getOrder().getItems().add(item);
         }
         if (view != null){
@@ -124,7 +142,7 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
     }
 
     private void getOrderItem(Activity context){
-        getOrderItem(context,true);
+        getOrderItem(context,syncItem);
     }
     public void getOrderItem(final Activity context, Boolean SyncYN){
 
@@ -134,6 +152,7 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
             mItem orderItem = GetOrderItemWhere(item);
             if (orderItem != null) {
                item.setQty(orderItem.getQty())
+
                        .setAmt(orderItem.getAmt());
 
             }
@@ -147,19 +166,21 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
 //        New_Order_Multiple_Adaptor order_item_list_adaptor = new New_Order_Multiple_Adaptor(context, adaptor_data_OrderItem);
 //        listView.setAdapter(order_item_list_adaptor);
 
-        if (SyncYN) {
+       /* if (SyncYN) {
             //Start of call to service
 
             HashMap<String,String> request=new HashMap<>();
             request.put("sCompanyFolder", view.getCompanyCode());
-            request.put("iPA_ID", view.getPartyID() );
+            request.put("iPA_ID",  view.getPartyID() );
+            request.put("iLOGIN_PA_ID",  view.getUserID() );
 
             ArrayList<Integer> tables=new ArrayList<>();
             tables.add(0);
+            tables.add(1);
 
             new MyOrderAPIService(context).execute(new ResponseBuilder("ItemGrid",request)
                     .setTables(tables)
-                    .setShowProgess(items.size() == 0 )
+                    *//*.setShowProgess(items.size() == 0 )*//*
                     .setResponse(new CBOServices.APIResponse() {
                         @Override
                         public void onComplete(Bundle bundle) throws Exception {
@@ -182,51 +203,65 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
             //End of call to service
 
 
-        }
+        }*/
     }
 
 
-//    public void parser2(Bundle result) throws JSONException {
-//        if (result!=null ) {
-//
-//                String table0 = result.getString("Tables0");
-//                JSONArray jsonArray1 = new JSONArray(table0);
-//
-//                String order_no;
-//                for (int i = 0; i < jsonArray1.length(); i++) {
-//                    JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
-//                    order_no=jsonObject2.getString("ORD_ID");
-//                    shareclass.save(this,"order_no",order_no);
-//                    insertOrderDetailToLocal(order_no);
-//                    paymentSuccess();
-//                }
-//
-//
-//
-//        }
-//
-//
-//    }
 
 
     public void parser1(Bundle result) throws JSONException {
         if (result!=null ) {
             String table0 = result.getString("Tables0");
-            JSONArray jsonArray1 = new JSONArray(table0);
+            JSONArray jsonArray = new JSONArray(table0);
 
-            if (jsonArray1.length() > 0) {
+            if (jsonArray.length() > 0) {
                 itemDB.delete();
             }
-            for (int i = 0; i < jsonArray1.length(); i++) {
-                JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
                 mItem item = new mItem()
                         .setId(jsonObject2.getString("ITEM_ID"))
                         .setName(jsonObject2.getString("ITEM_NAME"))
-                        .setRate(jsonObject2.getString("RATE"))
+                        .setRate(jsonObject2.getDouble("RATE"))
                         .setMRP(jsonObject2.getString("MRP_RATE"))
                         .setPack(jsonObject2.getString("PACK"))
-                        .setType(jsonObject2.getString("KIT_TYPE"));
+                        .setType(jsonObject2.getString("KIT_TYPE"))
+                        .setGropuID(jsonObject2.getInt("ITEM_GROUP_ID"));
+
+
+                mTax GST = new mTax(eTax.getTax(jsonObject2.getInt("GST_TYPE")));
+                GST.setSGST(jsonObject2.getDouble("TAX_PERCENT2"))
+                        .setCGST(jsonObject2.getDouble("TAX_PERCENT1"));
+
+                /*if (GST.getType() == eTax.CENTRAL){
+                    GST.getTaxs().add(new mTaxComponent(eTax.IGST).setTax(jsonObject2.getDouble("TAX_PERCENT1")));
+                }else{
+                    GST.getTaxs().add(new mTaxComponent(eTax.CGST).setTax(jsonObject2.getDouble("TAX_PERCENT1")));
+                    GST.getTaxs().add(new mTaxComponent(eTax.SGST).setTax(jsonObject2.getDouble("TAX_PERCENT2")));
+                }*/
+                item.setGST(GST);
+
                 itemDB.insert(item);
+
+            }
+
+            String table1 = result.getString("Tables1");
+            jsonArray = new JSONArray(table1);
+
+            if (jsonArray.length() > 0) {
+                discountDB.delete();
+            }
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                mDiscount discount = new mDiscount()
+                        .setType(eDiscount.valueOf(jsonObject2.getString("DOC_TYPE")))
+                        .setId(jsonObject2.getInt("ITEM_ID"))
+                        .setSecId(jsonObject2.getInt("ITEM_ID1"))
+                        .setFrom(jsonObject2.getDouble("FQTY"))
+                        .setTo(jsonObject2.getDouble("TQTY"))
+                        .setPercent(jsonObject2.getDouble("DISC_PERCENT"));
+
+                discountDB.insert(discount);
 
             }
         }

@@ -1,23 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true"
+    >
 
-
-    <include layout="@layout/custom_appbar_new"/>
-
-    <FrameLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/newOrderFragment">
-    </FrameLayout>
+        android:background="@color/white"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:contentScrim="#05009900"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <fragment
+                android:name="saleOrder.Fragments.FNewOrder"
+                android:id="@+id/newOrderFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="parallax"
+                android:layout_marginTop="?attr/actionBarSize"
+                tools:layout="@layout/fragment_new_order_view" />
+
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin"
+                app:contentInsetStart="0dp"
+                app:contentInsetEnd="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                android:background="?colorPrimaryDark">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/title"
+                        android:text="Deliver To"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="17sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/subTitle"
+                        android:text="SubTitle"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="12sp"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/cartFragment">
+        android:id="@+id/cartFragment"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
     </FrameLayout>
-</LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

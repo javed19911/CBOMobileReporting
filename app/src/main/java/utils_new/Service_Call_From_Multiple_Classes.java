@@ -218,7 +218,7 @@ public class Service_Call_From_Multiple_Classes {
                 cbo_helper.delete_Doctor_Call_Remark();
                 for (int b = 0; b<jsonArray6.length();b++){
                     JSONObject jasonObj2 = jsonArray6.getJSONObject(b);
-                    cbo_helper.insertDoctorCallRemark( jasonObj2.getString("PA_ID"),jasonObj2.getString("PA_NAME"));
+                    cbo_helper.insertDoctorCallRemark( jasonObj2.getString("PA_ID"),jasonObj2.getString("PA_NAME"),"R");
                 }
 
 
@@ -276,6 +276,12 @@ public class Service_Call_From_Multiple_Classes {
                     cbo_helper.insert_STk_Item( jasonObj2.getString("STK_ID"),jasonObj2.getString("ITEM_ID"),jasonObj2.getString("RATE"));
                 }
 
+                String table12 = result.getString("Tables12");
+                JSONArray jsonArray13 = new JSONArray(table12);
+                for (int b = 0; b<jsonArray13.length();b++){
+                    JSONObject jasonObj2 = jsonArray13.getJSONObject(b);
+                    cbo_helper.insertDoctorCallRemark( jasonObj2.getString("PA_ID"),jasonObj2.getString("PA_NAME"),"S");
+                }
                 /*switch (work_type_Selected){
                     case "w":
                         finish();
@@ -551,6 +557,7 @@ public class Service_Call_From_Multiple_Classes {
         tables.add(9);
         tables.add(10);
         tables.add(11);
+        tables.add(12);
 
         new MyAPIService(context)
                 .execute(new ResponseBuilder("DCRCOMMIT_DOWNLOADALL", request)
@@ -930,6 +937,10 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("DCRDRADDAREA_APP_MSG", c.getString("DCRDRADDAREA_APP_MSG"));
                 editor.putString("DRGIFTMANDATORY", c.getString("DRGIFTMANDATORY"));
                 editor.putString("DCR_MULTIPLE_ROUTEYN", c.getString("DCR_MULTIPLE_ROUTEYN"));
+                editor.putString("DCR_LEAD_ENTRY_YN", c.getString("DCR_LEAD_ENTRY_YN"));
+                editor.putString("DCR_CALL_STATUS_YN", c.getString("DCR_CALL_STATUS_YN"));
+                editor.putString("FY_FDATE", c.getString("FY_FDATE"));
+                editor.putString("FY_TDATE", c.getString("FY_TDATE"));
 
                 editor.commit();
 

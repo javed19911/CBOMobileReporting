@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.Activities;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -19,25 +20,36 @@ import com.cbo.cbomobilereporting.R;
 
 import java.util.ArrayList;
 
+import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
+import cbomobilereporting.cbo.com.cboorder.View.iNewOrder;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
-import saleOrder.Adaptor.ClientAdapter;
-import saleOrder.Views.iClient;
+import saleOrder.Adaptor.ItemAdapter;
+import saleOrder.Enum.eItem;
+import saleOrder.ViewModel.vmNewOrder;
 
-public class ClientActivity extends AppCompatActivity implements iClient {
+public class ItemFilterActivity extends AppCompatActivity implements iNewOrder {
 
     android.support.v7.widget.Toolbar toolbar;
     private RecyclerView itemlist_filter;
-    private ClientAdapter clientAdapter;
-    private vmClient viewModel;
+    private ItemAdapter itemAdapter;
+    private vmNewOrder viewModel;
     TextView itemincart;
     Activity context;
+    private eItem itemType = eItem.MEDICINE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client);
+        setContentView(R.layout.activity_new_order);
         context = this;
-        viewModel = ViewModelProviders.of(this).get(vmClient.class);
+        viewModel = ViewModelProviders.of(this).get(vmNewOrder.class);
+        viewModel.setOrder((mOrder) getIntent().getSerializableExtra("order"));
+        viewModel.setSync(getIntent().getBooleanExtra("syncItem",true));
+
+        if (getIntent().getSerializableExtra("itemType") != null){
+            itemType = (eItem) getIntent().getSerializableExtra("itemType");
+        }
+
         viewModel.setView(context,this);
     }
 
@@ -48,16 +60,17 @@ public class ClientActivity extends AppCompatActivity implements iClient {
         toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        itemincart = findViewById(R.id.itemincart);
 
         ImageView clearQry = findViewById(R.id.clearQry);
         itemlist_filter = (RecyclerView) findViewById(R.id.itemList);
-        clientAdapter = new ClientAdapter(context, viewModel.getParties());
+        itemAdapter = new ItemAdapter(this, viewModel.getItems(),itemType);
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         itemlist_filter.setLayoutManager(mLayoutManager1);
         itemlist_filter.setItemAnimator(new DefaultItemAnimator());
-        itemlist_filter.setAdapter(clientAdapter);
+        itemlist_filter.setAdapter(itemAdapter);
 
-        TextView filterTxt = findViewById(R.id.filterTxt);
+        TextView filterTxt = toolbar.findViewById(R.id.filterTxt);
         filterTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -67,7 +80,8 @@ public class ClientActivity extends AppCompatActivity implements iClient {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                clientAdapter.filter(s.toString());
+                viewModel.setFilterQry(s.toString());
+                viewModel.getOrderItem(context,false);
 
             }
 
@@ -83,12 +97,35 @@ public class ClientActivity extends AppCompatActivity implements iClient {
                 filterTxt.setText("");
             }
         });
-        clientAdapter.setOnClickListner(new RecycleViewOnItemClickListener() {
+        itemAdapter.setOnClickListner(new RecycleViewOnItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-                openOrder(clientAdapter.getPartyAt(position));
+
+               if (itemType == eItem.PRODUCT){
+                    Intent intent = new Intent();
+                    intent.putExtra("item",itemAdapter.getItems().get(position));
+                    setResult(RESULT_OK, intent);
+                    finish();
+               }else  if (view.getId() == R.id.add_to_cart) {
+                   viewModel.addItem(itemAdapter.getItems().get(position));
+               }
             }
         });
+        LinearLayout goToCart = findViewById(R.id.go_to_cart);
+        goToCart.setOnClickListener(view -> onBackPressed());
+        if (itemType == eItem.PRODUCT) {
+            goToCart.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public String getPartyID() {
+        return viewModel.getOrder().getPartyId();
+    }
+
+    @Override
+    public String getUserID() {
+        return MyCustumApplication.getInstance().getUser().getID();
     }
 
 
@@ -98,41 +135,41 @@ public class ClientActivity extends AppCompatActivity implements iClient {
     }
 
     @Override
-    public String getUserId() {
-        return MyCustumApplication.getInstance().getUser().getID();
+    public String getActivityTitle() {
+        return "New Order";
     }
 
     @Override
-    public void setTile() {
+    public void setTile(String title) {
+
         if (getSupportActionBar()!=null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_black);
             toolbar.setNavigationOnClickListener(view -> onBackPressed());
         }
-
-        TextView title = toolbar.findViewById(R.id.title);
-        title.setText("Party List");
     }
 
     @Override
-    public void openOrder(mParty party) {
-        Intent intent = new Intent(context, MyOrder.class);
-        intent.putExtra("party", party);
-        startActivity(intent);
+    public void onItemsChanged(ArrayList<mItem> items) {
+        itemAdapter.update(items);
     }
 
     @Override
-    public void openNewOrder(mParty party) {
-        Intent intent = new Intent(context, CartActivity.class);
-        intent.putExtra("order",new mOrder().setPartyId(party.getId()));
-        startActivity(intent);
+    public void onOrderChanged(mOrder order) {
+        itemincart.setText(order.getItems().size() + " Items in cart");
+
     }
 
     @Override
-    public void onPartyListUpdated(ArrayList<mParty> parties) {
-        clientAdapter.update(parties);
+    public void onBackPressed() {
+        if (itemType != eItem.PRODUCT) {
+            Intent intent = new Intent();
+            intent.putExtra("order", viewModel.getOrder());
+            setResult(RESULT_OK, intent);
+            finish();
+        }else{
+            setResult(RESULT_CANCELED, null);
+            finish();
+        }
     }
-
-
-
 }

@@ -1,6 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -47,6 +48,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.Contact_Us;
@@ -77,7 +79,6 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     private ViewPager viewPager;
     DrawerLayout drawer;
     Toolbar toolbar_;
-    Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
     FragmentManager fm;
     TextView hadder_text;
@@ -346,70 +347,6 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
         //createTabIcons();
     }
 
-    private void createTabIcons() {
-        ArrayList<String> tabs=cbo_db_helper.getTab();
-        TextView tabOne;
-        for(int i=0;i<tabs.size();i++) {
-            switch (tabs.get(i)) {
-                case "DCR":
-                    /*tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-                    tabOne.setText("DCR");
-                    tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vp_dcr1, 0, 0);
-                    tabLayout.getTabAt(i).setCustomView(tabOne);*/
-                    //tabLayout.getTabAt(i).setIcon(R.drawable.vp_dcr1);
-                    tabLayout.getTabAt(i).setIcon(R.drawable.button_back_light_2016);
-                    break;
-                case "MAIL":
-                    /*tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-                    tabOne.setText("MAIL");
-                    tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vp_mail1, 0, 0);
-                    tabLayout.getTabAt(i).setCustomView(tabOne);*/
-                    //tabLayout.getTabAt(i).setIcon(R.drawable.vp_mail1);
-                    tabLayout.getTabAt(i).setIcon(R.drawable.button_back_light_2016);
-                    break;
-                case "TRANSACTION":
-                    /*tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-                    tabOne.setText("TRANSACTION");
-                    tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vp_trans1, 0, 0);
-                    tabLayout.getTabAt(i).setCustomView(tabOne);*/
-                    //tabLayout.getTabAt(i).setIcon(R.drawable.vp_trans1);
-                    tabLayout.getTabAt(i).setIcon(R.drawable.button_back_light_2016);
-                    break;
-                case "REPORTS":
-                   /* tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-                    tabOne.setText("REPORTS");
-                    tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vp_reports1, 0, 0);
-                    tabLayout.getTabAt(i).setCustomView(tabOne);*/
-                    //tabLayout.getTabAt(i).setIcon(R.drawable.vp_reports1);
-                    tabLayout.getTabAt(i).setIcon(R.drawable.button_back_light_2016);
-                    break;
-                case "UTILITY":
-                    /*tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-                    tabOne.setText("UTILITY");
-                    tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vp_utility1, 0, 0);
-                    tabLayout.getTabAt(i).setCustomView(tabOne);*/
-                    //tabLayout.getTabAt(i).setIcon(R.drawable.vp_utility1);
-                    tabLayout.getTabAt(i).setIcon(R.drawable.button_back_light_2016);
-                    break;
-                case "PERSONAL_INFO":
-                   /* tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-                    tabOne.setText("PERSONAL INFO");
-                    tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vp_home1, 0, 0);
-                    tabLayout.getTabAt(i).setCustomView(tabOne);*/
-                    //tabLayout.getTabAt(i).setIcon(R.drawable.vp_home1);
-                    tabLayout.getTabAt(i).setIcon(R.drawable.button_back_light_2016);
-                    break;
-                case "APPROVAL":
-                    /*tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-                    tabOne.setText("APPROVAL");
-                    tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.approval_menu, 0, 0);
-                    tabLayout.getTabAt(i).setCustomView(tabOne);*/
-                    //tabLayout.getTabAt(i).setIcon(R.drawable.approval_menu);
-                    tabLayout.getTabAt(i).setIcon(R.drawable.button_back_light_2016);
-                    break;
-            }
-        }
-    }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -422,9 +359,9 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                 case "MAIL":
                     adapter.addFragment(new Mail_Screen(), "Mails");
                     break;
-                case "TRANSACTION":
+                /*case "TRANSACTION":
                     adapter.addFragment(new TransactionMenuInGrid(), "Transaction");
-                    break;
+                    break;*/
                 case "REPORTS":
                     adapter.addFragment(new ReportMenuInGrid(), "Reports");
                     break;
@@ -437,6 +374,13 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                 case "APPROVAL":
                     adapter.addFragment(new ApprovalMenuInGrid(), "APPROVAL");
                     break;
+                default:
+                    TransactionMenuInGrid myFragment = new TransactionMenuInGrid();
+                    Bundle data = new Bundle();//Use bundle to pass data
+                    data.putString("Code", tabs.get(i));
+                    myFragment.setArguments(data);
+                    adapter.addFragment(myFragment, tabs.get(i));
+
             }
         }
 
@@ -516,13 +460,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
         AppAlert.getInstance().setPositiveTxt("Yes").setNagativeTxt("No").DecisionAlert(context, "Logout!!!", "Are you sure to Logout?", new AppAlert.OnClickListener() {
             @Override
             public void onPositiveClicked(View item, String result) {
-                stopLoctionService(false);
-                Intent intent = new Intent(getApplicationContext(), LoginFake.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.putExtra("EXIT", true);
-                startActivity(intent);
-                finish();
+                MyCustumApplication.getInstance().Logout(context);
             }
 
             @Override

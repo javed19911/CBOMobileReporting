@@ -2,7 +2,7 @@ package saleOrder.Views;
 
 import java.util.ArrayList;
 
-import saleOrder.mParty;
+import saleOrder.Model.mParty;
 
 /**
  * Created by cboios on 06/03/19.

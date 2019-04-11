@@ -3,6 +3,7 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer;
 import com.cbo.cbomobilereporting.ui_new.Model.mWorkwith;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import utils.adapterutils.Dcr_Workwith_Model;
@@ -36,8 +37,13 @@ public interface iCustomerCall {
     void setCustomer(mCustomerCall customerCall);
     void setWorkWith(ArrayList<Dcr_Workwith_Model> workWiths );
     void setRemark(String remark);
+    void setStatus(String status);
+    void setCompetitor_Product(String competitor_Product);
     void setProduct(ArrayList<PobModel> products);
     void setGift(ArrayList<PobModel> gifts);
     void setLeads(ArrayList<PobModel> leads);
+    void setAttachments(ArrayList<String> attachments);
+    void setLead_SummaryVisibility(Boolean visible);
+    void updateSummary();
 
 }

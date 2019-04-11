@@ -23,6 +23,7 @@ import com.cbo.cbomobilereporting.databaseHelper.DCR.mDCR;
 import com.cbo.cbomobilereporting.databaseHelper.User.UserDB;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
+import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 
@@ -168,6 +169,16 @@ public class MyCustumApplication extends MultiDexApplication {
     }
 
 
+    public void Logout(Activity context){
+        stopLoctionService(false);
+        Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
+        context.finish();
+    }
 
     public void clearApplicationData() {
         File cache = getCacheDir();

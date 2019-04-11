@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.Model;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.Activities;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,34 +12,34 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 
 import java.util.ArrayList;
 
-import cbomobilereporting.cbo.com.cboorder.Adaptor.MedicineAdapter;
-import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
-import cbomobilereporting.cbo.com.cboorder.View.iNewOrder;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
+import saleOrder.Adaptor.ClientAdapter;
+import saleOrder.Model.mParty;
+import saleOrder.Views.iClient;
+import saleOrder.ViewModel.vmClient;
 
-public class ItemFilterActivity extends AppCompatActivity implements iNewOrder {
+public class ClientActivity extends AppCompatActivity implements iClient {
 
     android.support.v7.widget.Toolbar toolbar;
     private RecyclerView itemlist_filter;
-    private MedicineAdapter medicineAdapter;
-    private vmNewOrder viewModel;
+    private ClientAdapter clientAdapter;
+    private vmClient viewModel;
     TextView itemincart;
     Activity context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_order);
+        setContentView(R.layout.activity_client);
         context = this;
-        viewModel = ViewModelProviders.of(this).get(vmNewOrder.class);
-        viewModel.setOrder((mOrder) getIntent().getSerializableExtra("order"));
+        viewModel = ViewModelProviders.of(this).get(vmClient.class);
         viewModel.setView(context,this);
     }
 
@@ -50,17 +50,16 @@ public class ItemFilterActivity extends AppCompatActivity implements iNewOrder {
         toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        itemincart = findViewById(R.id.itemincart);
 
         ImageView clearQry = findViewById(R.id.clearQry);
         itemlist_filter = (RecyclerView) findViewById(R.id.itemList);
-        medicineAdapter = new MedicineAdapter(this, viewModel.getItems());
+        clientAdapter = new ClientAdapter(context, viewModel.getParties());
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         itemlist_filter.setLayoutManager(mLayoutManager1);
         itemlist_filter.setItemAnimator(new DefaultItemAnimator());
-        itemlist_filter.setAdapter(medicineAdapter);
+        itemlist_filter.setAdapter(clientAdapter);
 
-        TextView filterTxt = toolbar.findViewById(R.id.filterTxt);
+        TextView filterTxt = findViewById(R.id.filterTxt);
         filterTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -70,8 +69,7 @@ public class ItemFilterActivity extends AppCompatActivity implements iNewOrder {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                viewModel.setFilterQry(s.toString());
-                viewModel.getOrderItem(context,false);
+                clientAdapter.filter(s.toString());
 
             }
 
@@ -87,58 +85,56 @@ public class ItemFilterActivity extends AppCompatActivity implements iNewOrder {
                 filterTxt.setText("");
             }
         });
-        medicineAdapter.setOnClickListner(new RecycleViewOnItemClickListener() {
+        clientAdapter.setOnClickListner(new RecycleViewOnItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-                if (view.getId() == R.id.add_to_cart) {
-                    viewModel.addItem(medicineAdapter.getItems().get(position));
-                }
+                openOrder(clientAdapter.getPartyAt(position));
             }
         });
-        LinearLayout goToCart = findViewById(R.id.go_to_cart);
-        goToCart.setOnClickListener(view -> onBackPressed());
     }
 
-    @Override
-    public String getPartyID() {
-        return viewModel.getOrder().getPartyId();
-    }
 
     @Override
     public String getCompanyCode() {
-        return "Demo";
+        return MyCustumApplication.getInstance().getUser().getCompanyCode();
     }
 
     @Override
-    public String getActivityTitle() {
-        return "New Order";
+    public String getUserId() {
+        return MyCustumApplication.getInstance().getUser().getID();
     }
 
     @Override
-    public void setTile(String title) {
-
+    public void setTile() {
         if (getSupportActionBar()!=null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_black);
             toolbar.setNavigationOnClickListener(view -> onBackPressed());
         }
+
+        TextView title = toolbar.findViewById(R.id.title);
+        title.setText("Party List");
     }
 
     @Override
-    public void onItemsChanged(ArrayList<mItem> items) {
-        medicineAdapter.update(items);
+    public void openOrder(mParty party) {
+        Intent intent = new Intent(context, MyOrder.class);
+        intent.putExtra("party", party);
+        startActivity(intent);
     }
 
     @Override
-    public void onOrderChanged(mOrder order) {
-        itemincart.setText(order.getItems().size() + " Items in cart");
+    public void openNewOrder(mParty party) {
+        Intent intent = new Intent(context, CartActivity.class);
+        intent.putExtra("order",new mOrder().setPartyId(party.getId()));
+        startActivity(intent);
     }
 
     @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        intent.putExtra("order",viewModel.getOrder());
-        setResult(RESULT_OK, intent);
-        finish();
+    public void onPartyListUpdated(ArrayList<mParty> parties) {
+        clientAdapter.update(parties);
     }
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -46,7 +47,7 @@ public class UtilitiesMenuInGrid extends Fragment {
 
 
     View v;
-    Context context;
+    Activity context;
     GridView gridView;
     String fmcgYN;
     NetworkUtil networkUtil;
@@ -262,12 +263,14 @@ public class UtilitiesMenuInGrid extends Fragment {
 
                 if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
                     customVariablesAndMethod.msgBox(context, "Data Downloded Sucessfully...");
+                    MyCustumApplication.getInstance().Logout(context);
                 }else{
 
                     service.DownloadAll(context, new Response() {
                         @Override
                         public void onSuccess(Bundle bundle) {
                              customVariablesAndMethod.msgBox(context, "Data Downloded Sucessfully...");
+                             MyCustumApplication.getInstance().Logout(context);
                         }
 
                         @Override

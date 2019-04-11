@@ -69,10 +69,14 @@ public class DcrNewAdapter extends RecyclerView.Adapter<DcrNewAdapter.MyviewHold
         holder.Dairy.setText(rptmodel.getDairyCount());
         holder.Polutary.setText(rptmodel.getPolutaryCount());
 
-        if (fmcgYn.equalsIgnoreCase("Y")){
-            holder.lLayoutDr.setVisibility(View.GONE);
-            // holder.totalDr_text.setText("Total Retailer :");
+//        if (fmcgYn.equalsIgnoreCase("Y")){
+//            holder.lLayoutDr.setVisibility(View.GONE);
+//            // holder.totalDr_text.setText("Total Retailer :");
+//
+//        }
 
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CUSTOMER_NOT_REQUIRED","Y").equals("N")) {
+            holder.totalChem_text.setText("Total " + cbohelp.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL").split(" ")[0] + " :");
         }
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED","Y").equals("N")) {
             holder.totalChem_text.setText("Total " + cbohelp.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL").split(" ")[0] + " :");
@@ -90,23 +94,29 @@ public class DcrNewAdapter extends RecyclerView.Adapter<DcrNewAdapter.MyviewHold
             holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA"));
         }
 
-        if ((Rptdata.get(position).getTtldr()).equals("")){
+        if ((Rptdata.get(position).getTtldr()).equals("0") &&
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Doctor_NOT_REQUIRED").equals("Y")){
             holder.lLayoutDr.setVisibility(View.GONE);
         }else{
             holder.lLayoutDr.setVisibility(View.VISIBLE);
         }
 
-        if ((Rptdata.get(position).getTtlstk()).equals("")){
+        if ((Rptdata.get(position).getTtlstk()).equals("0") &&
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED").equals("Y")){
             holder.lLayoutSTK.setVisibility(View.GONE);
         }else{
             holder.lLayoutSTK.setVisibility(View.VISIBLE);
         }
 
-        if ((Rptdata.get(position).getTtlchm()).equals("")){
+        if ((Rptdata.get(position).getTtlchm()).equals("0") &&
+                (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("Y") &&
+                        customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CUSTOMER_NOT_REQUIRED").equals("Y"))){
             holder.chem.setVisibility(View.GONE);
         }else{
             holder.chem.setVisibility(View.VISIBLE);
         }
+
+
 
         if ((Rptdata.get(position).getTtlMissedCall()).equals("0")){
             holder.lLayoutMissed_call.setVisibility(View.GONE);
@@ -217,6 +227,7 @@ public class DcrNewAdapter extends RecyclerView.Adapter<DcrNewAdapter.MyviewHold
                     Intent ttlche=new Intent(v.getContext(),TotalChemistRpt.class);
                     ttlche.putExtra("PAID", Report_PAID);
                     ttlche.putExtra("date",Rptdata.get(position).getDate());
+                    ttlche.putExtra("Title", holder.TTlchm.getText().toString());
                     v.getContext().startActivity(ttlche);
                 }else{
                     customVariablesAndMethod.msgBox(context,"No Chemist in the list");
@@ -297,9 +308,7 @@ public class DcrNewAdapter extends RecyclerView.Adapter<DcrNewAdapter.MyviewHold
             }
         });
 
-        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("Y")){
-            holder.chem.setVisibility(View.GONE);
-        }
+
 
         return;
     }

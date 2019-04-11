@@ -563,7 +563,7 @@ public class Doctor_Sample extends AppCompatActivity {
                                 }
                             });
                    // customVariablesAndMethod.msgBox(context,"Please select atleast one promoted product");
-                }else if(! gift_added){
+                }else if(! gift_added && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE (context,"DRGIFTMANDATORY").contains ("D")){
                     AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
                             "Please give atleast  one Gift..." ,
                             new AppAlert.OnClickListener() {

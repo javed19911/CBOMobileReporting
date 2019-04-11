@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.ViewModel;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,9 +15,16 @@ import java.util.HashMap;
 
 import cbomobilereporting.cbo.com.cboorder.DBHelper.OrderDB;
 import cbomobilereporting.cbo.com.cboorder.DBHelper.OrderDetailDB;
+import cbomobilereporting.cbo.com.cboorder.Enum.eDiscount;
+import cbomobilereporting.cbo.com.cboorder.Enum.eTax;
+import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
+import cbomobilereporting.cbo.com.cboorder.Model.mTax;
 import cbomobilereporting.cbo.com.cboorder.View.iOrder;
+import saleOrder.MyOrderAPIService;
+import saleOrder.ViewModel.CBOViewModel;
+import utils_new.AppAlert;
 
 /**
  * Created by cboios on 04/03/19.
@@ -51,7 +58,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
     public void setStatus(String status){
         Status = status;
         if (view != null) {
-            orders = orderDB.Orders(Status, view.getPartyID());
+            orders = orderDB.Orders(Status,view.getAppYN(), view.getPartyID());
             view.onOrderListChanged(orders);
         }
     }
@@ -74,7 +81,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
 
         new MyOrderAPIService(context).execute(new ResponseBuilder("OrderGridMain",request)
                 .setTables(tables)
-                .setShowProgess(orders.size() == 0 )
+                /*.setShowProgess(orders.size() == 0 )*/
                 .setResponse(new CBOServices.APIResponse() {
                     @Override
                     public void onComplete(Bundle bundle) throws Exception {
@@ -115,7 +122,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
                             .setDocId(jsonObject2.getString("ID"))
                             .setDocNo(jsonObject2.getString("DOC_NO"))
                             .setDocDate(jsonObject2.getString("DOC_DATE"))
-                            .setNetAmt(jsonObject2.getString("NET_AMT"))
+                            .setNetAmt(jsonObject2.getDouble("NET_AMT"))
                             .setPayMode(jsonObject2.getString("PYMT_MODE"))
                             .setStatus(jsonObject2.getString("STATUS"))
                             .setBillNo(jsonObject2.getString("BILL_NO"))
@@ -123,7 +130,11 @@ public class vmOrder extends CBOViewModel<iOrder> {
                             .setBillAmt(jsonObject2.getString("BILL_AMT"))
                             .setGrDate(jsonObject2.getString("GR_DATE"))
                             .setGrNo(jsonObject2.getString("GR_NO"))
-                            .setTransport(jsonObject2.getString("TRANSPORT"));
+                            .setTransport(jsonObject2.getString("TRANSPORT"))
+                            .setApproved(jsonObject2.getString("APPYN"))
+                            .setBilledHO(jsonObject2.getInt("HOYN"))
+                            .setAttachment(jsonObject2.getString("FILE_PATH"));
+
 
                     orderDB.insert(order);
 
@@ -174,6 +185,52 @@ public class vmOrder extends CBOViewModel<iOrder> {
         //End of call to service
     }
 
+    public void DeleteOrder(Activity context, final mOrder order){
+
+        //Start of call to service
+
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder", view.getCompanyCode());
+        request.put("iOrdId", order.getDocId() );
+
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+
+        new MyOrderAPIService(context).execute(new ResponseBuilder("OrderDelete",request)
+                .setTables(tables)
+                .setResponse(new CBOServices.APIResponse() {
+                    @Override
+                    public void onComplete(Bundle result) throws Exception {
+                        String table0 = result.getString("Tables0");
+                        JSONArray jsonArray1 = new JSONArray(table0);
+                        String msg = jsonArray1.getJSONObject(0).getString("STATUS");
+                        if (msg.equalsIgnoreCase("OK")){
+                            orderDB.delete("DOC_ID='"+order.getDocId()+"'");
+                            setStatus(Status);
+                        }else{
+                            AppAlert.getInstance().getAlert(context,"Alert!!!",msg);
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onResponse(Bundle bundle) throws Exception {
+
+
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+
+                    }
+                }));
+
+
+        //End of call to service
+    }
     public void parserOrderDet(Bundle result, mOrder order) throws JSONException {
         if (result!=null ) {
             String table0 = result.getString("Tables0");
@@ -182,13 +239,29 @@ public class vmOrder extends CBOViewModel<iOrder> {
 
             for (int i = 0; i < jsonArray1.length(); i++) {
                 JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
+                ArrayList<mDiscount> discounts = new ArrayList<>();
+                discounts.add(new mDiscount().setType(eDiscount.QI).setPercent(jsonObject2.getDouble("DISC_PERCENT")));
+                discounts.add(new mDiscount().setType(eDiscount.VI).setPercent(jsonObject2.getDouble("DISC_PERCENT1")));
+                discounts.add(new mDiscount().setType(eDiscount.P).setPercent(jsonObject2.getDouble("DISC_PERCENT2")));
+                discounts.add(new mDiscount().setType(eDiscount.PG).setPercent(jsonObject2.getDouble("DISC_PERCENT3")));
                 mItem item = new mItem()
                         .setId(jsonObject2.getString("ITEM_ID"))
                         .setName(jsonObject2.getString("ITEM_NAME"))
-                        .setRate(jsonObject2.getString("RATE"))
+                        .setRate(jsonObject2.getDouble("RATE"))
                         .setMRP(jsonObject2.getString("RATE"))
-                        .setQty(jsonObject2.getString("QTY"))
-                        .setAmt(jsonObject2.getString("AMOUNT"));
+                        .setQty(jsonObject2.getDouble("QTY"))
+                        .setPack(jsonObject2.getString("PACK"))
+                        .setAmt(jsonObject2.getDouble("AMOUNT"))
+                        .setMiscDiscount(discounts)
+                        .setGropuID(jsonObject2.getInt("ITEM_GROUP_ID"))
+                        .setMangerDiscount(new mDiscount().setType(eDiscount.M).setPercent(jsonObject2.getDouble("DISC_PERCENT4")) )
+                        .setManualDiscount(new mDiscount().setPercent(jsonObject2.getDouble("DISC_PERCENT5")) );
+
+                mTax GST = new mTax(eTax.getTax(jsonObject2.getInt("GST_TYPE")));
+                GST.setSGST(jsonObject2.getDouble("TAX_PERCENT1"))
+                        .setCGST(jsonObject2.getDouble("TAX_PERCENT"));
+
+                item.setGST(GST).setQty(jsonObject2.getDouble("QTY"));
 
                 //orderDetailDB.insert(view.getPartyID(),order.getDocId(),item);
                 order.getItems().add(item);

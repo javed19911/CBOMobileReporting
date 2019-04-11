@@ -62,7 +62,7 @@ public class SpoDistributorsWise extends AppCompatActivity {
     String Title="Stock Report",cnftxt="Distributors",rpt_typ="p";
 
     LinkedHashMap<String,ArrayList<String>> data1;
-    ArrayList<String> Consignee,Sales_Amount,Sales_Return,Breakage_Expiry,Credit_Note_Other,Net_Sales,Secondary_Sales,Receipt,Outstanding,Stock_Amount;
+    ArrayList<String> Consignee,Sales_Amount,Sales_Return,Breakage_Expiry,Credit_Note_Other,Net_Sales,Secondary_Sales,Receipt,Outstanding,Stock_Amount,spo_bill_url;
 
 
 
@@ -215,6 +215,7 @@ public class SpoDistributorsWise extends AppCompatActivity {
                     Receipt=new ArrayList<String>();
                     Outstanding=new ArrayList<String>();
                     Stock_Amount=new ArrayList<String>();
+                    spo_bill_url= new ArrayList<String>();
 
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray jsonArray = jsonObject.getJSONArray("Tables0");
@@ -268,6 +269,10 @@ public class SpoDistributorsWise extends AppCompatActivity {
                         spoModel.setStockAmt(stkAmt);
                         Stock_Amount.add(stkAmt);
 
+                        String url = object.getString("BILL_URL");
+                        spoModel.setSpo_bill_url (url);
+                        spo_bill_url.add(url);
+
 
                         dataList.add(spoModel);
 
@@ -299,6 +304,8 @@ public class SpoDistributorsWise extends AppCompatActivity {
                     data1.put("Secondary Sales",Secondary_Sales);
                     data1.put("Receipt",Receipt);
                     data1.put("Outstanding",Outstanding);
+
+
                     //data1.put("Stock Amount",Stock_Amount);
 
 /*

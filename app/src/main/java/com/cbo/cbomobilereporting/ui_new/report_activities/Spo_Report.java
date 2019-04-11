@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.LayoutZoomer;
@@ -123,7 +124,9 @@ public class Spo_Report extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    new CustomDatePicker(context, null,
+                    new CustomDatePicker(context,
+                            CustomDatePicker.getDate(MyCustumApplication.getInstance().
+                                    getDataFrom_FMCG_PREFRENCE("FY_FDATE",null), CustomDatePicker.CommitFormat),
                             CustomDatePicker.getDate(todatebtn.getText().toString(), CustomDatePicker.ShowFormat)
                     ).Show(CustomDatePicker.getDate(fromdatebtn.getText().toString(),  CustomDatePicker.ShowFormat)
                             , new CustomDatePicker.ICustomDatePicker() {
@@ -145,7 +148,9 @@ public class Spo_Report extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     new CustomDatePicker(context,
-                            CustomDatePicker.getDate(fromdatebtn.getText().toString(),  CustomDatePicker.ShowFormat))
+                            CustomDatePicker.getDate(fromdatebtn.getText().toString(),  CustomDatePicker.ShowFormat),
+                            CustomDatePicker.getDate(MyCustumApplication.getInstance().
+                                    getDataFrom_FMCG_PREFRENCE("FY_TDATE",null), CustomDatePicker.CommitFormat))
                             .Show(CustomDatePicker.getDate(todatebtn.getText().toString(),  CustomDatePicker.ShowFormat)
                                     , new CustomDatePicker.ICustomDatePicker() {
                                         @Override

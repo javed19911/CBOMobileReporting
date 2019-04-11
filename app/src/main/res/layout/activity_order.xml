@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee"
-    tools:context="cbomobilereporting.cbo.com.mylibraries.MyOrder">
+    android:background="#eee">
 
     <android.support.design.widget.AppBarLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/appbar">
 
-        <include layout="@layout/custom_appbar_new"/>
+        <include layout="@layout/custom_appbar"/>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"

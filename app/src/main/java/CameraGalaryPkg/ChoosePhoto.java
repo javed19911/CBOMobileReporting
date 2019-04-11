@@ -1,4 +1,4 @@
-package camera_galary_pkg;
+package CameraGalaryPkg;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import utils_new.AppAlert;
+
 /**
  * Created by cboios on 25/05/18.
  */
@@ -35,10 +37,10 @@ public class ChoosePhoto {
         galary,
         all;
     }
-    public static int CHOOSE_PHOTO_INTENT = 101;
-    public static int SELECTED_IMG_CROP = 102;
-    public static int SELECT_PICTURE_CAMERA = 103;
-    public static int currentAndroidDeviceVersion = Build.VERSION.SDK_INT;
+    public static final int CHOOSE_PHOTO_INTENT = 101;
+    public static final int SELECTED_IMG_CROP = 102;
+    public static final int SELECT_PICTURE_CAMERA = 103;
+    public static final int currentAndroidDeviceVersion = Build.VERSION.SDK_INT;
 
     private int ASPECT_X = 1;
     private int ASPECT_Y = 1;
@@ -84,9 +86,9 @@ public class ChoosePhoto {
         cameraUrl = FileUtil.getInstance(mContext).createImageUri();
         //Create any other intents you want
         final Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         cameraIntent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUrl);
-
 
         //Add them to an intent array
         Intent[] intents = new Intent[]{cameraIntent};
@@ -110,8 +112,11 @@ public class ChoosePhoto {
 
     // Change this method(edited)
     public void handleGalleryResult(Intent data,File file) {
-        /*try {*/
-            cropPictureUrl = Uri.fromFile(file);
+        try {
+
+        //cropPictureUrl = Uri.fromFile(File.createTempFile(file,".jpg",new File(Environment.getExternalStorageDirectory(), "CBO")));
+
+        cropPictureUrl = Uri.fromFile(file);
                     /*FileUtil.getInstance(mContext)
                     .createImageTempFile(Environment.getExternalStorageDirectory()));*/
             String realPathFromURI = FileUtil.getRealPathFromURI(mContext, data.getData());
@@ -129,9 +134,9 @@ public class ChoosePhoto {
                 cropImage(data.getData(), cropPictureUrl);
             }
 
-        /*} catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     public static String getImageUrlWithAuthority(Context context, Uri uri) {
@@ -163,16 +168,20 @@ public class ChoosePhoto {
 
 
     public void handleCameraResult(Uri cameraPictureUrl,File file) {
-        /*try {*/
+        try {
             cropPictureUrl = Uri.fromFile(file);
-                    /*FileUtil.getInstance(mContext)
-                    .createImageTempFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)));*/
+
+            /*cropPictureUrl = Uri.fromFile(FileUtil.getInstance(mContext)
+                    .createImageTempFile(Environment.getExternalStoragePublicDirectory("CBO")));*/
+            //cropPictureUrl = Uri.fromFile(File.createTempFile(file,".jpg",new File(Environment.getExternalStorageDirectory(), "CBO")));
+
 
             cropImage(cameraPictureUrl, cropPictureUrl);
-        /*} catch (IOException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }*/
+        }
 
     }
 
@@ -185,41 +194,45 @@ public class ChoosePhoto {
     }
 
     private void cropImage(final Uri sourceImage, Uri destinationImage) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        try {
+            Intent intent = new Intent("com.android.camera.action.CROP");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-        intent.setType("image/*");
+            intent.setType("image/*");
 
-        List<ResolveInfo> list = mContext.getPackageManager().queryIntentActivities(intent, 0);
-        int size = list.size();
-        if (size == 0) {
-            //Utils.showToast(mContext, mContext.getString(R.string.error_cant_select_cropping_app));
-            selectedImageUri = sourceImage;
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, sourceImage);
-            ((Activity) mContext).startActivityForResult(intent, ResponseCode);
-            return;
-        } else {
-            intent.setDataAndType(sourceImage, "image/*");
-            intent.putExtra("aspectX", ASPECT_X);
-            intent.putExtra("aspectY", ASPECT_Y);
-            intent.putExtra("outputY", OUT_PUT_Y);
-            intent.putExtra("outputX", OUT_PUT_X);
-            intent.putExtra("scale", SCALE);
-
-            //intent.putExtra("return-data", true);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, destinationImage);
-            selectedImageUri = destinationImage;
-            if (size == 1) {
-                Intent i = new Intent(intent);
-                ResolveInfo res = list.get(0);
-                i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            List<ResolveInfo> list = mContext.getPackageManager().queryIntentActivities(intent, 0);
+            int size = list.size();
+            if (size == 0) {
+                //Utils.showToast(mContext, mContext.getString(R.string.error_cant_select_cropping_app));
+                selectedImageUri = sourceImage;
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, sourceImage);
                 ((Activity) mContext).startActivityForResult(intent, ResponseCode);
+                return;
             } else {
-                Intent i = new Intent(intent);
-                i.putExtra(Intent.EXTRA_INITIAL_INTENTS, list.toArray(new Parcelable[list.size()]));
-                ((Activity) mContext).startActivityForResult(intent, ResponseCode);
+                intent.setDataAndType(sourceImage, "image/*");
+                intent.putExtra("aspectX", ASPECT_X);
+                intent.putExtra("aspectY", ASPECT_Y);
+                intent.putExtra("outputY", OUT_PUT_Y);
+                intent.putExtra("outputX", OUT_PUT_X);
+                intent.putExtra("scale", SCALE);
+
+                //intent.putExtra("return-data", true);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, destinationImage);
+                selectedImageUri = destinationImage;
+                if (size == 1) {
+                    Intent i = new Intent(intent);
+                    ResolveInfo res = list.get(0);
+                    i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+                    ((Activity) mContext).startActivityForResult(intent, ResponseCode);
+                } else {
+                    Intent i = new Intent(intent);
+                    i.putExtra(Intent.EXTRA_INITIAL_INTENTS, list.toArray(new Parcelable[list.size()]));
+                    ((Activity) mContext).startActivityForResult(intent, ResponseCode);
+                }
             }
+        }catch (Exception e){
+            AppAlert.getInstance().getAlert(mContext,"Exception",e.getMessage());
         }
     }
 }

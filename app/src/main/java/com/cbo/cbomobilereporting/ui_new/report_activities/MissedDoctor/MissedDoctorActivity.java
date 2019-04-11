@@ -103,6 +103,7 @@ public class MissedDoctorActivity extends AppCompatActivity implements SearchVie
                 }
             }
         });
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -8,6 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpense;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mOthExpense;
+
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.text.ParseException;
@@ -29,7 +35,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 41;
+    private static final int DATABASE_VERSION = 44;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -197,7 +203,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String RC_DOCTOR = "CREATE TABLE phdcrdr_rc ( id integer primary key,dcr_id text,dr_id text,address text,time text,latLong text,updated text,rc_km text,srno text,batteryLevel text,remark text,file text,LOC_EXTRA text,Ref_latlong text)";
         String CHEMIST_SUBMIT_TABLE = "CREATE TABLE phdcrchem ( id integer primary key,dcr_id text,chem_id text,pob_amt text," +
                 "allitemid text,allitemqty text,address text,allgiftid text,allgiftqty text,time text,battery_level text,sample text," +
-                "remark text,file text,LOC_EXTRA text,Ref_latlong text,rate text)";
+                "remark text,file text,LOC_EXTRA text,Ref_latlong text,rate text,status text,Competitor_Product text)";
+
         String STOCKIST_SUBMIT_TABLE = "CREATE TABLE phdcrstk ( id integer primary key,dcr_id integer,stk_id text,pob_amt text," +
                 "allitemid text,allitemqty text,address text,time text,battery_level text,latLong text,updated text,stk_km text," +
                 "srno text,sample text,remark text,file text,LOC_EXTRA text,allgiftid text,allgiftqty text,Ref_latlong text,rate text)";
@@ -208,9 +215,9 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String Dcr_Appraisal = "CREATE TABLE " +Appraisal+" ( id integer primary key,PA_ID text,PA_NAME text,DR_CALL text,DR_AVG text,CHEM_CALL text,CHEM_AVG text,FLAG text,sAPPRAISAL_ID_STR text,sAPPRAISAL_NAME_STR text,sGRADE_STR text,sGRADE_NAME_STR text,sOBSERVATION text,sACTION_TAKEN text)";
 
         String CREATE_TABLE_dob_doa = "CREATE TABLE " + dob_doa + "(id Integer PRIMARY KEY AUTOINCREMENT,PA_NAME text,DOB text,DOA text,MOBILE text,TYPE text)";
-        String CREATE_TABLE_Expenses_head = "CREATE TABLE " + Expenses_head + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_NAME text,FIELD_ID text,MANDATORY text,DA_ACTION text)";
+        String CREATE_TABLE_Expenses_head = "CREATE TABLE " + Expenses_head + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_NAME text,FIELD_ID text,MANDATORY text,DA_ACTION text,EXP_TYPE text,ATTACHYN text,MAX_AMT float,TAMST_VALIDATEYN text)";
         String CREATE_TABLE_Tenivia_traker = "CREATE TABLE " + Tenivia_traker + "(id Integer PRIMARY KEY AUTOINCREMENT,DR_ID text,DR_NAME text,QTY text,AMOUNT text,QTY_CAPTION text,ITEM_ID text,AMOUN_CAPTION text,TIME text,REMARK text)";
-        String CREATE_TABLE_Doctor_Call_Remark = "CREATE TABLE " + Doctor_Call_Remark + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_ID text,FIELD_NAME text)";
+        String CREATE_TABLE_Doctor_Call_Remark = "CREATE TABLE " + Doctor_Call_Remark + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_ID text,FIELD_NAME text,type text)";
 
         String CREATE_TABLE_Lat_Long_Reg = "CREATE TABLE " + Lat_Long_Reg + "(id Integer PRIMARY KEY ,DCS_ID text,LAT_LONG text,DCS_TYPE text,DCS_ADD text,DCS_INDES text,UPDATED text)";
 
@@ -505,7 +512,16 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN APP_PENDING_YN text DEFAULT '0'");
             case 40:
                 db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN GENERIC_NAME text DEFAULT '0'");
-
+            case 41:
+                db.execSQL("ALTER TABLE "+Doctor_Call_Remark +" ADD COLUMN type text DEFAULT 'R'");
+            case 42:
+                db.execSQL("ALTER TABLE "+"phdcrchem" +" ADD COLUMN status text DEFAULT ''");
+                db.execSQL("ALTER TABLE "+"phdcrchem" +" ADD COLUMN Competitor_Product text DEFAULT ''");
+            case 43:
+                db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN EXP_TYPE DEFAULT '0'");
+                db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN ATTACHYN text DEFAULT 'N'");
+                db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN MAX_AMT float DEFAULT 0");
+                db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN TAMST_VALIDATEYN text DEFAULT 'N'");
 
         }
     }
@@ -2002,6 +2018,42 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }
         return mychem;
     }
+
+
+    public String getStatus_Chemist(String chem_id) {
+        String mychem = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select status from phdcrchem where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    mychem = c.getString(c.getColumnIndex("status"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return mychem;
+    }
+
+    public String getCompProduct_Chemist(String chem_id) {
+        String mychem = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select Competitor_Product from phdcrchem where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    mychem = c.getString(c.getColumnIndex("Competitor_Product"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return mychem;
+    }
+
     public String getSRNO_Chemist(String chem_id) {
         String mychem = "";
         sd = this.getWritableDatabase();
@@ -2365,7 +2417,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public long submitChemistInLocal(String dcrid, String chemid, String pobamt, String allitemid, String allitemqty, String address,
                                      String allgiftid, String allgiftqty, String time, String battryLevel, String sample,String remark,
-                                     String file,String LOC_EXTRA,String Ref_latlong,String rate) {
+                                     String file,String LOC_EXTRA,String Ref_latlong,String rate,String status,String Competitor_Product) {
         Long a =0l;
         try {
 
@@ -2387,6 +2439,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("LOC_EXTRA", LOC_EXTRA);
             cv.put("Ref_latlong", Ref_latlong);
             cv.put("rate", rate);
+            cv.put ("status",status);
+            cv.put ("Competitor_Product",Competitor_Product);
 
              a = sd.insert("phdcrchem", null, cv);
 
@@ -2402,7 +2456,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public int updateChemistInLocal(String dcrid, String chemid, String pobamt, String allitemid, String allitemqty,
                                     String address, String allgiftid, String allgiftqty, String time, String sample,
-                                    String remark,String file,String rate) {
+                                    String remark,String file,String rate,String status,String Competitor_Product) {
         int a = 0;
         try {
             sd = this.getWritableDatabase();
@@ -2423,6 +2477,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             }
 
             cv.put("remark", remark);
+            cv.put ("status",status);
+            cv.put ("Competitor_Product",Competitor_Product);
             cv.put("file", file);
             cv.put("rate", rate);
             a = sd.update("phdcrchem", cv, "chem_id=" + chemid + "", null);
@@ -5252,11 +5308,12 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                         } else if (table.equals("chemisttemp")) {
                             String dr_sample_id = "", dr_gift_id = "";
                             //Cursor c1 =  sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='ORIGINAL' ", null);
-                            Cursor c1 = sd.rawQuery("select allitemid,allitemqty,sample,allgiftid,allgiftqty,pob_amt,remark from phdcrchem where chem_id='" + dr_id + "'", null);
+                            Cursor c1 = sd.rawQuery("select allitemid,allitemqty,sample,allgiftid,allgiftqty,pob_amt,remark,file from phdcrchem where chem_id='" + dr_id + "'", null);
 
                             try {
                                 if (c1.moveToFirst()) {
                                     do {
+                                        attachment = c1.getString(c1.getColumnIndex("file"));
                                         dr_sample_id = c1.getString(c1.getColumnIndex("allitemid"));
                                         dr_sample_qty = c1.getString(c1.getColumnIndex("sample"));
                                         dr_sample_pob = c1.getString(c1.getColumnIndex("allitemqty"));
@@ -5633,7 +5690,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return approval_count;
     }
 
-    public void insert_Expense(String exp_head_id, String exp_head,String amount, String remark,String FILE_NAME, String ID, String time) {
+    public void insert_Expense(String exp_head_id, String exp_head,String amount,
+                               String remark,String FILE_NAME, String ID, String time) {
         try {
             sd = this.getWritableDatabase();
             sd.delete(Expenses, "exp_head_id='" + exp_head_id + "'", null);
@@ -5696,6 +5754,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }
         return data;
     }
+
+
 
     public void insert_DOB_DOA(String PA_NAME, String DOB,String DOA, String MOBILE,String TYPE) {
         try {
@@ -5841,8 +5901,9 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             ,String time, String is_read,String category,String type, String subject
             ,String remark, String file_name, String file_path) {
 
+        SQLiteDatabase sd = null;
         try {
-            sd = this.getWritableDatabase();
+
             ContentValues cv = new ContentValues();
             cv.put("mail_id", mail_id);
             cv.put("who_id", who_id);
@@ -5857,8 +5918,10 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("file_path", file_path);
 
             if (get_Mail(category, "" + mail_id).size() > 0) {
+                sd = this.getWritableDatabase();
                 sd.update(Mail, cv, "mail_id=" + mail_id, null);
             } else {
+                sd = this.getWritableDatabase();
                 cv.put("is_read", is_read);
                 sd.insert(Mail, null, cv);
             }
@@ -5882,7 +5945,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     public  ArrayList<Map<String, String>> get_Mail(String mail_category,String mail_id) {
         ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        sd = this.getWritableDatabase();
+        SQLiteDatabase sd = this.getWritableDatabase();
         String query = "Select * from " + Mail+" where category='"+mail_category+"' order by mail_id DESC" ;
         if (!mail_id.equals("")){
             query = "Select * from " + Mail+" where mail_id='"+mail_id+"' order by mail_id DESC" ;
@@ -6076,7 +6139,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     ///=================================================exp head==========================================
 
-    public void Insert_EXP_Head(String FIELD_NAME, String FIELD_ID,String MANDATORY,String DA_ACTION) {
+    public void Insert_EXP_Head(String FIELD_NAME, String FIELD_ID,String MANDATORY,String DA_ACTION,
+                                String EXP_TYPE, String ATTACHYN,String MAX_AMT,String TAMST_VALIDATEYN) {
         try {
             sd = this.getWritableDatabase();
             ContentValues cv = new ContentValues();
@@ -6084,11 +6148,82 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("FIELD_ID", FIELD_ID);
             cv.put("MANDATORY", MANDATORY);
             cv.put("DA_ACTION", DA_ACTION);
+
+            cv.put("EXP_TYPE", EXP_TYPE);
+            cv.put("ATTACHYN", ATTACHYN);
+            cv.put("MAX_AMT", MAX_AMT);
+            cv.put("TAMST_VALIDATEYN", TAMST_VALIDATEYN);
+
             sd.insert(Expenses_head, null, cv);
         }finally {
             sd.close();
         }
     }
+
+
+    public mExpHead getEXP_Head(String Id) {
+        mExpHead expHead = new mExpHead(0,"");
+
+        String query ="Select * from " + Expenses_head + " where FIELD_ID='"+Id+"'";
+        SQLiteDatabase sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    expHead = new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
+                            c.getString(c.getColumnIndex("FIELD_NAME")))
+                            .setEXP_TYPE_STR(c.getString(c.getColumnIndex("EXP_TYPE")))
+                            .setEXP_TYPE(eExpanse.getExp(c.getInt(c.getColumnIndex("EXP_TYPE"))))
+                            .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
+                            .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
+                            .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))
+                            .setMAX_AMT(c.getDouble(c.getColumnIndex("MAX_AMT")))
+                            .setMasterValidate(c.getInt(c.getColumnIndex("TAMST_VALIDATEYN")));
+
+                  /*  if (expHead.getMasterValidate() == 1){
+                        if (expHead.getEXP_TYPE() == eExpanse.TA) {
+                            expHead.setMAX_AMT(Double.parseDouble(MyCustumApplication.getInstance()
+                                    .getDataFrom_FMCG_PREFRENCE("distance_val", "" + expHead.getMasterValidate())));
+                        }else{
+                            expHead.setMAX_AMT(Double.parseDouble(MyCustumApplication.getInstance()
+                                    .getDataFrom_FMCG_PREFRENCE("da_val", "" + expHead.getMasterValidate())));
+                        }
+
+                    }*/
+
+
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+        return expHead;
+    }
+
+
+    public ArrayList<Map<String, String>> get_ExpenseTypeAdded(String typeStr ) {
+        ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        sd = this.getWritableDatabase();
+        String query ="Select * from " + Expenses + " LEFT JOIN "+Expenses_head+" ON exp_head_id = FIELD_ID where EXP_TYPE ='"+typeStr+"'";
+        //String query = "Select * from " + Expenses_head + " LEFT JOIN "+Expenses+" ON exp_head_id=FIELD_ID where MANDATORY='1' and exp_head_id != FIELD_ID" ;
+        Cursor c = sd.rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    Map<String,String>datanum=new HashMap<String,String>();
+                    datanum.put("PA_NAME",c.getString(c.getColumnIndex("FIELD_NAME")));
+                    datanum.put("PA_ID",c.getString(c.getColumnIndex("FIELD_ID")));
+                    data.add(datanum);
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+        return data;
+    }
+
     public void delete_EXP_Head() {
         try {
             sd = this.getWritableDatabase();
@@ -6097,6 +6232,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             sd.close();
         }
     }
+
+
 
     public ArrayList<Map<String, String>> get_mandatory_pending_exp_head() {
         ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
@@ -6216,17 +6353,21 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     public ArrayList<String> get_Doctor_Call_Remark() {
+       return get_Call_Status_Remark("R");
+    }
+
+    public ArrayList<String> get_Doctor_Call_Status_List() {
+        return get_Call_Status_Remark("S");
+    }
+
+    public ArrayList<String> get_Call_Status_Remark(String type) {
         ArrayList<String> data = new ArrayList<String>();
         sd = this.getWritableDatabase();
-        String query ="Select * from " + Doctor_Call_Remark ;
+        String query ="Select * from " + Doctor_Call_Remark + " where type='" +type+"'";
         Cursor c = sd.rawQuery(query, null);
         try {
             if (c.moveToFirst()) {
                 do {
-                   /* Map<String,String>datanum=new HashMap<String,String>();
-                    datanum.put("FIELD_NAME",c.getString(c.getColumnIndex("FIELD_NAME")));
-                    datanum.put("FIELD_ID",c.getString(c.getColumnIndex("FIELD_ID")));
-                    //data.add(datanum);*/
                     data.add(c.getString(c.getColumnIndex("FIELD_NAME")));
                 } while (c.moveToNext());
             }
@@ -6239,12 +6380,13 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }
         return data;
     }
-    public void insertDoctorCallRemark(String item_id, String item_name) {
+    public void insertDoctorCallRemark(String item_id, String item_name,String type) {
         try {
             sd = this.getWritableDatabase();
             ContentValues cv = new ContentValues();
             cv.put("FIELD_NAME", item_name);
             cv.put("FIELD_ID", item_id);
+            cv.put("TYPE", type);
             sd.insert(Doctor_Call_Remark, null, cv);
         }finally {
             sd.close();
@@ -6478,8 +6620,9 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                    String allitemid, String allitemqty, String sample, String allgiftid, String allgiftqty,
                                    String file,String LOC_EXTRA,String IS_INTRESTED,String Ref_latlong) {
        Long l =0l;
+        SQLiteDatabase sd = null;
         try {
-           sd = this.getWritableDatabase();
+
            ContentValues cv = new ContentValues();
            cv.put("DAIRY_ID", DAIRY_ID);
            cv.put("DAIRY_NAME", DAIRY_NAME);
@@ -6512,7 +6655,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
            insert_DCR_Item(DAIRY_ID, allitemid, sample, "SAMPLE", "DAIRY");
            insert_DCR_Item(DAIRY_ID, allgiftid, allgiftqty, "GIFT", "DAIRY");
 
-
+           sd = this.getWritableDatabase();
            l= sd.insert(PH_DAIRY_DCR, null, cv);
        }finally {
            sd.close();
@@ -6527,8 +6670,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                    String allitemid, String allitemqty, String sample, String allgiftid, String allgiftqty,
                                    String file,String IS_INTRESTED) {
         Long l =0l;
+        SQLiteDatabase sd = null;
         try {
-            sd = this.getWritableDatabase();
             ContentValues cv = new ContentValues();
             cv.put("DAIRY_ID", DAIRY_ID);
             cv.put("DAIRY_NAME", DAIRY_NAME);
@@ -6566,7 +6709,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             delete_DCR_Item(DAIRY_ID, null, null, "DAIRY");
             insert_DCR_Item(DAIRY_ID, allitemid, sample, "SAMPLE", "DAIRY");
             insert_DCR_Item(DAIRY_ID, allgiftid, allgiftqty, "GIFT", "DAIRY");
-
+            sd = this.getWritableDatabase();
             sd.update(PH_DAIRY_DCR, cv, "DAIRY_ID ='" + DAIRY_ID + "'", null);
         }finally {
             sd.close();
@@ -6732,8 +6875,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public void delete_DCR_Item(String ID,String item_id,String ItemType,String Category) {
+        SQLiteDatabase sd = this.getWritableDatabase();
         try {
-            sd = this.getWritableDatabase();
             String whereClause = "";
 
             if (ID != null) {
@@ -6766,8 +6909,9 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
     public void insert_DCR_Item(String ID, String ArrITEM_ID, String ArrQTY,String ItemType, String Category) {
+        SQLiteDatabase sd = this.getWritableDatabase();
         try {
-            sd = this.getWritableDatabase();
+
 
             String item_id[] = ArrITEM_ID.split(",");
             String Qty[] = ArrQTY.split(",");

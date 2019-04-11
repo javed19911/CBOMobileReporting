@@ -22,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
+                android:visibility="gone"
                 android:text="Medicines :"/>
 
 
@@ -82,7 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Discount @ 0%"
+                        android:text="Discount"
                         android:textColor="@color/colorPrimaryDark"/>
 
                     <TextView
@@ -106,8 +107,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Estimated Total "
+                        android:text="Amount "
                         android:textStyle="bold"
+                        android:textSize="12dp"
                         android:textColor="@android:color/black"/>
 
                     <TextView
@@ -115,9 +117,94 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="end"
-                        android:id="@+id/cartTotal"
+                        android:id="@+id/cartNetAmount"
                         android:text="238.00"
+                        android:textSize="12dp"
                         android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:id="@+id/centralTax"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="CGST"
+                        android:id="@+id/centralTaxName"
+                        android:layout_weight="1"
+                        android:textSize="12dp"
+                        android:textColor="@android:color/black"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100.00"
+                        android:layout_gravity="end"
+                        android:textSize="12dp"
+                        android:id="@+id/CGST_amt"
+                        android:textColor="@android:color/black"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:id="@+id/LocalTax"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SGST"
+                        android:id="@+id/LocalTaxName"
+                        android:layout_weight="1"
+                        android:textSize="12dp"
+                        android:textColor="@android:color/black"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100.00"
+                        android:layout_gravity="end"
+                        android:textSize="12dp"
+                        android:id="@+id/SGST_amt"
+                        android:textColor="@android:color/black"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Net Amount"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:textColor="@android:color/black"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="438.00"
+                        android:layout_gravity="end"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:id="@+id/cartTotal"
                         android:textColor="@android:color/black"/>
 
                 </LinearLayout>
@@ -160,7 +247,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="Estimated price of medicines"
+                android:text="* Estimated price "
                 android:textColor="@android:color/black"/>
 
 
@@ -177,7 +264,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:text="238"
+                android:text="438"
                 android:id="@+id/cartTotal_out"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"/>

@@ -8,9 +8,8 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import java.util.ArrayList;
 
-import saleOrder.CBOViewModel;
+import saleOrder.ViewModel.CBOViewModel;
 import utils.adapterutils.SpinnerModel;
-import utils_new.AppAlert;
 
 /**
  * Created by cboios on 10/03/19.

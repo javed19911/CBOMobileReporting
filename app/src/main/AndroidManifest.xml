@@ -48,7 +48,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <!-- <action android:name="android.location.PROVIDERS_CHANGED" /> -->
     <application
         android:name=".MyCustumApplication"
         android:allowBackup="false"
@@ -56,8 +55,23 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name="saleOrder.Activities.CartAttachment"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme"/>
+        <activity
+            android:name=".ui_new.AttachImage"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme" />
+        <activity
+            android:name=".ui_new.dcr_activities.Expense.OtherExpense"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme" />
+        <activity android:name=".ui_new.dcr_activities.Expense.Expense" />
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".ui_new.SplashScreen_2016"
             android:clearTaskOnLaunch="true">
@@ -318,9 +332,7 @@
 
         <receiver
             android:name=".emp_tracking.LocationBroadcast"
-            android:enabled="true" />
-
-        <!-- ****Below broadcast Start the Receiver  after Boot Completed -->
+            android:enabled="true" /> <!-- ****Below broadcast Start the Receiver  after Boot Completed -->
         <receiver
             android:name=".emp_tracking.StartAlarmAfterDeviceRestart"
             android:enabled="false">
@@ -421,9 +433,7 @@
             android:theme="@style/Appdilogtheme" />
         <activity android:name=".ui_new.dcr_activities.PospondFarmerMeeting" />
 
-        <receiver
-            android:name="utils_new.CustomTextToSpeech"
-             />
+        <receiver android:name="utils_new.CustomTextToSpeech" />
 
         <activity
             android:name=".ui_new.SystemAlertActivity"
@@ -442,21 +452,28 @@
             android:name=".ui_new.dcr_activities.DrRXActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui_new.dcr_activities.DayPlan.DayPlan" />
-        <activity android:name="saleOrder.ItemFilterActivity"
+        <activity
+            android:name="saleOrder.Activities.ItemFilterActivity"
             android:theme="@style/AppThemeNoBar" />
-        <activity android:name="saleOrder.MyOrder"
-            android:theme="@style/AppThemeNoBar"/>
-        <activity android:name="saleOrder.CartActivity"
-            android:theme="@style/AppThemeNoBar"/>
-        <activity android:name="saleOrder.ClientActivity"
+        <activity
+            android:name="saleOrder.Activities.MyOrder"
+            android:theme="@style/AppThemeNoBar" />
+        <activity
+            android:name="saleOrder.Activities.CartActivity"
+            android:theme="@style/AppThemeNoBar" />
+        <activity
+            android:name="saleOrder.Activities.ClientActivity"
             android:theme="@style/AppThemeNoBar" />
         <activity android:name=".ui_new.dcr_activities.Customer.CustomerCall" />
-        <activity android:name=".ui_new.dcr_activities.CallUtils.CallActivity"
-            android:theme="@style/AppThemeNoBar"/>
-        <activity android:name=".ui_new.dcr_activities.WorkWith.WorkWithActivity"
-            android:theme="@style/AppThemeNoBar"/>
-        <activity android:name=".ui_new.dcr_activities.lead.LeadActivity"
-            android:theme="@style/AppThemeNoBar"></activity>
+        <activity
+            android:name=".ui_new.dcr_activities.CallUtils.CallActivity"
+            android:theme="@style/AppThemeNoBar" />
+        <activity
+            android:name=".ui_new.dcr_activities.WorkWith.WorkWithActivity"
+            android:theme="@style/AppThemeNoBar" />
+        <activity
+            android:name=".ui_new.dcr_activities.lead.LeadActivity"
+            android:theme="@style/AppThemeNoBar" />
     </application>
 
 </manifest>

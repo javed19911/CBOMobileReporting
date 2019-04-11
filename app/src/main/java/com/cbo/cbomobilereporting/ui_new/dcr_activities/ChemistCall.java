@@ -862,7 +862,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
             if (cbohelp.searchChemist(chm_id).contains(chm_id)) {
                 int val = cbohelp.updateChemistInLocal(dcrid, chm_id, PobAmt, AllItemId, AllItemQty,
                         Custom_Variables_And_Method.GLOBAL_LATLON + "!^" + address, AllGiftId, AllGiftQty,
-                        time,sample,remark.getText().toString(),"",rate);
+                        time,sample,remark.getText().toString(),"",rate,"","");
                 Log.e("chemist updated", "" + val);
                 customVariablesAndMethod.msgBox(context,chm_name + "  successfully updated");
 
@@ -898,7 +898,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
                     long val = cbohelp.submitChemistInLocal(dcrid, chm_id, PobAmt, AllItemId, AllItemQty,
                             latLong + "!^" + address, AllGiftId, AllGiftQty, customVariablesAndMethod.currentTime(context),
-                            currentBatterLevel,sample,remark.getText().toString(),"",locExtra,ref_latLong,rate);
+                            currentBatterLevel,sample,remark.getText().toString(),"",locExtra,ref_latLong,rate,"","");
                     cbohelp.addChemistInLocal(chm_id, chm_name,""+customVariablesAndMethod.currentTime(context), latLong, Custom_Variables_And_Method.global_address,updated,chem_km,mchemistCall.getSrno(),locExtra);
                     Log.e("chemist submit in local", "" + val);
                     Log.e("chemist details", dcrid + "," + chm_id + "," + PobAmt + "," + AllItemId + "," + AllItemQty + "," + address + "," + AllGiftId + "," + AllGiftQty);

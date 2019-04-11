@@ -108,7 +108,7 @@ public class aLead extends RecyclerView.Adapter {
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        updating = true;
+        //updating = true;
 
         try {
 
@@ -131,8 +131,7 @@ public class aLead extends RecyclerView.Adapter {
 
                     ((POBViewHolder) holder).selected.setChecked(GetOrderItemWhere(item) != null);
 
-
-
+                    break;
                 case GIFT:
 
                     ((LeadViewHolder) holder).name.setText(item.getName());
@@ -145,6 +144,7 @@ public class aLead extends RecyclerView.Adapter {
                     drawable.setColorFilter(color[0], PorterDuff.Mode.SRC_IN);
 
                     ((LeadViewHolder) holder).selected.setChecked(GetOrderItemWhere(item) != null);
+                    break;
                 case LEAD:
 
                     ((LeadViewHolder) holder).name.setText(item.getName());
@@ -156,6 +156,7 @@ public class aLead extends RecyclerView.Adapter {
                     drawable.setColorFilter(color[0], PorterDuff.Mode.SRC_IN);
 
                     ((LeadViewHolder) holder).selected.setChecked(GetOrderItemWhere(item) != null);
+                    break;
             }
 
 
@@ -164,7 +165,7 @@ public class aLead extends RecyclerView.Adapter {
         }catch(Exception e){
             e.printStackTrace();
         }
-        updating = false;
+        //updating = false;
     }
 
     public void setOnClickListner(RecycleViewOnItemClickListener recycleViewOnItemClickListener) {

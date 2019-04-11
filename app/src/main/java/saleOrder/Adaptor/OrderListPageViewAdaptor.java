@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 
 import saleOrder.Fragments.OrderListFragment;
-import saleOrder.mParty;
+import saleOrder.Model.mParty;
 
 
 /**

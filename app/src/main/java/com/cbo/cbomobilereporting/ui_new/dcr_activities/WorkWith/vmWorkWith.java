@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.database.Cursor;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallBuilder;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.iCall;
 
 import java.util.ArrayList;
 
-import saleOrder.CBOViewModel;
+import saleOrder.ViewModel.CBOViewModel;
 import utils.adapterutils.Dcr_Workwith_Model;
-import utils.adapterutils.SpinnerModel;
 
 /**
  * Created by cboios on 10/03/19.

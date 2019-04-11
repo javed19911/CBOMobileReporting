@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#05009900"
+    android:id="@+id/mainLayout"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/filterTxt"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:textColor="@android:color/black"
+            android:hint="Search Items/Products"
+            android:textSize="15sp"
+            android:padding="5dp"
+            android:textColorHint="@android:color/darker_gray"
+            android:background="@drawable/input_txt"/>
+
+        <EditText
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:id="@+id/Qty"
+            android:inputType="number"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            android:gravity="center"
+            android:hint="Qty."
+            android:selectAllOnFocus="true"
+            android:minWidth="60dp"
+            android:background="@drawable/input_txt"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:orientation="horizontal">
+
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/managerDiscount"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:padding="5dp"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:hint="Staff Discount"
+            android:selectAllOnFocus="true"
+            android:background="@drawable/input_txt"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Manualdiscount"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:padding="5dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:hint="Misc. Discount"
+            android:selectAllOnFocus="true"
+            android:textSize="13sp"
+            android:background="@drawable/input_txt"/>
+        <Button
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:id="@+id/add"
+            android:textColor="@color/white"
+            android:text="Add"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/button_back_light_2016"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="?colorPrimary"/>
+
+
+</LinearLayout>

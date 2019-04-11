@@ -138,7 +138,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="15dp"
                             android:layout_marginTop="10dp"
-                            android:text="Name"
+                            android:text="Customer Name"
                             android:textColor="@color/navigationBarColor"
                             android:textSize="17sp" />
 
@@ -247,15 +247,96 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/drop_bg"
+                        android:layout_marginLeft="8dip"
+                        android:layout_marginRight="8dip"
+                        android:id="@+id/statusLayout"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/statusBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:minHeight="40dp"
+                            android:prompt="@string/spinner_title4"
+                            android:text="---Select Status---"
+                            android:textAllCaps="false"
+                            android:textColor="@color/navigationBarColor"
+
+                            />
+
+                        <View
+                            android:layout_width="1.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="3.5dp"
+                            android:layout_marginTop="3.5dp"
+                            android:background="@color/colorPrimaryDark" />
+
+                        <ImageView
+                            android:id="@+id/status_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:layout_weight="7"
+                            android:padding="6.5dp"
+                            android:src="@drawable/drop_icon" />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
                         android:id="@+id/dr_remark_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="8dip"
                         android:layout_marginRight="8dip"
+                        android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/drop_bg"
+                            android:visibility="gone"
+                            android:orientation="horizontal">
 
+                            <Button
+                                android:id="@+id/remarkBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:minHeight="40dp"
+                                android:prompt="@string/spinner_title4"
+                                android:text="---Select Remark---"
+                                android:textAllCaps="false"
+                                android:textColor="@color/navigationBarColor"
 
+                                />
+
+                            <View
+                                android:layout_width="1.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="3.5dp"
+                                android:layout_marginTop="3.5dp"
+                                android:background="@color/colorPrimaryDark" />
+
+                            <ImageView
+                                android:id="@+id/remark_img"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="1dp"
+                                android:layout_weight="7"
+                                android:padding="6.5dp"
+                                android:src="@drawable/drop_icon" />
+                        </LinearLayout>
 
                         <EditText
                             android:id="@+id/dr_remark_edit"
@@ -263,15 +344,69 @@
                             android:layout_height="match_parent"
                             android:gravity="top|left"
                             android:layout_marginTop="10dp"
-                            android:hint="Remark Here.." />
+                            android:hint="Call Discussion" />
+                        <EditText
+                            android:id="@+id/dr_compet_product"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="top|left"
+                            android:layout_marginTop="10dp"
+                            android:hint="Competitor Products being used" />
+
+
 
                     </LinearLayout>
 
+
+
+
+                    <LinearLayout
+                        android:id="@+id/dr_attach_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dip"
+                        android:layout_marginRight="8dip"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/dr_attach_add"
+                            android:orientation="horizontal">
+
+                            <CheckBox
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:id="@+id/dr_attach_add_chk"
+                                android:background="?android:attr/listChoiceIndicatorMultiple"
+                                android:backgroundTint="@color/colorPrimaryDark"
+                                android:button="@null"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="17dp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:text="Attachment"/>
+
+                        </LinearLayout>
+
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/attach"
+                            android:visibility="gone"
+                            android:src="@drawable/no_image"/>
+
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="40dp"
                         android:gravity="center"
-                        android:id="@+id/product_layout"
+                        android:id="@+id/lead_layout"
                         android:layout_marginLeft="8dip"
                         android:layout_marginRight="8dip"
                         android:layout_marginTop="10dp"
@@ -284,7 +419,58 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
                             android:background="@drawable/button_text_view_selector"
+                            android:text="Lead For Products"
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/textColorPrimary"
+                            android:textAllCaps="false"
+                            android:textSize="14dp"/>
+
+
+                        <Button
+                            android:id="@+id/lead_for_summary"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Lead  Summary"
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/textColorPrimary"
+                            android:textAllCaps="false"
+                            android:textSize="14dp"/>
+
+                        <Button
+                            android:id="@+id/gift2"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="Gift"
+                            android:visibility="gone"
+                            android:textColor="@color/textColorPrimary"
+                            android:textAllCaps="false"
+                            android:textSize="14dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:id="@+id/product_layout"
+                        android:layout_marginLeft="8dip"
+                        android:layout_marginRight="8dip"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <Button
+
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_text_view_selector"
                             android:text="Lead"
+                            android:visibility="gone"
                             android:layout_marginRight="5dp"
                             android:textColor="@color/textColorPrimary"
                             android:textAllCaps="false"
@@ -312,11 +498,12 @@
                             android:layout_weight="1"
                             android:background="@drawable/button_text_view_selector"
                             android:text="Gift"
-                            android:visibility="gone"
                             android:textColor="@color/textColorPrimary"
                             android:textAllCaps="false"
                             android:textSize="14dp"/>
                     </LinearLayout>
+
+
 
 
 

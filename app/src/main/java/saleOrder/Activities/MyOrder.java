@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.Activities;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
@@ -9,8 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -18,10 +16,11 @@ import com.cbo.cbomobilereporting.R;
 
 import java.util.ArrayList;
 
-import cbomobilereporting.cbo.com.cboorder.Adaptor.Order_List_Adaptor;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.View.iOrder;
 import saleOrder.Adaptor.OrderListPageViewAdaptor;
+import saleOrder.Model.mParty;
+import saleOrder.ViewModel.vmOrder;
 
 public class MyOrder extends AppCompatActivity implements iOrder {
 
@@ -67,6 +66,7 @@ public class MyOrder extends AppCompatActivity implements iOrder {
 
         //create tabs title
         tabLayout.addTab(tabLayout.newTab().setText("Pending"));
+        tabLayout.addTab(tabLayout.newTab().setText("Approved"));
         tabLayout.addTab(tabLayout.newTab().setText("Billed"));
         tabLayout.addTab(tabLayout.newTab().setText("All"));
 
@@ -119,6 +119,11 @@ public class MyOrder extends AppCompatActivity implements iOrder {
     }
 
     @Override
+    public String getAppYN() {
+        return "";
+    }
+
+    @Override
     public void setTile(String s) {
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -132,7 +137,9 @@ public class MyOrder extends AppCompatActivity implements iOrder {
 
 
         TextView title = toolbar.findViewById(R.id.title);
+        TextView subTitle = toolbar.findViewById(R.id.subTitle);
         title.setText(s);
+        subTitle.setText(party.getHeadQtr());
     }
 
     @Override
@@ -154,6 +161,7 @@ public class MyOrder extends AppCompatActivity implements iOrder {
     public void newOrder() {
         Intent intent = new Intent(context, CartActivity.class);
         intent.putExtra("order",new mOrder().setPartyId(getPartyID()));
+        intent.putExtra("party",party);
         startActivity(intent);
     }
     @Override

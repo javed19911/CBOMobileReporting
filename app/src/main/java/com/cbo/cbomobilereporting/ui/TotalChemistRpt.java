@@ -69,9 +69,10 @@ public class TotalChemistRpt extends AppCompatActivity {
         context=this;
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 
-        String head="Chemist";
+        String head= getIntent().getExtras().getString("Title");
+
         //String Hide_status = Constants.getSIDE_STATUS(context);
-        String Hide_status = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"fmcg_value");
+        /*String Hide_status = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"fmcg_value");
         if (Hide_status != null) {
             if (Hide_status.equals("N") || Hide_status.equals("")) {
                 head="Chemist";
@@ -79,7 +80,7 @@ public class TotalChemistRpt extends AppCompatActivity {
                 head="Retailer";
             }
 
-        }
+        }*/
 
         Toolbar toolbar =(Toolbar) findViewById(R.id.toolbar_hadder);
         TextView textView =(TextView) findViewById(R.id.hadder_text_1);

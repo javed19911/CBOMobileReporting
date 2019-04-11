@@ -2,6 +2,8 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils;
 
 import com.cbo.cbomobilereporting.ui_new.Model.mWorkwith;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import utils.adapterutils.Dcr_Workwith_Model;
@@ -11,7 +13,7 @@ import utils.adapterutils.PobModel;
  * Created by cboios on 10/03/19.
  */
 
-public class mCall {
+public class mCall implements Serializable {
     private String id = "0";
     private String name = "";
     private Boolean workwithreqd = false;
@@ -24,6 +26,7 @@ public class mCall {
     private String refLatLong="0.0,0.0";
     private String callLatLong="0.0,0.0";
     private String lastVisited = "";
+    private ArrayList<String> attachments = new ArrayList<>();
 
     //getter
 
@@ -64,6 +67,11 @@ public class mCall {
     public ArrayList<PobModel> getGifts() {
         return gifts;
     }
+
+    public ArrayList<String> getAttachments() {
+        return attachments;
+    }
+
 
     //setter
 
@@ -110,6 +118,11 @@ public class mCall {
 
     public mCall setGifts(ArrayList<PobModel> gifts) {
         this.gifts = gifts;
+        return this;
+    }
+
+    public mCall setAttachments(ArrayList<String> attachments) {
+        this.attachments = attachments;
         return this;
     }
 }

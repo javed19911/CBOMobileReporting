@@ -44,6 +44,7 @@ public class mDCR {
     private String BackDateReason; //BackDateReason
 
     private String AdditionalAreaApprovalReqd; //ADDAREA_APPYN
+    private String AdditionalAreaValidationReqd ; //ADDITIONALAREA_MENDETYN
 
 
     ///getter
@@ -69,10 +70,16 @@ public class mDCR {
     }
 
     public String getWorkTypeId() {
+        if (WorkTypeId == null){
+            WorkTypeId = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("working_code","W");
+        }
         return WorkTypeId;
     }
 
     public String getWorkType() {
+        if (WorkType == null){
+            WorkType = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("working_head","Working");
+        }
         return WorkType;
     }
 
@@ -168,6 +175,15 @@ public class mDCR {
         }
         return AdditionalAreaApprovalReqd;
     }
+
+    public String getAdditionalAreaValidationReqd() {
+        if (AdditionalAreaValidationReqd == null){
+            AdditionalAreaValidationReqd = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("ADDITIONALAREA_MENDETYN","");
+        }
+        return AdditionalAreaValidationReqd;
+    }
+
+
     ///setter
 
 
@@ -191,11 +207,13 @@ public class mDCR {
 
     public mDCR setWorkTypeId(String workTypeId) {
         WorkTypeId = workTypeId;
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("working_code",workTypeId);
         return this;
     }
 
     public mDCR setWorkType(String workType) {
         WorkType = workType;
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("working_head",workType);
         return this;
     }
 
@@ -293,6 +311,12 @@ public class mDCR {
     public mDCR setAdditionalAreaApprovalReqd(String additionalAreaApprovalReqd) {
         AdditionalAreaApprovalReqd = additionalAreaApprovalReqd;
         MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("ADDAREA_APPYN",additionalAreaApprovalReqd);
+        return this;
+    }
+
+    public mDCR setAdditionalAreaValidationReqd(String additionalAreaValidationReqd) {
+        AdditionalAreaValidationReqd = additionalAreaValidationReqd;
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("ADDITIONALAREA_MENDETYN",additionalAreaValidationReqd);
         return this;
     }
 }

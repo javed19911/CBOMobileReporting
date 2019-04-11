@@ -7,7 +7,7 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import java.util.ArrayList;
 
-import saleOrder.CBOViewModel;
+import saleOrder.ViewModel.CBOViewModel;
 import utils.adapterutils.PobModel;
 
 /**

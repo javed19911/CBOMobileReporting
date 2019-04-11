@@ -1342,17 +1342,17 @@ public class Dcr_Open_New extends AppCompatActivity {
 
         if (MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")){
             //get_workwith.setEnabled(false);
-            work_with_title.setText("Work-with (As per TP)");
+            work_with_title.setText(MyCustumApplication.getInstance().getDCR().getWorkWithTitle() +" (As per TP)");
         }else{
-            work_with_title.setText("Work-with");
+            work_with_title.setText(MyCustumApplication.getInstance().getDCR().getWorkWithTitle());
         }
 
         if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y")
                 && !ROUTEDIVERTYN.isChecked()){
             //get_area.setEnabled(false);
-            Area_title.setText("Area (As per TP)");
+            Area_title.setText(MyCustumApplication.getInstance().getDCR().getAreaTitle() +" (As per TP)");
         }else{
-            Area_title.setText("Area");
+            Area_title.setText(MyCustumApplication.getInstance().getDCR().getAreaTitle());
         }
 
 

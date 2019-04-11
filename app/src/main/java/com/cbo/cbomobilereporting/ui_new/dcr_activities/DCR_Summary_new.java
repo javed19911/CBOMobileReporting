@@ -116,6 +116,11 @@ public class DCR_Summary_new extends CustomActivity {
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL"),chemist_list);
         }
+
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CUSTOMER_NOT_REQUIRED").equals("N")){
+            summary_list.put(cboDbHelper.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL"),chemist_list);
+        }
+
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_STK_CALL").get("D_STK_CALL"),stockist_list);
         }

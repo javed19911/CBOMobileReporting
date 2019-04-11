@@ -103,7 +103,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String sb_DCRLATCOMMIT_KM, sb_DCRLATCOMMIT_LOC_LAT, sb_sDCRLATCOMMIT_IN_TIME, sDCRLATCOMMIT_ID, sDCRLATCOMMIT_LOC;
     String sDCRITEM_DR_ID, sDCRITEM_ITEMIDIN, sDCRITEM_ITEM_ID_ARR, sDCRITEM_QTY_ARR, sDCRITEM_ITEM_ID_GIFT_ARR, sDCRITEM_QTY_GIFT_ARR, sDCRITEM_POB_QTY, sDCRITEM_POB_VALUE, sDCRITEM_VISUAL_ARR,sDCRITEM_NOC_ARR;
     String sDCRDR_DR_ID, sDCRDR_WW1, sDCRDR_WW2, sDCRDR_WW3, sDCRDR_LOC, sDCRDR_IN_TIME, sDCRDR_BATTERY_PERCENT, sDCRDR_REMARK, sDCRDR_KM, sDCRDR_SRNO,sDCRDR_FILE,sDCRDR_CALLTYPE,sDR_REF_LAT_LONG;
-    String sDCRCHEM_CHEM_ID, sDCRCHEM_POB_QTY, sDCRCHEM_POB_AMT, sDCRCHEM_ITEM_ID_ARR, sDCRCHEM_QTY_ARR, sDCRCHEM_LOC, sDCRCHEM_IN_TIME, sDCRCHEM_SQTY_ARR, sDCRCHEM_ITEM_ID_GIFT_ARR, sDCRCHEM_QTY_GIFT_ARR, sDCRCHEM_BATTERY_PERCENT, sDCRCHEM_KM, sDCRCHEM_SRNO,sDCRCHEM_REMARK,sDCRCHEM_FILE,sCHEM_REF_LAT_LONG;
+    String sDCRCHEM_CHEM_ID, sDCRCHEM_POB_QTY, sDCRCHEM_POB_AMT, sDCRCHEM_ITEM_ID_ARR, sDCRCHEM_QTY_ARR, sDCRCHEM_LOC, sDCRCHEM_IN_TIME, sDCRCHEM_SQTY_ARR, sDCRCHEM_ITEM_ID_GIFT_ARR, sDCRCHEM_QTY_GIFT_ARR, sDCRCHEM_BATTERY_PERCENT, sDCRCHEM_KM, sDCRCHEM_SRNO,sDCRCHEM_REMARK,sDCRCHEM_FILE,sCHEM_REF_LAT_LONG,sCHEM_STATUS,sCOMPETITOR_REMARK;
     String sDCRSTK_STK_ID, sDCRSTK_POB_QTY, sDCRSTK_POB_AMT, sDCRSTK_ITEM_ID_ARR, sDCRSTK_QTY_ARR, sDCRSTK_LOC, sDCRSTK_IN_TIME, sDCRSTK_SQTY_ARR, sDCRSTK_ITEM_ID_GIFT_ARR, sDCRSTK_QTY_GIFT_ARR, sDCRSTK_BATTERY_PERCENT, sDCRSTK_KM, sDCRSTK_SRNO,sDCRSTK_REMARK,sDCRSTK_FILE,sSTK_REF_LAT_LONG;
     String sDCRRC_IN_TIME, sDCRRC_LOC, sDCRRC_DR_ID, sDCRRC_KM, sDCRRC_SRNO,sDCRRC_BATTERY_PERCENT,sDCRRC_REMARK,sDCRRC_FILE,sRC_REF_LAT_LONG;
     String sDCR_DR_RX, sDCR_ITM_RX;
@@ -434,6 +434,8 @@ public class FinalSubmitDcr_new extends CustomActivity {
             sCHEM_REF_LAT_LONG = "";
             DCRCHEM_RATE = "";
 
+            sCHEM_STATUS="";
+            sCOMPETITOR_REMARK="";
         } else {
             sDCRCHEM_CHEM_ID = dcr_ChemistCommit.get("sb_sDCRCHEM_CHEM_ID");
             sDCRCHEM_POB_QTY = dcr_ChemistCommit.get("sb_sDCRCHEM_POB_QTY");
@@ -452,6 +454,10 @@ public class FinalSubmitDcr_new extends CustomActivity {
             sDCRCHEM_FILE= dcr_ChemistCommit.get("sb_sDCRCHEM_FILE");
             sCHEM_REF_LAT_LONG = dcr_ChemistCommit.get("sb_sCHEM_REF_LAT_LONG");
             DCRCHEM_RATE = dcr_ChemistCommit.get("sb_DCRCHEM_RATE");
+
+
+            sCHEM_STATUS= dcr_ChemistCommit.get("sCHEM_STATUS");
+            sCOMPETITOR_REMARK= dcr_ChemistCommit.get("sCOMPETITOR_REMARK");
         }
 
 
@@ -752,6 +758,9 @@ public class FinalSubmitDcr_new extends CustomActivity {
         request.put("DCRDR_RATE", DCRDR_RATE);
         request.put("DCRCHEM_RATE", DCRCHEM_RATE);
 
+        request.put("sCHEM_STATUS", sCHEM_STATUS);
+        request.put("sCOMPETITOR_REMARK", sCOMPETITOR_REMARK);
+
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(-1);
 
@@ -769,7 +778,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DCRCommitFinal_New_18", request)
+                .execute(new ResponseBuilder("DCRCommitFinal_New_19", request)
                         .setTables(tables)
                         .setDescription("Please Wait..\n" +
                                 "Final Submit in process......")

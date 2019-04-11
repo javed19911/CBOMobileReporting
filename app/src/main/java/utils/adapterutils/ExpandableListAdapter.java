@@ -244,6 +244,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 Doc_Detail(dr_detail_layout, childText.get("class").get(childPosition), childText.get("potential").get(childPosition),"", childText.get("area").get(childPosition),childText.get("dr_crm").get(childPosition),childText.get("dr_camp_group").get(childPosition),"Class","Potential","Area","Dr CRM","Campaign Group",1,1);
             }
 
+            if (childText.get("attach") != null) {
+                if (childText.get("attach").get(childPosition).equals("")) {
+                    attach.setVisibility(View.GONE);
+                } else {
+                    attach.setVisibility(View.VISIBLE);
+                }
+            }
+
             expend.setText("-");
             expend.setVisibility(View.VISIBLE);
 

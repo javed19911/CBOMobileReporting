@@ -39,8 +39,8 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.cbo.cbomobilereporting.ui_new.Model.mAddress;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
@@ -52,17 +52,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsStates;
 
-import saleOrder.ClientActivity;
-import saleOrder.MyOrder;
 import services.Sync_service;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 
-import utils.LatLngToAddress;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
-import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
 
@@ -223,7 +219,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                     //new CustomTextToSpeech().setTextToSpeech("1");
 
-                    /*Intent intent = new Intent(context, ClientActivity.class);
+                    /*Intent intent = new Intent(context, AttachImage.class);
                     startActivity(intent);*/
 
                     /*Intent intent = new Intent(context, Doctor_registration_GPS.class);
@@ -378,8 +374,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                 if (gpsYN.equals("Y") && (!myCustomMethod.checkGpsEnable() || mode != 3)) {
                     customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
-                    //getGpsSetting();
-                    customVariablesAndMethod.getGpsSetting(context);
+                    if (mode !=0){
+                        customVariablesAndMethod.RequestGPSFromSetting(context);
+                    }else{
+                        customVariablesAndMethod.getGpsSetting(context);
+                    }
 
                 } else if ((dor != null) && (dos != null)) {
                     if (dor.equals("Y")) {

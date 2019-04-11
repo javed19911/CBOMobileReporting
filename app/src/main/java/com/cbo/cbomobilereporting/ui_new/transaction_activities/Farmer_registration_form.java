@@ -1,18 +1,13 @@
 package com.cbo.cbomobilereporting.ui_new.transaction_activities;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -22,13 +17,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,32 +45,17 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui.LoginFake;
-import com.cbo.cbomobilereporting.ui_new.DcrmenuInGrid;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.ChemistCall;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.GetDCR;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
-import camera_galary_pkg.ChoosePhoto;
-import it.sauronsoftware.ftp4j.FTPClient;
-import it.sauronsoftware.ftp4j.FTPDataTransferListener;
+import CameraGalaryPkg.ChoosePhoto;
 import services.CboServices;
 import services.ServiceHandler;
 import utils.adapterutils.HLVAdapter;
@@ -87,7 +63,6 @@ import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
 import utils_new.Chm_Sample_Dialog;
 import utils_new.Custom_Variables_And_Method;
-import utils_new.GPS_Timmer_Dialog;
 import utils_new.up_down_ftp;
 
 /**

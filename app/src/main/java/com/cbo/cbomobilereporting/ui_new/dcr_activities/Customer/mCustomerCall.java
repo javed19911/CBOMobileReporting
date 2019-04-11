@@ -14,6 +14,9 @@ public class mCustomerCall extends mCall {
 
     private Boolean leadReqd = false;
     private ArrayList<PobModel> leads = new ArrayList<>();
+    private String status = "";
+    private String Competitor_Product ="";
+
 
     public mCustomerCall() {
         //setItemReqd(true);
@@ -31,7 +34,26 @@ public class mCustomerCall extends mCall {
         return leads;
     }
 
-    public void setLeads(ArrayList<PobModel> leads) {
+    public mCustomerCall setLeads(ArrayList<PobModel> leads) {
         this.leads = leads;
+        return this;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public mCustomerCall setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+    public String getCompetitor_Product() {
+        return Competitor_Product;
+    }
+
+    public mCustomerCall setCompetitor_Product(String competitor_Product) {
+        this.Competitor_Product = competitor_Product;
+       return this;
+    }
+
 }

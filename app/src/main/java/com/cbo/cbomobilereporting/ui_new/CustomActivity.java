@@ -49,7 +49,7 @@ public abstract class CustomActivity extends AppCompatActivity {
     private String TAG = "CustomActivity";
 
     activityType activitytype = activityType.ACTIVITY;
-    public Context context;
+    public CustomActivity context;
     public Custom_Variables_And_Method customVariablesAndMethod;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

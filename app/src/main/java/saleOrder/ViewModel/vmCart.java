@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.ViewModel;
 
 import android.app.Activity;
 

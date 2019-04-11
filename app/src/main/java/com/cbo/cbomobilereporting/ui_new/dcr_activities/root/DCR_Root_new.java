@@ -1261,7 +1261,9 @@ public class DCR_Root_new extends AppCompatActivity {
                 if (work_name.equals("") && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                     Toast.makeText(context, "Select Work With", Toast.LENGTH_SHORT).show();
                 } else if (root_name.equals("")) {
-                    customVariablesAndMethod.msgBox(context,"Please Select Route Fisrt .....");
+                    customVariablesAndMethod.msgBox(context,"Please Select Route First .....");
+                }else if (getArea().trim().isEmpty() && MyCustumApplication.getInstance().getDCR().getAdditionalAreaValidationReqd().equalsIgnoreCase("Y")) {
+                    customVariablesAndMethod.msgBox(context,"Please Select "+MyCustumApplication.getInstance().getDCR().getAreaTitle()+" First .....");
                 } else {
 
                     submitWorking();
@@ -1291,6 +1293,9 @@ public class DCR_Root_new extends AppCompatActivity {
                         Toast.makeText(context, "Select Work With", Toast.LENGTH_SHORT).show();
                     } else if (root_name.equals("") && !work_type_code.contains("_R")) {
                         customVariablesAndMethod.msgBox(context,"Please Select Route Fisrt .....");
+                    }else if (getArea().trim().isEmpty()  && !work_type_code.contains("_A")
+                            && MyCustumApplication.getInstance().getDCR().getAdditionalAreaValidationReqd().equalsIgnoreCase("Y")) {
+                        customVariablesAndMethod.msgBox(context,"Please Select "+MyCustumApplication.getInstance().getDCR().getAreaTitle()+" First .....");
                     } else {
                         getWorkWithIDs();
                         submitforMeeting();
@@ -1298,6 +1303,10 @@ public class DCR_Root_new extends AppCompatActivity {
                 }else{
                     if (getRoute().equals("")) {
                         customVariablesAndMethod.msgBox(context,"Select Your Route First...");
+                    }else if (getArea().trim().isEmpty()
+                            && MyCustumApplication.getInstance().getDCR()
+                            .getAdditionalAreaValidationReqd().equalsIgnoreCase("Y")) {
+                        customVariablesAndMethod.msgBox(context,"Please Select "+MyCustumApplication.getInstance().getDCR().getAreaTitle()+" First .....");
                     } else {
                         getWorkWithIDs();
                         submitforMeeting();
@@ -1558,22 +1567,25 @@ public class DCR_Root_new extends AppCompatActivity {
         if (MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")
                 && !DIVERTWWYN.isChecked()){
             //get_workwith.setEnabled(false);
-            work_with_title.setText("WorkWith (As per TP)");
+            //work_with_title.setText("WorkWith (As per TP)");
+            work_with_title.setText(MyCustumApplication.getInstance().getDCR().getWorkWithTitle()+" (As per TP)");
         }else{
-            work_with_title.setText("WorkWith");
+            work_with_title.setText(MyCustumApplication.getInstance().getDCR().getWorkWithTitle());
         }
 
         if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y")
                 && !ROUTEDIVERTYN.isChecked()){
             //get_area.setEnabled(false);
-            Route_Title.setText("Route (As per TP)");
+            Route_Title.setText(MyCustumApplication.getInstance().getDCR().getRouteTitle()+" (As per TP)");
         }else{
-            Route_Title.setText("Route");
+            Route_Title.setText(MyCustumApplication.getInstance().getDCR().getRouteTitle());
         }
 
         if (MyCustumApplication.getInstance().getDCR().getAdditionalAreaApprovalReqd().equalsIgnoreCase("Y")){
             //get_area.setEnabled(false);
-            Area_title.setText("Additional Area (Approval Required)");
+            Area_title.setText(MyCustumApplication.getInstance().getDCR().getAreaTitle()+"(Approval Required)");
+        }else{
+            Area_title.setText(MyCustumApplication.getInstance().getDCR().getAreaTitle());
         }
     }
 

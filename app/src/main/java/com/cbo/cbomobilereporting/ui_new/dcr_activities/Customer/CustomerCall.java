@@ -1,6 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,27 +11,38 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallBuilder;
@@ -39,13 +51,16 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.WorkWith.WorkWithBuilder
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.LeadActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.SamplePOBBuilder;
 import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.CboProgressDialog;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import CameraGalaryPkg.ChoosePhoto;
 import locationpkg.Const;
 import services.MyAPIService;
 import services.Sync_service;
@@ -59,16 +74,20 @@ import utils_new.Chemist_Gift_Dialog;
 import utils_new.Chm_Sample_Dialog;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
+import utils_new.up_down_ftp;
 
-public class CustomerCall extends CustomActivity implements iCustomerCall,ExpandableListAdapter.Summary_interface{
+public class CustomerCall extends CustomActivity implements iCustomerCall,
+        ExpandableListAdapter.Summary_interface,up_down_ftp.AdapterCallback {
 
     private vmCustomerCall viewModel;
     Activity context;
     Button drname,get_workwithBtn,back;
-    ImageView spinner_img_drCall;
+    ImageView spinner_img_drCall,attachImg,remark_img,status_img;
+    CheckBox dr_attach_add_chk;
     TextView loc,get_workwith;
     RelativeLayout loc_layout;
-    Button products, gift,lead,add;
+    Button products, gift,lead,add,btn_remark,statusBtn;
+    AlertDialog  myalertDialog = null;
 
 
     String sample_name="",sample_pob="",sample_sample="";
@@ -85,10 +104,15 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
 
     TableLayout stk,gift_layout,leadView;
 
-    LinearLayout call_layout;
+    LinearLayout call_layout,dr_attach_add,lead_layout;
     ExpandableListView summary_layout;
     Button tab_call,tab_summary;
-    EditText dr_remark_edit;
+    EditText dr_remark_edit,dr_competitive_product;
+
+    Button Lead_summary;
+
+    LinearLayout statusLayout,remarkLayout;
+
 
     boolean IsRefreshedClicked = true;
 
@@ -97,9 +121,13 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
     ExpandableListAdapter listAdapter;
 
     CBO_DB_Helper cbo_db_helper;
+    private final int REQUEST_CAMERA=201;
+    private ChoosePhoto choosePhoto=null;
+    CboProgressDialog cboProgressDialog = null;
 
     private final int CALL_ACTIVITY=0,WORKWITH_ACTIVITY=1, PRODUCT_DILOG=3,
             GIFT_DILOG=2,LEAD_DILOG=4,MESSAGE_INTERNET_SEND_FCM=5,POB_DILOG=6;
+
 
 
     @Override
@@ -124,7 +152,19 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
 
         dr_remark_edit = findViewById(R.id.dr_remark_edit);
 
+        dr_competitive_product=findViewById (R.id.dr_compet_product);
+
+        lead_layout=findViewById (R.id.lead_layout);
         lead = findViewById(R.id.lead);
+        Lead_summary=findViewById (R.id.lead_for_summary);
+
+        statusLayout = (LinearLayout) findViewById(R.id.statusLayout);
+
+        dr_attach_add = findViewById(R.id.dr_attach_add);
+        attachImg = findViewById(R.id.attach);
+        dr_attach_add_chk = findViewById(R.id.dr_attach_add_chk);
+
+
         products = findViewById(R.id.product);
         gift = findViewById(R.id.gift);
 
@@ -138,6 +178,59 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
         tab_summary= (Button) findViewById(R.id.summary);
 
         back = findViewById(R.id.bkfinal_button);
+
+
+        dr_remark_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.getCustomer().setRemark(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        if(!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_CALL_STATUS_YN","Y").equalsIgnoreCase("Y")){
+            statusLayout.setVisibility(View.GONE);
+        }
+        statusBtn = findViewById(R.id.statusBtn);
+        statusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickDrCallStatus();
+            }
+        });
+        status_img = (ImageView) findViewById(R.id.status_img);
+        status_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statusBtn.performClick();
+            }
+        });
+
+
+        btn_remark = findViewById(R.id.remarkBtn);
+        btn_remark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickDrCallRemark();
+            }
+        });
+        remark_img = (ImageView) findViewById(R.id.remark_img);
+        remark_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_remark.performClick();
+            }
+        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,34 +274,40 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
             }
         });
 
-        String GiftCaption = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GIFT_BTN_CAPTION","");
-        if (!GiftCaption.isEmpty())
-            gift.setText(GiftCaption);
-
-        gift.setOnClickListener(new View.OnClickListener() {
-
+        dr_attach_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                dr_attach_add_chk.setChecked(!dr_attach_add_chk.isChecked());
+            }
+        });
 
-                if (viewModel.getCustomer().getId().equalsIgnoreCase("0")) {
+        dr_attach_add_chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    customVariablesAndMethod.msgBox(context, "Please Select " + "" + " First..");
-                } else {
-                    Bundle b = new Bundle();
-                    b.putString("intent_fromRcpaCAll", "dr");
-                    b.putString("gift_name", gift_name);
-                    b.putString("gift_qty", gift_qty);
-
-                    b.putString("gift_name_previous", gift_name_previous);
-                    b.putString("gift_qty_previous", gift_qty_previous);
-
-                    b.putString("ID", viewModel.getCustomer().getId());
-                    new Chemist_Gift_Dialog(context, mHandler, b, GIFT_DILOG).Show();
+                if (isChecked){
+                    if (viewModel.getCustomer().getId().equalsIgnoreCase("0")) {
+                        dr_attach_add_chk.setChecked(false);
+                        customVariablesAndMethod.msgBox(context, "Please Select " + "Customer" + " First..");
+                    } else {
+                        String filenameTemp = Custom_Variables_And_Method.PA_ID+"_"+Custom_Variables_And_Method.DCR_ID+"_Call_"+customVariablesAndMethod.get_currentTimeStamp()+".jpg";
+                        //choosePhoto = new ChoosePhoto(context, REQUEST_CAMERA, ChoosePhoto.ChooseFrom.all);
+                        Intent intent = new Intent(context, AttachImage.class);
+                        intent.putExtra("Output_FileName",filenameTemp);
+                        intent.putExtra("SelectFrom",AttachImage.ChooseFrom.all);
+                        startActivityForResult(intent,REQUEST_CAMERA);
+                    }
+                }else{
+                    viewModel.setAttachment(null);
                 }
             }
         });
 
+
+
+        if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_LEAD_ENTRY_YN","Y").equalsIgnoreCase("Y")){
+            lead_layout.setVisibility(View.GONE);
+        }
         lead.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -219,37 +318,106 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
             }
         });
 
-        String ProductCaption = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SAMPLE_BTN_CAPTION","");
-        if (!ProductCaption.isEmpty())
-            products.setText(ProductCaption);
-        products.setOnClickListener(new View.OnClickListener() {
 
+        Lead_summary.setOnClickListener (new View.OnClickListener () {
             @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
+            public void onClick(View view) {
+                if (viewModel.getCustomer ().getId ().equalsIgnoreCase ("0")) {
 
-                openPOB(viewModel.getCustomer().getPOBs());
-                /*if (viewModel.getCustomer().getId().equalsIgnoreCase("0")) {
-
-                    customVariablesAndMethod.msgBox(context, "Please Select " + "Customer" + " First..");
+                    customVariablesAndMethod.msgBox (context, "Please Select " + "Customer" + " First..");
                 } else {
-                    Bundle b = new Bundle();
-                    b.putString("intent_fromRcpaCAll", "Select Product...");
-                    b.putString("sample_name", sample_name);
-                    b.putString("sample_pob", sample_pob);
-                    b.putString("sample_sample", sample_sample);
-
-                    b.putString("sample_name_previous", sample_name_previous);
-                    b.putString("sample_pob_previous", sample_pob_previous);
-                    b.putString("sample_sample_previous", sample_sample_previous);
-
-                    new Chm_Sample_Dialog(context, mHandler, b, PRODUCT_DILOG).Show();
-                }*/
-
+                    MyCustumApplication.getInstance()
+                            .LoadURL(Lead_summary.getText().toString(),
+                                    viewModel.getLeadSummaryLink() + "&CHEM_ID=" + viewModel.getCustomer().getId());
+                }
 
             }
         });
 
+        //chnage by parkash
+
+
+        dr_competitive_product.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                viewModel.getCustomer().setCompetitor_Product(s.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        if (customVariablesAndMethod.IsProductEntryReq(context)) {
+            String ProductCaption = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE (context, "SAMPLE_BTN_CAPTION", "");
+            if (!ProductCaption.isEmpty ())
+                products.setText (ProductCaption);
+            products.setOnClickListener (new View.OnClickListener () {
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+
+                    //openPOB(viewModel.getCustomer().getPOBs());
+                    if (viewModel.getCustomer ().getId ().equalsIgnoreCase ("0")) {
+
+                        customVariablesAndMethod.msgBox (context, "Please Select " + "Customer" + " First..");
+                    } else {
+                        Bundle b = new Bundle ();
+                        b.putString ("intent_fromRcpaCAll", "Select Product...");
+                        b.putString ("sample_name", sample_name);
+                        b.putString ("sample_pob", sample_pob);
+                        b.putString ("sample_sample", sample_sample);
+
+                        b.putString ("sample_name_previous", sample_name_previous);
+                        b.putString ("sample_pob_previous", sample_pob_previous);
+                        b.putString ("sample_sample_previous", sample_sample_previous);
+
+                        new Chm_Sample_Dialog (context, mHandler, b, PRODUCT_DILOG).Show ();
+                    }
+
+
+                }
+            });
+
+
+            String GiftCaption = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE (context, "GIFT_BTN_CAPTION", "");
+            if (!GiftCaption.isEmpty ())
+                gift.setText (GiftCaption);
+
+            gift.setOnClickListener (new View.OnClickListener () {
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+
+                    if (viewModel.getCustomer ().getId ().equalsIgnoreCase ("0")) {
+
+                        customVariablesAndMethod.msgBox (context, "Please Select " + "Customer" + " First..");
+                    } else {
+                        Bundle b = new Bundle ();
+                        b.putString ("intent_fromRcpaCAll", "dr");
+                        b.putString ("gift_name", gift_name);
+                        b.putString ("gift_qty", gift_qty);
+
+                        b.putString ("gift_name_previous", gift_name_previous);
+                        b.putString ("gift_qty_previous", gift_qty_previous);
+
+                        b.putString ("ID", viewModel.getCustomer ().getId ());
+                        new Chemist_Gift_Dialog (context, mHandler, b, GIFT_DILOG).Show ();
+                    }
+                }
+            });
+        }else{
+                gift.setVisibility(View.GONE);
+                products.setVisibility(View.GONE);
+            }
 
         chemist_list_summary=cbo_db_helper.getCallDetail("chemisttemp","","1");
 
@@ -306,6 +474,53 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
         });
 
     }
+
+
+    private void onClickDrCallStatus() {
+
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(context);
+        final ListView listview = new ListView(context);
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(listview);
+        myDialog.setView(layout);
+        //ArrayAdapter arrayAdapter = new ArrayAdapter(mDrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
+        ArrayAdapter<String> arrayAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, viewModel.getStatusList());
+        listview.setAdapter(arrayAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                myalertDialog.dismiss();
+                viewModel.setStatus(viewModel.getStatusList().get(position));
+            }
+        });
+
+        myalertDialog = myDialog.show();
+    }
+    private void onClickDrCallRemark() {
+
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(context);
+        final ListView listview = new ListView(context);
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(listview);
+        myDialog.setView(layout);
+        //ArrayAdapter arrayAdapter = new ArrayAdapter(mDrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
+        ArrayAdapter<String> arrayAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, viewModel.getRemarkList());
+        listview.setAdapter(arrayAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                myalertDialog.dismiss();
+                viewModel.setRemark(viewModel.getRemarkList().get(position));
+            }
+        });
+
+        myalertDialog = myDialog.show();
+    }
+
 
     @Override
     public String getCompanyCode() {
@@ -367,6 +582,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
 
     @Override
     public void showSummaryUI() {
+        updateSummary();
         summary_layout.setVisibility(View.VISIBLE);
         call_layout.setVisibility(View.GONE);
         tab_call.setBackgroundResource(R.drawable.tab_deselected);
@@ -461,17 +677,51 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
 
     @Override
     public void setRemark(String remark) {
+        dr_remark_edit.setText(remark);
+        /*if (viewModel.getRemarkList().contains(remark) && !remark.equalsIgnoreCase("other")){
+            btn_remark.setText( remark);
+            dr_remark_edit.setVisibility(View.GONE);
+        }else {
+            btn_remark.setText( "Other");
+            if(remark.equalsIgnoreCase("other")){
+                dr_remark_edit.setText("");
+            }
+            dr_remark_edit.setVisibility(View.VISIBLE);
+        }*/
 
     }
 
     @Override
+    public void setStatus(String status) {
+        if (status.trim().isEmpty()){
+            statusBtn.setText("---Select Status---");
+        }else{
+            statusBtn.setText(status);
+        }
+
+    }
+
+    @Override
+    public void setCompetitor_Product(String competitor_product) {
+        dr_competitive_product.setText(competitor_product);
+    }
+
+    @Override
     public void setProduct(ArrayList<PobModel> products) {
+        sample_name="";
+        sample_pob="";
+        sample_sample="";
+
+        stk.removeAllViews();
 
     }
 
     @Override
     public void setGift(ArrayList<PobModel> gifts) {
+        gift_name="";
+        gift_qty="";
 
+        gift_layout.removeAllViews();
     }
 
     @Override
@@ -480,12 +730,72 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
     }
 
     @Override
+    public void setAttachments(ArrayList<String> attachments) {
+        if (attachments.size() > 0) {
+            attachImg.setVisibility(View.VISIBLE);
+            previewCapturedImage(attachments.get(0));
+        }else{
+            dr_attach_add_chk.setChecked(false);
+            attachImg.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void setLead_SummaryVisibility(Boolean visible) {
+        if (visible){
+            Lead_summary.setVisibility(View.VISIBLE);
+        }else{
+            Lead_summary.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void updateSummary() {
+        chemist_list_summary=cbo_db_helper.getCallDetail("chemisttemp","","1");
+        listAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
+                case ChoosePhoto.CHOOSE_PHOTO_INTENT :
+                    File dir = new File(Environment.getExternalStorageDirectory(), "CBO");
+                    if (!dir.exists()) {
+                        if (!dir.mkdirs()) {
+                            Toast.makeText(this, "error", Toast.LENGTH_LONG).show();
+                            //return true;
+                        }
+                    }
+                    String filenameTemp = Custom_Variables_And_Method.PA_ID+"_"+Custom_Variables_And_Method.DCR_ID+"_Call_"+customVariablesAndMethod.get_currentTimeStamp()+".jpg";
+                    File output = new File(dir, filenameTemp);
+
+
+
+                    if (data != null && data.getData() != null) {
+                        choosePhoto.handleGalleryResult(data, output);
+                    } else {
+                        choosePhoto.handleCameraResult(choosePhoto.getCameraUri(), output);
+                        //viewModel.setAttachment(choosePhoto.getCameraUri().getPath());
+                        //previewCapturedImage(FileUtil.getRealPathFromURI(context, choosePhoto.getCameraUri()));
+                    }
+
+                    break;
+               /* case ChoosePhoto.SELECTED_IMG_CROP :
+                        //mImgCamera.setImageURI(choosePhoto.getCropImageUrl());
+                        File file2 = new File(choosePhoto.getCropImageUrl().getPath());
+                        // previewCapturedImage(file2);
+                    break;*/
+                case REQUEST_CAMERA :
+                    //previewCapturedImage(choosePhoto.getCropImageUrl().getPath());
+
+                    //viewModel.setAttachment(choosePhoto.getCropImageUrl().getPath());
+                    viewModel.setAttachment(((File) data.getSerializableExtra("Output")).getPath());
+                   break;
                 case CALL_ACTIVITY:
                     //SpinnerModel model = (SpinnerModel) data.getSerializableExtra("item");
-                    viewModel.setCallmodel((SpinnerModel) data.getSerializableExtra("item"));
+                    viewModel.setCallmodel(context,(SpinnerModel) data.getSerializableExtra("item"));
 
                     break;
                 case WORKWITH_ACTIVITY:
@@ -504,6 +814,26 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
                 default:
 
             }
+        }
+    }
+
+    private void previewCapturedImage(String picUri) {
+        try {
+            // hide video preview
+            Glide.with(this).load( picUri).into( attachImg);
+
+           /* // bimatp factory
+            BitmapFactory.Options options = new BitmapFactory.Options();
+
+            // downsizing image as it throws OutOfMemory Exception for larger
+            // images
+            options.inSampleSize = 10;
+
+            final Bitmap bitmap = BitmapFactory.decodeFile(picUri,
+                    options);
+            attachImg.setImageBitmap(bitmap);*/
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -861,45 +1191,55 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
         }else if (viewModel.getCustomer().getLeads().size() == 0 &&
                 viewModel.getCustomer().getLeadReqd()){
             customVariablesAndMethod.msgBox(context, "Please Select atleast one lead...");
+        }else if(viewModel.getCustomer().getAttachments().size() >0 ) {
+            this.cboProgressDialog = new CboProgressDialog(this.context, "Please Wait..\nuploading Image");
+            this.cboProgressDialog.show();
+            new up_down_ftp().uploadFile( new File(viewModel.getCustomer().getAttachments().get(0)), context);
         }else{
 
-            //Start of call to service
-
-            HashMap<String,String> request=new HashMap<>();
-            request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
-            request.put("iPaId", MyCustumApplication.getInstance().getUser().getID() );
-            request.put("iDCR_ID",  MyCustumApplication.getInstance().getDCR().getId());
-            request.put("iCHEM_ID", viewModel.getCustomer().getId());
-            request.put("sITEM_ID", lead_ids);
-            request.put("sSTATUS",  "");
-            request.put("sREAMRK", dr_remark_edit.getText().toString());
-
-            ArrayList<Integer> tables=new ArrayList<>();
-            tables.add(0);
-
-            new MyAPIService(context).execute(new ResponseBuilder("DCRLEAD_COMMIT",request)
-                    .setTables(tables)
-                    .setResponse(new CBOServices.APIResponse() {
-                        @Override
-                        public void onComplete(Bundle bundle) throws Exception {
-                            submitChemist(false);
-                        }
-
-                        @Override
-                        public void onResponse(Bundle bundle) throws Exception {
-
-                            //parser2(bundle);
-                        }
-
-                        @Override
-                        public void onError(String s, String s1) {
-                            AppAlert.getInstance().getAlert(context,s,s1);
-                        }
-                    }));
-
-
-            //End of call to service
+            LeadCommit();
         }
+    }
+
+    private void LeadCommit(){
+        //Start of call to service
+
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
+        request.put("iPaId", MyCustumApplication.getInstance().getUser().getID() );
+        request.put("iDCR_ID",  MyCustumApplication.getInstance().getDCR().getId());
+        request.put("iCHEM_ID", viewModel.getCustomer().getId());
+        request.put("sITEM_ID", lead_ids);
+        request.put("sSTATUS",  "");
+        request.put("sREAMRK", viewModel.getCustomer().getRemark());
+        request.put("sCHEM_STATUS", viewModel.getCustomer().getStatus());
+        request.put("sCOMPETITOR_REMARK", viewModel.getCustomer().getCompetitor_Product ());
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+
+        new MyAPIService(context).execute(new ResponseBuilder("DCRLEAD_COMMIT_1",request)
+                .setTables(tables)
+                .setResponse(new CBOServices.APIResponse() {
+                    @Override
+                    public void onComplete(Bundle bundle) throws Exception {
+                        submitChemist(false);
+                    }
+
+                    @Override
+                    public void onResponse(Bundle bundle) throws Exception {
+
+                        //parser2(bundle);
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+                        AppAlert.getInstance().getAlert(context,s,s1);
+                    }
+                }));
+
+
+        //End of call to service
     }
 
 
@@ -935,12 +1275,14 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
             }
 
 
+            String attachment = viewModel.getCustomer().getAttachments().size() >0 ? viewModel.getCustomer().getAttachments().get(0) : "";
 
+            attachment = attachment.substring(attachment.lastIndexOf("/")+1);
 
             if (cbo_db_helper.searchChemist(viewModel.getCustomer().getId()).contains(viewModel.getCustomer().getId())) {
                 int val = cbo_db_helper.updateChemistInLocal(dcrid, viewModel.getCustomer().getId(), PobAmt, AllItemId, AllItemQty,
                         Custom_Variables_And_Method.GLOBAL_LATLON + "!^" + address, AllGiftId, AllGiftQty,
-                        "",sample,dr_remark_edit.getText().toString(),"",rate);
+                        "",sample,dr_remark_edit.getText().toString(),attachment,rate,viewModel.getCustomer().getStatus(),viewModel.getCustomer().getCompetitor_Product());
                 Log.e("chemist updated", "" + val);
                 customVariablesAndMethod.msgBox(context,chm_name + "  successfully updated");
 
@@ -970,7 +1312,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
 
                     long val = cbo_db_helper.submitChemistInLocal(dcrid, viewModel.getCustomer().getId(), PobAmt, AllItemId, AllItemQty,
                             viewModel.getCallmodel().getLAT_LONG() + "!^" + address, AllGiftId, AllGiftQty, customVariablesAndMethod.currentTime(context),
-                            MyCustumApplication.getInstance().getUser().getBattery(),sample,dr_remark_edit.getText().toString(),"",locExtra,viewModel.getCallmodel().getREF_LAT_LONG(),rate);
+                            MyCustumApplication.getInstance().getUser().getBattery(),sample,dr_remark_edit.getText().toString(),attachment,locExtra,viewModel.getCallmodel().getREF_LAT_LONG(),rate,viewModel.getCustomer().getStatus(),viewModel.getCustomer().getCompetitor_Product());
 
 
                     cbo_db_helper.addChemistInLocal(viewModel.getCustomer().getId(), chm_name,""+customVariablesAndMethod.currentTime(context), viewModel.getCallmodel().getLAT_LONG(), Custom_Variables_And_Method.global_address,"0","0",customVariablesAndMethod.srno(context) ,locExtra);
@@ -1020,4 +1362,31 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,Expand
         }
     };
 
+    @Override
+    public void started(Integer responseCode, String message, String description) {
+
+    }
+
+    @Override
+    public void progess(Integer responseCode, Long FileSize, Float value, String description) {
+
+    }
+
+    @Override
+    public void complete(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        LeadCommit();
+    }
+
+    @Override
+    public void aborted(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        AppAlert.getInstance().getAlert(context,message,description);
+    }
+
+    @Override
+    public void failed(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        AppAlert.getInstance().getAlert(context,message,description);
+    }
 }

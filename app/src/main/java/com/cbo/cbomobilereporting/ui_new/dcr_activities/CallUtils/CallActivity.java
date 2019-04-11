@@ -36,10 +36,7 @@ import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
 
-import cbomobilereporting.cbo.com.cboorder.Adaptor.MedicineAdapter;
-import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
-import saleOrder.vmNewOrder;
 import services.Sync_service;
 import utils.adapterutils.SpinnerModel;
 import utils_new.AppAlert;

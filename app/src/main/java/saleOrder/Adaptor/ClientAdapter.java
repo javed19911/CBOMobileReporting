@@ -17,7 +17,7 @@ import java.util.Random;
 
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
-import saleOrder.mParty;
+import saleOrder.Model.mParty;
 
 
 public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.MyViewHolder> {

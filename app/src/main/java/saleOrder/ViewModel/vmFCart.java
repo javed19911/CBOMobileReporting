@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.ViewModel;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import java.util.HashMap;
 
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
+import saleOrder.MyOrderAPIService;
+import saleOrder.ViewModel.CBOViewModel;
 import saleOrder.Views.iFCart;
 import utils_new.AppAlert;
 
@@ -39,13 +41,29 @@ public class vmFCart extends CBOViewModel<iFCart> {
     public void orderCommit(Activity context, String Pay_mode){
 
         String itemString = "",qtyString = "",rateString = "",amtString = "";
+        String sTax_Percent = "",sTax_Percent1 = "",sTax_Amt = "",sTax_Amt1 = "";
+        String sDisc_Amt = "";
+        String sDisc_Percent = "",sDisc_Percent1= "",sDisc_Percent2= "",
+                sDisc_Percent3= "",sDisc_Percent4= "",sDisc_Percent5= "";
 
         for(mItem item : order.getItems()){
-            if (!item.getQty().trim().equalsIgnoreCase("0")) {
+            if (item.getQty() != 0.0) {
                 itemString = item.getId() + "," + itemString;
                 qtyString = item.getQty() + "," + qtyString;
                 rateString = item.getRate() + "," + rateString;
-                amtString = item.getAmt() + "," + amtString;
+                amtString = String.format("%.2f", item.getAmt()) + "," + amtString;
+
+                sTax_Percent = item.getGST().getCGST()  + "," + sTax_Percent;
+                sTax_Percent1 =  item.getGST().getSGST() + "," + sTax_Percent1;
+                sTax_Amt =   item.getCGSTAmt()  + "," + sTax_Amt;
+                sTax_Amt1 =   item.getSGSTAmt()  + "," + sTax_Amt1;
+                sDisc_Amt = (item.getAmt() - item.getNetAmt()) + "," +  sDisc_Amt;
+                sDisc_Percent = item.getMiscDiscount().get(0).getPercent() + "," + sDisc_Percent;
+                sDisc_Percent1 = item.getMiscDiscount().get(1).getPercent() + "," + sDisc_Percent1;
+                sDisc_Percent2 = item.getMiscDiscount().get(2).getPercent() + "," + sDisc_Percent2;
+                sDisc_Percent3 = item.getMiscDiscount().get(3).getPercent() + "," + sDisc_Percent3;
+                sDisc_Percent4 = item.getMangerDiscount().getPercent() + "," + sDisc_Percent4;
+                sDisc_Percent5 = item.getManualDiscount().getPercent() + "," + sDisc_Percent5;
             }
         }
 
@@ -61,9 +79,22 @@ public class vmFCart extends CBOViewModel<iFCart> {
         request.put("sQtyStr", qtyString);
         request.put("sRateStr", rateString);
         request.put("sAmountStr", amtString);
-        request.put("iNetAmt", order.getNetAmt());
+        request.put("iNetAmt", ""+ String.format("%.2f", order.getTotAmt())  );
         request.put("sPymtMode", Pay_mode);
         request.put("iLogin_PA_ID", view.getUserId());
+
+        request.put("sDisc_Amt",sDisc_Amt);
+        request.put("sTax_Percent", sTax_Percent);
+        request.put("sTax_Percent1",sTax_Percent1 );
+        request.put("sTax_Amt", sTax_Amt);
+        request.put("sTax_Amt1", sTax_Amt1);
+        request.put("sDisc_Percent", sDisc_Percent);
+        request.put("sDisc_Percent1", sDisc_Percent1);
+        request.put("sDisc_Percent2", sDisc_Percent2);
+        request.put("sDisc_Percent3", sDisc_Percent3);
+        request.put("sDisc_Percent4", sDisc_Percent4);
+        request.put("sDisc_Percent5", sDisc_Percent5);
+
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -96,6 +127,35 @@ public class vmFCart extends CBOViewModel<iFCart> {
                         }));
 
         //End of call to service
+    }
+
+    private mItem GetOrderItemWhere(mItem item){
+
+        if (getOrder() == null)
+            return null;
+
+        if (getOrder().getItems().size() > 0) {
+
+            for (mItem orderItem : getOrder().getItems()) {
+                if (orderItem.getId().equals(item.getId())) {
+                    return orderItem;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void addItem(mItem item){
+        mItem orderItem = GetOrderItemWhere(item);
+        if (orderItem != null){
+            getOrder().getItems().remove(orderItem);
+        }
+        if (item.getQty() != 0.0) {
+            getOrder().getItems().add(item);
+        }
+        if (view != null){
+            view.updateOrder(getOrder());
+        }
     }
 
 }

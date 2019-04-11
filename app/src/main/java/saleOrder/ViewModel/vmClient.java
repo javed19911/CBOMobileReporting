@@ -1,4 +1,4 @@
-package saleOrder;
+package saleOrder.ViewModel;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,6 +13,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import saleOrder.Model.mParty;
+import saleOrder.MyOrderAPIService;
+import saleOrder.ViewModel.CBOViewModel;
 import saleOrder.Views.iClient;
 
 /**

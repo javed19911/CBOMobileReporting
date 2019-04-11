@@ -1,4 +1,4 @@
-package camera_galary_pkg;
+package CameraGalaryPkg;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
