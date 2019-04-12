@@ -285,7 +285,7 @@ public class CartFragment extends Fragment implements iFCart {
                 || viewModel.getOrder().getApproved().equalsIgnoreCase("Y")){
             context.     onBackPressed();
         }else if( viewModel.getOrder().getItems().size() == 0){
-            AppAlert.getInstance().getAlert(context,"No Item !!!!","Please add atleast one iten to the cart... ");
+            AppAlert.getInstance().getAlert(context,"No Item !!!!","Please add atleast one item to the cart... ");
         }else{
             viewModel.orderCommit(context,"COD");
         }

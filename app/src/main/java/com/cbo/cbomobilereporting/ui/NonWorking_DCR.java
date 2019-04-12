@@ -1062,6 +1062,8 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
         dialog.show();
 
         if (who.equals("0")) {
+            adapter = new SpinAdapter(getApplicationContext(), R.layout.spin_row, cbohelp.get_ExpenseHeadNotAdded());
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
             exphead.setAdapter(adapter);
             head.setVisibility(View.GONE);
         } else {
@@ -1709,11 +1711,17 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 ArrayList<SpinnerModel> newlist = new ArrayList<SpinnerModel>();
                 newlist.add(new SpinnerModel("--Select--", ""));
 
+                cbohelp.delete_EXP_Head();
                 String table0 = result.getString("Tables2");
                 JSONArray jsonArray1 = new JSONArray(table0);
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
                     newlist.add(new SpinnerModel(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID")));
+
+                    cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
+                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
+                            jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
+                            jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
 
                 }
                 actual_fare_layout.setVisibility(View.GONE);

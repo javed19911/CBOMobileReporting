@@ -710,6 +710,8 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
         dialog.setTitle("Add Other Expences");
 
         if(who.equals("0")) {
+            adapter = new SpinAdapter(getApplicationContext(), R.layout.spin_row, cbohelp.get_ExpenseHeadNotAdded());
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
             exphead.setAdapter(adapter);
             head.setVisibility(View.GONE);
         }else{

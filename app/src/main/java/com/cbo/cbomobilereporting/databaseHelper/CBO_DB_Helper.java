@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import utils.MyConnection;
+import utils.adapterutils.SpinnerModel;
 import utils.model.DropDownModel;
 import utils_new.Custom_Variables_And_Method;
 
@@ -6161,6 +6162,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
 
+
     public mExpHead getEXP_Head(String Id) {
         mExpHead expHead = new mExpHead(0,"");
 
@@ -6201,6 +6203,28 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return expHead;
     }
 
+    public  ArrayList<SpinnerModel> get_ExpenseHeadNotAdded() {
+        ArrayList<SpinnerModel> data = new ArrayList<SpinnerModel>();
+        sd = this.getWritableDatabase();
+        String query ="Select * from " + Expenses_head + " LEFT JOIN "+Expenses+" ON exp_head_id = FIELD_ID where exp_head_id IS NULL";
+        //String query = "Select * from " + Expenses_head + " LEFT JOIN "+Expenses+" ON exp_head_id=FIELD_ID where MANDATORY='1' and exp_head_id != FIELD_ID" ;
+        Cursor c = sd.rawQuery(query, null);
+        data.add(new SpinnerModel("--Select--", ""));
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    SpinnerModel datanum=new SpinnerModel(c.getString(c.getColumnIndex("FIELD_NAME"))
+                            ,c.getString(c.getColumnIndex("FIELD_ID")),
+                            c.getString(c.getColumnIndex("DA_ACTION")));
+                    data.add(datanum);
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+        return data;
+    }
 
     public ArrayList<Map<String, String>> get_ExpenseTypeAdded(String typeStr ) {
         ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();

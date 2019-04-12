@@ -23,7 +23,7 @@ public class mUser {
     private String IMEI;
     private String OS;
     private String battery;
-    private String AppVersion = "20190411";
+    private String AppVersion = "20190412";
     private String time;
     private Location location;
     private Boolean LoggedInAsSupport = false;
