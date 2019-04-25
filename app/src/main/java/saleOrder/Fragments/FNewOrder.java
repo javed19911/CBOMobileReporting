@@ -237,6 +237,7 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
 
     @Override
     public void setItem(mItem item) {
+        item.setNoOfDiscountAlowed(getNoOfDiscountAllowed());
         if (getPartyId() == null) {
             if (context instanceof iCart) {
                 order = (((iCart) context).getOrder());
@@ -260,8 +261,18 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     }
 
     @Override
+    public int getNoOfDiscountAllowed() {
+        return Integer.parseInt( MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("ORD_DISC_TYPE","6"));
+    }
+
+    @Override
     public void setItemName(String name) {
         filterTxt.setText(name);
+    }
+
+    @Override
+    public void ManualDiscountEnabled(Boolean enabled) {
+        Manualdiscount.setEnabled(enabled);
     }
 
     @Override
@@ -278,6 +289,11 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     @Override
     public void setMiscDiscount(ArrayList<mDiscount> discounts) {
 
+    }
+
+    @Override
+    public void ManagerDiscountEnabled(Boolean enabled) {
+        managerDiscount.setEnabled(enabled);
     }
 
 

@@ -1282,6 +1282,19 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     stk_name.setText("---Select---");
                     stk_id="";
                     stkst_name="";
+
+
+                    mstockistCall = (mStockistCall) new mStockistCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+
                 }else {
 
 

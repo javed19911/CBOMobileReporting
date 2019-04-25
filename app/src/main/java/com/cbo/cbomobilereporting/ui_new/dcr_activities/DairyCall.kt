@@ -973,6 +973,16 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 dr_id = ""
                 doc_name = ""
 
+                mdairyCall = mDairyCall(head)
+                        .setId(model.id)
+                        .setName(model.name)
+                        .setArea(model.area)
+                        .setDcr_id(MyCustumApplication.getInstance().user.dcrId)
+                        .setDcr_date(MyCustumApplication.getInstance().user.dcrDate)
+                        .setRef_latlong(model.reF_LAT_LONG)
+                        .setLatLong(arrayAdapter.latLong)
+                        .setBattery(MyCustumApplication.getInstance().user.battery) as mDairyCall
+
             }  else {
 
 

@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDayPlan;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
@@ -98,6 +100,9 @@ public class Dcr_Open_New extends AppCompatActivity {
     TextView work_with_title,Area_title;
     private Location currentBestLocation;
 
+    mDayPlan dayPlan;
+    LocationDB locationDB;
+
 
 
     @Override
@@ -121,6 +126,8 @@ public class Dcr_Open_New extends AppCompatActivity {
         }
 
         context=this;
+        locationDB = new LocationDB();
+        dayPlan = new mDayPlan("Day Plan");
         progress1 = new ProgressDialog(this);
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
@@ -269,6 +276,7 @@ public class Dcr_Open_New extends AppCompatActivity {
         }else {
 
             textView.setText("Dcr Day Replan");
+            dayPlan = new mDayPlan("Day Replan");
 
             work_val=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_head","Working" );
             work_type_code=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code", "W");
@@ -1544,6 +1552,10 @@ public class Dcr_Open_New extends AppCompatActivity {
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"dcr_date_real", real_date);
 
             Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
+
+            dayPlan.setTime(customVariablesAndMethod.currentTime(context));
+            dayPlan.setLatLong(customVariablesAndMethod.get_best_latlong(context));
+            locationDB.insert(dayPlan);
 
             new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
                 @Override

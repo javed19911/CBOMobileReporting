@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDayPlan;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
@@ -109,6 +111,9 @@ public class DCR_Root_new extends AppCompatActivity {
     String mLatLong;
     String mAddress,LocExtra="";
 
+    mDayPlan dayPlan;
+    LocationDB locationDB;
+
     String fmcg_Live_Km = "";
     Runnable r1 = new Runnable() {
         @Override
@@ -179,6 +184,10 @@ public class DCR_Root_new extends AppCompatActivity {
         get_area_again = (Button) findViewById(R.id.get_ara_again);
 
         context=this;
+
+        locationDB = new LocationDB();
+        dayPlan = new mDayPlan("Day Plan");
+
         progress1 = new ProgressDialog(this);
         customVariablesAndMethod= Custom_Variables_And_Method.getInstance();
         new SystemArchitecture(context).getDEVICE_ID(context);
@@ -398,6 +407,8 @@ public class DCR_Root_new extends AppCompatActivity {
                     );
         }else {
             hader_text.setText("Dcr Day Replan");
+            dayPlan = new mDayPlan("Day Replan");
+
             work_val=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_head","Working" );
             work_type_code=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code", "W");
             //getworkingType.add(new SpinnerModel("Working","W"));
@@ -1792,6 +1803,9 @@ public class DCR_Root_new extends AppCompatActivity {
             cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
             Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
 
+            dayPlan.setTime(customVariablesAndMethod.currentTime(context));
+            dayPlan.setLatLong(customVariablesAndMethod.get_best_latlong(context));
+            locationDB.insert(dayPlan);
 
            new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
                 @Override

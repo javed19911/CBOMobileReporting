@@ -142,7 +142,7 @@ public class OrderListFragment extends Fragment implements iOrder {
                                 }
                             });
 
-                }if (view.getId () == com.cbo.cbomobilereporting.R.id.attach) {
+                }else if (view.getId () == com.cbo.cbomobilereporting.R.id.attach) {
 
                    MyCustumApplication.getInstance().LoadURL("Attachment",viewModel.getOrders().get(position).getAttachment());
 

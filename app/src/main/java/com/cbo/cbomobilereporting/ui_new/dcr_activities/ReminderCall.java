@@ -1017,6 +1017,25 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 					drname.setText("---Select---");
 					dr_id="";
 					doc_name="";
+
+
+					mdrRCCall = (mDrRCCall) new mDrRCCall()
+							.setId(model.getId())
+							.setName(model.getName())
+							.setArea(model.getAREA())
+							.setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+							.setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+							.setRef_latlong(model.getREF_LAT_LONG())
+							.setLatLong(arrayAdapter.latLong)
+							.setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+					mdrRCCall.setDrColour(model.getColour())
+							.setDrClass(model.getCLASS())
+							.setDr_CRM(model.getCRM_COUNT())
+							.setDrLastVisited(model.getLastVisited())
+							.setDrPotential(model.getPOTENCY_AMT())
+							.setDRCAPM_GROUP(model.getDRCAPM_GROUP());
+
 				}else if( Integer.parseInt(array_sort.get(position).getFREQ()) != 0 && Integer.parseInt(array_sort.get(position).getFREQ()) < Integer.parseInt(array_sort.get(position).getNO_VISITED()) ) {
 					customVariablesAndMethod.getAlert(context,"Visit Freq. Exceeded",("For "+doc_name +"@ Allowed Freq. : " + array_sort.get(position).getFREQ() + "@ Visited       : "+array_sort.get(position).getNO_VISITED()).split("@"));
 					drname.setText("---Select---");

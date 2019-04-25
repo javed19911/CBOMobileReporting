@@ -941,6 +941,7 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("DCR_CALL_STATUS_YN", c.getString("DCR_CALL_STATUS_YN"));
                 editor.putString("FY_FDATE", c.getString("FY_FDATE"));
                 editor.putString("FY_TDATE", c.getString("FY_TDATE"));
+                editor.putString("ORD_DISC_TYPE", c.getString("ORD_DISC_TYPE"));
 
                 editor.commit();
 

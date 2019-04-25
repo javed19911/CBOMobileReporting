@@ -190,6 +190,12 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
 
                 distanceLayout.setTag(position);
 
+                if (loc_icon.getVisibility() == View.GONE && distance.getVisibility() == View.GONE ) {
+                    distanceLayout.setVisibility(View.GONE);
+                }else{
+                    distanceLayout.setVisibility(View.VISIBLE);
+                }
+
                 distanceLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

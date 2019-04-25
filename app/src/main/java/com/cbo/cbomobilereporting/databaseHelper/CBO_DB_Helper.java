@@ -5741,7 +5741,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     Map<String, String> datanum = new HashMap<String, String>();
                     datanum.put("exp_head_id",c.getString(c.getColumnIndex("exp_head_id")));
                     datanum.put("exp_head", c.getString(c.getColumnIndex("exp_head")));
-                    datanum.put("amount", c.getString(c.getColumnIndex("amount")));
+                    datanum.put("amount", c.getString(c.getColumnIndex("amount")).trim().isEmpty() ? "0": c.getString(c.getColumnIndex("amount")));
                     datanum.put("remark",c.getString(c.getColumnIndex("remark")));
                     datanum.put("FILE_NAME",c.getString(c.getColumnIndex("FILE_NAME")));
                     datanum.put("ID",c.getString(c.getColumnIndex("exp_ID")));

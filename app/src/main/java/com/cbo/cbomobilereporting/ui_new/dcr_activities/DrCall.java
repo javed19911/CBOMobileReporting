@@ -1307,6 +1307,26 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                     doc_name="";
 
 
+                    mdrCall = (mDrCall) new mDrCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+
+                    mdrCall.setDrColour(model.getColour())
+                            .setCall_type(model.getPANE_TYPE())
+                            .setDrClass(model.getCLASS())
+                            .setDr_CRM(model.getCRM_COUNT())
+                            .setDrLastVisited(model.getLastVisited())
+                            .setDrPotential(model.getPOTENCY_AMT())
+                            .setDRCAPM_GROUP(model.getDRCAPM_GROUP());
+
+
                 }else if( Integer.parseInt(array_sort.get(position).getFREQ()) != 0 && Integer.parseInt(array_sort.get(position).getFREQ()) <= Integer.parseInt(array_sort.get(position).getNO_VISITED()) ) {
                     customVariablesAndMethod.getAlert(context,"Visit Freq. Exceeded",("For "+doc_name +"@ Allowed Freq. : " + array_sort.get(position).getFREQ() + "@ Visited       : "+array_sort.get(position).getNO_VISITED()).split("@"));
                     drname.setText("---Select---");
@@ -1622,7 +1642,6 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
             if (progress1 != null) {
                 progress1.dismiss();
             }
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             if (intent.getStringExtra("message").equals("Y")) {
                 customVariablesAndMethod.getAlert(context,"Registered",dr_name_reg+" Successfully Re-Registered("+dr_id_index+")");

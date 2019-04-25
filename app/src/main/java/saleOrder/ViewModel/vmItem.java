@@ -146,8 +146,16 @@ public class vmItem extends CBOViewModel<iFNewOrder> {
             //setManagerDiscount(null);
             item.getMangerDiscount().setMax(getManagerDiscount().getMax());
         }
+        if (item.getNoOfDiscountAlowed()<6){
+            item.getManualDiscount().setMax(0D);
+        }
+        if (item.getNoOfDiscountAlowed()<5){
+            item.getMangerDiscount().setMax(0D);
+        }
         view.setItemName(item.getName());
         view.setQty(item.getQty());
+        view.ManualDiscountEnabled(item.getNoOfDiscountAlowed()<6);
+        view.ManagerDiscountEnabled(item.getNoOfDiscountAlowed()<5);
         view.setManagerDiscount(item.getMangerDiscount());
         view.setMiscDiscount(item.getMiscDiscount());
         view.setManualDiscount(item.getManualDiscount());

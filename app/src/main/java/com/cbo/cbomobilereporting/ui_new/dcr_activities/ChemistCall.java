@@ -1336,6 +1336,18 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                     ch_name.setText("---Select---");
                     chm_id="";
                     chm_name="";
+
+
+                    mchemistCall = (mChemistCall) new mChemistCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
                 }else {
                     Custom_Variables_And_Method.CHEMIST_ID = chm_id;
                     ch_name.setText(chm_name);

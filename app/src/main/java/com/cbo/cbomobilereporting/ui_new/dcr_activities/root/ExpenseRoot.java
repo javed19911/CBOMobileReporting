@@ -133,7 +133,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
     String value;
     Boolean resultTrue, myval=false;
     ImageView attach_img,attachnew;
-    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "";
+    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "",ACTUALFAREYN_MANDATORY="";
 
     ArrayList<Map<String, String>> data = null;
 
@@ -262,7 +262,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 if (datype_val.equals("--Select--")) {
                     customVariablesAndMethod.msgBox(context,"Please Select your DA TYPE");
                 } else */
-                if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("")) {
+                if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("") && !ACTUALFAREYN_MANDATORY.equalsIgnoreCase("N")) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Actual Fare....");
                 }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"EXP_ATCH_YN","N").equals("Y") &&  actual_fare_layout.getVisibility()==View.VISIBLE && attach_txt.getText().toString().equals("* Attach Picture....")) {
                     customVariablesAndMethod.msgBox(context,"Please Attach supporting File for Actual Fare....");
@@ -623,10 +623,12 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 exp_hed= ((TextView) arg1.findViewById(R.id.spin_name)).getText().toString();
                 DA_ACTION[0] = ((SpinnerModel)adapter.data.get(arg2)).getPANE_TYPE();
                 filename="";
+
                 attach_img.setImageDrawable(null);
                 add_attachment.setChecked(false);
 
                 expHead[0] = cbohelp.getEXP_Head(exp_id);
+                exhAmt.setText("");
                 Boolean allreadyAdded = false;
                 if (who.equals("0")){
                     if (cbohelp.get_ExpenseTypeAdded(expHead[0].getEXP_TYPE_STR()).size() >0
@@ -773,15 +775,18 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                         File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + filename);
                         new up_down_ftp().uploadFile(file2,ExpenseRoot.this);
 
-                    }
-                    if(!path.equals("")){
+                    }else{
                         filename= finalExt;
-                    }
-                    dialog.dismiss();
-
-                    if (filename.equals("")) {
                         other_expense_commit();
                     }
+                    /*if(!path.equals("")){
+                        filename= finalExt;
+                    }*/
+                    dialog.dismiss();
+
+                    /*if (filename.equals("")) {
+                        other_expense_commit();
+                    }*/
 
                 }
             }
@@ -1354,10 +1359,37 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                     rootdata.add((object.getString("ACTUALFAREYN")));
                     ROUTE_CLASS = object.getString("ROUTE_CLASS");
                     ACTUALDA_FAREYN = object.getString("ACTUALDA_FAREYN");
+                    ACTUALFAREYN_MANDATORY  = object.getString("ACTUALFAREYN_MANDATORY");
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN",object.getString("ACTUALFAREYN"));
 
 
+
+                    String MyDaType = object.getString("DA_TYPE_NEW");
+                    String da_val = object.getString("DA_RATE_NEW");
+                    /*Float rate = Float.parseFloat(one.getString("FARE_RATE"));
+                    Float kms = Float.parseFloat(one.getString("KM"));
+
+                    if (MyDaType.equals("L")) {
+                        da_val = one.getString("DA_L_RATE");
+                    } else if (MyDaType.equals("EX") || MyDaType.equals("EXS")) {
+                        da_val = one.getString("DA_EX_RATE");
+                    } else if (MyDaType.equals("NSD") || MyDaType.equals("NS")) {
+                        da_val = one.getString("DA_NS_RATE");
+                    }
+                    String distance_val = "0";
+                    if (MyDaType.equals("EX") || MyDaType.equals("NSD")) {
+                        distance_val = "" + (kms * rate * 2);
+
+                    } else {
+                        distance_val = "" + (kms * rate);
+                    }*/
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",object.getString("KM_NEW"));
                 }
+
+
 
 
                 data=cbohelp.get_Expense();

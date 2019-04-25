@@ -3,6 +3,7 @@ package saleOrder.ViewModel;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -254,6 +255,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
                         .setAmt(jsonObject2.getDouble("AMOUNT"))
                         .setMiscDiscount(discounts)
                         .setGropuID(jsonObject2.getInt("ITEM_GROUP_ID"))
+                        .setNoOfDiscountAlowed(Integer.parseInt( MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("ORD_DISC_TYPE","6")))
                         .setMangerDiscount(new mDiscount().setType(eDiscount.M).setPercent(jsonObject2.getDouble("DISC_PERCENT4")) )
                         .setManualDiscount(new mDiscount().setPercent(jsonObject2.getDouble("DISC_PERCENT5")) );
 

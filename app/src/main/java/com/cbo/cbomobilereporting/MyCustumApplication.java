@@ -43,7 +43,7 @@ public class MyCustumApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        FirebaseSyncYN = getDataFrom_FMCG_PREFRENCE("FIREBASE_SYNCYN","Y");
+        //FirebaseSyncYN = getDataFrom_FMCG_PREFRENCE("FIREBASE_SYNCYN","Y");
         /*if (isLiveTrackingOn()){
             FirebaseSyncYN = "Y";
         }*/
