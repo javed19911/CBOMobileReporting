@@ -377,7 +377,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
     @Override
     public void Edit_Expense(String who, String hed, String amt, String rem, String path, String hed_id) {
-        Add_expense(who,hed,amt,rem,path,hed_id);
+        if (!hed_id.equalsIgnoreCase("-1")) {
+            Add_expense(who, hed, amt, rem, path, hed_id);
+        }
     }
 
     @Override

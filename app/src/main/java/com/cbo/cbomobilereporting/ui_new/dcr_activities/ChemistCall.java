@@ -54,6 +54,7 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
+import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
@@ -66,6 +67,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import locationpkg.Const;
+import services.MyAPIService;
 import services.Sync_service;
 import utils.CBOUtils.Constants;
 import utils.adapterutils.ExpandableListAdapter;
@@ -73,6 +75,8 @@ import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
+
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
@@ -1124,45 +1128,64 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
 
     @Override
     public void delete_Call(final String Dr_id, final String Dr_name) {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
-        final Button Alert_Nagative= (Button) dialogLayout.findViewById(R.id.nagative);
-        Alert_title.setText("Delete!!!");
-        Alert_message.setText("Do you Really want to delete "+Dr_name+" ?");
-        Alert_Nagative.setText("Cancel");
-        Alert_Positive.setText("Delete");
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
 
-        final AlertDialog dialog = builder1.create();
 
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
+        AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete " + Dr_name + " ?", new AppAlert.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onPositiveClicked(View item, String result) {
 
-                dialog.dismiss();
+                //Start of call to service
 
-                mchemistCall = (mChemistCall) new mChemistCall().setId(Dr_id);
-                chemistCallDB.delete(mchemistCall);
+                HashMap<String,String> request=new HashMap<>();
+                request.put("sCompanyFolder",  MyCustumApplication.getInstance ().getUser ().getCompanyCode ());
+                request.put("iPaId",  MyCustumApplication.getInstance ().getUser ().getID ());
+                request.put("iDCR_ID",  MyCustumApplication.getInstance ().getUser ().getDCRId ());
+                request.put("iDR_ID", Dr_id);
+                request.put("sTableName", "CHEMIST");
 
-                cbohelp.delete_Chemist_from_local_all(Dr_id);
-                customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-                finish();
+
+                ArrayList<Integer> tables=new ArrayList<>();
+                tables.add(0);
+
+                new MyAPIService(context)
+                        .execute(new ResponseBuilder("DRCHEMDELETE_MOBILE",request)
+                                .setDescription("Please Wait..." +
+                                        "\nDeleting "+Dr_name+" from DCR...")
+                                .setResponse(new CBOServices.APIResponse() {
+                                    @Override
+                                    public void onComplete(Bundle bundle) throws Exception {
+                                        mchemistCall = (mChemistCall) new mChemistCall().setId(Dr_id);
+                                        chemistCallDB.delete(mchemistCall);
+
+                                        cbohelp.delete_Chemist_from_local_all(Dr_id);
+                                        customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Bundle bundle) throws Exception {
+
+                                    }
+
+                                    @Override
+                                    public void onError(String s, String s1) {
+                                        AppAlert.getInstance().getAlert(context,s,s1);
+                                    }
+                                }));
+
+                //End of call to service
+
+
+
+
+            }
+
+            @Override
+            public void onNegativeClicked(View item, String result) {
             }
         });
-        Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
+
 
     }
 

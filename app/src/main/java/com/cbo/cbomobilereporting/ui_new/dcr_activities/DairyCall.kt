@@ -34,6 +34,10 @@ import utils.adapterutils.SpinAdapter
 import utils.adapterutils.SpinAdapter_new
 import utils.adapterutils.SpinnerModel
 import com.cbo.cbomobilereporting.MyCustumApplication
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall
+import com.uenics.javed.CBOLibrary.CBOServices
+import com.uenics.javed.CBOLibrary.ResponseBuilder
+import services.MyAPIService
 import utils.networkUtil.NetworkUtil
 import utils_new.*
 import java.io.File
@@ -704,36 +708,55 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
     }
 
     override fun delete_Call(Dr_id: String, Dr_name: String) {
-        val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null)
-        val Alert_title = dialogLayout.findViewById(R.id.title) as TextView
-        val Alert_message = dialogLayout.findViewById(R.id.message) as TextView
-        val Alert_Positive = dialogLayout.findViewById(R.id.positive) as Button
-        val Alert_Nagative = dialogLayout.findViewById(R.id.nagative) as Button
-        Alert_title.text = "Delete!!!"
-        Alert_message.text = "Do you Really want to delete $Dr_name ?"
-        Alert_Nagative.text = "Cancel"
-        Alert_Positive.text = "Delete"
+        AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete $Dr_name ?", object : AppAlert.OnClickListener {
+            override fun onPositiveClicked(item: View, result: String) {
 
-        val builder1 = AlertDialog.Builder(context)
+                //Start of call to service
+
+                val request = HashMap<String, String>()
+                request["sCompanyFolder"] = MyCustumApplication.getInstance().user.companyCode
+                request["iPaId"] = MyCustumApplication.getInstance().user.id
+                request["iDCR_ID"] = MyCustumApplication.getInstance().user.dcrId
+                request["iDR_ID"] = Dr_id
+                request["sTableName"] = "DAIRY"
 
 
-        val dialog = builder1.create()
+                val tables = java.util.ArrayList<Int>()
+                tables.add(0)
 
-        dialog.setView(dialogLayout)
-        Alert_Positive.setOnClickListener {
-            dialog.dismiss()
+                MyAPIService(context)
+                        .execute(ResponseBuilder("DRCHEMDELETE_MOBILE", request)
+                                .setDescription("Please Wait..." +
+                                        "\nDeleting " + Dr_name + " from DCR...")
+                                .setResponse(object : CBOServices.APIResponse {
+                                    @Throws(Exception::class)
+                                    override fun onComplete(bundle: Bundle) {
+                                        mdairyCall = mDairyCall(head).setId(Dr_id) as mDairyCall
+                                        dairyCallDB.delete(mdairyCall)
 
-            mdairyCall = mDairyCall(head).setId(Dr_id) as mDairyCall
-            dairyCallDB.delete(mdairyCall)
+                                        cbohelp.delete_phdairy_dcr(Dr_id)
+                                        customVariablesAndMethod.msgBox(context, "$Dr_name sucessfully Deleted.")
+                                        finish()
+                                    }
 
-            cbohelp.delete_phdairy_dcr(Dr_id)
-            customVariablesAndMethod.msgBox(context, "$Dr_name sucessfully Deleted.")
-            finish()
-        }
-        Alert_Nagative.setOnClickListener { dialog.dismiss() }
-        dialog.setCancelable(false)
-        dialog.show()
+                                    @Throws(Exception::class)
+                                    override fun onResponse(bundle: Bundle) {
+
+                                    }
+
+                                    override fun onError(s: String, s1: String) {
+                                        AppAlert.getInstance().getAlert(context, s, s1)
+                                    }
+                                }))
+
+                //End of call to service
+
+
+            }
+
+            override fun onNegativeClicked(item: View, result: String) {}
+        })
+
 
     }
 

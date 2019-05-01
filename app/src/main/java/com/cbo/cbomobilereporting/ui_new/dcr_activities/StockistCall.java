@@ -50,11 +50,13 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.StockistCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mChemistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
+import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
@@ -66,12 +68,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import locationpkg.Const;
+import services.MyAPIService;
 import services.Sync_service;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
+
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
@@ -813,43 +818,62 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
     @Override
     public void delete_Call(final String Dr_id, final String Dr_name) {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
-        final Button Alert_Nagative= (Button) dialogLayout.findViewById(R.id.nagative);
-        Alert_title.setText("Delete!!!");
-        Alert_message.setText("Do you Really want to delete "+Dr_name+" ?");
-        Alert_Nagative.setText("Cancel");
-        Alert_Positive.setText("Delete");
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
 
-        final AlertDialog dialog = builder1.create();
-
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
+        AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete " + Dr_name + " ?", new AppAlert.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                mstockistCall = (mStockistCall) new mStockistCall().setId(Dr_id);
-                stockistCallDB.delete(mstockistCall);
+            public void onPositiveClicked(View item, String result) {
 
-                cbohelp.delete_Stokist_from_local_all(Dr_id);
-                customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-                finish();
+                //Start of call to service
+
+                HashMap<String,String> request=new HashMap<>();
+                request.put("sCompanyFolder",  MyCustumApplication.getInstance ().getUser ().getCompanyCode ());
+                request.put("iPaId",  MyCustumApplication.getInstance ().getUser ().getID ());
+                request.put("iDCR_ID",  MyCustumApplication.getInstance ().getUser ().getDCRId ());
+                request.put("iDR_ID", Dr_id);
+                request.put("sTableName", "STOCKIST");
+
+
+                ArrayList<Integer> tables=new ArrayList<>();
+                tables.add(0);
+
+                new MyAPIService(context)
+                        .execute(new ResponseBuilder("DRCHEMDELETE_MOBILE",request)
+                                .setDescription("Please Wait..." +
+                                        "\nDeleting "+Dr_name+" from DCR...")
+                                .setResponse(new CBOServices.APIResponse() {
+                                    @Override
+                                    public void onComplete(Bundle bundle) throws Exception {
+                                        mstockistCall = (mStockistCall) new mStockistCall().setId(Dr_id);
+                                        stockistCallDB.delete(mstockistCall);
+
+                                        cbohelp.delete_Stokist_from_local_all(Dr_id);
+                                        customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Bundle bundle) throws Exception {
+
+                                    }
+
+                                    @Override
+                                    public void onError(String s, String s1) {
+                                        AppAlert.getInstance().getAlert(context,s,s1);
+                                    }
+                                }));
+
+                //End of call to service
+
+
+
+
+            }
+
+            @Override
+            public void onNegativeClicked(View item, String result) {
             }
         });
-        Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
 
     }
 

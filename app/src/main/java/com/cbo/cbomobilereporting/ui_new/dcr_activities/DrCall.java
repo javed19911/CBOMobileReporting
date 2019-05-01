@@ -56,6 +56,7 @@ import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
+import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
@@ -68,12 +69,15 @@ import java.util.List;
 
 import locationpkg.Const;
 import services.CboServices;
+import services.MyAPIService;
 import services.Sync_service;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
+
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -723,16 +727,52 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                 @Override
                 public void onPositiveClicked(View item, String result) {
 
-                    mdrCall = (mDrCall) new mDrCall().setId(Dr_id);
-                    drCallDB.delete(mdrCall);
+                    //Start of call to service
+
+                    HashMap<String,String> request=new HashMap<>();
+                    request.put("sCompanyFolder",  MyCustumApplication.getInstance ().getUser ().getCompanyCode ());
+                    request.put("iPaId",  MyCustumApplication.getInstance ().getUser ().getID ());
+                    request.put("iDCR_ID",  MyCustumApplication.getInstance ().getUser ().getDCRId ());
+                    request.put("iDR_ID", Dr_id);
+                    request.put("sTableName", "DOCTOR");
 
 
-                    cbohelp.delete_tenivia_traker(Dr_id);
-                    // customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-                    cbohelp.delete_Doctor_from_local_all(Dr_id);
-                    customVariablesAndMethod.msgBox(context, Dr_name + " sucessfully Deleted.");
+                    ArrayList<Integer> tables=new ArrayList<>();
+                    tables.add(0);
 
-                    finish();
+                    new MyAPIService(context)
+                            .execute(new ResponseBuilder("DRCHEMDELETE_MOBILE",request)
+                                    .setDescription("Please Wait..." +
+                                            "\nDeleting "+Dr_name+" from DCR...")
+                                    .setResponse(new CBOServices.APIResponse() {
+                                        @Override
+                                        public void onComplete(Bundle bundle) throws Exception {
+                                            mdrCall = (mDrCall) new mDrCall().setId(Dr_id);
+                                            drCallDB.delete(mdrCall);
+
+
+                                            cbohelp.delete_tenivia_traker(Dr_id);
+                                            // customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                                            cbohelp.delete_Doctor_from_local_all(Dr_id);
+                                            customVariablesAndMethod.msgBox(context, Dr_name + " sucessfully Deleted.");
+
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void onResponse(Bundle bundle) throws Exception {
+
+                                        }
+
+                                        @Override
+                                        public void onError(String s, String s1) {
+                                            AppAlert.getInstance().getAlert(context,s,s1);
+                                        }
+                                    }));
+
+                    //End of call to service
+
+
 
 
                 }
