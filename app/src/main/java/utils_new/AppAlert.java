@@ -14,11 +14,10 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.SystemAlertActivity;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 import org.json.JSONException;
-
-import utils.clearAppData.MyCustumApplication;
 
 
 /**
@@ -151,10 +150,11 @@ public class AppAlert {
             @Override
             public void onClick(View view) {
                 if (url!=null && !url.isEmpty()){
-                    Intent i = new Intent(context, CustomWebView.class);
+                   /* Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", title);
-                    context.startActivity(i);
+                    context.startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(title,url);
                 }
                 dialog.dismiss();
             }
@@ -297,6 +297,9 @@ public class AppAlert {
         Alert_title.setText(title);
         Alert_Positive.setText(getPositiveTxt());
         Alert_negative.setText(getNagativeTxt());
+
+        setNagativeTxt("Cancel");
+        setPositiveTxt("OK");
 
         final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
         pa_id_txt.setText(""+ Custom_Variables_And_Method.PA_ID);

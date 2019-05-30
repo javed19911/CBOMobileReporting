@@ -1,70 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/striper_font_color"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="@drawable/nav_header_background"
+
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical">
-
-    <RelativeLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="200dp"
+        android:minHeight="200dp"
+        android:scaleType="fitXY"
+        android:id="@+id/company_pic"
+        android:src="@drawable/cbo"/>
 
-        <ImageView
+    <View
+        android:id="@+id/transptert_header"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:minHeight="200dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/nav_header_background"
+        android:alpha="0.75"
+        />
+
+
+    />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/user_pic"
-            android:layout_width="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_height="60dp"
-            android:layout_gravity="top"
-            android:src="@drawable/user_id" />
-
-        <ImageView
-            android:id="@+id/company_pic"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="top"
-            android:src="@drawable/cbo" />
-
-    </RelativeLayout>
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:src="@drawable/user_pic"
+            app:civ_border_width="2dp"
+            android:layout_marginTop="10dp"
+            app:civ_border_color="@color/White_new"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingTop="10dp">
 
 
 
-    <TextView
-        android:id="@+id/company_name_drawer"
+            <TextView
+                android:id="@+id/company_name_drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:text="CBO InFotec Pvt Ltd"
+                android:textStyle="bold"
+
+                android:gravity="center"
+                android:fontFamily="@font/caviardreams"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+
+                />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/white"
+                android:text="Name"
+                android:layout_below="@+id/company_name_drawer"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="3dp"
+                android:fontFamily="@font/caviardreams"
+                android:id="@+id/emp_name_drawer"
+                />
+
+            <TextView
+                android:id="@+id/emp_desig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emp_name_drawer"
+                android:layout_alignParentRight="true"
+                android:text="Designation"
+                android:fontFamily="@font/caviardreams"
+                android:gravity="center"
+                android:padding="3dp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_below="@+id/emp_desig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:padding="3dp"
+                android:fontFamily="@font/caviardreams"
+                android:text="Head-Quarter"
+                android:id="@+id/emp_hq"
+                />
+
+            />
+
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:paddingTop="5dp"
-        android:text="CBO Infotech pvt. ltd"
-        android:textStyle="bold"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="#fff"
-        android:text="Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:id="@+id/emp_name_drawer"
+        android:layout_height="5dp"
+        android:background="#002D80"
+        android:layout_below="@+id/company_pic"
         />
-    <TextView
-        android:id="@+id/emp_desig"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="Designation"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#fff"
-        android:textSize="12sp"
-        android:text="Head-Quarter"
-        android:id="@+id/emp_hq"
-        />
-  </LinearLayout>
+
+
+
+
+
+
+
+</RelativeLayout>
+

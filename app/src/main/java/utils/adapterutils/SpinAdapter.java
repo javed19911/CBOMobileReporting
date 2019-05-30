@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
@@ -57,10 +58,11 @@ public class SpinAdapter extends ArrayAdapter<String> {
         TextView sub = row.findViewById(R.id.spin_id);
         TextView distance = row.findViewById(R.id.distance);
         ImageView loc_icon =  row.findViewById(R.id.loc_icon);
-
+        LinearLayout distanceLayout = row.findViewById(R.id.distanceLayout);
 
         distance.setVisibility(View.GONE);
         loc_icon.setVisibility(View.GONE);
+        distanceLayout.setVisibility(View.GONE);
 
         {
             // Set values for spinner each row

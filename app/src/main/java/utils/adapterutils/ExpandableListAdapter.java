@@ -65,6 +65,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //this.visible_status = visible_status;
 
     }
+    private String TeniviaMenuName(){
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Tenivia_NOT_REQUIRED").equals("N")) {
+            return cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX");
+        }
+
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Rx_NOT_REQUIRED").equals("N")) {
+            return cboDbHelper.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN");
+        }
+
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Rx_NA_NOT_REQUIRED").equals("N")) {
+            return cboDbHelper.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA");
+        }
+        return "";
+    }
 
     @Override
     public  HashMap<String, ArrayList<String>> getChild(int groupPosition, int childPosititon) {
@@ -201,7 +215,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             if (!childText.get("gift_name").get(childPosition).equals("")) {
                 String[] gift_name= childText.get("gift_name").get(childPosition).split(",");
                 String[] gift_qty= childText.get("gift_qty").get(childPosition).split(",");
-                if (!_listDataHeader.get(groupPosition).equals(cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX"))) {
+                if (!_listDataHeader.get(groupPosition).equals(TeniviaMenuName())) {
                     init_gift(gift_layout, gift_name, gift_qty, "Gift", " Qty. ");
                 }else{
                     init_gift(gift_layout, gift_name, gift_qty, "", "");
@@ -228,6 +242,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             }
             if (childText.get("class")!=null && childText.get("potential")!=null && childText.get("area")!=null ) {
                 Doc_Detail(dr_detail_layout, childText.get("class").get(childPosition), childText.get("potential").get(childPosition),"", childText.get("area").get(childPosition),childText.get("dr_crm").get(childPosition),childText.get("dr_camp_group").get(childPosition),"Class","Potential","Area","Dr CRM","Campaign Group",1,1);
+            }
+
+            if (childText.get("attach") != null) {
+                if (childText.get("attach").get(childPosition).equals("")) {
+                    attach.setVisibility(View.GONE);
+                } else {
+                    attach.setVisibility(View.VISIBLE);
+                }
             }
 
             expend.setText("-");

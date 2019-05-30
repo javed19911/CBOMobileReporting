@@ -1,11 +1,8 @@
 package com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,14 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
-import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.MissedDocAdapter;
-import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.VM_MissedGrid_Mobile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +21,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.AppAlert;
-import utils_new.interfaces.RecycleViewOnItemClickListener;
 
 public class RemainderActivity extends CustomActivity implements IApprovalRemainder{
 
@@ -105,10 +98,11 @@ public class RemainderActivity extends CustomActivity implements IApprovalRemain
     public void onListUpdated(ArrayList<mApprovalRemainder> mApprovalRemainders) {
         approvalRemainderAdaptor =
                 new ApprovalRemainderAdaptor(context, mApprovalRemainders, (view, position, isLongClick) -> {
-                    Intent i = new Intent(context, CustomWebView.class);
+                    /*Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP", mApprovalRemainders.get(position).getADD_URL());
                     i.putExtra("Title",  mApprovalRemainders.get(position).getPARICULARS());
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(mApprovalRemainders.get(position).getPARICULARS(),mApprovalRemainders.get(position).getADD_URL());
                 });
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());

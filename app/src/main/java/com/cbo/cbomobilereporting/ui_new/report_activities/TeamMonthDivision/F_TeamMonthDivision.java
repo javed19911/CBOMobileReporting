@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
@@ -27,7 +28,8 @@ import utils_new.CustomError;
 import utils_new.Custom_Variables_And_Method;
 
 public class F_TeamMonthDivision extends Fragment implements VM_TeamMonthDivision.ITeam {
-    public Button name, month, missed_type, division;
+    LinearLayout Lname, Lmonth, Lmissed_type, Ldivision;
+    Button name, month, missed_type, division;
     VM_TeamMonthDivision dcrmodel;
     CBO_DB_Helper cboDbHelper;
     Custom_Variables_And_Method customVariablesAndMethod;
@@ -44,8 +46,10 @@ public class F_TeamMonthDivision extends Fragment implements VM_TeamMonthDivisio
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
         progress1 = new ProgressDialog(getContext());
         cboDbHelper = new CBO_DB_Helper(getContext());
-        dcrmodel= ViewModelProviders.of(getActivity()).get(VM_TeamMonthDivision.class);
-        dcrmodel.setListner(this);
+       /* dcrmodel= ViewModelProviders.of(getActivity()).get(VM_TeamMonthDivision.class);
+        dcrmodel.setListner(this);*/
+
+        getViewModel();
 
 
         name.setOnClickListener(v -> dcrmodel.onClickName(context));
@@ -81,6 +85,11 @@ public class F_TeamMonthDivision extends Fragment implements VM_TeamMonthDivisio
         name = retView.findViewById(R.id.rptt_name);
         month = retView.findViewById(R.id.month_name);
         missed_type = retView.findViewById(R.id.missed_type);
+
+        Lname = retView.findViewById(R.id.Lrptt_name);
+        Lmonth = retView.findViewById(R.id.Lmonth_name);
+        Lmissed_type = retView.findViewById(R.id.Lmissed_type);
+
         spinImgName =  retView.findViewById(R.id.spinner_img_dcr_rpt_name);
         spinImgMonth = retView.findViewById(R.id.spinner_img_dcr_rpt_month);
         img_missed_type =  retView.findViewById(R.id.img_missed_type);
@@ -92,7 +101,31 @@ public class F_TeamMonthDivision extends Fragment implements VM_TeamMonthDivisio
     }
 
     public VM_TeamMonthDivision getViewModel(){
+        if ( dcrmodel == null) {
+            dcrmodel = ViewModelProviders.of(getActivity()).get(VM_TeamMonthDivision.class);
+            dcrmodel.setListner(this);
+        }
         return dcrmodel;
+    }
+
+    @Override
+    public void onNameVisibilityChanged(int visibility) {
+        Lname.setVisibility(visibility);
+    }
+
+    @Override
+    public void onMonthVisibilityChanged(int visibility) {
+        Lmonth.setVisibility(visibility);
+    }
+
+    @Override
+    public void onMissedTypeVisibilityChanged(int visibility) {
+        Lmissed_type.setVisibility(visibility);
+    }
+
+    @Override
+    public void onDivisionVisibilityChanged(int visibility) {
+
     }
 
     @Override

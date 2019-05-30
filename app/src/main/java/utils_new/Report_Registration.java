@@ -159,7 +159,7 @@ public class Report_Registration extends DialogFragment{
                 Toast.makeText(context, "Location Updated....\nPlease Try Again...", Toast.LENGTH_LONG).show();
             }else if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 //takePictureButton.setEnabled(false);
-                ActivityCompat.requestPermissions((Activity) context, new String[] { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CAMERA);
+                requestPermissions( new String[] { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CAMERA);
                 Toast.makeText(context, "Please allow the permission", Toast.LENGTH_LONG).show();
 
             }else {
@@ -237,7 +237,8 @@ public class Report_Registration extends DialogFragment{
             ((Activity) context).startActivityForResult(intent, REQUEST_CAMERA);
 
         } else {
-            Toast.makeText(context, getString(R.string.error_no_camera), Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, getString(R.string.error_no_camera), Toast.LENGTH_LONG).show();
+            AppAlert.getInstance().getAlert(context,"No Camera Found!!!", "Sorry you have no support for CAMERA");
         }
     }
 
@@ -250,6 +251,8 @@ public class Report_Registration extends DialogFragment{
                 // && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 captureImage();
                 //Toast.makeText(this, "Permission granted", Toast.LENGTH_LONG).show();
+            }else{
+                AppAlert.getInstance().getAlert(context,"Permission Required!!!","Please grant the permission to use your camera....");
             }
         }
 

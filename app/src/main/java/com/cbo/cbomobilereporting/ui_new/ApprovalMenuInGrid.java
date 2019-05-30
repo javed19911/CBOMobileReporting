@@ -2,7 +2,6 @@ package com.cbo.cbomobilereporting.ui_new;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder.RemainderActivity;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.Approval_Adapter;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -80,10 +79,11 @@ public class ApprovalMenuInGrid extends Fragment {
                 String itemLebel = getKeyList.get(position);
                 String url=new CBO_DB_Helper(getActivity()).getMenuUrl("APPROVAL",itemLebel);
                 if(url!=null && !url.equals("")) {
-                    Intent i = new Intent(getActivity(), CustomWebView.class);
+                    /*Intent i = new Intent(getActivity(), CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", listOfAllTab.get(position));
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                 }else {
                     switch (itemLebel) {
 
@@ -98,18 +98,14 @@ public class ApprovalMenuInGrid extends Fragment {
                         }default: {
                             url = cboDbHelper.getMenuUrl("APPROVAL", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
-                                Intent i = new Intent(getActivity(), CustomWebView.class);
+                               /* Intent i = new Intent(getActivity(), CustomWebView.class);
                                 i.putExtra("A_TP1", url);
                                 i.putExtra("Menu_code", getKeyList.get(position));
                                 i.putExtra("Title", listOfAllTab.get(position));
-                                startActivity(i);
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-					        context.startActivity(browserIntent);
-
-                                //String url = ¨https://paul.kinlan.me/¨;
-                          /*  CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                            CustomTabsIntent customTabsIntent = builder.build();
-                            customTabsIntent.launchUrl(getActivity(), Uri.parse(url));*/
+                                startActivity(i);*/
+                            /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+					        context.startActivity(browserIntent);*/
+                                MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
 
                             } else {
                                 Toast.makeText(context, "Page Under Development", Toast.LENGTH_LONG).show();
@@ -152,12 +148,14 @@ public class ApprovalMenuInGrid extends Fragment {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
         } else {
 
-            Intent i = new Intent(context, CustomWebView.class);
+           /* Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("A_TP1", cboDbHelper.getMenuUrl("APPROVAL","A_TP"));
             i.putExtra("Menu_code", getKeyList.get(position));
             i.putExtra("Title", listOfAllTab.get(position));
 
-            startActivity(i);
+            startActivity(i);*/
+
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),cboDbHelper.getMenuUrl("APPROVAL","A_TP"));
 
             /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(cboDbHelper.getMenuUrl("APPROVAL","A_TP")));
             context.startActivity(browserIntent);*/

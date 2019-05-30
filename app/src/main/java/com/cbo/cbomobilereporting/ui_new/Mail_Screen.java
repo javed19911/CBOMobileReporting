@@ -23,7 +23,6 @@ import com.cbo.cbomobilereporting.ui_new.mail_activities.CreateMail1;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Mail;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Notification;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Outbox_Mail;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.MailMenu_Grid_Adapter;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -116,10 +116,11 @@ public class Mail_Screen extends Fragment{
 				String onClick = getKeyList.get(position);
 				String url=new CBO_DB_Helper(getActivity()).getMenuUrl("MAIL",onClick);
 				if(url!=null && !url.equals("")) {
-					Intent i = new Intent(getActivity(), CustomWebView.class);
-					i.putExtra("A_TP", url);
-					i.putExtra("Title", listOfAllTab.get(position));
-					startActivity(i);
+//					Intent i = new Intent(getActivity(), CustomWebView.class);
+//					i.putExtra("A_TP", url);
+//					i.putExtra("Title", listOfAllTab.get(position));
+//					startActivity(i);
+					MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
 				}else {
 					switch (onClick) {
 
@@ -152,10 +153,11 @@ public class Mail_Screen extends Fragment{
 						default: {
 							url = new CBO_DB_Helper(getActivity()).getMenuUrl("MAIL", getKeyList.get(position));
 							if (url != null && !url.equals("")) {
-								Intent i = new Intent(getActivity(), CustomWebView.class);
+								/*Intent i = new Intent(getActivity(), CustomWebView.class);
 								i.putExtra("A_TP", url);
 								i.putExtra("Title", listOfAllTab.get(position));
-								startActivity(i);
+								startActivity(i);*/
+								MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
 							} else {
 								customVariablesAndMethod.msgBox(context, "Page Under Development");
 							}

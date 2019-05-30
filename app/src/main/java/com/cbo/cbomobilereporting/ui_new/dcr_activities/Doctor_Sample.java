@@ -31,35 +31,31 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
-import com.cbo.cbomobilereporting.ui.Dr_Gift;
-import com.cbo.cbomobilereporting.ui.Dr_Sample;
 import com.cbo.cbomobilereporting.ui.GridViewActivity;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui.PrescribeNew;
 import com.cbo.cbomobilereporting.ui.VideoPlay;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.flurry.android.FlurryAgent;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import utils.ExceptionHandler;
-import utils.MyConnection;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Dr_Gift_Dialog;
 import utils_new.Dr_Sample_Dialog;
-import utils_new.GPS_Timmer_Dialog;
 import utils_new.Service_Call_From_Multiple_Classes;
 
 
@@ -95,6 +91,7 @@ public class Doctor_Sample extends AppCompatActivity {
     String gift_name="",gift_qty="",call="N";
     String workwith1,workwith2,workwith34,loc,time;
     Boolean sample_added=false;
+    Boolean gift_added=false;
     TextView remark;
     EditText dr_remark;
     ArrayList<String> remark_list;
@@ -102,6 +99,12 @@ public class Doctor_Sample extends AppCompatActivity {
     AlertDialog myalertDialog = null;
     private  static final int  PRODUCT_DILOG=5,GIFT_DILOG=6,MESSAGE_INTERNET_SEND_FCM=0;
     String Dr_sale_url = "";
+
+
+    ///firebase DB
+    mDrCall mdrCall;
+    DrCallDB drCallDB;
+    LocationDB locationDB;
 
     public int getSplId(String id) {
         int splid = 0;
@@ -164,6 +167,9 @@ public class Doctor_Sample extends AppCompatActivity {
         btn_remark = (Button) findViewById(R.id.remark);
         btn_remark.setText("---Select Remak---");
 
+
+        drCallDB = new DrCallDB();
+        locationDB = new LocationDB();
 
         DCR_ID = Custom_Variables_And_Method.DCR_ID;
         PA_ID = Custom_Variables_And_Method.PA_ID;
@@ -254,6 +260,14 @@ public class Doctor_Sample extends AppCompatActivity {
                 doc_name = ((TextView) arg1.findViewById(R.id.spin_name)).getText().toString();
                 String dr[] = doc_name.split(",");
 
+
+                mdrCall = (mDrCall) new mDrCall()
+                        .setId(dr_id)
+                        .setName(doc_name)
+                        .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                        .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
+
+
                 String dr1 = dr[0];
                 Custom_Variables_And_Method.DR_ID = dr_id.trim();
                 Custom_Variables_And_Method.DR_NAME = dr1;
@@ -272,8 +286,8 @@ public class Doctor_Sample extends AppCompatActivity {
                     if (!doctor_list.get("remark").get(0).equals("")) {
                         String remark=doctor_list.get("remark").get(0);
                         if (remark.contains("\u20B9")) {
-                            if (remark.split("\\n").length>1) {
-                                remark = remark.split("\\n")[1];
+                            if (remark.split("\n").length>1) {
+                                remark = remark.split("\n")[1];
                                 if (remark_list.contains(remark)){
                                    // btn_remark.setText(remark);
                                     dr_remark.setVisibility(View.GONE);
@@ -312,7 +326,7 @@ public class Doctor_Sample extends AppCompatActivity {
 
                         init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
                     }else{
-
+                        sample_added=false;
                         sample_name="";
                         sample_sample="";
                         sample_pob="";
@@ -321,6 +335,8 @@ public class Doctor_Sample extends AppCompatActivity {
                         stk.removeAllViews();
                     }
                     if (!doctor_list.get("gift_name").get(0).equals("")) {
+                        gift_added=true;
+
                         String[] gift_name1= doctor_list.get("gift_name").get(0).split(",");
                         String[] gift_qty1= doctor_list.get("gift_qty").get(0).split(",");
 
@@ -329,14 +345,33 @@ public class Doctor_Sample extends AppCompatActivity {
 
                         init_gift(gift_layout,gift_name1,gift_qty1);
                     }else{
+                        gift_added=false;
                         gift_name="";
                         gift_qty="";
                         gift_layout.removeAllViews();
                     }
                 }else{
+                    sample_added=false;
+                    gift_added=false;
+                    sample_name="";
+                    sample_sample="";
+                    sample_pob="";
+                    sample_noc="";
+
+                    gift_name="";
+                    gift_qty="";
+
                     stk.removeAllViews();
                     gift_layout.removeAllViews();
                 }
+
+                mdrCall.setGift_name_Arr(gift_name)
+                        .setGift_qty_Arr(gift_qty)
+                        .setSample_name_Arr(sample_name)
+                        .setSample_pob_Arr(sample_pob)
+                        .setSample_qty_Arr(sample_sample);
+
+                mdrCall.setSample_noc_Arr(sample_noc);
 
             }
 
@@ -478,10 +513,11 @@ public class Doctor_Sample extends AppCompatActivity {
                     customVariablesAndMethod.msgBox(context,"Select Doctor from List...");
                 } else {
 
-                    Intent i = new Intent(context, CustomWebView.class);
+                    /*Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP", Dr_sale_url+"&DR_ID="+dr_id+"&MONTH="+customVariablesAndMethod.currentDate());
                     i.putExtra("Title", doc_name);
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(doc_name,Dr_sale_url+"&DR_ID="+dr_id+"&MONTH="+customVariablesAndMethod.currentDate());
                 }
             }
         });
@@ -510,10 +546,47 @@ public class Doctor_Sample extends AppCompatActivity {
                 if (dr_id.equals("0")) {
                     customVariablesAndMethod.msgBox(context,"Select Doctor from List...");
                 } else if (!sample_added) {
-                    customVariablesAndMethod.msgBox(context,"Please select atleast one promoted product");
-                }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"REMARK_WW_MANDATORY").contains("D") &&  dr_remark.getText().toString().equals("")) {
+
+                    AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
+                            "Please select atleast one promoted product" ,
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    sample.performClick ();
+                                    // gift_added=true;
+                                    //(1);
+                                }
+
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+                                    // no_prescription.setChecked(false);
+                                }
+                            });
+                   // customVariablesAndMethod.msgBox(context,"Please select atleast one promoted product");
+                }else if(! gift_added && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE (context,"DRGIFTMANDATORY").contains ("D")){
+                    AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
+                            "Please give atleast  one Gift..." ,
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    gift.performClick ();
+                                   // gift_added=true;
+                                    //(1);
+                                }
+
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+                                   // no_prescription.setChecked(false);
+                                }
+                            });
+                   // customVariablesAndMethod.msgBox(context,"Please selct  gift");
+                } else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"REMARK_WW_MANDATORY").contains("D") &&  dr_remark.getText().toString().equals("")) {
                     customVariablesAndMethod.msgBox(context,"Please enter remak");
                 }else {
+
+                    mdrCall.setRemark(dr_remark.getText().toString());
+                    drCallDB.insert(mdrCall);
+                    locationDB.insert(mdrCall);
 
                     cbohelp.updateRemark_TempDrInLocal(dr_id,dr_remark.getText().toString());
 
@@ -598,7 +671,7 @@ public class Doctor_Sample extends AppCompatActivity {
     public ArrayList<String> remAdded() {
         ArrayList<String> drlist = new ArrayList<String>();
         drlist.clear();
-        Cursor c = cbohelp.getDoctorName1();
+        Cursor c = cbohelp.getDoctorListLocal(null,"1");  //getDoctorName1();
         if (c.moveToFirst()) {
             do {
                 drlist.add(c.getString(c.getColumnIndex("dr_id")));
@@ -877,7 +950,7 @@ public class Doctor_Sample extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.addView(listview);
         myDialog.setView(layout);
-        //ArrayAdapter arrayAdapter = new ArrayAdapter(DrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
+        //ArrayAdapter arrayAdapter = new ArrayAdapter(mDrCall.this, R.layout.spin_row, cbohelp.get_Doctor_Call_Remark());
         ArrayAdapter<String> arrayAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, remark_list);
         listview.setAdapter(arrayAdapter);
@@ -933,13 +1006,16 @@ public class Doctor_Sample extends AppCompatActivity {
 
                         init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
                     }else{
+                        sample_added=false;
                         sample_name = "";
                         sample_pob = "";
                         sample_sample = "";
+                        sample_noc = "";
                         stk.removeAllViews();
                     }
 
                     if (!doctor_list.get("gift_name").get(0).equals("")) {
+                        gift_added=true;
                         String[] gift_name1= doctor_list.get("gift_name").get(0).split(",");
                         String[] gift_qty1= doctor_list.get("gift_qty").get(0).split(",");
 
@@ -948,10 +1024,20 @@ public class Doctor_Sample extends AppCompatActivity {
 
                         init_gift(gift_layout,gift_name1,gift_qty1);
                     }else{
+                        gift_added=false;
                         gift_name = "";
                         gift_qty = "";
                         gift_layout.removeAllViews();
                     }
+
+                    mdrCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty)
+                            .setSample_name_Arr(sample_name)
+                            .setSample_pob_Arr(sample_pob)
+                            .setSample_qty_Arr(sample_sample);
+
+                    mdrCall.setSample_noc_Arr(sample_noc);
+
                     break;
                 case GIFT_DILOG:
                      b1 = msg.getData();
@@ -961,6 +1047,7 @@ public class Doctor_Sample extends AppCompatActivity {
                     doctor_list=cbohelp.getCallDetail("tempdr",Custom_Variables_And_Method.DR_ID,"0");
 
                     if (!doctor_list.get("sample_name").get(0).equals("")) {
+                        sample_added=true;
                         String[] sample_name1= doctor_list.get("sample_name").get(0).split(",");
                         String[] sample_qty1= doctor_list.get("sample_qty").get(0).split(",");
                         String[] sample_pob1= doctor_list.get("sample_pob").get(0).split(",");
@@ -973,6 +1060,7 @@ public class Doctor_Sample extends AppCompatActivity {
 
                         init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
                     }else{
+                        sample_added=false;
                         sample_name = "";
                         sample_pob = "";
                         sample_sample = "";
@@ -981,6 +1069,7 @@ public class Doctor_Sample extends AppCompatActivity {
 
 
                     if (!doctor_list.get("gift_name").get(0).equals("")) {
+                        gift_added=true;
                         String[] gift_name1= doctor_list.get("gift_name").get(0).split(",");
                         String[] gift_qty1= doctor_list.get("gift_qty").get(0).split(",");
 
@@ -989,10 +1078,21 @@ public class Doctor_Sample extends AppCompatActivity {
 
                         init_gift(gift_layout,gift_name1,gift_qty1);
                     }else{
+                        gift_added=false;
                         gift_name = "";
                         gift_qty = "";
                         gift_layout.removeAllViews();
                     }
+
+                    mdrCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty)
+                            .setSample_name_Arr(sample_name)
+                            .setSample_pob_Arr(sample_pob)
+                            .setSample_qty_Arr(sample_sample);
+
+                    mdrCall.setSample_noc_Arr(sample_noc);
+
+
                     break;
                 case MESSAGE_INTERNET_SEND_FCM:
                     customVariablesAndMethod.msgBox(context,"Sample Saved Sucessfully....");

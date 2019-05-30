@@ -5,22 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
-import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadAdaptor;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
+import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
+import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui.LoginMain;
+import com.cbo.cbomobilereporting.ui_new.CustomActivity;
+import com.uenics.javed.CBOLibrary.CBOException;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -29,14 +27,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import services.CboServices;
 import services.MyAPIService;
 import utils.CBOUtils.SystemArchitecture;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 /**
  * Created by pc24 on 21/12/2017.
@@ -50,58 +47,11 @@ public class Service_Call_From_Multiple_Classes {
     Custom_Variables_And_Method customVariablesAndMethod;
     CBO_DB_Helper cbo_helper;
 
-    private  static final int MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL=1,MESSAGE_INTERNET_SEND_FCM_= 2;
+    private  static final int MESSAGE_INTERNET_SEND_FCM_= 2;
 
     public Service_Call_From_Multiple_Classes() {
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
         cbo_helper = new CBO_DB_Helper(MyCustumApplication.getInstance());
-    }
-
-    public void DownloadAll(Context context, Handler mHandler, final Integer response_code){
-
-         this.response_code=response_code;
-         this.mHandler = mHandler;
-         this.context = context;
-         progress1 = new ProgressDialog(context);
-         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
-         new SystemArchitecture(context).getDEVICE_ID(context);
-         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
-         cbo_helper = new CBO_DB_Helper(context);
-
-        //Start of call to service
-
-        HashMap<String,String> request=new HashMap<>();
-        request.put("sCompanyFolder",cbo_helper.getCompanyCode());
-        request.put("iPA_ID", "" + Custom_Variables_And_Method.PA_ID);
-        request.put("sDcrId",Custom_Variables_And_Method.DCR_ID);
-        request.put("sRouteYn", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed"));
-        request.put("sGCM_TOKEN", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken"));
-        request.put("sMobileId", SystemArchitecture.COMPLETE_DEVICE_INFO);
-        request.put("sVersion", Custom_Variables_And_Method.VERSION);
-
-        ArrayList<Integer> tables=new ArrayList<>();
-        tables.add(0);
-        tables.add(1);
-        tables.add(2);
-        tables.add(3);
-        tables.add(4);
-        tables.add(5);
-        tables.add(6);
-        tables.add(7);
-        tables.add(8);
-        tables.add(9);
-        tables.add(10);
-        tables.add(11);
-
-        progress1.setMessage("Please Wait..\n" +
-                " Fetching your Utilitis for the day");
-        progress1.setCancelable(false);
-        progress1.show();
-
-        new CboServices(context,hh).customMethodForAllServices(request,"DCRCOMMIT_DOWNLOADALL",MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL,tables);
-
-        //End of call to service
-
     }
 
 
@@ -159,14 +109,7 @@ public class Service_Call_From_Multiple_Classes {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
 
-                    if ((null != msg.getData())) {
-
-                        parser_DCRCOMMIT_DOWNLOADALL(msg.getData());
-
-                    }
-                    break;
                 case MESSAGE_INTERNET_SEND_FCM_:
 
                     if ((null != msg.getData())) {
@@ -189,7 +132,7 @@ public class Service_Call_From_Multiple_Classes {
     };
 
 
-    public void parser_DCRCOMMIT_DOWNLOADALL(Bundle result) {
+    public void parser_DCRCOMMIT_DOWNLOADALL(Context context,Bundle result,Response listener) {
 
         if (result!=null ) {
 
@@ -197,34 +140,39 @@ public class Service_Call_From_Multiple_Classes {
                 String table0 = result.getString("Tables0");
                 JSONArray jsonArray1 = new JSONArray(table0);
 
-                JSONObject one = jsonArray1.getJSONObject(0);
+                if (jsonArray1.length() >0) {
+                    JSONObject one = jsonArray1.getJSONObject(0);
 
-                String MyDaType = one.getString("DA_TYPE");
-                String da_val="0";
-                Float rate = Float.parseFloat(one.getString("FARE_RATE"));
-                Float kms = Float.parseFloat(one.getString("KM"));
+                    String MyDaType = one.getString("DA_TYPE");
+                    String da_val = "0";
+                    Float rate = Float.parseFloat(one.getString("FARE_RATE"));
+                    Float kms = Float.parseFloat(one.getString("KM"));
 
-                if (MyDaType.equals("L")) {
-                    da_val=one.getString("DA_L_RATE");
-                } else if (MyDaType.equals("EX") || MyDaType.equals("EXS")) {
-                    da_val=one.getString("DA_EX_RATE");
-                } else if (MyDaType.equals("NSD") || MyDaType.equals("NS")) {
-                    da_val=one.getString("DA_NS_RATE");
+                    if (MyDaType.equals("L")) {
+                        da_val = one.getString("DA_L_RATE");
+                    } else if (MyDaType.equals("EX") || MyDaType.equals("EXS")) {
+                        da_val = one.getString("DA_EX_RATE");
+                    } else if (MyDaType.equals("NSD") || MyDaType.equals("NS")) {
+                        da_val = one.getString("DA_NS_RATE");
+                    }
+                    String distance_val = "0";
+                    if (MyDaType.equals("EX") || MyDaType.equals("NSD")) {
+                        distance_val = "" + (kms * rate * 2);
+
+                    } else {
+                        distance_val = "" + (kms * rate);
+                    }
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",distance_val);
                 }
-                String distance_val="0";
-                if (MyDaType.equals("EX") || MyDaType.equals("NSD")) {
-                    distance_val="" + (kms * rate * 2);
 
-                } else {
-                    distance_val="" + (kms * rate);
-                }
 
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
-                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",distance_val);
 
                 String table1 = result.getString("Tables1");
-                cbo_helper.delete_phdoctor();
+                cbo_helper.delete_phdoctor(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_MULTIPLE_ROUTEYN","N").equalsIgnoreCase("Y"));
+
                 JSONArray jsonArray2 = new JSONArray(table1);
                 for (int i = 0; i < jsonArray2.length(); i++) {
                     JSONObject c = jsonArray2.getJSONObject(i);
@@ -232,7 +180,8 @@ public class Service_Call_From_Multiple_Classes {
                             c.getString("CLASS"), c.getString("PANE_TYPE"),c.getString("POTENCY_AMT"),
                             c.getString("ITEM_NAME"), c.getString("ITEM_POB"), c.getString("ITEM_SALE"),c.getString("AREA"),c.getString("DR_LAT_LONG")
                             , c.getString("FREQ"),c.getString("NO_VISITED") , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("COLORYN")
-                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"));
+                            ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"),c.getString("RXGENYN")
+                            , c.getString("APP_PENDING_YN"));
 
                 }
 
@@ -242,7 +191,7 @@ public class Service_Call_From_Multiple_Classes {
                 for (int i = 0; i < jsonArray3.length(); i++) {
                     JSONObject c = jsonArray3.getJSONObject(i);
                     cbo_helper.insert_Chemist(c.getInt("CHEM_ID"), c.getString("CHEM_NAME"),
-                            "", "",c.getString("LAST_VISIT_DATE"),c.getString("DR_LAT_LONG") ,
+                            c.getString("AREA"), "",c.getString("LAST_VISIT_DATE"),c.getString("DR_LAT_LONG") ,
                             c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("SHOWYN"));
 
                 }
@@ -269,7 +218,7 @@ public class Service_Call_From_Multiple_Classes {
                 cbo_helper.delete_Doctor_Call_Remark();
                 for (int b = 0; b<jsonArray6.length();b++){
                     JSONObject jasonObj2 = jsonArray6.getJSONObject(b);
-                    cbo_helper.insertDoctorCallRemark( jasonObj2.getString("PA_ID"),jasonObj2.getString("PA_NAME"));
+                    cbo_helper.insertDoctorCallRemark( jasonObj2.getString("PA_ID"),jasonObj2.getString("PA_NAME"),"R");
                 }
 
 
@@ -327,6 +276,12 @@ public class Service_Call_From_Multiple_Classes {
                     cbo_helper.insert_STk_Item( jasonObj2.getString("STK_ID"),jasonObj2.getString("ITEM_ID"),jasonObj2.getString("RATE"));
                 }
 
+                String table12 = result.getString("Tables12");
+                JSONArray jsonArray13 = new JSONArray(table12);
+                for (int b = 0; b<jsonArray13.length();b++){
+                    JSONObject jasonObj2 = jsonArray13.getJSONObject(b);
+                    cbo_helper.insertDoctorCallRemark( jasonObj2.getString("PA_ID"),jasonObj2.getString("PA_NAME"),"S");
+                }
                 /*switch (work_type_Selected){
                     case "w":
                         finish();
@@ -340,15 +295,24 @@ public class Service_Call_From_Multiple_Classes {
                         break;
                 }
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_type_Selected",work_type_Selected);*/
-                threadMsg("OK");
+                if (mHandler != null)
+                    threadMsg("OK");
             } catch (JSONException e) {
-                Log.d("MYAPP", "objects are: " + e.toString());
-                CboServices.getAlert(context,"Missing field error",context.getResources().getString(R.string.service_unavilable) +e.toString());
-                e.printStackTrace();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    public void run() {
+                        if (listener != null)
+                            listener.onError("Missing field error",context.getResources().getString(R.string.service_unavilable) + e.toString());
+
+                        Log.d("MYAPP", "objects are: " + e.toString());
+                        //AppAlert.getInstance().getAlert(context, "Missing field error", context.getResources().getString(R.string.service_unavilable) + e.toString());
+                        e.printStackTrace();
+                    }
+                });
             }
 
         }
-        if(progress1 != null && progress1.isShowing()){ progress1.dismiss();}
+        //if(progress1 != null && progress1.isShowing()){ progress1.dismiss();}
         //Log.d("MYAPP", "objects are1: " + result);
 
 
@@ -380,8 +344,253 @@ public class Service_Call_From_Multiple_Classes {
 
     }
 
+    public void DCR_COMMIT_AREA(Context context,HashMap<String,String> request, Response listener){
+        DCR_COMMIT(context,"DCR_COMMIT_7",request,listener);
+    }
+
+    public void DCR_COMMIT_ROUTE(Context context,HashMap<String,String> request, Response listener){
+        DCR_COMMIT(context,"DCR_COMMIT_ROUTE_9",request,listener);
+    }
+
+    public void DCR_COMMIT(Context context,String Method,HashMap<String,String> request, Response listener){
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder(Method, request)
+                        .setTables(tables)
+                        .setDescription("Please Wait..\n" +
+                                " Fetching your Utilitis for the day").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle response) {
+                                /*if (listener != null)
+                                    listener.onSuccess(message);*/
+
+                                parser_submit_for_working(context,response,listener);
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+                               // parser_submit_for_working(context,response,listener);
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                if (listener != null)
+                                    listener.onError(s,s1);
+                            }
+
+
+                        })
+                );
+    }
+
+
+
+    public void parser_submit_for_working(Context context,Bundle result,Response listener) {
+
+
+
+        if (result!=null ) {
+
+            try {
+                String table0 = result.getString("Tables0");
+                JSONArray jsonArray1 = new JSONArray(table0);
+                for (int i = 0; i < jsonArray1.length(); i++) {
+                    JSONObject c = jsonArray1.getJSONObject(i);
+                    Custom_Variables_And_Method.DCR_ID = c.getString("DCRID");
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "FCMHITCALLYN", c.getString("FCMHITCALLYN") );
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "FARMERREGISTERYN", c.getString("FARMERREGISTERYN") );
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DIVERTLOCKYN", c.getString("DIVERTLOCKYN") );
+
+
+                    if(!c.getString("FCMHITCALLYN").equals("") && !c.getString("FCMHITCALLYN").equals("N")){
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "MOBILEDATAYN", "Y" );
+                    }
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "APPROVAL_MSG", "" );
+                    if(Custom_Variables_And_Method.DCR_ID.equals("0") &&  c.getString("DCRID")!=null){
+                        Alert(context,"Alert !!!",c.getString("MSG"),listener);
+                    }else if( c.getString("DIVERTLOCKYN").toUpperCase().equals("Y")){
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "APPROVAL_MSG", c.getString("MSG") );
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DCR_ID", c.getString("DCRID"));
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlanTime_server", c.getString("IN_TIME") );
+                        Alert(context,"Alert !!!",c.getString("MSG"),listener);
+                    }else if(c.getString("FARMERREGISTERYN").equals("Y")){
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "APPROVAL_MSG", c.getString("MSG") );
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DCR_ID", c.getString("DCRID"));
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlanTime_server", c.getString("IN_TIME") );
+                        Alert(context,"Alert !!!",
+                                "Today You have an activity for "+
+                                        cbo_helper.getMenu("DCR", "D_FAR").get("D_FAR"),listener);
+                    }else{
+
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DCR_ID", c.getString("DCRID"));
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlanTime_server", c.getString("IN_TIME") );
+                        DownloadAllAfterDayPlan(context,listener);
+                    }
+                }
+
+
+
+            }catch (JSONException e) {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    public void run() {
+                        if (listener != null)
+                            listener.onError("Missing field error",context.getResources().getString(R.string.service_unavilable) + e.toString());
+
+                        Log.d("MYAPP", "objects are: " + e.toString());
+                        //AppAlert.getInstance().getAlert(context, "Missing field error", context.getResources().getString(R.string.service_unavilable) + e.toString());
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+        }
+
+
+
+    }
+
+
+    private void Alert(Context context,String title,String description,Response listener){
+        AppAlert.getInstance().Alert(context, title, description, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DownloadAllAfterDayPlan(context,listener);
+            }
+        });
+    }
+
+    public void DownloadAllAfterDayPlan(Context context, Response listener){
+//        if (!(Custom_Variables_And_Method.DCR_ID.equals("0"))) {
+//
+//
+//            cbo_helper.deletedcrFromSqlite();
+//            cbo_helper.deleteUtils();
+//            cbo_helper.deleteDCRDetails();
+//
+//            new CustomTextToSpeech().setTextToSpeech("");
+//
+//            cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
+//            long val = cbo_helper.insertUtils(Custom_Variables_And_Method.pub_area);
+//            long val2 = cbo_helper.insertDcrDetails(Custom_Variables_And_Method.DCR_ID, Custom_Variables_And_Method.pub_area);
+//
+//
+//            if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")){
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "OveAllKm", "0.0");
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DayPlanLatLong", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "shareLatLong", Custom_Variables_And_Method.GLOBAL_LATLON));
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DcrPlantimestamp", customVariablesAndMethod.get_currentTimeStamp());
+//            }
+//
+//            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"working_head", work_val);
+//            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"working_code", work_type_code);
+//
+//            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"BackDateReason", late_remark.getText().toString());
+//            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"sDivert_Remark", divert_remark.getText().toString());
+//
+//
+//            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"dcr_date_real", real_date);
+//            cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
+//            Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
+//
+//            DownloadAll(context,listener);
+//
+//            if ((fmcg_Live_Km.equalsIgnoreCase("Y")) || (fmcg_Live_Km.equalsIgnoreCase("5"))||(fmcg_Live_Km.equalsIgnoreCase("Y5"))) {
+//                String lat, lon, time, km;
+//                customVariablesAndMethod.deleteFmcg_ByKey(context,"myKm1");
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "Y");
+//                lat = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLat");
+//                lon = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLon");
+//                time =customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareMyTime");
+//                km = "0.0";
+//                customMethod.insertDataInOnces_Minute(lat, lon, km, time);
+//
+//                new Thread(r1).start();
+//                new Thread(r2).start();
+//            }
+//
+//
+//            if(intent.getStringExtra("plan_type").equals("p")) {
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Final_submit","N");
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN","");
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFARE","");
+//                cbo_helper.deleteAllRecord10();
+//                cbo_helper.delete_DCR_Item(null,null,null,null);
+//                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Dcr_Planed_Date", customVariablesAndMethod.currentDate());
+//            }
+//            //startActivity(new Intent(getApplicationContext(), ViewPager_2016.class));
+//        }
+    }
+
+
+    public void DownloadAll(Context context, Response listener){
+        new SystemArchitecture(context).getDEVICE_ID(context);
+        Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
+
+
+        //Start of call to service
+
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder",MyCustumApplication.getInstance().getUser().getCompanyCode());
+        request.put("iPA_ID", MyCustumApplication.getInstance().getUser().getID());
+        request.put("sDcrId",MyCustumApplication.getInstance().getDCR().getId());
+        request.put("sRouteYn", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed"));
+        request.put("sGCM_TOKEN", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken"));
+        request.put("sMobileId", SystemArchitecture.COMPLETE_DEVICE_INFO);
+        request.put("sVersion", Custom_Variables_And_Method.VERSION);
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+        tables.add(1);
+        tables.add(2);
+        tables.add(3);
+        tables.add(4);
+        tables.add(5);
+        tables.add(6);
+        tables.add(7);
+        tables.add(8);
+        tables.add(9);
+        tables.add(10);
+        tables.add(11);
+        tables.add(12);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCRCOMMIT_DOWNLOADALL", request)
+                        .setTables(tables)
+                        .setDescription("Please Wait..\n" +
+                                " Fetching your Utilitis for the day").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+                                if (listener != null)
+                                    listener.onSuccess(message);
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+                                parser_DCRCOMMIT_DOWNLOADALL(context,response,listener);
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                if (listener != null)
+                                    listener.onError(s,s1);
+                            }
+
+
+                        })
+                );
+    }
 
     public void getListForLocal(Context context, Response listener){
+
+
+
         HashMap<String, String> request = new HashMap<>();
         request.put("sCompanyFolder", cbo_helper.getCompanyCode());
         request.put("iPaId", "" + Custom_Variables_And_Method.PA_ID);
@@ -397,8 +606,70 @@ public class Service_Call_From_Multiple_Classes {
                             }
 
                             @Override
-                            public void onResponse(Bundle response) {
+                            public void onResponse(Bundle response) throws JSONException {
                                 parser_utilites(context,response,listener);
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                if (listener != null)
+                                    listener.onError(s, s1);
+                            }
+
+
+                        })
+                );
+    }
+
+
+    public void resetDCR(Context context, Response listener){
+        mUser user = MyCustumApplication.getInstance().getUser();
+
+        if (user.getLoggedInAsSupport()){
+
+
+            resetDCRNow(context);
+
+            if (listener != null)
+                listener.onSuccess(null);
+
+
+            Intent i = new Intent(context, LoginMain.class);
+            ((CustomActivity) context).stopLoctionService();
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+            ((CustomActivity) context).finish();
+
+            return;
+        }
+
+
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder",user.getCompanyCode());
+        request.put("DCRID",user.getDCRId());
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DcrReset_1", request)
+                        .setDescription("Please Wait....").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+                                if (listener != null)
+                                    listener.onSuccess(message);
+
+                                Intent i = new Intent(context, LoginMain.class);
+                                ((CustomActivity) context).stopLoctionService();
+                                context.startActivity(i);
+                                ((CustomActivity) context).finish();
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) throws Exception {
+                                parser_resetDCR(context,response,listener);
                             }
 
                             @Override
@@ -413,10 +684,52 @@ public class Service_Call_From_Multiple_Classes {
     }
 
 
-    private void parser_utilites(Context context,Bundle result,Response listener) {
+    private void parser_resetDCR(Context context,Bundle result,Response listener) throws Exception {
         if (result != null) {
 
-            try {
+                String table0 = result.getString("Tables0");
+                JSONArray jsonArray1 = new JSONArray(table0);
+
+                JSONObject c = jsonArray1.getJSONObject(0);
+
+                if (c.getString("DCRID").equals("RESET")) {
+                    resetDCRNow(context);
+                } else {
+                    throw new CBOException("Please Day plan First......");
+                }
+
+        }
+
+    }
+
+    public void resetDCRNow(Context context){
+        //customVariablesAndMethod.msgBox(context,"Dcr Day Successfully Reset ");
+        MyCustomMethod customMethod;
+        customMethod=new MyCustomMethod(context);
+
+        customMethod.stopAlarm10Minute();
+        customMethod.stopAlarm10Sec();
+        customMethod.stopDOB_DOA_Remainder();
+        new CustomTextToSpeech().stopTextToSpeech();
+
+        new MainDB().delete(null);
+        //MyCustumApplication.getInstance().updateUser();
+        Custom_Variables_And_Method.DCR_ID = "0";
+        MyCustumApplication.getInstance().clearApplicationData();
+
+        cbo_helper.DropDatabase(context);
+
+                    /*Intent i = new Intent(context, LoginMain.class);
+                    stopLoctionService();
+                    startActivity(i);
+                    finish();*/
+    }
+
+
+    private void parser_utilites(Context context,Bundle result,Response listener) throws JSONException {
+        if (result != null) {
+/*
+            try {*/
 
                 // table 0-11 for getitemlistforlocal
                 // table 12-13 for fmgcddl_2
@@ -437,12 +750,13 @@ public class Service_Call_From_Multiple_Classes {
                 JSONArray jsonArray20 = new JSONArray(result.getString("Tables9"));
                 JSONArray jsonArray22 = new JSONArray(result.getString("Tables11"));
 
+                cbo_helper.delete_phitem();
                 for (int a = 0; a < jsonArray11.length(); a++) {
                     JSONObject jasonObj1 = jsonArray11.getJSONObject(a);
                     cbo_helper.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"),
                             Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),
                             jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"),
-                            jasonObj1.getInt("SPL_ID"));
+                            jasonObj1.getInt("SPL_ID"),jasonObj1.getString("GENERIC_NAME"));
                     Log.e("%%%%%%%%%%%%%%%", "item insert");
 
                 }
@@ -452,6 +766,7 @@ public class Service_Call_From_Multiple_Classes {
                                     Log.e("%%%%%%%%%%%%%%%", "doctor insert");
 
                                 }*/
+                cbo_helper.delete_phallmst();
                 for (int c = 0; c < jsonArray14.length(); c++) {
 
                     JSONObject jsonObject3 = jsonArray14.getJSONObject(c);
@@ -459,6 +774,7 @@ public class Service_Call_From_Multiple_Classes {
                     Log.e("%%%%%%%%%%%%%%%", "allmst_insert");
                 }
 
+                /*cbo_helper.delete_phparty();
                 for (int d = 0; d < jsonArray15.length(); d++) {
 
                     JSONObject jsonObject4 = jsonArray15.getJSONObject(d);
@@ -468,7 +784,9 @@ public class Service_Call_From_Multiple_Classes {
                             jsonObject4.getString("PA_LAT_LONG3"), jsonObject4.getString("SHOWYN"));
                     Log.e("%%%%%%%%%%%%%%%", "party_insert");
 
-                }
+                }*/
+
+                cbo_helper.delete_phrelation();
                 for (int e = 0; e < jsonArray16.length(); e++) {
 
                     JSONObject jsonObject5 = jsonArray16.getJSONObject(e);
@@ -477,6 +795,7 @@ public class Service_Call_From_Multiple_Classes {
 
                 }
 
+                cbo_helper.delete_phitemspl();
                 for (int f = 0; f < jsonArray17.length(); f++) {
 
                     JSONObject jsonObject6 = jsonArray17.getJSONObject(f);
@@ -485,6 +804,8 @@ public class Service_Call_From_Multiple_Classes {
 
 
                 }
+
+                cbo_helper.deleteFTPTABLE();
                 for (int f = 0; f < jsonArray18.length(); f++) {
 
                     JSONObject jsonObject7 = jsonArray18.getJSONObject(f);
@@ -523,19 +844,19 @@ public class Service_Call_From_Multiple_Classes {
                 parseFMCG(context,new JSONArray(result.getString("Tables12")),new JSONArray(result.getString("Tables13")));
 
 
-            } catch (JSONException e) {
+            /*} catch (JSONException e) {
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     public void run() {
                         if (listener != null)
-                            listener.onError("Missing field error",e.getMessage());
+                            listener.onError("Missing field error",context.getResources().getString(R.string.service_unavilable) + e.toString());
 
                         Log.d("MYAPP", "objects are: " + e.toString());
-                        AppAlert.getInstance().getAlert(context, "Missing field error", context.getResources().getString(R.string.service_unavilable) + e.toString());
+                        //AppAlert.getInstance().getAlert(context, "Missing field error", context.getResources().getString(R.string.service_unavilable) + e.toString());
                         e.printStackTrace();
                     }
                 });
-            }
+            }*/
         }
     }
 
@@ -612,6 +933,22 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
                 editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
                 editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
+                editor.putString("DR_RXGEN_VALIDATE", c.getString("DR_RXGEN_VALIDATE"));
+                editor.putString("FIREBASE_SYNCYN", c.getString("FIREBASE_SYNCYN"));
+
+
+                editor.putString("DCRDRADDAREA_APP_MSG", c.getString("DCRDRADDAREA_APP_MSG"));
+                editor.putString("DRGIFTMANDATORY", c.getString("DRGIFTMANDATORY"));
+                editor.putString("DCR_MULTIPLE_ROUTEYN", c.getString("DCR_MULTIPLE_ROUTEYN"));
+                editor.putString("DCR_LEAD_ENTRY_YN", c.getString("DCR_LEAD_ENTRY_YN"));
+                editor.putString("DCR_CALL_STATUS_YN", c.getString("DCR_CALL_STATUS_YN"));
+                editor.putString("FY_FDATE", c.getString("FY_FDATE"));
+                editor.putString("FY_TDATE", c.getString("FY_TDATE"));
+                editor.putString("ORD_DISC_TYPE", c.getString("ORD_DISC_TYPE"));
+                editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
+                editor.putString("ORD_DISC_EDITCOLS", c.getString("ORD_DISC_EDITCOLS"));
+
+
                 editor.commit();
 
             }
@@ -636,6 +973,107 @@ public class Service_Call_From_Multiple_Classes {
             //return false;
         }
 
+
+    }
+
+
+
+
+    public void CheckIfCallsUnlocked(Context context,String type) {
+
+
+        //Start of call to service
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("sCompanyFolder", cbo_helper.getCompanyCode());
+        request.put("iPA_ID", "" + Custom_Variables_And_Method.PA_ID);
+        request.put("iDCR_ID", "" + Custom_Variables_And_Method.DCR_ID);
+        request.put("sTYPE",type);
+        ArrayList<Integer> tables = new ArrayList<>();
+        tables.add(0);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("CallUnlockStatus", request)
+                        .setTables(tables)
+                        .setDescription("Please Wait....\nChecking your DCR Status..").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+                                parser_is_call_unlocked(context,type,message);
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) throws JSONException {
+                            }
+
+                            @Override
+                            public void onError(String title, String description) {
+                                AppAlert.getInstance().getAlert(context,title,description);
+                            }
+
+
+                        })
+                );
+
+
+        //End of call to service
+    }
+
+
+    private void parser_is_call_unlocked(Context context,String CheckType,Bundle result) {
+
+        if (result!=null ) {
+
+            try {
+                String table0 = result.getString("Tables0");
+                JSONArray jsonArray0 = new JSONArray(table0);
+                if (CheckType.equals("ADDAREA")){
+                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").equalsIgnoreCase("Y")) {
+
+                        cbo_helper.doctorApproved("0");
+
+                        AppAlert.getInstance().getAlert(context, "Approved !!!", "Your Additional Area have been Approved \nYou can please proceed");
+                    } else {
+
+                        AppAlert.getInstance().getAlert(context, "Approval Pending !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+                                "DCRDRADDAREA_APP_MSG","Your Additional Area Approval is Pending... \nYou Additional Area must be approved first !!!\n" +
+                                        "Please contact your Head-Office for APPROVAL"));
+
+                    }
+                }else if (CheckType.equals("A")){
+                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[DIVERT_UNLOCK]")) {
+
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DIVERTLOCKYN","" );
+                        AppAlert.getInstance().getAlert(context, "Approved !!!", "Your Calls have been Approved \nYou can please proceed");
+                    } else {
+
+                        AppAlert.getInstance().getAlert(context, "Approval !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+                                "APPROVAL_MSG","Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
+                                        "Please contact your Head-Office for APPROVAL"));
+                        // customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
+                    }
+                }else  {
+                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[CALL_UNLOCK]")) {
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "CALL_UNLOCK_STATUS", "[CALL_UNLOCK]");
+                        AppAlert.getInstance().getAlert(context, "CALL UNLOCKED", "Your Calls have been Unlocked \nYou can please proceed");
+                    } else {
+                        Float FIRST_CALL_LOCK_TIME = Float.valueOf(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "FIRST_CALL_LOCK_TIME", "0"));
+                        AppAlert.getInstance().getAlert(context, "CALL LOCKED", "Your Calls has been Locked... \nYou must have made your first Call before " + FIRST_CALL_LOCK_TIME + " O'clock\n" +
+                                "Please contact your Head-Office to UNLOCK");
+                        // customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
+                    }
+                }
+
+                //progress1.dismiss();
+            } catch (JSONException e) {
+                Log.d("MYAPP", "objects are: " + e.toString());
+                AppAlert.getInstance().getAlert(context,"Missing field error",context.getResources().getString(R.string.service_unavilable) +e.toString());
+                e.printStackTrace();
+            }
+
+        }
+        //Log.d("MYAPP", "objects are1: " + result);
+        //progress1.dismiss();
 
     }
 

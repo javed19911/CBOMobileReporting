@@ -30,7 +30,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -60,7 +59,6 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.MailTo_PPL;
 import com.cbo.cbomobilereporting.ui.Mail_CC;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,6 +66,7 @@ import org.json.JSONObject;
 
 import services.CboServices;
 import services.ServiceHandler;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GalleryUtil;
 import utils_new.up_down_ftp;
@@ -201,11 +200,12 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                             aT1[0]=new File(Environment.getExternalStorageDirectory(), "cbo/"+aT1[0]).toString();
                         }
 
-                        Intent i = new Intent(context, CustomWebView.class);
+                        /*Intent i = new Intent(context, CustomWebView.class);
                         i.putExtra("A_TP1", aT1[0]);
                         i.putExtra("Menu_code", "");
                         i.putExtra("Title", "Attachment");
-                        context.startActivity(i);
+                        context.startActivity(i);*/
+                        MyCustumApplication.getInstance().LoadURL("Attachment",aT1[0]);
                     }
                 });
             }

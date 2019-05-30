@@ -15,18 +15,20 @@ public class SpinnerModel extends DropDownModel{
 	private  String ITEM_POB="";
 	private  String ITEM_SALE="";
 	private  String AREA="";
-	private  String FREQ="";
+	private  String FREQ="0";
 	private  String DR_LAT_LONG="";
 	private  String DR_LAT_LONG2="";
 	private  String DR_LAT_LONG3="";
 	private  String PANE_TYPE="";
-	private  String NO_VISITED="";
+	private  String NO_VISITED="0";
 	private  String COLORYN="0";
 	private  String CALLYN="0";
 	private  String REF_LAT_LONG="";
+	private  String LAT_LONG="";
 
 	private  String CRM_COUNT="";
 	private  String DRCAPM_GROUP="";
+	private  String APP_PENDING_YN="0";
 	/*********** Set Methods ******************/
 	public SpinnerModel(String name,String id){
 		super(name,id);
@@ -52,7 +54,8 @@ public class SpinnerModel extends DropDownModel{
 
 	public SpinnerModel(String name,String id,String last_visited,String CLASS,String POTENCY_AMT,String ITEM_NAME
 			,String ITEM_POB,String ITEM_SALE,String AREA,String PANE_TYPE, String DR_LAT_LONG,String FREQ, String NO_VISITED
-			,String DR_LAT_LONG2, String DR_LAT_LONG3,String COLORYN,String CALLYN,String CRM_COUNT,String DRCAPM_GROUP){
+			,String DR_LAT_LONG2, String DR_LAT_LONG3,String COLORYN,String CALLYN,String CRM_COUNT,String DRCAPM_GROUP
+			,String APP_PENDING_YN){
 		/*this.name=name;
 		this.id=id;*/
 		super(name,id);
@@ -73,6 +76,7 @@ public class SpinnerModel extends DropDownModel{
 		this.CALLYN=CALLYN;
 		this.CRM_COUNT = CRM_COUNT;
 		this.DRCAPM_GROUP = DRCAPM_GROUP;
+		this.APP_PENDING_YN = APP_PENDING_YN;
 	}
 
 	public SpinnerModel(String name){
@@ -168,6 +172,9 @@ public class SpinnerModel extends DropDownModel{
 
 	public String getFREQ()
 	{
+		if (FREQ.equals("")){
+			FREQ = "0";
+		}
 		return this.FREQ;
 	}
 	public void setFREQ(String FREQ) {
@@ -220,5 +227,20 @@ public class SpinnerModel extends DropDownModel{
 
 	public void setREF_LAT_LONG(String REF_LAT_LONG) {
 		this.REF_LAT_LONG = REF_LAT_LONG;
+	}
+
+	public String getLAT_LONG() {
+		return LAT_LONG;
+	}
+
+	public void setLAT_LONG(String LAT_LONG) {
+		this.LAT_LONG = LAT_LONG;
+	}
+	public String getAPP_PENDING_YN() {
+		return APP_PENDING_YN;
+	}
+
+	public void setAPP_PENDING_YN(String APP_PENDING_YN) {
+		this.APP_PENDING_YN = APP_PENDING_YN;
 	}
 }

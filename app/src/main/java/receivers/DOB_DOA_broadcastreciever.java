@@ -1,22 +1,16 @@
 package receivers;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Mail;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;
-import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Update_Avilable;
-
-import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Created by pc24 on 22/09/2016.
@@ -41,11 +35,12 @@ public class DOB_DOA_broadcastreciever  extends BroadcastReceiver {
 
                 String url = new CBO_DB_Helper(context1).getMenuUrl("REPORTS","MSG_HO");
                 if (!url.trim().isEmpty()) {
-                    intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
+                    /*intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
                     intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent1.putExtra("msg","1");
                     intent1.putExtra("msg_ho", url);
-                    context1.startActivity(intent1);
+                    context1.startActivity(intent1);*/
+                    MyCustumApplication.getInstance().LoadURL("Notification",url,1);
                 }
                 break;
             case "2":
@@ -55,11 +50,12 @@ public class DOB_DOA_broadcastreciever  extends BroadcastReceiver {
                 //new MyConnection(context).getAppUpdateAlert(context, "Update Available", "Please Update your APP to avail the latest Features");
                 break;
             case "3":
-                intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
+                /*intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent1.putExtra("msg","1");
                 intent1.putExtra("msg_ho", intent.getStringExtra("url"));
-                context1.startActivity(intent1);
+                context1.startActivity(intent1);*/
+                MyCustumApplication.getInstance().LoadURL("Notification",intent.getStringExtra("url"),1);
                 break;
             case "4":
                 intent1=new Intent(context1.getApplicationContext(),Inbox_Mail.class);
@@ -68,11 +64,12 @@ public class DOB_DOA_broadcastreciever  extends BroadcastReceiver {
                 context1.startActivity(intent1);
                 break;
             case "5":
-                intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
+                /*intent1=new Intent(context1.getApplicationContext(),Msg_ho.class);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent1.putExtra("msg","2");
                 intent1.putExtra("msg_ho", intent.getStringExtra("url"));
-                context1.startActivity(intent1);
+                context1.startActivity(intent1);*/
+                MyCustumApplication.getInstance().LoadURL("Notification",intent.getStringExtra("url"),2);
                 break;
         }
 

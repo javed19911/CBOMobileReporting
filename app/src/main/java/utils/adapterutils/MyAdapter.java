@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 
+import interfaces.Ipob;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.InputFilterMinMax;
@@ -26,14 +27,16 @@ import utils_new.InputFilterMinMax;
 public class MyAdapter extends ArrayAdapter<GiftModel> {
 
     private final List<GiftModel> list;
+    Ipob listener;
     private final Activity context;
     private Boolean clicked= true;
     Custom_Variables_And_Method customVariablesAndMethod;
     String DCRGIFT_QTY_VALIDATE ="";
 
-    public MyAdapter(Activity context, List<GiftModel> list) {
+    public MyAdapter(Activity context, List<GiftModel> list, Ipob listener) {
         super(context, R.layout.stk_sample_row, list);
         this.context = context;
+        this.listener = listener;
         this.list = list;
         customVariablesAndMethod =Custom_Variables_And_Method.getInstance();
         DCRGIFT_QTY_VALIDATE = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCRGIFT_QTY_VALIDATE","");
@@ -76,6 +79,9 @@ public class MyAdapter extends ArrayAdapter<GiftModel> {
                     if(s.toString().equals("") && viewHolder.sample.getText().toString().equals("")  && !element.isSelected()) {
                         viewHolder.checkbox.setChecked(false);
                     }else {
+                        if (listener != null && element.isSelected()) {
+                            listener.onItemSelectedListChanged();
+                        }
                         viewHolder.checkbox.setChecked(true);
                     }
                 }
@@ -106,8 +112,14 @@ public class MyAdapter extends ArrayAdapter<GiftModel> {
                                     @Override
                                     public void onClick(View v) {
                                         clicked = false;
-                                        viewHolder.sample.setText(""+element.getBalance());
-                                        element.setSample(""+element.getBalance());
+                                        if (element.getBalance() >= 0) {
+                                            viewHolder.sample.setText(""+element.getBalance());
+                                            element.setSample(""+element.getBalance());
+                                        }else{
+                                            viewHolder.sample.setText("" );
+                                            element.setSample("0");
+                                        }
+
                                         if (s.toString().equals("") && viewHolder.scores.getText().toString().equals("") && !element.isSelected()) {
                                             viewHolder.checkbox.setChecked(false);
                                         } else {
@@ -131,6 +143,9 @@ public class MyAdapter extends ArrayAdapter<GiftModel> {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         GiftModel element = (GiftModel) viewHolder.checkbox.getTag();
                         element.setSelected(buttonView.isChecked());
+                    if (listener != null) {
+                        listener.onItemSelectedListChanged();
+                    }
                 }
             });
 
@@ -166,7 +181,7 @@ public class MyAdapter extends ArrayAdapter<GiftModel> {
         holder.text.setText(list.get(position).getName());
         holder.rate.setText(list.get(position).getRate());
         holder.id.setText(list.get(position).getId());
-        holder.scores.setText(list.get(position).getScore());
+        holder.scores.setText(list.get(position).getScore().equalsIgnoreCase("0")?"":list.get(position).getScore());
         holder.sample.setText(list.get(position).getSample());
         holder.checkbox.setChecked(list.get(position).isSelected());
 

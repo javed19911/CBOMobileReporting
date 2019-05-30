@@ -148,7 +148,7 @@
         android:layout_marginBottom="5dp">
 
         <TextView
-            android:id="@+id/totalDr_text"
+            android:id="@+id/totalChem_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Chemist Call"

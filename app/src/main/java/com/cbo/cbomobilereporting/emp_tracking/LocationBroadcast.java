@@ -1,14 +1,12 @@
 package com.cbo.cbomobilereporting.emp_tracking;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Log;
 
-import utils.CBOUtils.Constants;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 
@@ -42,10 +40,12 @@ public class LocationBroadcast extends BroadcastReceiver {
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking","Y");
 
-          ComponentName comp = new ComponentName(context.getPackageName(), MyLoctionService.class.getName());
-            //ComponentName service = context.startService(new Intent().setComponent(comp));
+          //ComponentName comp = new ComponentName(context.getPackageName(), MyLoctionService.class.getName());
+           // ComponentName service = context.startService(new Intent().setComponent(comp));
+        Log.d(TAG, "location update by timmer");
 
-        Intent intent1 = new Intent().setComponent(comp);
+        MyCustumApplication.getInstance().startLoctionService();
+        /*Intent intent1 = new Intent().setComponent(comp);
         intent1.setAction(Constants.ACTION.LIVE_TRACKING_ACTION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "Running on Android O");
@@ -53,7 +53,7 @@ public class LocationBroadcast extends BroadcastReceiver {
         }else{
             Log.d(TAG, "Running on Android N or lower");
             context.startService(intent1);
-        }
+        }*/
 
           //  myConnection.msgBox("Service Start For Storing  Data in 1 Minute.... ");
             Log.d("Broadcast is Running","Service Start For Storing  Data in 1 Minute ");

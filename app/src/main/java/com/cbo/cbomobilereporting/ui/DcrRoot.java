@@ -103,7 +103,7 @@ public class DcrRoot extends AppCompatActivity{
 	
 	public void setData()
 	{
-		adapter=new DcrRootAdapter(DcrRoot.this,new Doback().doInBackground() );
+		adapter=new DcrRootAdapter(DcrRoot.this,new Doback().doInBackground(),false );
 		mylist.setAdapter(adapter);
 	}
 	
@@ -275,7 +275,7 @@ public class DcrRoot extends AppCompatActivity{
 					customVariablesAndMethod.msgBox(context,result);
                 } else {
                     list=rootTask.setDataToRootList(result,list);
-                    adapter=new DcrRootAdapter(DcrRoot.this,list );
+                    adapter=new DcrRootAdapter(DcrRoot.this,list ,false);
                     mylist.setAdapter(adapter);
                     commitDialog.dismiss();
                 }

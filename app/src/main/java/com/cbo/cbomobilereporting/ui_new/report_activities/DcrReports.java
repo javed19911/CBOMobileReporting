@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.CBOReportView;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,9 +39,7 @@ import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 import utils_new.Custom_Variables_And_Method;
 
-/**
- * Created by Akshit.Udainiya on 2/15/2015.
- */
+
 public class DcrReports extends AppCompatActivity{
     Button name,month,done,back;
     ArrayList<SpinnerModel>rptName=new ArrayList<SpinnerModel>();

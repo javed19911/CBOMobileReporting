@@ -27,7 +27,6 @@ import android.widget.TextView;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.DrVisitedList;
-import com.cbo.cbomobilereporting.ui.Dr_Workwith;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -21,22 +21,26 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import java.util.List;
 
+import interfaces.Ipob;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Dr_Sample_Dialog;
 import utils_new.InputFilterMinMax;
 
 
 public class PobAdapter extends ArrayAdapter<PobModel> {
 	private final List<PobModel>list;
+	Ipob listener;
 	private final Activity context;
 	private Boolean showNOC,clicked= true;
 	CBO_DB_Helper cbo_db_helper;
     Custom_Variables_And_Method customVariablesAndMethod;
     String DCRGIFT_QTY_VALIDATE ="";
 	
-	public PobAdapter(Activity context, List<PobModel> list,Boolean showNOC){
+	public PobAdapter(Activity context, List<PobModel> list,Boolean showNOC,Ipob listener){
 		super(context, R.layout.dr_pob_row, list);
 		this.context = context;
+		this.listener = listener;
         this.list = list;
 		this.showNOC=showNOC;
 		cbo_db_helper = new CBO_DB_Helper(context);
@@ -96,8 +100,13 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 										@Override
 										public void onClick(View v) {
 											clicked = false;
-											viewHolder.scores.setText(""+element.getBalance());
-											element.setScore(""+element.getBalance());
+											if (element.getBalance() >= 0) {
+												viewHolder.scores.setText("" + element.getBalance());
+												element.setScore("" + element.getBalance());
+											}else{
+												viewHolder.scores.setText("" );
+												element.setScore("0");
+											}
 											if(s.toString().equals("") && viewHolder.pob_val.getText().toString().equals("") && viewHolder.noc.getText().toString().equals("") && !element.isSelected() ) {
 												viewHolder.checkbox.setChecked(false);
 											}else {
@@ -125,8 +134,13 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 						if(s.toString().equals("") && viewHolder.scores.getText().toString().equals("") && viewHolder.noc.getText().toString().equals("") && !element.isSelected() ) {
 							viewHolder.checkbox.setChecked(false);
 						}else {
+							if (listener != null && element.isSelected()) {
+								listener.onItemSelectedListChanged();
+							}
 							viewHolder.checkbox.setChecked(true);
 						}
+
+
 						
 					}
 					
@@ -181,6 +195,9 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 						PobModel element = (PobModel) viewHolder.checkbox.getTag();
 
 						element.setSelected(buttonView.isChecked());
+						if (listener != null) {
+							listener.onItemSelectedListChanged();
+						}
 
 					}
 				});
@@ -234,7 +251,7 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 	    		holder.id.setText(list.get(position).getId());
 	    		holder.rate.setText(list.get(position).getRate());
 	    		holder.scores.setText(list.get(position).getScore()); 
-	    		holder.pob_val.setText(list.get(position).getPob());
+	    		holder.pob_val.setText(list.get(position).getPob().equalsIgnoreCase("0")?"":list.get(position).getPob());
 				holder.noc.setText(list.get(position).getNOC());
 	    		holder.checkbox.setChecked(list.get(position).isSelected());
 			    holder.checkbox_prescribe.setChecked(list.get(position).isSelected_Rx());

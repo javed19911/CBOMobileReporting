@@ -88,24 +88,6 @@ public class ServiceHandler {
     }
     ///////////////////////&&&&&&&&********** VISUALAID_DOWNLOAD End //////////////%%%%%%%%%%%%/////////
 
-    /////////////////-------------DCRCALLDETMOBILEGRID Start-----------------/////////////////////
-
-    public String getResponse_DCRCALLDETMOBILEGRID(String sCompanyFolder, String iPaId, String sFDATE, String sTDATE, String sAREA, String iTime, String sTEAMYN) {
-     //Start of call to service
-
-        HashMap<String,String> request=new HashMap<>();
-        request.put("sCompanyFolder", sCompanyFolder);
-        request.put("iPaId", iPaId);
-        request.put("sFDATE", sFDATE);
-        request.put("sTDATE", sTDATE);
-        request.put("sAREA", sAREA);
-        request.put("iTime", iTime);
-        request.put("sTEAMYN", sTEAMYN);
-
-        //End of call to service
-
-        return customMethodForAllServices(request,"DCRCALLDETMOBILEGRID");
-    }
 
     /////////////Complaint_Docno Start /////////////////
     public String getResponse_Complaint_Docno(String sCompanyFolder) {
@@ -190,22 +172,7 @@ public class ServiceHandler {
         return customMethodForAllServices(request,"GetItemListForLocal");
 
     }
-//////////************/////////GetDoctorRoute Start /////////////////
 
-    public String getResponseFrom_GetDoctorRoute(String sCompanyFolder, String iPaId, String DCRID) {
-        //Start of call to service
-
-        HashMap<String,String> request=new HashMap<>();
-        request.put("sCompanyFolder", sCompanyFolder);
-        request.put("iPaId", iPaId);
-        request.put("DCRID", DCRID);
-
-        //End of call to service
-
-        return customMethodForAllServices(request,"GetDoctorRoute_1");
-
-
-    }
 
     //////////************/////////GetDoctorRoute End /////////////////
 
@@ -692,7 +659,8 @@ public class ServiceHandler {
 
 
 
-    public String getResponse_SpoCNFGrid(String sCompanyFolder, String iPA_ID, String sFDATE, String sTDATE, String sType, String iCompanyId, String iHqId) {
+    public String getResponse_SpoCNFGrid(String sCompanyFolder, String iPA_ID, String sFDATE, String sTDATE,
+                                         String sType, String iCompanyId, String iHqId,String sCurrencyType) {
 
         //Start of call to service
 
@@ -706,15 +674,16 @@ public class ServiceHandler {
         request.put("sType", sType);
         request.put("iCompanyId", iCompanyId);
         request.put("iHqId", iHqId);
+        request.put("sCurrencyType", sCurrencyType);
 
         //End of call to service
 
-        return customMethodForAllServices(request,"SpoCNFGrid");
+        return customMethodForAllServices(request,"SpoCNFGrid_1");
 
     }
 
     public String getResponse_SPOCNFViewGrid(String sCompanyFolder, String sCompanyName, String sFdate, String sTdate,
-                                             String iLoginPaId, String iType) {
+                                             String iLoginPaId, String iType,String sCurrencyType) {
         //Start of call to service
 
         HashMap<String,String> request=new HashMap<>();
@@ -725,10 +694,11 @@ public class ServiceHandler {
         request.put("sTdate", sTdate);
         request.put("iLoginPaId", iLoginPaId);
         request.put("iType", iType);
+        request.put("sCurrencyType", sCurrencyType);
 
         //End of call to service
 
-        return customMethodForAllServices(request,"SPOCNFViewGrid");
+        return customMethodForAllServices(request,"SPOCNFViewGrid_1");
 
 
     }
@@ -1113,165 +1083,6 @@ public class ServiceHandler {
         dialog.show();
     }
 
-    /////////////////////////////&&&&&&&&& DCR_COMMITFINAL End &&&&&&&&&&&&////////////////
 
-    public String getSoapResponse_DCRCommitFinal_New
-            (String sCompanyFolder, String iDcrId, String iNoChemist, String iNoStockist, String sChemistRemark,
-             String sStockistREmark, String iPob, String iPobQty, String iActualFareAmt,
-             String sDatype, String iDistanceId, String sRemark, String sLoc, String iOuttime, String sRouteYn,
-             String sDCRLATCOMMIT_ID, String sDCRLATCOMMIT_IN_TIME, String sDCRLATCOMMIT_LOC_LAT, String sDCRLATCOMMIT_LOC,
-             String sDCRLATCOMMIT_KM, String sDCRITEM_DR_ID, String sDCRITEM_ITEMIDIN, String sDCRITEM_ITEM_ID_ARR, String
-                     sDCRITEM_QTY_ARR, String sDCRITEM_ITEM_ID_GIFT_ARR, String sDCRITEM_QTY_GIFT_ARR, String sDCRITEM_POB_QTY, String
-                     sDCRITEM_POB_VALUE, String sDCRITEM_VISUAL_ARR,String sDCRITEM_NOC_ARR, String sDCRDR_DR_ID, String sDCRDR_WW1, String sDCRDR_WW2, String
-                     sDCRDR_WW3, String sDCRDR_LOC, String sDCRDR_IN_TIME, String sDCRDR_BATTERY_PERCENT, String sDCRDR_REMARK,
-             String sDCRDR_KM,String sDCRDR_SRNO,String sDCRDR_FILE,String sDCRDR_CALLTYPE, String sDCRCHEM_CHEM_ID,
-             String sDCRCHEM_POB_QTY, String sDCRCHEM_POB_AMT, String sDCRCHEM_ITEM_ID_ARR, String sDCRCHEM_QTY_ARR, String
-                     sDCRCHEM_LOC, String sDCRCHEM_IN_TIME, String sDCRCHEM_SQTY_ARR, String sDCRCHEM_ITEM_ID_GIFT_ARR, String
-                     sDCRCHEM_QTY_GIFT_ARR, String sDCRCHEM_BATTERY_PERCENT,
-             String sDCRCHEM_KM,String sDCRCHEM_SRNO,String sDCRCHEM_REMARK,String sDCRCHEM_FILE, String sDCRSTK_STK_ID, String sDCRSTK_POB_QTY, String sDCRSTK_POB_AMT, String
-                     sDCRSTK_ITEM_ID_ARR, String sDCRSTK_QTY_ARR, String sDCRSTK_LOC, String sDCRSTK_IN_TIME, String
-                     sDCRSTK_SQTY_ARR, String sDCRSTK_ITEM_ID_GIFT_ARR, String sDCRSTK_QTY_GIFT_ARR, String sDCRSTK_BATTERY_PERCENT,
-             String sDCRSTK_KM,String sDCRSTK_SRNO, String sDCRSTK_REMARK,String sDCRSTK_FILE,String sDCRRC_DR_ID, String
-                     sDCRRC_LOC, String sDCRRC_IN_TIME, String sDCRRC_KM,String sDCRRC_SRNO,String sDCRRC_BATTERY_PERCENT,String sDCRRC_REMARK,String sDCRRC_FILE, String sDCRRX_DR_ARR,
-             String sDCRRX_ITEMID_ARR, String iFinalKM,String sAPI_Pattern,String sBATTERY_PERCENT,String sGCMToken,
-            String DCS_ID_ARR, String LAT_LONG_ARR,String DCS_TYPE_ARR,String DCS_ADD_ARR,String DCS_INDES_ARR) {
-
-
-
-        final String methodName = "DCRCommitFinal_New_14";
-        final String SOAP_ACTION = NAMESPACE + methodName;
-        SoapObject request = new SoapObject(NAMESPACE, methodName);
-
-        //System.setProperty("http.keepAlive", "false");
-
-
-        request.addProperty("sCompanyFolder", sCompanyFolder);
-        request.addProperty("iDcrId", iDcrId);
-        request.addProperty("iNoChemist", iNoChemist);
-        request.addProperty("iNoStockist", iNoStockist);
-        request.addProperty("sChemistRemark", sChemistRemark);
-        request.addProperty("sStockistREmark", sStockistREmark);
-        request.addProperty("iPob", iPob);
-        request.addProperty("iPobQty", iPobQty);
-        request.addProperty("iActualFareAmt", iActualFareAmt);
-        request.addProperty("sDatype", sDatype);
-        request.addProperty("iDistanceId", iDistanceId);
-        request.addProperty("sRemark", sRemark);
-        request.addProperty("sLoc", sLoc);
-        request.addProperty("iOuttime", iOuttime);
-
-        request.addProperty("sRouteYn", sRouteYn);
-        request.addProperty("sDCRLATCOMMIT_ID", sDCRLATCOMMIT_ID);
-        request.addProperty("sDCRLATCOMMIT_IN_TIME", sDCRLATCOMMIT_IN_TIME);
-        request.addProperty("sDCRLATCOMMIT_LOC_LAT", sDCRLATCOMMIT_LOC_LAT);
-        request.addProperty("sDCRLATCOMMIT_LOC", sDCRLATCOMMIT_LOC);
-        request.addProperty("sDCRLATCOMMIT_KM", sDCRLATCOMMIT_KM);
-        request.addProperty("sDCRITEM_DR_ID", sDCRITEM_DR_ID);
-        request.addProperty("sDCRITEM_ITEMIDIN", sDCRITEM_ITEMIDIN);
-
-
-        request.addProperty("sDCRITEM_ITEM_ID_ARR", sDCRITEM_ITEM_ID_ARR);
-        request.addProperty("sDCRITEM_QTY_ARR", sDCRITEM_QTY_ARR);
-        request.addProperty("sDCRITEM_ITEM_ID_GIFT_ARR", sDCRITEM_ITEM_ID_GIFT_ARR);
-        request.addProperty("sDCRITEM_QTY_GIFT_ARR", sDCRITEM_QTY_GIFT_ARR);
-
-        request.addProperty("sDCRITEM_POB_QTY", sDCRITEM_POB_QTY);
-        request.addProperty("sDCRITEM_POB_VALUE", sDCRITEM_POB_VALUE);
-        request.addProperty("sDCRITEM_VISUAL_ARR", sDCRITEM_VISUAL_ARR);
-        request.addProperty("sDCRITEM_NOC_ARR", sDCRITEM_NOC_ARR);
-
-        request.addProperty("sDCRDR_DR_ID", sDCRDR_DR_ID);
-        request.addProperty("sDCRDR_WW1", sDCRDR_WW1);
-        request.addProperty("sDCRDR_WW2", sDCRDR_WW2);
-        request.addProperty("sDCRDR_WW3", sDCRDR_WW3);
-        request.addProperty("sDCRDR_LOC", sDCRDR_LOC);
-        request.addProperty("sDCRDR_IN_TIME", sDCRDR_IN_TIME);
-        request.addProperty("sDCRDR_BATTERY_PERCENT", sDCRDR_BATTERY_PERCENT);
-        request.addProperty("sDCRDR_REMARK", sDCRDR_REMARK);
-        request.addProperty("sDCRDR_KM", sDCRDR_KM);
-        request.addProperty("sDCRDR_SRNO", sDCRDR_SRNO);
-        request.addProperty("sDCRDR_FILE", sDCRDR_FILE);
-        request.addProperty("sDCRDR_CALLTYPE", sDCRDR_CALLTYPE);
-
-        request.addProperty("sDCRCHEM_CHEM_ID", sDCRCHEM_CHEM_ID);
-        request.addProperty("sDCRCHEM_POB_QTY", sDCRCHEM_POB_QTY);
-        request.addProperty("sDCRCHEM_POB_AMT", sDCRCHEM_POB_AMT);
-        request.addProperty("sDCRCHEM_ITEM_ID_ARR", sDCRCHEM_ITEM_ID_ARR);
-        request.addProperty("sDCRCHEM_QTY_ARR", sDCRCHEM_QTY_ARR);
-        request.addProperty("sDCRCHEM_LOC", sDCRCHEM_LOC);
-        request.addProperty("sDCRCHEM_IN_TIME", sDCRCHEM_IN_TIME);
-        request.addProperty("sDCRCHEM_SQTY_ARR", sDCRCHEM_SQTY_ARR);
-        request.addProperty("sDCRCHEM_ITEM_ID_GIFT_ARR", sDCRCHEM_ITEM_ID_GIFT_ARR);
-        request.addProperty("sDCRCHEM_QTY_GIFT_ARR", sDCRCHEM_QTY_GIFT_ARR);
-        request.addProperty("sDCRCHEM_BATTERY_PERCENT", sDCRCHEM_BATTERY_PERCENT);
-        request.addProperty("sDCRCHEM_KM", sDCRCHEM_KM);
-        request.addProperty("sDCRCHEM_SRNO", sDCRCHEM_SRNO);
-        request.addProperty("sDCRCHEM_REMARK", sDCRCHEM_REMARK);
-        request.addProperty("sDCRCHEM_FILE", sDCRCHEM_FILE);
-
-
-        request.addProperty("sDCRSTK_STK_ID", sDCRSTK_STK_ID);
-        request.addProperty("sDCRSTK_POB_QTY", sDCRSTK_POB_QTY);
-        request.addProperty("sDCRSTK_POB_AMT", sDCRSTK_POB_AMT);
-        request.addProperty("sDCRSTK_ITEM_ID_ARR", sDCRSTK_ITEM_ID_ARR);
-        request.addProperty("sDCRSTK_QTY_ARR", sDCRSTK_QTY_ARR);
-        request.addProperty("sDCRSTK_LOC", sDCRSTK_LOC);
-        request.addProperty("sDCRSTK_IN_TIME", sDCRSTK_IN_TIME);
-        request.addProperty("sDCRSTK_SQTY_ARR", sDCRSTK_SQTY_ARR);
-        request.addProperty("sDCRSTK_ITEM_ID_GIFT_ARR", sDCRSTK_ITEM_ID_GIFT_ARR);
-        request.addProperty("sDCRSTK_QTY_GIFT_ARR", sDCRSTK_QTY_GIFT_ARR);
-        request.addProperty("sDCRSTK_BATTERY_PERCENT", sDCRSTK_BATTERY_PERCENT);
-        request.addProperty("sDCRSTK_KM", sDCRSTK_KM);
-        request.addProperty("sDCRSTK_SRNO", sDCRSTK_SRNO);
-        request.addProperty("sDCRSTK_REMARK", sDCRSTK_REMARK);
-        request.addProperty("sDCRSTK_FILE", sDCRSTK_FILE);
-
-        request.addProperty("sDCRRC_DR_ID", sDCRRC_DR_ID);
-        request.addProperty("sDCRRC_LOC", sDCRRC_LOC);
-        request.addProperty("sDCRRC_IN_TIME", sDCRRC_IN_TIME);
-        request.addProperty("sDCRRC_KM", sDCRRC_KM);
-        request.addProperty("sDCRRC_SRNO", sDCRRC_SRNO);
-        request.addProperty("sDCRRC_BATTERY_PERCENT", sDCRRC_BATTERY_PERCENT);
-        request.addProperty("sDCRRC_REMARK", sDCRRC_REMARK);
-        request.addProperty("sDCRRC_FILE", sDCRRC_FILE);
-
-        request.addProperty("sDCRRX_DR_ARR", sDCRRX_DR_ARR);
-        request.addProperty("sDCRRX_ITEMID_ARR", sDCRRX_ITEMID_ARR);
-
-        request.addProperty("iFinalKM", iFinalKM);
-        request.addProperty("iPaId",  Custom_Variables_And_Method.PA_ID);
-
-        request.addProperty("sGCM_TOKEN", sGCMToken);
-        request.addProperty("sAPI_PATTERN", sAPI_Pattern);
-        request.addProperty("sBATTERY_PERCENT", sBATTERY_PERCENT);
-
-        request.addProperty("REG_ID_ARR", DCS_ID_ARR);
-        request.addProperty("REG_LAT_LONG_ARR", LAT_LONG_ARR);
-        request.addProperty("REG_TYPE_ARR", DCS_TYPE_ARR);
-        request.addProperty("REG_ADD_ARR", DCS_ADD_ARR);
-        request.addProperty("REG_INDES_ARR", DCS_INDES_ARR);
-
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                SoapEnvelope.VER11);
-        envelope.dotNet = true;
-        envelope.setOutputSoapObject(request);
-        /*String URL="http://delcure.in/mobilerpt.asmx";*/
-
-        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL,40000);
-        try {
-
-            androidHttpTransport.call(SOAP_ACTION, envelope);
-
-            result = (SoapPrimitive) envelope.getResponse();
-            return result.toString();
-        } catch (Exception e) {
-            return "[ERROR] "+"service  method "+methodName+ " "+e.toString();
-        }
-
-        /*request = null;
-        envelope = null;
-        androidHttpTransport = null;*/
-
-    }
 
 }

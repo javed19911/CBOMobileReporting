@@ -67,7 +67,7 @@ public class GiftModel {
     }
 
     public String getScore() {
-        return score;
+        return score.trim().isEmpty()?"0":score.trim();
     }
 
     public void setScore(String score) {
@@ -75,7 +75,7 @@ public class GiftModel {
     }
 
     public String getRate() {
-        return rate;
+        return  rate.trim().isEmpty()?"0":rate.trim();
     }
 
     public void setRate(String rate) {

@@ -18,36 +18,45 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.LayoutZoomer;
+import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import services.CboServices;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
+import utils.model.DropDownModel;
+import utils_new.CustomDatePicker;
+import utils_new.CustomDialog.Spinner_Dialog;
 import utils_new.Custom_Variables_And_Method;
 
 
 public class Spo_Report extends AppCompatActivity {
-    Button btShowReport, btBack, btFrom, btTo, btName;
-    ImageView imgFrorm, imgTo;
+    Button btShowReport, btBack, btFrom, btTo, btName, fromdatebtn, todatebtn,Display_Unit;
+    ImageView imgFrorm, imgTo,img_followdate,img_nextfollowdate,bt_unit;
     Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
     ProgressDialog pd;
 
     String uid, uname, mName;
     public static String mIdFrom, mIdTo;
+    public static String mUnitID,mUnitName;
     private AlertDialog myalertDialog = null;
 
     ArrayList<SpinnerModel> nameList = new ArrayList<SpinnerModel>();
     ArrayList<SpinnerModel> mothList = new ArrayList<SpinnerModel>();
+    ArrayList<SpinnerModel>unitList= new ArrayList<SpinnerModel>();
     public ProgressDialog progress1;
     private  static final int MESSAGE_INTERNET=1;
     CBO_DB_Helper cboDbHelper;
@@ -75,10 +84,18 @@ public class Spo_Report extends AppCompatActivity {
         progress1 = new ProgressDialog(this);
         cboDbHelper=new CBO_DB_Helper(this);
 
+
+        fromdatebtn = (Button) findViewById(R.id.fromdatebtn);
+        todatebtn = (Button) findViewById(R.id.todatebtn);
+        img_followdate = (ImageView) findViewById(R.id.spinner_img_followdate);
+        img_nextfollowdate = (ImageView) findViewById(R.id.spinner_img_nextfollowdate);
+
         btShowReport = (Button) findViewById(R.id.bt_show_spo_rpt_details);
         btBack = (Button) findViewById(R.id.bt_back_rpt_list);
         btName = (Button) findViewById(R.id.bt_spo_rptt_name);
         btFrom = (Button) findViewById(R.id.bt_spo_rptt_from);
+        Display_Unit=findViewById (R.id.Display_Unit);
+        bt_unit = findViewById(R.id.bt_unit);
         btTo = (Button) findViewById(R.id.bt_spo_month_to);
         imgFrorm = (ImageView) findViewById(R.id.bt_spo_rptt_from_img);
         imgTo = (ImageView) findViewById(R.id.bt_spo_rptt_to_img);
@@ -90,9 +107,75 @@ public class Spo_Report extends AppCompatActivity {
         btTo.setText("---Select---");
 
 
+
+        fromdatebtn.setText(CustomDatePicker.currentDate( CustomDatePicker.ShowFirstDayOfMonthFormat));
+        mIdFrom=(CustomDatePicker.currentDate( CustomDatePicker.CommitFirstDayOfMonthFormat));
+        todatebtn.setText(CustomDatePicker.currentDate( CustomDatePicker.ShowFormat));
+        mIdTo=(CustomDatePicker.currentDate( CustomDatePicker.CommitFormat));
+
+
         //Spo_Report.this.backGroundData(Spo_Report.this);
 
         //Start of call to service
+
+
+
+        fromdatebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    new CustomDatePicker(context,
+                            CustomDatePicker.getDate(MyCustumApplication.getInstance().
+                                    getDataFrom_FMCG_PREFRENCE("FY_FDATE",null), CustomDatePicker.CommitFormat),
+                            CustomDatePicker.getDate(todatebtn.getText().toString(), CustomDatePicker.ShowFormat)
+                    ).Show(CustomDatePicker.getDate(fromdatebtn.getText().toString(),  CustomDatePicker.ShowFormat)
+                            , new CustomDatePicker.ICustomDatePicker() {
+                                @Override
+                                public void onDateSet(Date date) {
+                                    fromdatebtn.setText(CustomDatePicker.formatDate(date,CustomDatePicker.ShowFormat));
+                                    mIdFrom=(CustomDatePicker.formatDate(date,CustomDatePicker.CommitFormat));
+                                }
+                            });
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        todatebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    new CustomDatePicker(context,
+                            CustomDatePicker.getDate(fromdatebtn.getText().toString(),  CustomDatePicker.ShowFormat),
+                            CustomDatePicker.getDate(MyCustumApplication.getInstance().
+                                    getDataFrom_FMCG_PREFRENCE("FY_TDATE",null), CustomDatePicker.CommitFormat))
+                            .Show(CustomDatePicker.getDate(todatebtn.getText().toString(),  CustomDatePicker.ShowFormat)
+                                    , new CustomDatePicker.ICustomDatePicker() {
+                                        @Override
+                                        public void onDateSet(Date date) {
+                                            todatebtn.setText(CustomDatePicker.formatDate(date,CustomDatePicker.ShowFormat));
+                                            mIdTo=(CustomDatePicker.formatDate(date,CustomDatePicker.CommitFormat));
+                                        }
+                                    });
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        img_followdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fromdatebtn.performClick();
+            }
+        });
+        img_nextfollowdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                todatebtn.performClick();
+            }
+        });
 
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder",cboDbHelper.getCompanyCode());
@@ -103,6 +186,7 @@ public class Spo_Report extends AppCompatActivity {
         tables.add(0);
         tables.add(1);
         tables.add(2);
+        tables.add (4);
 
         progress1.setMessage("Please Wait..\n" +
                 " Fetching data");
@@ -123,11 +207,27 @@ public class Spo_Report extends AppCompatActivity {
                 spoDetails.putExtra("uid", uid);
                 spoDetails.putExtra("mIdFrom", mIdFrom);
                 spoDetails.putExtra("mIdTo", mIdTo);
+                spoDetails.putExtra ("CurrencyType",mUnitID);
                 startActivity(spoDetails);
 
             }
         });
-        imgFrorm.setOnClickListener(new View.OnClickListener() {
+        Display_Unit.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                setUnit();
+            }
+        });
+
+        bt_unit.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                setUnit();
+            }
+        });
+
+
+     /*   imgFrorm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setBtFrom();
@@ -139,7 +239,7 @@ public class Spo_Report extends AppCompatActivity {
 
                 setBtTo();
             }
-        });
+        });*/
 
 
         btBack.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +283,11 @@ public class Spo_Report extends AppCompatActivity {
             }
         });
 
+
+
+
+
+/*
         btFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,8 +302,22 @@ public class Spo_Report extends AppCompatActivity {
                 setBtTo();
 
             }
-        });
+        });*/
     }
+
+    private void setUnit() {
+
+        new Spinner_Dialog(context, unitList, new Spinner_Dialog.OnItemClickListener() {
+            @Override
+            public void ItemSelected(DropDownModel item) {
+                mUnitID = item.getId();
+                mUnitName = item.getName();
+                Display_Unit.setText(mUnitName);
+                Display_Unit.setPadding(1, 0, 5, 0);
+            }
+        }).show();
+    }
+
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -208,7 +327,8 @@ public class Spo_Report extends AppCompatActivity {
                     progress1.dismiss();
                     if ((null != msg.getData())) {
 
-                        parser_worktype(msg.getData());
+                      //  parser_worktype(msg.getData());
+                        getUnitType(msg.getData ());
 
                     }
                     break;
@@ -224,6 +344,43 @@ public class Spo_Report extends AppCompatActivity {
             }
         }
     };
+
+    private void getUnitType(Bundle result) {
+
+        if (result!=null ) {
+
+            try {
+                String table4 = result.getString("Tables4");
+                JSONArray jsonArray2 = new JSONArray(table4);
+                for (int i = 0; i < jsonArray2.length(); i++) {
+                    JSONObject c = jsonArray2.getJSONObject(i);
+                    unitList.add(new SpinnerModel(c.getString("PA_NAME"),c.getString("PA_ID")));
+                }
+
+                for (int i=0;i<unitList.size();i++){
+                    mUnitID=unitList.get(0).getId ();
+                    mUnitName=unitList.get(0).getName();
+
+                    Display_Unit.setText(mUnitName);
+                    Display_Unit.setPadding(1, 0, 5, 0);
+                    //  btTo.setPadding(1, 0, 5, 0);
+                }
+
+
+                progress1.dismiss();
+            } catch (JSONException e) {
+                Log.d("MYAPP", "objects are: " + e.toString());
+                CboServices.getAlert(this,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
+                e.printStackTrace();
+            }
+
+        }
+        //Log.d("MYAPP", "objects are1: " + result);
+        progress1.dismiss();
+
+
+
+    }
 
     public void parser_worktype(Bundle result) {
         if (result!=null ) {
@@ -246,10 +403,10 @@ public class Spo_Report extends AppCompatActivity {
                         mIdFrom=mothList.get(i).getId();
 
                         mName=mothList.get(i).getName();
-                        btTo.setText(mName);
-                        btTo.setPadding(1, 0, 5, 0);
-                        btFrom.setText(mName);
-                        btFrom.setPadding(1, 0, 5, 0);
+                     //   btTo.setText(mName);
+                      //  btTo.setPadding(1, 0, 5, 0);
+                    //    btFrom.setText(mName);
+                      //  btFrom.setPadding(1, 0, 5, 0);
                         break;
                     }
                 }

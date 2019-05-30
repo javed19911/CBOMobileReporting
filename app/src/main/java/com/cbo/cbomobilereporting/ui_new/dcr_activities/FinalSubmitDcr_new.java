@@ -26,11 +26,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 
 import org.json.JSONArray;
@@ -45,11 +49,12 @@ import java.util.Map;
 
 import async.CBOFinalTask_New;
 import async.CBOFinalTasks;
-import async.CommitTask_New;
 import locationpkg.Const;
 import services.CboServices;
+import services.MyAPIService;
 import services.ServiceHandler;
 import services.TaskListener;
+import utils_new.AppAlert;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GPS_Timmer_Dialog;
@@ -57,6 +62,7 @@ import utils_new.GetVersionCode;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.SendMailTask;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 /**
  * Created by Akshit on 1/5/2016.
@@ -79,7 +85,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String mRemark,back_allowed="Y";
     String DCR_REMARK_NA;
 
-    ServiceHandler mServiceHandler;
+    Service_Call_From_Multiple_Classes servive;
     MyCustomMethod customMethod;
     private Location currentBestLocation;
 
@@ -98,7 +104,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String sb_DCRLATCOMMIT_KM, sb_DCRLATCOMMIT_LOC_LAT, sb_sDCRLATCOMMIT_IN_TIME, sDCRLATCOMMIT_ID, sDCRLATCOMMIT_LOC;
     String sDCRITEM_DR_ID, sDCRITEM_ITEMIDIN, sDCRITEM_ITEM_ID_ARR, sDCRITEM_QTY_ARR, sDCRITEM_ITEM_ID_GIFT_ARR, sDCRITEM_QTY_GIFT_ARR, sDCRITEM_POB_QTY, sDCRITEM_POB_VALUE, sDCRITEM_VISUAL_ARR,sDCRITEM_NOC_ARR;
     String sDCRDR_DR_ID, sDCRDR_WW1, sDCRDR_WW2, sDCRDR_WW3, sDCRDR_LOC, sDCRDR_IN_TIME, sDCRDR_BATTERY_PERCENT, sDCRDR_REMARK, sDCRDR_KM, sDCRDR_SRNO,sDCRDR_FILE,sDCRDR_CALLTYPE,sDR_REF_LAT_LONG;
-    String sDCRCHEM_CHEM_ID, sDCRCHEM_POB_QTY, sDCRCHEM_POB_AMT, sDCRCHEM_ITEM_ID_ARR, sDCRCHEM_QTY_ARR, sDCRCHEM_LOC, sDCRCHEM_IN_TIME, sDCRCHEM_SQTY_ARR, sDCRCHEM_ITEM_ID_GIFT_ARR, sDCRCHEM_QTY_GIFT_ARR, sDCRCHEM_BATTERY_PERCENT, sDCRCHEM_KM, sDCRCHEM_SRNO,sDCRCHEM_REMARK,sDCRCHEM_FILE,sCHEM_REF_LAT_LONG;
+    String sDCRCHEM_CHEM_ID, sDCRCHEM_POB_QTY, sDCRCHEM_POB_AMT, sDCRCHEM_ITEM_ID_ARR, sDCRCHEM_QTY_ARR, sDCRCHEM_LOC, sDCRCHEM_IN_TIME, sDCRCHEM_SQTY_ARR, sDCRCHEM_ITEM_ID_GIFT_ARR, sDCRCHEM_QTY_GIFT_ARR, sDCRCHEM_BATTERY_PERCENT, sDCRCHEM_KM, sDCRCHEM_SRNO,sDCRCHEM_REMARK,sDCRCHEM_FILE,sCHEM_REF_LAT_LONG,sCHEM_STATUS,sCOMPETITOR_REMARK;
     String sDCRSTK_STK_ID, sDCRSTK_POB_QTY, sDCRSTK_POB_AMT, sDCRSTK_ITEM_ID_ARR, sDCRSTK_QTY_ARR, sDCRSTK_LOC, sDCRSTK_IN_TIME, sDCRSTK_SQTY_ARR, sDCRSTK_ITEM_ID_GIFT_ARR, sDCRSTK_QTY_GIFT_ARR, sDCRSTK_BATTERY_PERCENT, sDCRSTK_KM, sDCRSTK_SRNO,sDCRSTK_REMARK,sDCRSTK_FILE,sSTK_REF_LAT_LONG;
     String sDCRRC_IN_TIME, sDCRRC_LOC, sDCRRC_DR_ID, sDCRRC_KM, sDCRRC_SRNO,sDCRRC_BATTERY_PERCENT,sDCRRC_REMARK,sDCRRC_FILE,sRC_REF_LAT_LONG;
     String sDCR_DR_RX, sDCR_ITM_RX;
@@ -167,7 +173,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
 
         cbohelp = new CBO_DB_Helper(context);
-        mServiceHandler = new ServiceHandler(context);
+        servive = new Service_Call_From_Multiple_Classes();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         DCR_REMARK_NA = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_REMARK_NA");
@@ -271,7 +277,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_INTERNET_FINAL_SUBMIT:
-                    parser6(msg.getData());
+                    //parser6(msg.getData());
                     break;
                 case GPS_TIMMER:
                     //finalSubmit();
@@ -429,6 +435,8 @@ public class FinalSubmitDcr_new extends CustomActivity {
             sCHEM_REF_LAT_LONG = "";
             DCRCHEM_RATE = "";
 
+            sCHEM_STATUS="";
+            sCOMPETITOR_REMARK="";
         } else {
             sDCRCHEM_CHEM_ID = dcr_ChemistCommit.get("sb_sDCRCHEM_CHEM_ID");
             sDCRCHEM_POB_QTY = dcr_ChemistCommit.get("sb_sDCRCHEM_POB_QTY");
@@ -447,6 +455,10 @@ public class FinalSubmitDcr_new extends CustomActivity {
             sDCRCHEM_FILE= dcr_ChemistCommit.get("sb_sDCRCHEM_FILE");
             sCHEM_REF_LAT_LONG = dcr_ChemistCommit.get("sb_sCHEM_REF_LAT_LONG");
             DCRCHEM_RATE = dcr_ChemistCommit.get("sb_DCRCHEM_RATE");
+
+
+            sCHEM_STATUS= dcr_ChemistCommit.get("sCHEM_STATUS");
+            sCOMPETITOR_REMARK= dcr_ChemistCommit.get("sCOMPETITOR_REMARK");
         }
 
 
@@ -747,12 +759,15 @@ public class FinalSubmitDcr_new extends CustomActivity {
         request.put("DCRDR_RATE", DCRDR_RATE);
         request.put("DCRCHEM_RATE", DCRCHEM_RATE);
 
+        request.put("sCHEM_STATUS", sCHEM_STATUS);
+        request.put("sCOMPETITOR_REMARK", sCOMPETITOR_REMARK);
+
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(-1);
 
 
 
-        commitDialog = new ProgressDialog(FinalSubmitDcr_new.this);
+       /* commitDialog = new ProgressDialog(FinalSubmitDcr_new.this);
         commitDialog.setMessage("Please Wait..");
         commitDialog.setCanceledOnTouchOutside(false);
         commitDialog.setCancelable(false);
@@ -760,304 +775,86 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
         new CboServices(this, mHandler).customMethodForAllServices(request, "DCRCommitFinal_New_18", MESSAGE_INTERNET_FINAL_SUBMIT, tables);
+*/
 
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCRCommitFinal_New_19", request)
+                        .setTables(tables)
+                        .setDescription("Please Wait..\n" +
+                                "Final Submit in process......")
+                        .setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) throws JSONException {
+
+                                String table0 = message.getString("Tables0");
+                                JSONArray jsonArray1 = new JSONArray(table0);
+                                JSONObject c = jsonArray1.getJSONObject(0);
+                                if ( c.getString("STATUS").equals("Y")) {
+                                    customMethod.stopAlarm10Sec();
+                                    customMethod.stopAlarm10Minute();
+                                    customMethod.stopDOB_DOA_Remainder();
+                                    new CustomTextToSpeech().stopTextToSpeech();
+
+                                    new MainDB().delete(null);
+                                    //MyCustumApplication.getInstance().updateUser();
+
+                                    new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
+                                    Intent i = new Intent(getApplicationContext(), LoginFake.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(i);
+
+                                    if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ASKUPDATEYN","N").equals("Y")) {
+                                        new GetVersionCode(FinalSubmitDcr_new.this).execute();
+                                    }
+
+                                    stopLoctionService();
+                                    customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
+                                    finish();
+                                } else {
+                                    AppAlert.getInstance().getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) throws JSONException {
+                                parser6(response);
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                AppAlert.getInstance().getAlert(context,s, s1);
+
+                            }
+
+
+                        })
+                );
         //End of call to service
 
     }
 
-    private void parser6(Bundle result) {
-        if (result != null) {
+    private void parser6(Bundle result) throws JSONException {
 
-            try {
-
-                customVariablesAndMethod.SetLastCallLocation(context);
-
-
-                String table0 = result.getString("Tables0");
-                JSONArray jsonArray1 = new JSONArray(table0);
-                JSONObject c = jsonArray1.getJSONObject(0);
-
-                if ( c.getString("STATUS").equals("Y")) {
-                    setDataforFMCGandMenu(result);
-                    customMethod.stopAlarm10Sec();
-                    customMethod.stopAlarm10Minute();
-                    customMethod.stopDOB_DOA_Remainder();
-                    new CustomTextToSpeech().stopTextToSpeech();
-
-                    new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
-                    Intent i = new Intent(getApplicationContext(), LoginFake.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-
-                    if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ASKUPDATEYN","N").equals("Y")) {
-                        new GetVersionCode(FinalSubmitDcr_new.this).execute();
-                    }
-                    commitDialog.dismiss();
-                    stopLoctionService();
-                    customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
-                    finish();
-                    //setAlertDialogifDataNotFound_2(""+result);
-                } else {
+        customVariablesAndMethod.SetLastCallLocation(context);
+        String table0 = result.getString("Tables0");
+        JSONArray jsonArray1 = new JSONArray(table0);
+        JSONObject c = jsonArray1.getJSONObject(0);
 
 
-                    customVariablesAndMethod.getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));
-                    commitDialog.dismiss();
-                    // setAlertDialogifDataNotFound_2(""+result);
-                    //mycon.msgBox(result);
-                }
-
-            } catch (JSONException e) {
-                Log.d("MYAPP", "objects are: " + e.toString());
-                CboServices.getAlert(this, "Missing field error", getResources().getString(R.string.service_unavilable) + e.toString());
-                e.printStackTrace();
-                commitDialog.dismiss();
-                List toEmailList = Arrays.asList("mobilereporting@cboinfotech.com".split("\\s*,\\s*"));
-                new SendMailTask().execute("mobilereporting@cboinfotech.com",
-                        "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": "+" Final Submit Error",getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n methodName : "+"Final Submit"+"\n"+ e.toString());
-
-            }
+        if ( c.getString("STATUS").equals("Y")) {
+            String table1 = result.getString("Tables1");
+            JSONArray jsonArray2 = new JSONArray(table1);
+            servive.parseFMCG(context,jsonArray1,jsonArray2);
 
         }
-        //Log.d("MYAPP", "objects are1: " + result);
 
     }
 
 
-    public void setDataforFMCGandMenu(Bundle result) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, context.MODE_PRIVATE).edit();
-            try {
-                cbohelp.deleteMenu();
-                /*JSONObject jsonObject = new JSONObject(response);
-                JSONArray rows = jsonObject.getJSONArray("Tables");
-                JSONObject jsonObject1 = rows.getJSONObject(0);
-                JSONObject jsonObject2 = rows.getJSONObject(1);*/
 
-                String table11 = result.getString("Tables0");
-                JSONArray table0 = new JSONArray(table11);
-
-                String table12 = result.getString("Tables1");
-                JSONArray table1 = new JSONArray(table12);
-
-                for (int i = 0; i < table0.length(); i++) {
-                    JSONObject c = table0.getJSONObject(i);
-                    editor.putString("fmcg_value", c.getString("FMCG"));
-                    editor.putString("root_needed", c.getString("ROUTE"));
-                    editor.putString("gps_needed", c.getString("GPRSYN"));
-                    editor.putString("version", c.getString("VER"));
-
-                    cbohelp.deleteVersion();
-                    cbohelp.insertVersionInLocal(c.getString("VER"));
-
-                    editor.putString("doryn", c.getString("DORYN"));
-                    editor.putString("dosyn", c.getString("DOSYN"));
-                    editor.putString("internet", c.getString("INTERNET_RQD"));
-                    editor.putString("live_km", c.getString("LIVE_KM"));
-                    editor.putString("leave_yn", c.getString("LEAVEYN"));
-                    editor.putString("WEBSERVICE_URL", c.getString("WEBSERVICE_URL"));
-                    editor.putString("WEBSERVICE_URL_ALTERNATE", c.getString("WEBSERVICE_URL_ALTERNATE"));
-                    editor.putString("FLASHYN", c.getString("FLASHYN"));
-                    //editor.putString("FLASHYN", c.getString("FLASHYN"));
-                    editor.putString("DCR_REMARK_NA", c.getString("DCR_REMARK_NA"));
-                    editor.putString("DCR_DR_REMARKYN", c.getString("DCR_DR_REMARKYN"));
-                    editor.putString("ROUTEDIVERTYN", c.getString("ROUTEDIVERTYN"));
-                    editor.putString("DCR_ADDAREANA", c.getString("DCR_ADDAREANA"));
-                    editor.putString("VISUALAIDPDFYN", c.getString("VISUALAIDPDFYN"));
-                    editor.putString("SAMPLE_POB_MANDATORY", c.getString("SAMPLE_POB_MANDATORY"));
-                    editor.putString("REMARK_WW_MANDATORY", c.getString("REMARK_WW_MANDATORY"));
-                    editor.putString("SAMPLE_POB_INPUT_MANDATORY", c.getString("SAMPLE_POB_INPUT_MANDATORY"));
-                    editor.putString("MISSED_CALL_OPTION", c.getString("MISSED_CALL_OPTION"));
-                    editor.putString("APPRAISALMANDATORY", c.getString("APPRAISALMANDATORY"));
-                    editor.putString("USER_NAME", c.getString("USER_NAME"));
-                    editor.putString("PASSWORD", c.getString("PASSWORD"));
-                    editor.putString("VISUALAID_DRSELITEMYN", c.getString("VISUALAID_DRSELITEMYN"));
-                    editor.putString("DOB_REMINDER_HOUR", c.getString("DOB_REMINDER_HOUR"));
-                    editor.putString("SYNCDRITEMYN", c.getString("SYNCDRITEMYN"));
-                    editor.putString("GEO_FANCING_KM", c.getString("GEO_FANCING_KM"));
-                    editor.putString("FIRST_CALL_LOCK_TIME", c.getString("FIRST_CALL_LOCK_TIME"));
-                    editor.putString("mark", c.getString("FLASH_MESSAGE"));
-                    editor.putString("NOC_HEAD", c.getString("NOC_HEAD"));
-                    editor.putString("USER_PIC", c.getString("USER_PIC"));
-                    editor.putString("DCR_LETREMARK_LENGTH", c.getString("DCR_LETREMARK_LENGTH"));
-                    editor.putString("SAMPLEMAXQTY", c.getString("SAMPLEMAXQTY"));
-                    editor.putString("POBMAXQTY", c.getString("POBMAXQTY"));
-                    editor.putString("ASKUPDATEYN", c.getString("ASKUPDATEYN"));
-                    editor.putString("MOBILEDATAYN", c.getString("MOBILEDATAYN"));
-                    editor.putString("CALLWAITINGTIME", c.getString("CALLWAITINGTIME"));
-                    editor.putString("COMPANY_PIC", c.getString("COMPANY_PIC"));
-                    editor.putString("RE_REG_KM", c.getString("RE_REG_KM"));
-                    editor.putString("ERROR_EMAIL", c.getString("ERROR_EMAIL"));
-                    editor.putString("DIVERT_REMARKYN", c.getString("DIVERT_REMARKYN"));
-                    editor.putString("NLC_PIC_YN", c.getString("NLC_PIC_YN"));
-                    editor.putString("RX_MAX_QTY", c.getString("RX_MAX_QTY"));
-                    editor.putString("SHOW_ADD_REGYN", c.getString("SHOW_ADD_REGYN"));
-                    editor.putString("EXP_ATCH_YN", c.getString("EXP_ATCH_YN"));
-                    editor.putString("FARMERADDFIELDYN", c.getString("FARMERADDFIELDYN"));
-                    editor.putString("NO_DR_CALL_REQ", c.getString("NO_DR_CALL_REQ"));
-                    editor.putString("DR_RX_ENTRY_YN", c.getString("DR_RX_ENTRY_YN"));
-                    editor.putString("RETAILERCHAINYN", c.getString("RETAILERCHAINYN"));
-                    editor.putString("DCR_SUBMIT_TIME", c.getString("DCR_SUBMIT_TIME"));
-                    editor.putString("DCR_SUBMIT_SPEACH", c.getString("DCR_SUBMIT_SPEACH"));
-                    editor.putString("ALLOWED_APP", c.getString("ALLOWED_APP"));
-                    editor.putString("DCRGIFT_QTY_VALIDATE", c.getString("DCRGIFT_QTY_VALIDATE"));
-                    editor.putString("SAMPLE_BTN_CAPTION", c.getString("SAMPLE_BTN_CAPTION"));
-                    editor.putString("GIFT_BTN_CAPTION", c.getString("GIFT_BTN_CAPTION"));
-                    editor.putString("DIVERTWWYN", c.getString("DIVERTWWYN"));
-                    editor.putString("PIN_ALLOWED_MSG", c.getString("PIN_ALLOWED_MSG"));
-                    editor.putString("CMC3_GALLERY_REQ", c.getString("CMC3_GALLERY_REQ"));
-                    editor.putString("DR_COLOR", c.getString("DR_COLOR"));
-                    editor.putString("DCRPPNA", c.getString("DCRPPNA"));
-                    editor.putString("DR_SALE_URL", c.getString("DR_SALE_URL"));
-                    editor.putString("REG_ADDRESS_KM", c.getString("REG_ADDRESS_KM"));
-                    editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
-                    editor.commit();
-
-                }
-
-                for (int i = 0; i < table1.length(); i++) {
-                    JSONObject object = table1.getJSONObject(i);
-                    String menu = object.getString("MAIN_MENU");
-                    String menu_code = object.getString("MENU_CODE");
-                    String menu_name = object.getString("MENU_NAME");
-                    String menu_url = object.getString("URL");
-                    String main_menu_srno = object.getString("MAIN_MENU_SRNO");
-                    cbohelp.insertMenu(menu, menu_code, menu_name, menu_url, main_menu_srno);
-                }
-
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-
-    private void finalSubmit(){
-        final CommitTask_New commitFinal = new CommitTask_New(FinalSubmitDcr_new.this);
-        commitFinal.setListener(new TaskListener<String>() {
-            ProgressDialog commitDialog;
-
-            @Override
-            public void onStarted() {
-                try {
-                    commitDialog = new ProgressDialog(FinalSubmitDcr_new.this);
-                    commitDialog.setMessage("Please Wait..");
-                    commitDialog.setCanceledOnTouchOutside(false);
-                    commitDialog.setCancelable(false);
-                    commitDialog.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFinished(String result) {
-
-                if ((result == null) || (result.contains("[ERROR]"))) {
-                    commitDialog.dismiss();
-                    //mycon.msgBox("Data Error Please Contact Your Head Office or\n Switch OFF your GPS and Restart your APP ");
-                    //mycon.msgBox("Data Error Please Reset DayPlan....");
-                    setAlertDialogifDataNotFound_2("" + result);
-                    String subject="";
-                    if (result.length()>22  && result.length()>=80){
-                        subject=result.substring(22,80);
-                    }else if (result.length()>22){
-                        subject=result.substring(22);
-                    }else{
-                        subject=result;
-                    }
-                    List toEmailList = Arrays.asList("mobilereporting@cboinfotech.com".split("\\s*,\\s*"));
-                    new SendMailTask().execute("mobilereporting@cboinfotech.com",
-                            "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": "+subject,getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n methodName : "+"Final Submit"+"\n"+ result);
-
-                } else {
-
-                    try {
-
-                        //{"Tables": [{"Tables0": [{"STATUS": "N",	"MESSAGE": "DCR ID NOT FOUND",	"URL": ""	}]}]}
-                        JSONObject jsonObject = new JSONObject(result);
-                        JSONArray rows = jsonObject.getJSONArray("Tables");
-                        JSONObject jsonObject1 = rows.getJSONObject(0);
-                        JSONArray table0 = jsonObject1.getJSONArray("Tables0");
-                        JSONObject c = table0.getJSONObject(0);
-                        if ( c.getString("STATUS").equals("Y")) {
-                            appPrefrences.setDataforFMCGandMenu(result);
-                            customMethod.stopAlarm10Sec();
-                            customMethod.stopAlarm10Minute();
-                            customMethod.stopDOB_DOA_Remainder();
-                            new CustomTextToSpeech().stopTextToSpeech();
-                            new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
-                            Intent i = new Intent(getApplicationContext(), LoginFake.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(i);
-
-                            if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ASKUPDATEYN","N").equals("Y")) {
-                                new GetVersionCode(FinalSubmitDcr_new.this).execute();
-                            }
-                            commitDialog.dismiss();
-                            customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
-                            stopLoctionService();
-                            finish();
-                            //setAlertDialogifDataNotFound_2(""+result);
-                        } else {
-
-
-                            customVariablesAndMethod.getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));
-                            commitDialog.dismiss();
-                            // setAlertDialogifDataNotFound_2(""+result);
-                            //mycon.msgBox(result);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-
-                }
-            }
-        });
-        currentBestLocation=customVariablesAndMethod.getObject(context,"currentBestLocation",Location.class);
-
-        String locExtra="";
-
-        if (currentBestLocation!=null) {
-            locExtra = "Lat_Long " + currentBestLocation.getLatitude() + "," + currentBestLocation.getLongitude() + ", Accuracy " + currentBestLocation.getAccuracy() + ", Time " + currentBestLocation.getTime() + ", Speed " + currentBestLocation.getSpeed() + ", Provider " + currentBestLocation.getProvider();
-        }
-
-        commitFinal.execute(remark.getText().toString(), Custom_Variables_And_Method.GLOBAL_LATLON +"@"+locExtra+ "!^" + address);
-
-    }
-    //check for version
-    //new GetVersionCode(this).execute();
-
-    public void setAlertDialogifDataNotFound_2(final String msg) {
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
-        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
-        Alert_title.setText("Server Error");
-        Alert_message.setText(getResources().getString(R.string.try_later));
-
-        final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
-        pa_id_txt.setText(""+Custom_Variables_And_Method.PA_ID);
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-
-
-        final AlertDialog dialog = builder1.create();
-
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
-
-    }
 
 
 

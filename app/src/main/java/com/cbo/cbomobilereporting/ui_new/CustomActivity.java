@@ -3,10 +3,12 @@ package com.cbo.cbomobilereporting.ui_new;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +49,7 @@ public abstract class CustomActivity extends AppCompatActivity {
     private String TAG = "CustomActivity";
 
     activityType activitytype = activityType.ACTIVITY;
-    public Context context;
+    public CustomActivity context;
     public Custom_Variables_And_Method customVariablesAndMethod;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,8 +133,8 @@ public abstract class CustomActivity extends AppCompatActivity {
             intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Log.d(TAG, "Running on Android O");
-                //startForegroundService(intent);
-                startService(intent);
+                startForegroundService(intent);
+                //startService(intent);
             } else {
                 Log.d(TAG, "Running on Android N or lower");
                 startService(intent);
@@ -143,15 +145,35 @@ public abstract class CustomActivity extends AppCompatActivity {
     }
 
     public void stopLoctionService() {
-        Intent intent = new Intent(this, MyLoctionService.class);
-        intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.d(TAG, "Running on Android O");
-            //startForegroundService(intent);
-            startService(intent);
-        }else{
-            Log.d(TAG, "Running on Android N or lower");
-            startService(intent);
+        stopLoctionService(true);
+    }
+
+    public void stopLoctionService(boolean forcefully) {
+
+        if (!isLiveTrackingOn() || forcefully) {
+            Intent intent = new Intent(this, MyLoctionService.class);
+            intent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d(TAG, "Running on Android O");
+                stopService(intent);
+                //startService(intent);
+            } else {
+                Log.d(TAG, "Running on Android N or lower");
+                stopService(intent);
+            }
         }
     }
+
+    public Boolean isLiveTrackingOn(){
+
+        //return false;
+        String fmcg_Live_Km =customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"live_km");
+
+        return  (fmcg_Live_Km.equalsIgnoreCase("Y"))||
+                (fmcg_Live_Km.equalsIgnoreCase("5"))||
+                (fmcg_Live_Km.equalsIgnoreCase("Y5"));
+
+
+    }
+
 }

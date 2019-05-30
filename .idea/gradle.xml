@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$/CBOLibrary" />
             <option value="$PROJECT_DIR$/ShortcutBadger" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/cboorder" />
+            <option value="$PROJECT_DIR$/dbhelper" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

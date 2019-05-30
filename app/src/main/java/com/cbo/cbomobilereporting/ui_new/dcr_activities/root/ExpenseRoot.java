@@ -15,9 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Expense;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
 import com.flurry.android.FlurryAgent;
@@ -52,6 +55,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -79,6 +84,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import services.CboServices;
 import services.ServiceHandler;
 import utils.ExceptionHandler;
@@ -129,7 +135,8 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
     String value;
     Boolean resultTrue, myval=false;
     ImageView attach_img,attachnew;
-    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "";
+    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "",ACTUALFAREYN_MANDATORY="";
+    Double ACTUALFARE_MAXAMT = 0D;
 
     ArrayList<Map<String, String>> data = null;
 
@@ -246,7 +253,33 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
         });
 
 
+        distAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (ACTUALFARE_MAXAMT>0){
+                    if ((distAmt.getText().toString().trim().isEmpty() ? 0D :Double.parseDouble( distAmt.getText().toString())) > ACTUALFARE_MAXAMT){
+                        AppAlert.getInstance().Alert(context, "Alert!!!",
+                                "Your AcutaFare cannot exceed " + AddToCartView.toCurrency(String.format("%.2f", (ACTUALFARE_MAXAMT))), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        distAmt.setText(""+ACTUALFARE_MAXAMT);
+                                    }
+                                });
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         save_exp.setOnClickListener(new OnClickListener() {
@@ -258,7 +291,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 if (datype_val.equals("--Select--")) {
                     customVariablesAndMethod.msgBox(context,"Please Select your DA TYPE");
                 } else */
-                if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("")) {
+                if ( actual_fare_layout.getVisibility()==View.VISIBLE
+                        && distAmt.getText().toString().equals("")
+                        && !ACTUALFAREYN_MANDATORY.equalsIgnoreCase("N")) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Actual Fare....");
                 }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"EXP_ATCH_YN","N").equals("Y") &&  actual_fare_layout.getVisibility()==View.VISIBLE && attach_txt.getText().toString().equals("* Attach Picture....")) {
                     customVariablesAndMethod.msgBox(context,"Please Attach supporting File for Actual Fare....");
@@ -373,7 +408,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
     @Override
     public void Edit_Expense(String who, String hed, String amt, String rem, String path, String hed_id) {
-        Add_expense(who,hed,amt,rem,path,hed_id);
+        if (!hed_id.equalsIgnoreCase("-1")) {
+            Add_expense(who, hed, amt, rem, path, hed_id);
+        }
     }
 
     @Override
@@ -555,6 +592,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
         attach_option.setVisibility(View.GONE);
         final String[] DA_ACTION = {"0"};
 
+        final mExpHead[] expHead = {null};
+        final Boolean[] keyPressed = {true};
+
         add_attachment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -570,6 +610,8 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 }
             }
         });
+
+
 
         attach_option.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -614,18 +656,40 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 exp_hed= ((TextView) arg1.findViewById(R.id.spin_name)).getText().toString();
                 DA_ACTION[0] = ((SpinnerModel)adapter.data.get(arg2)).getPANE_TYPE();
                 filename="";
+
                 attach_img.setImageDrawable(null);
                 add_attachment.setChecked(false);
 
-                if (exp_id.equals("3119")) {
-                    exhAmt.setHint("K.M.");
-                    textRemark.setText("K.M. Remark.");
-                    ex_head_root_txt.setText("K.M.");
-                } else {
-                    exhAmt.setHint("Amt.");
-                    textRemark.setText("Exp Remark.");
-                    ex_head_root_txt.setText("Amount");
+                expHead[0] = cbohelp.getEXP_Head(exp_id);
+                exhAmt.setText("");
+                Boolean allreadyAdded = false;
+                if (who.equals("0")){
+                    if (cbohelp.get_ExpenseTypeAdded(expHead[0].getEXP_TYPE_STR()).size() >0
+                            && expHead[0].getEXP_TYPE() != eExpanse.None) {
+                        allreadyAdded = true;
 
+                    }
+                }
+                if (!allreadyAdded) {
+                    if (exp_id.equals("3119")) {
+                        exhAmt.setHint("K.M.");
+                        textRemark.setText("K.M. Remark.");
+                        ex_head_root_txt.setText("K.M.");
+                    } else {
+                        exhAmt.setHint("Amt.");
+                        textRemark.setText("Exp Remark.");
+                        ex_head_root_txt.setText("Amount");
+
+                    }
+                }else{
+                    AppAlert.getInstance().Alert(context, "Alert!!!",
+                            expHead[0].getEXP_TYPE().name() +" allready submitted in another Head",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    exphead.setSelection(0);
+                                }
+                            });
                 }
             }
 
@@ -635,10 +699,54 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
             }
         });
+
+
+
+        exhAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+               // if (expHead[0] != null) {
+                    Double amt = s.toString().trim().isEmpty() ? 0D : Double.parseDouble(s.toString());
+                    Double maxAmt = expHead[0].getMAX_AMT();
+                    if (maxAmt == 0) {
+                        maxAmt = amt;
+                    }
+                    if (keyPressed[0]) {
+                        keyPressed[0] = false;
+                        if (amt > maxAmt) {
+                            Double finalMaxAmt = maxAmt;
+                            AppAlert.getInstance().Alert(context, "Alert!!!",
+                                    "You are not allowed to enter more then " + maxAmt,
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            exhAmt.setText("" + finalMaxAmt);
+                                        }
+                                    });
+
+                        }
+                        keyPressed[0] = true;
+                    }
+               // }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         dialog.setView(dialogLayout);
         dialog.setTitle("Add Other Expences");
 
         if(who.equals("0")) {
+            adapter = new SpinAdapter(getApplicationContext(), R.layout.spin_row, cbohelp.get_ExpenseHeadNotAdded());
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
             exphead.setAdapter(adapter);
             head.setVisibility(View.GONE);
         }else{
@@ -646,6 +754,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
             exphead.setVisibility(View.GONE);
             head.setText(hed);
             exp_id=hed_id;
+            expHead[0] = cbohelp.getEXP_Head(exp_id);
             exp_hed=hed;
             exhAmt.setText(amt);
             rem_final.setText(rem);
@@ -672,7 +781,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                     customVariablesAndMethod.msgBox(context,"First Select the Expense Head...");
                 } else if (my_Amt.trim().isEmpty()) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Expense Amt....");
-                } else if (Integer.valueOf(my_Amt)==0) {
+                } else if (Double.valueOf(my_Amt)==0) {
                     customVariablesAndMethod.msgBox(context,"Expense Amt. can't be zero...");
                 } else if (my_rem.trim().isEmpty()) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Remark....");
@@ -685,6 +794,10 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                             dialog.dismiss();
                         }
                     });
+                }else if (expHead[0].getATTACHYN() != 0
+                        && filename.equalsIgnoreCase("")
+                        && path.equalsIgnoreCase("")) {
+                    customVariablesAndMethod.msgBox(context,"Please add an attachment....");
                 }else {
 
 
@@ -695,15 +808,18 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                         File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + filename);
                         new up_down_ftp().uploadFile(file2,ExpenseRoot.this);
 
-                    }
-                    if(!path.equals("")){
+                    }else{
                         filename= finalExt;
-                    }
-                    dialog.dismiss();
-
-                    if (filename.equals("")) {
                         other_expense_commit();
                     }
+                    /*if(!path.equals("")){
+                        filename= finalExt;
+                    }*/
+                    dialog.dismiss();
+
+                    /*if (filename.equals("")) {
+                        other_expense_commit();
+                    }*/
 
                 }
             }
@@ -1229,8 +1345,11 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                     JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
                     newlist.add(new SpinnerModel(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
                             jsonObject1.getString("DA_ACTION")));
+
                     cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
-                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"));
+                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
+                            jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
+                            jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
 
                 }
                 if (newlist.size() > 0) {
@@ -1273,10 +1392,38 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                     rootdata.add((object.getString("ACTUALFAREYN")));
                     ROUTE_CLASS = object.getString("ROUTE_CLASS");
                     ACTUALDA_FAREYN = object.getString("ACTUALDA_FAREYN");
+                    ACTUALFAREYN_MANDATORY  = object.getString("ACTUALFAREYN_MANDATORY");
+                    ACTUALFARE_MAXAMT  = object.getDouble("ACTUALFARE_MAXAMT");
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN",object.getString("ACTUALFAREYN"));
 
 
+
+                    String MyDaType = object.getString("DA_TYPE_NEW");
+                    String da_val = object.getString("DA_RATE_NEW");
+                    /*Float rate = Float.parseFloat(one.getString("FARE_RATE"));
+                    Float kms = Float.parseFloat(one.getString("KM"));
+
+                    if (MyDaType.equals("L")) {
+                        da_val = one.getString("DA_L_RATE");
+                    } else if (MyDaType.equals("EX") || MyDaType.equals("EXS")) {
+                        da_val = one.getString("DA_EX_RATE");
+                    } else if (MyDaType.equals("NSD") || MyDaType.equals("NS")) {
+                        da_val = one.getString("DA_NS_RATE");
+                    }
+                    String distance_val = "0";
+                    if (MyDaType.equals("EX") || MyDaType.equals("NSD")) {
+                        distance_val = "" + (kms * rate * 2);
+
+                    } else {
+                        distance_val = "" + (kms * rate);
+                    }*/
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",object.getString("TA_AMT_NEW"));
                 }
+
+
 
 
                 data=cbohelp.get_Expense();
@@ -1328,50 +1475,6 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
     }
 
-    /*@Override
-    public void upload_complete(final String IsCompleted) {
-        progress1.dismiss();
-        if (IsCompleted.equals("S")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    //new UploadPhotoInBackGround().execute();
-                }
-            });
-        }else if (IsCompleted.equals("Y")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    other_expense_commit();
-
-                }
-            });
-        }else if (IsCompleted.contains("ERROR")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    //new UploadPhotoInBackGround().execute();
-                    String folder=IsCompleted.substring(6);
-                    customVariablesAndMethod.getAlert(context,"Folder not found",folder+"   Invalid path \nPlease contact your administrator");
-                }
-            });
-        }else {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    customVariablesAndMethod.msgBox(context,"UPLOAD FAILED \n Please try again");
-                }
-            });
-        }
-    }*/
 
     @Override
     public void started(Integer responseCode, String message, String description) {

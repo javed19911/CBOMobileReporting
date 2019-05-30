@@ -69,6 +69,7 @@ public class Route_Dialog extends AlertDialog {
     ArrayList<String>data,data1;
     StringBuilder sb,sb2;
     String sAllYn;
+    Boolean  allowMultipleRoute = false;
     ArrayList<RootModel>list=new ArrayList<RootModel>();
 
     String name;
@@ -118,6 +119,7 @@ public class Route_Dialog extends AlertDialog {
 
 
         sAllYn=Msg.getString("sAllYn");
+        allowMultipleRoute = Msg.getBoolean("allowMultipleRoute");
 
         setRootDataToUI((Activity) context);
         Custom_Variables_And_Method.work_with_area_id="";
@@ -214,7 +216,7 @@ public class Route_Dialog extends AlertDialog {
                     customVariablesAndMethod.msgBox(context,result);
                 } else {
                     list=rootTask.setDataToRootList(result,list);
-                    adapter=new DcrRootAdapter(context,list );
+                    adapter=new DcrRootAdapter(context,list ,allowMultipleRoute);
                     mylist.setAdapter(adapter);
                 }
 

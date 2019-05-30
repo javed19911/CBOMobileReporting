@@ -22,13 +22,14 @@ import com.cbo.cbomobilereporting.ui_new.transaction_activities.ComplaintView;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Farmer_registration_form;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Rcpa_Call;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import saleOrder.Activities.ClientActivity;
 import utils.adapterutils.Transaction_Grid_Adapter;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -48,6 +49,8 @@ public class TransactionMenuInGrid extends Fragment {
     ArrayList<String> getKeyList = new ArrayList<>();
     Map<String,String> keyValue = new LinkedHashMap<>();
     Custom_Variables_And_Method customVariablesAndMethod;
+    String MenuCode = "TRANSACTION";
+    GridView gridView;
 
 
 
@@ -66,10 +69,12 @@ public class TransactionMenuInGrid extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         context = getActivity();
-        GridView gridView = (GridView) v.findViewById(R.id.grid_view_example);
+        gridView = (GridView) v.findViewById(R.id.grid_view_example);
         cboDbHelper = new CBO_DB_Helper(context);
         networkUtil = new NetworkUtil(context);
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
+        MenuCode = getArguments().getString("Code");
+
 
         fmcgYN = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"fmcg_value");
         leave_yn = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"leave_yn");
@@ -83,12 +88,13 @@ public class TransactionMenuInGrid extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
               String nameOnClick = getKeyList.get(position);
-                String url=new CBO_DB_Helper(getActivity()).getMenuUrl("TRANSACTION",nameOnClick);
+                String url=new CBO_DB_Helper(getActivity()).getMenuUrl(MenuCode,nameOnClick);
                 if(url!=null && !url.equals("")) {
-                    Intent i = new Intent(getActivity(), CustomWebView.class);
+                    /*Intent i = new Intent(getActivity(), CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", listOfAllTab.get(position));
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
 
                 }else {
                     switch (nameOnClick) {
@@ -98,10 +104,10 @@ public class TransactionMenuInGrid extends Fragment {
                             onClickLeaveReq();
                             break;
                         }
-                        case "T_SS": {
+                        /*case "T_SS": {
                             onClickSecSales(position);
                             break;
-                        }
+                        }*/
                         case "T_COMP": {
                             onClickComplaint();
                             break;
@@ -125,48 +131,10 @@ public class TransactionMenuInGrid extends Fragment {
                             }
                             break;
                         }
-
-                        case "T_ADDDOC": {
-                            onClickAddDoctor(position);
-                            break;
-                        }
-
-                        case "T_ADDCHEM": {
-                            onClickAddChemist(position);
+                        case "T_SORD":
+                            onClickSalesOrder();
                             break;
 
-                        }
-                        case "T_DRSHALE": {
-                            onClickDrWiseSales(position);
-                            break;
-
-                        }
-
-                        case "T_ADDTP": {
-
-                            onClickAddTP(position);
-                            break;
-
-                        }
-                        case "T_TPAPROVE": {
-
-                            onClickAddTPApproval(position);
-                            break;
-
-                        }
-
-                        case "T_CHALACK": {
-
-                            onClickChallanAck(position);
-
-                            break;
-                        }
-                        case "T_RM": {
-
-                            onClickRouteMaster(position);
-
-                            break;
-                        }
                         case "T_DRREG": {
 
                             onClickDoctorRegistration(position);
@@ -199,12 +167,13 @@ public class TransactionMenuInGrid extends Fragment {
 
 
                         default: {
-                            url = new CBO_DB_Helper(context).getMenuUrl("TRANSACTION", getKeyList.get(position));
+                            url = new CBO_DB_Helper(context).getMenuUrl(MenuCode, getKeyList.get(position));
                             if (url != null && !url.equals("")) {
-                                Intent i = new Intent(getActivity(), CustomWebView.class);
+                                /*Intent i = new Intent(getActivity(), CustomWebView.class);
                                 i.putExtra("A_TP", url);
                                 i.putExtra("Title", listOfAllTab.get(position));
-                                startActivity(i);
+                                startActivity(i);*/
+                                MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                             } else {
                                 Toast.makeText(context, "Page Under Development", Toast.LENGTH_LONG).show();
                             }
@@ -215,10 +184,48 @@ public class TransactionMenuInGrid extends Fragment {
         });
 
     }
+
+
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            //Only manually call onResume if fragment is already visible
+            //Otherwise allow natural fragment lifecycle to call onResume
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!getUserVisibleHint())
+        {
+            return;
+        }
+
+        addDataInList();
+        //cboDbHelper.getDetailsForOffline();
+
+        gridView.setAdapter(new Transaction_Grid_Adapter(context, listOfAllTab, getKeyList));
+
+    }
+
+
+    private void onClickSalesOrder() {
+
+        Intent intent = new Intent(context, ClientActivity.class);
+        startActivity(intent);
+
+    }
 ////////////////////////
     public void addDataInList() {
 
-        keyValue = cboDbHelper.getMenu("TRANSACTION","");
+        keyValue = cboDbHelper.getMenu(MenuCode,"");
+        getKeyList = new ArrayList<>();
         listOfAllTab = new ArrayList<String>();
         for (String key : keyValue.keySet()) {
             getKeyList.add(key);
@@ -332,119 +339,7 @@ public class TransactionMenuInGrid extends Fragment {
     }
 
 
-    ///////////onClickAddDoctor/////////////
 
-    private void onClickAddDoctor(Integer position) {
-
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-        } else {
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("addnew_dr_Url", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_ADDNEW_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
-        }
-    }
-
-    ///////////onClickAddChemist/////////////
-
-    private void onClickAddChemist(Integer position) {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-        } else {
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("addnew_chm_Url",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEM_ADDNEW_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
-        }
-
-    }
-///////////onClickChallanAck/////////////
-
-    private void onClickChallanAck(Integer position) {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-        } else {
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("CHALLAN_ACK_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHALLAN_ACK_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-
-            startActivity(i);
-        }
-
-    }
-
-
-
-///////////onClickTPApproval/////////////
-
-    private void onClickAddTPApproval(Integer position) {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-        } else {
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("TP_APPROVE_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_APPROVE_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
-        }
-
-    }
-
-
-///////////onClickChallanDrwiseSale/////////////
-
-    private void onClickDrWiseSales(Integer position) {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-        } else {
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("DRSALE_ADDNEW_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DRSALE_ADDNEW_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
-        }
-
-    }
-
-///////////onClickChallanDrwiseSale/////////////
-
-    private void onClickSecSales(Integer position) {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-        } else {
-
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("SECONDARY_SALE_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SECONDARY_SALE_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
-
-
-            /*Intent i = new Intent(getActivity(), Sec_Sales.class);
-
-            startActivity(i);*/
-        }
-
-    }
-///////////onClickRouteMaster/////////////
-
-
-    private void onClickRouteMaster(Integer position) {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-        } else {
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("ROUTE_MASTER_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTE_MASTER_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
-        }
-
-    }
 
     private void onClickDoctorRegistration(Integer position) {
 
@@ -461,20 +356,5 @@ public class TransactionMenuInGrid extends Fragment {
         }
 
     }
-
-///////////onClickAddTP/////////////
-
-    private void onClickAddTP(Integer position) {
-        if (!networkUtil.internetConneted(context)) {
-            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-        } else {
-            Intent i = new Intent(getActivity(), CustomWebView.class);
-            i.putExtra("TP_ADDNEW_URL",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"TP_ADDNEW_URL"));
-            i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
-        }
-
-    }
-
 
 }

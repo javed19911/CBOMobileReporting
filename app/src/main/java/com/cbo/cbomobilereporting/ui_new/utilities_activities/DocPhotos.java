@@ -32,14 +32,17 @@ import com.cbo.cbomobilereporting.BuildConfig;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.Show_Sample;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.flurry.android.FlurryAgent;
+import com.uenics.javed.CBOLibrary.Response;
 
 
 import utils.adapterutils.DocSampleModel;
 import utils.adapterutils.LazyAdapter;
-import utils.networkUtil.NetworkUtil;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 public class DocPhotos extends AppCompatActivity {
 	ListView mylist;
@@ -70,7 +73,7 @@ public class DocPhotos extends AppCompatActivity {
 		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
 		TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 		setSupportActionBar(toolbar);
-		hader_text.setText("Visual Aid");
+		hader_text.setText("Visual Ads");
 
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -130,13 +133,26 @@ public class DocPhotos extends AppCompatActivity {
 					//Intent i=new Intent(getApplicationContext(),MyUtil.class);
 					//startActivity(i);
 					//finish();
-					NetworkUtil networkUtil = new NetworkUtil(getApplicationContext());
+					/*NetworkUtil networkUtil = new NetworkUtil(getApplicationContext());
 					if (!networkUtil.internetConneted(getApplicationContext())) {
 						customVariablesAndMethod.Connect_to_Internet_Msg(context);
 					} else {
 						startActivityForResult(new Intent(getApplicationContext(), VisualAid_Download.class),1);
 
-					}
+					}*/
+
+					new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+						@Override
+						public void onSuccess(Bundle bundle) {
+							customVariablesAndMethod.msgBox(context, "Data Downloded Sucessfully...");
+
+						}
+
+						@Override
+						public void onError(String message, String description) {
+							AppAlert.getInstance().getAlert(context,message,description);
+						}
+					});
 				}
 				});
 			dialog = builder1.create();
@@ -155,13 +171,16 @@ public class DocPhotos extends AppCompatActivity {
 				String item_name=((TextView)v.findViewById(R.id.dcr_workwith_name)).getText().toString();
 				rowid=((TextView)v.findViewById(R.id.list_row_id)).getText().toString();
 				String visual_pdf=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"VISUALAIDPDFYN");
-				if(item_name.equals("CATALOG")){
+				File file =new File(Environment.getExternalStorageDirectory(), "cbo/product/"+item_name+"/"+"Menu"+".html");
+				if(file.exists()){
 
-					Intent i = new Intent(context, CustomWebView.class);
-					i.putExtra("A_TP1", (new File(Environment.getExternalStorageDirectory(), "cbo/product/Catalog/"+"Menu"+".html").toString()));
+					/*Intent i = new Intent(context, CustomWebView.class);
+					i.putExtra("A_TP1", file.toString());
 					i.putExtra("Menu_code", "");
 					i.putExtra("Title", item_name);
-					startActivity(i);
+					startActivity(i);*/
+
+					MyCustumApplication.getInstance().LoadURL(item_name,file.toString());
 
 					/*Intent browserIntent = new Intent(Intent.ACTION_VIEW);
 					browserIntent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "cbo/Catalog/"+"Menu"+".html")), "text/html");
@@ -204,11 +223,12 @@ public class DocPhotos extends AppCompatActivity {
 								customVariablesAndMethod.msgBox(context,"PDF Reader application is not installed in your device");
 							}*/
 						}else {
-							Intent i = new Intent(context, CustomWebView.class);
+							/*Intent i = new Intent(context, CustomWebView.class);
 							i.putExtra("A_TP1", path1.toString());
 							i.putExtra("Menu_code", "");
 							i.putExtra("Title", item_name);
-							startActivity(i);
+							startActivity(i);*/
+							MyCustumApplication.getInstance().LoadURL(item_name,path1.toString());
 						}
 
 					}else if(path2.exists()){
@@ -242,11 +262,12 @@ public class DocPhotos extends AppCompatActivity {
 								customVariablesAndMethod.msgBox(context,"PDF Reader application is not installed in your device");
 							}*/
 						}else {
-							Intent i = new Intent(context, CustomWebView.class);
+							/*Intent i = new Intent(context, CustomWebView.class);
 							i.putExtra("A_TP1", path2.toString());
 							i.putExtra("Menu_code", "");
 							i.putExtra("Title", item_name);
-							startActivity(i);
+							startActivity(i);*/
+							MyCustumApplication.getInstance().LoadURL(item_name,path2.toString());
 						}
 
 					}else{
@@ -419,9 +440,9 @@ public class DocPhotos extends AppCompatActivity {
 						}
 					}
 				} else {
-					if (sample_name.contains("CATALOG")) {
+					if (sample_name.contains(file1.getName())) {
 						for (int j = 0; j < sample_name.size(); j++) {
-							if (sample_name.get(j).equals("CATALOG")) {
+							if (sample_name.get(j).equals(file1.getName())) {
 								list.get(j).set_file_ext(".html");
 								break;
 							}

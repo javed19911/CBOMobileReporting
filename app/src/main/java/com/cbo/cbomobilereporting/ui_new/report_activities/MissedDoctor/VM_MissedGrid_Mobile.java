@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import services.CboServices;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.AppAlert;
 import utils_new.CustomError;
 import utils_new.Custom_Variables_And_Method;

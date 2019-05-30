@@ -49,33 +49,38 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.StockistCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mChemistCall;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.Chemist_Gift;
 import com.cbo.cbomobilereporting.ui.LoginFake;
-import com.cbo.cbomobilereporting.ui.Stk_Sample;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import locationpkg.Const;
+import services.MyAPIService;
 import services.Sync_service;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
+
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
-import utils_new.Chm_Sample_Dialog;
 import utils_new.Custom_Variables_And_Method;
-import utils_new.Dr_Gift_Dialog;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Report_Registration;
 import utils_new.SendAttachment;
@@ -143,6 +148,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
     String latLong = "";
     String ref_latLong = "";
+    Service_Call_From_Multiple_Classes service ;
 
     public ArrayList<String> getmydata() {
         ArrayList<String> raw = new ArrayList<String>();
@@ -166,6 +172,11 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
 
 
+    ///firebase DB
+    mStockistCall mstockistCall;
+    StockistCallDB stockistCallDB;
+    LocationDB locationDB;
+
     public void onCreate(Bundle b) {
 
         super.onCreate(b);
@@ -187,6 +198,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
         mNetworkUtil = new NetworkUtil(context);
         progress1 = new ProgressDialog(this);
+        service =  new Service_Call_From_Multiple_Classes();
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         loc = (EditText) findViewById(R.id.loc_stock);
         pob = (EditText) findViewById(R.id.stk_pob);
@@ -236,6 +248,9 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             visited1.setVisibility(View.GONE);
         }*/
 
+
+        locationDB = new LocationDB();
+        stockistCallDB = new StockistCallDB();
 
         stkDataList = new ArrayList<SpinnerModel>();
 
@@ -287,12 +302,21 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     buttonView.setChecked(false);
                 }else if (buttonView.isChecked()) {
 
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","Y");
+                    AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
+                            "Are you sure to save as\n\"No " + "Stockist" + " for the day",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","Y");
+                                    finish();
+                                }
 
-                   // MyConnection.STOCKIST_NOT_VISITED = "Y";
-                    Intent i = new Intent(getApplicationContext(), ViewPager_2016.class);
-                    startActivity(i);
-                    finish();
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+                                    buttonView.setChecked(false);
+                                }
+                            });
+
                 }
 
             }
@@ -681,6 +705,30 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     stk_id = Dr_id;
                     stkst_name = Dr_name;
                     stk_name.setText(stkst_name);
+
+                    mstockistCall = (mStockistCall) new mStockistCall()
+                            .setId(Dr_id)
+                            .setName(Dr_name)
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
+
+
+                    String remarktxt=stockist_list.get("remark").get(0);
+                    if (remarktxt.contains("\u20B9")) {
+                        //mstockistCall.setPOBAmt(remarktxt.split("\n")[0].replace("\u20B9",""));
+
+                        /*if (remarktxt.split("\n").length>1) {
+                            remarktxt = remarktxt.split("\n")[1];
+                        } else {
+                            remarktxt = "";
+                        }*/
+                        mstockistCall.setPOBAmt(remarktxt.substring(remarktxt.indexOf("\u20B9")+1,remarktxt.indexOf("\n")));
+                        pob.setText(mstockistCall.getPOBAmt());
+                        remarktxt = remarktxt.substring(remarktxt.indexOf("\n")+1);
+
+                    }
+                    remark.setText(remarktxt);
+
                     if (!stockist_list.get("sample_name").get(0).equals("")) {
                         String[] sample_name1 = stockist_list.get("sample_name").get(0).split(",");
                         String[] sample_qty1 = stockist_list.get("sample_qty").get(0).split(",");
@@ -695,11 +743,6 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         sample_pob_previous=sample_pob;
                         sample_sample_previous=sample_sample;*/
 
-
-                        String remarkWithPOB = stockist_list.get("remark").get(0);
-                        if (remarkWithPOB.contains("\u20B9"))
-                            remarkWithPOB = remarkWithPOB.substring(remarkWithPOB.indexOf("\n"));
-                        remark.setText(remarkWithPOB);
 
                         init(sample_name1, sample_qty1, sample_pob1);
                     }else{
@@ -751,6 +794,12 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 gift_name_previous = gift_name;
                 gift_qty_previous = gift_qty;
 
+                mstockistCall.setGift_name_Arr(gift_name)
+                        .setGift_qty_Arr(gift_qty)
+                        .setSample_name_Arr(sample_name)
+                        .setSample_pob_Arr(sample_pob)
+                        .setSample_qty_Arr(sample_sample);
+
                 dialog.dismiss();
             }
         });
@@ -769,39 +818,62 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
     @Override
     public void delete_Call(final String Dr_id, final String Dr_name) {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
-        final Button Alert_Nagative= (Button) dialogLayout.findViewById(R.id.nagative);
-        Alert_title.setText("Delete!!!");
-        Alert_message.setText("Do you Really want to delete "+Dr_name+" ?");
-        Alert_Nagative.setText("Cancel");
-        Alert_Positive.setText("Delete");
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
 
-        final AlertDialog dialog = builder1.create();
-
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
+        AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete " + Dr_name + " ?", new AppAlert.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                cbohelp.delete_Stokist_from_local_all(Dr_id);
-                customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-                finish();
+            public void onPositiveClicked(View item, String result) {
+
+                //Start of call to service
+
+                HashMap<String,String> request=new HashMap<>();
+                request.put("sCompanyFolder",  MyCustumApplication.getInstance ().getUser ().getCompanyCode ());
+                request.put("iPaId",  MyCustumApplication.getInstance ().getUser ().getID ());
+                request.put("iDCR_ID",  MyCustumApplication.getInstance ().getUser ().getDCRId ());
+                request.put("iDR_ID", Dr_id);
+                request.put("sTableName", "STOCKIST");
+
+
+                ArrayList<Integer> tables=new ArrayList<>();
+                tables.add(0);
+
+                new MyAPIService(context)
+                        .execute(new ResponseBuilder("DRCHEMDELETE_MOBILE",request)
+                                .setDescription("Please Wait..." +
+                                        "\nDeleting "+Dr_name+" from DCR...")
+                                .setResponse(new CBOServices.APIResponse() {
+                                    @Override
+                                    public void onComplete(Bundle bundle) throws Exception {
+                                        mstockistCall = (mStockistCall) new mStockistCall().setId(Dr_id);
+                                        stockistCallDB.delete(mstockistCall);
+
+                                        cbohelp.delete_Stokist_from_local_all(Dr_id);
+                                        customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Bundle bundle) throws Exception {
+
+                                    }
+
+                                    @Override
+                                    public void onError(String s, String s1) {
+                                        AppAlert.getInstance().getAlert(context,s,s1);
+                                    }
+                                }));
+
+                //End of call to service
+
+
+
+
+            }
+
+            @Override
+            public void onNegativeClicked(View item, String result) {
             }
         });
-        Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
 
     }
 
@@ -870,6 +942,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 locExtra = "Lat_Long " + currentBestLocation.getLatitude() + "," + currentBestLocation.getLongitude() + ", Accuracy " + currentBestLocation.getAccuracy() + ", Time " + currentBestLocation.getTime() + ", Speed " + currentBestLocation.getSpeed() + ", Provider " + currentBestLocation.getProvider();
             }
 
+
+            mstockistCall.setRemark(remark.getText().toString());
+
+
             if (cbohelp.searchStockist(stk_id).contains(stk_id)) {
                 int val = cbohelp.updateStockistInLocal(dcrid, stk_id, PobAtm, AllItemId, AllItemQty,
                         Custom_Variables_And_Method.GLOBAL_LATLON + "!^" + address,
@@ -886,6 +962,9 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 intent.putExtra("EXIT", true);
                 startActivity(intent);*/
 
+                stockistCallDB.insert(mstockistCall);
+                locationDB.insert(mstockistCall);
+
                 finish();
             }else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,Skip_Verification)) {
                 customVariablesAndMethod.msgBox(context,"Verifing Your Location");
@@ -895,13 +974,18 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             } else {
                 try {
 
+                    mstockistCall.setSrno(customVariablesAndMethod.srno(context))
+                            .setLOC_EXTRA(locExtra)
+                            .setTime(customVariablesAndMethod.currentTime(context));
+
                     customVariablesAndMethod.SetLastCallLocation(context);
 
                     long val = cbohelp.submitStockitInLocal(dcrid, stk_id, PobAtm, AllItemId, AllItemQty,
                             latLong+ "!^" + address, customVariablesAndMethod.currentTime(context),
                             currentBatteryLevel,Custom_Variables_And_Method.GLOBAL_LATLON,"0","0",
-                            customVariablesAndMethod.srno(context),sample,remark.getText().toString(),"",
+                            mstockistCall.getSrno(),sample,remark.getText().toString(),"",
                             locExtra,AllGiftId,AllGiftQty,ref_latLong,rate);
+
                     cbohelp.addStockistInLocal(stk_id, stkst_name);
                     Log.e("stockist submitted", "" + val);
                     if (val != -1) {
@@ -920,10 +1004,13 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         pob.setText("");
                         Custom_Variables_And_Method.STOCKIST_NOT_VISITED = "Y";
 
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED","N");
+
                         new Service_Call_From_Multiple_Classes().SendFCMOnCall(context, mHandler, MESSAGE_INTERNET_SEND_FCM,"S",stk_id,Custom_Variables_And_Method.GLOBAL_LATLON);
 
 
-
+                        stockistCallDB.insert(mstockistCall);
+                        locationDB.insert(mstockistCall);
                     }
 
 
@@ -932,6 +1019,8 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 }
 
             }
+
+
 
 
         }
@@ -1000,7 +1089,14 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         String[] sample_qty1 = sample.split(",");
                         String[] sample_pob1 = name2.split(",");
                         init(sample_name1, sample_qty1, sample_pob1);
+
+                        mstockistCall.setSample_name_Arr(sample_name)
+                                .setSample_pob_Arr(sample_pob)
+                                .setSample_qty_Arr(sample_sample);
+
                     }
+
+
                     break;
 
                 case GIFT_DILOG:
@@ -1016,6 +1112,9 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
                         init_gift(gift_layout,gift_name1,gift_qty1);
                    // }
+
+                    mstockistCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty);
                     break;
                 case GPS_TIMMER:
                     spinImg.setEnabled(true);
@@ -1023,9 +1122,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     new StokistData().execute();
                     break;
                 case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
-                    Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
-                    new GPS_Timmer_Dialog(context,mHandler,"Scanning Stockist...",GPS_TIMMER).show();
+                    onDownloadAllResponse();
                     break;
                 case MESSAGE_INTERNET_SEND_FCM:
                     if (mNetworkUtil.internetConneted(context)) {
@@ -1058,6 +1155,14 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             }
         }
     };
+
+
+    private void onDownloadAllResponse(){
+        Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
+        Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
+        new GPS_Timmer_Dialog(context,mHandler,"Scanning Stockist...",GPS_TIMMER).show();
+
+    }
 
     class StokistData extends AsyncTask<ArrayList<SpinnerModel>, String, ArrayList<SpinnerModel>> {
         ProgressDialog pd;
@@ -1155,6 +1260,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 myalertDialog.dismiss();
+
+                mstockistCall = null;
+                SpinnerModel model = array_sort.get(position);
+
                 stk_id = ((TextView) view.findViewById(R.id.spin_id)).getText().toString();
                 stkst_name = ((TextView) view.findViewById(R.id.spin_name)).getText().toString();
                 stk_name.setText(stkst_name);
@@ -1197,7 +1306,31 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     stk_name.setText("---Select---");
                     stk_id="";
                     stkst_name="";
+
+
+                    mstockistCall = (mStockistCall) new mStockistCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+
                 }else {
+
+
+                    mstockistCall = (mStockistCall) new mStockistCall()
+                            .setId(model.getId())
+                            .setName(model.getName())
+                            .setArea(model.getAREA())
+                            .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                            .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+                            .setRef_latlong(model.getREF_LAT_LONG())
+                            .setLatLong(arrayAdapter.latLong)
+                            .setBattery(MyCustumApplication.getInstance().getUser().getBattery());
 
                     latLong = arrayAdapter.latLong;
                     ref_latLong = array_sort.get(position).getREF_LAT_LONG();
@@ -1211,15 +1344,20 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
                         String remarktxt=stockist_list.get("remark").get(0);
                         if (remarktxt.contains("\u20B9")) {
-                            if (remarktxt.split("\\n").length>1) {
-                                remarktxt = remarktxt.split("\\n")[1];
+                            /*mstockistCall.setPOBAmt(remarktxt.split("\n")[0].replace("\u20B9",""));
+                            pob.setText(mstockistCall.getPOBAmt());
+                            if (remarktxt.split("\n").length>1) {
+                                remarktxt = remarktxt.split("\n")[1];
                             } else {
                                 remarktxt = "";
-                            }
+                            }*/
+                            mstockistCall.setPOBAmt(remarktxt.substring(remarktxt.indexOf("\u20B9")+1,remarktxt.indexOf("\n")));
+                            pob.setText(mstockistCall.getPOBAmt());
+                            remarktxt = remarktxt.substring(remarktxt.indexOf("\n")+1);
 
                         }
                         remark.setText(remarktxt);
-
+                        mstockistCall.setRemark(remarktxt);
 
                         if (!stockist_list.get("sample_name").get(0).equals("")) {
                             String[] sample_name1 = stockist_list.get("sample_name").get(0).split(",");
@@ -1277,6 +1415,12 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     gift_name_previous = gift_name;
                     gift_qty_previous = gift_qty;
 
+                    mstockistCall.setGift_name_Arr(gift_name)
+                            .setGift_qty_Arr(gift_qty)
+                            .setSample_name_Arr(sample_name)
+                            .setSample_pob_Arr(sample_pob)
+                            .setSample_qty_Arr(sample_sample);
+
 
                 }
 
@@ -1326,7 +1470,18 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                             LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                                     new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                         }else{
-                            new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                            //new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                            service.DownloadAll(context, new Response() {
+                                @Override
+                                public void onSuccess(Bundle bundle) {
+                                    onDownloadAllResponse();
+                                }
+
+                                @Override
+                                public void onError(String s, String s1) {
+                                    AppAlert.getInstance().getAlert(context,s,s1);
+                                }
+                            });
                         }
 
                         Vibrator vbr = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -1345,7 +1500,18 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
         public void onReceive(Context contex, Intent intent) {
             Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
             if ( IsRefreshedClicked ) {
-                new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                //new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                service.DownloadAll(context, new Response() {
+                    @Override
+                    public void onSuccess(Bundle bundle) {
+                        onDownloadAllResponse();
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+                        AppAlert.getInstance().getAlert(context,s,s1);
+                    }
+                });
             }else{
                 submitStockist(true);
             }
@@ -1374,10 +1540,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                             rate = b1.getString("resultRate");
                             resultList = b1.getString("resultList");
                             DecimalFormat f = new DecimalFormat("#.00");
-                            if ("" + result != null) {
-                                String result3 = f.format(result);
-                                pob.setText(result3);
-                            }
+
+                            String result3 = f.format(result);
+                            pob.setText(result3);
+
 
                             sample_name=resultList;
                             sample_sample=sample;

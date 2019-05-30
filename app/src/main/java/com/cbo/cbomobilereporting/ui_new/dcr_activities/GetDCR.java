@@ -27,6 +27,7 @@ import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
 import com.flurry.android.FlurryAgent;
+import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 
 import services.ServiceHandler;
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
 
@@ -154,7 +156,18 @@ public class GetDCR extends AppCompatActivity {
                     customVariablesAndMethod.Connect_to_Internet_Msg(context);
                 } else {
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DcrPlantimestamp", customVariablesAndMethod.get_currentTimeStamp());
-                    new Service_Call_From_Multiple_Classes().DownloadAll(context,hh,MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                   // new Service_Call_From_Multiple_Classes().DownloadAll(context,hh,MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+                    new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            customVariablesAndMethod.msgBox(context,"Data Up-dated Sucessfully...");
+                        }
+
+                        @Override
+                        public void onError(String s, String s1) {
+                            AppAlert.getInstance().getAlert(context,s,s1);
+                        }
+                    });
                     //new getDoctor_Chemist().execute();
                     vbr.vibrate(100);
 
@@ -190,7 +203,7 @@ public class GetDCR extends AppCompatActivity {
                     Alert_Positive.setText("Replan");
                     Alert_title.setText("Call Found");
                     Alert_message.setText("Are you sure to Replan ? \nSome Calls found in your Day Summary.\n" +
-                            "Else Reset your Day Plan from Constants");
+                            "Else Reset your Day Plan from Utility");
 
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
@@ -245,7 +258,7 @@ public class GetDCR extends AppCompatActivity {
 
     private Boolean checkforCalls(){
         int result=0;
-        //result+=cbo_helper.getmenu_count("phdcrdr_rc");
+        result+=cbo_helper.getmenu_count("phdcrdr_rc");
         result+=cbo_helper.getmenu_count("tempdr");
         result+=cbo_helper.getmenu_count("chemisttemp");
         //result+=cbo_helper.getmenu_count("phdcrstk");
@@ -257,23 +270,8 @@ public class GetDCR extends AppCompatActivity {
     }
 
     private void openForReplan(){
-        SharedPreferences pref = GetDCR.this.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, MODE_PRIVATE);
-        Custom_Variables_And_Method.ROOT_NEEDED = pref.getString("root_needed", null);
-        if (Custom_Variables_And_Method.ROOT_NEEDED != null) {
-            if (Custom_Variables_And_Method.ROOT_NEEDED.equals("Y")) {
-                Intent intent=new Intent(context, DCR_Root_new.class);
-                intent.putExtra("plan_type","r");
-                startActivity(intent);
-                finish();
-            } else {
-                Intent intent=new Intent(context, Dcr_Open_New.class);
-                intent.putExtra("plan_type","r");
-                startActivity(intent);
-                finish();
-            }
-        } else if (DCR_ID != "0") {
-            // TODO Auto-generated method stub
-            Intent intent=new Intent(context, Dcr_Open_New.class);
+        if ( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed","Y").equalsIgnoreCase("Y")) {
+            Intent intent=new Intent(context, DCR_Root_new.class);
             intent.putExtra("plan_type","r");
             startActivity(intent);
             finish();

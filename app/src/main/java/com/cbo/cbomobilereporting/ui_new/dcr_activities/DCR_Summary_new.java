@@ -4,11 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,21 +17,16 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import async.CBOFinalTasks;
-import services.CboServices;
 import utils.adapterutils.ExpandableListAdapter;
-import utils.clearAppData.MyCustumApplication;
-import utils_new.CustomTextToSpeech;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 import static java.lang.Thread.sleep;
 
@@ -125,6 +116,11 @@ public class DCR_Summary_new extends CustomActivity {
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL"),chemist_list);
         }
+
+        if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CUSTOMER_NOT_REQUIRED").equals("N")){
+            summary_list.put(cboDbHelper.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL"),chemist_list);
+        }
+
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_STK_CALL").get("D_STK_CALL"),stockist_list);
         }
@@ -145,6 +141,12 @@ public class DCR_Summary_new extends CustomActivity {
         }
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX"),tenivia_traker);
+        }
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NA_NOT_REQUIRED").equals("N")){
+            summary_list.put(cboDbHelper.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA"),tenivia_traker);
+        }
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Rx_NOT_REQUIRED").equals("N")){
+            summary_list.put(cboDbHelper.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN"),tenivia_traker);
         }
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Expense_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_EXP").get("D_EXP"),expense_list);
@@ -179,10 +181,45 @@ public class DCR_Summary_new extends CustomActivity {
                     askForReset();
 
                 }else{
-                    cboDbHelper.deleteLogin();
+
+                    new Service_Call_From_Multiple_Classes().resetDCRNow(context);
+
+                    Intent i = new Intent(context, LoginMain.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    stopLoctionService();
+                    startActivity(i);
+                    finish();
+
+
+                    /*cboDbHelper.deleteLogin();
                     cboDbHelper.deleteLoginDetail();
                     cboDbHelper.deleteFTPTABLE();
                     cboDbHelper.delete_Mail("");
+
+
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"DCR_ID");
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"DcrPlantime");
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"D_DR_RX_VISITED");
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"CHEMIST_NOT_VISITED");
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"STOCKIST_NOT_VISITED");
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"dcr_date_real");
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"Dcr_Planed_Date");
+                    customVariablesAndMethod.deleteFmcg_ByKey(context,"CUR_DATE");
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"myKm1", "0.0");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"OveAllKm","0.0");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"final_km","0.0");
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE","0");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val","0");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val","0");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Final_submit","Y");
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_type_Selected","w");
+
+
+
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "WEBSERVICE_URL", "");
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DOB_DOA_notification_date", "");
                     new MyCustomMethod(context).stopDOB_DOA_Remainder();
@@ -192,7 +229,7 @@ public class DCR_Summary_new extends CustomActivity {
 
                     Intent i = new Intent(getApplicationContext(), LoginMain.class);
                     startActivity(i);
-                    finish();
+                    finish();*/
                 }
             }
         });
@@ -267,26 +304,18 @@ public class DCR_Summary_new extends CustomActivity {
         Alert_Nagative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Custom_Variables_And_Method.internetConneted(context)) {
-                    //Start of call to service
 
-                    HashMap<String,String> request=new HashMap<>();
-                    request.put("sCompanyFolder",cboDbHelper.getCompanyCode());
-                    request.put("DCRID",cboDbHelper.getDCR_ID_FromLocal());
+                new Service_Call_From_Multiple_Classes().resetDCR(context, new Response() {
+                    @Override
+                    public void onSuccess(Bundle bundle) {
+                        //customVariablesAndMethod.msgBox(context,"Data Downloded Sucessfully...");
+                    }
 
-                    ArrayList<Integer> tables=new ArrayList<>();
-                    tables.add(0);
-
-                    progress1.setMessage("Please Wait..");
-                    progress1.setCancelable(false);
-                    progress1.show();
-
-                    new CboServices(context,mHandler).customMethodForAllServices(request,"DcrReset_1",MESSAGE_INTERNET,tables);
-
-                    //End of call to service
-                }else{
-                    customVariablesAndMethod.Connect_to_Internet_Msg(context);
-                }
+                    @Override
+                    public void onError(String message, String description) {
+                        AppAlert.getInstance().getAlert(context,message,description);
+                    }
+                });
                 dialog.dismiss();
             }
         });
@@ -311,7 +340,7 @@ public class DCR_Summary_new extends CustomActivity {
     }
 
 
-    private final Handler mHandler = new Handler() {
+    /*private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -413,5 +442,5 @@ public class DCR_Summary_new extends CustomActivity {
         }
         //Log.d("MYAPP", "objects are1: " + result);
         progress1.dismiss();
-    }
+    }*/
 }

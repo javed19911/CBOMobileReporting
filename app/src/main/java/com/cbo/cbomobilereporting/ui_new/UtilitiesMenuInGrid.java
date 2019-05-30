@@ -1,17 +1,14 @@
 package com.cbo.cbomobilereporting.ui_new;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,35 +25,29 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.CaptureSignatureMain;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DivisionWise_Map;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
-import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity;
-import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAid_Download;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.uenics.javed.CBOLibrary.Response;
 
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import async.CBOFinalTasks;
 import services.ServiceHandler;
 import utils.adapterutils.Util_Grid_Adapter;
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
-import utils_new.CustomTextToSpeech;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 public class UtilitiesMenuInGrid extends Fragment {
 
 
     View v;
-    Context context;
+    Activity context;
     GridView gridView;
     String fmcgYN;
     NetworkUtil networkUtil;
@@ -125,10 +116,11 @@ public class UtilitiesMenuInGrid extends Fragment {
 
                 String url=new CBO_DB_Helper(getActivity()).getMenuUrl("UTILITY",nameOnClick);
                 if(url!=null && !url.equals("")) {
-                    Intent i = new Intent(getActivity(), CustomWebView.class);
+                    /*Intent i = new Intent(getActivity(), CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", listOfAllTab.get(position));
-                    startActivity(i);
+                    startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                 }else {
                     switch (nameOnClick) {
 
@@ -184,10 +176,11 @@ public class UtilitiesMenuInGrid extends Fragment {
                         default: {
                             url = new CBO_DB_Helper(getActivity()).getMenuUrl("UTILITY", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
-                                Intent i = new Intent(getActivity(), CustomWebView.class);
+                                /*Intent i = new Intent(getActivity(), CustomWebView.class);
                                 i.putExtra("A_TP", url);
                                 i.putExtra("Title", listOfAllTab.get(position));
-                                startActivity(i);
+                                startActivity(i);*/
+                                MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                             } else {
                                 Toast.makeText(getActivity(), "Page Under Development", Toast.LENGTH_LONG).show();
                             }
@@ -253,11 +246,46 @@ public class UtilitiesMenuInGrid extends Fragment {
     private void onClickUploadDownLoad() {
 
 
-        if (!networkUtil.internetConneted(context)) {
+        /*if (!networkUtil.internetConneted(context)) {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
         } else {
             new Doback_phitem().execute();
-        }
+        }*/
+
+        Service_Call_From_Multiple_Classes service =  new Service_Call_From_Multiple_Classes();
+
+        service.getListForLocal(context, new Response() {
+            @Override
+            public void onSuccess(Bundle bundle) {
+
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"MAIL_STATUS","N");
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DOB_DOA_notification_date","01/01/1970");
+
+                if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
+                    customVariablesAndMethod.msgBox(context, "Data Downloded Sucessfully...");
+                    MyCustumApplication.getInstance().Logout(context);
+                }else{
+
+                    service.DownloadAll(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                             customVariablesAndMethod.msgBox(context, "Data Downloded Sucessfully...");
+                             MyCustumApplication.getInstance().Logout(context);
+                        }
+
+                        @Override
+                        public void onError(String s, String s1) {
+                            AppAlert.getInstance().getAlert(context,s,s1);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String message, String description) {
+                AppAlert.getInstance().getAlert(context,message,description);
+            }
+        });
 
     }
 
@@ -361,7 +389,7 @@ public class UtilitiesMenuInGrid extends Fragment {
     }
 
 
-   public class Doback_phitem extends AsyncTask<Void, Integer, Long> {
+   /*public class Doback_phitem extends AsyncTask<Void, Integer, Long> {
         ProgressDialog pd;
         private int progress;
         long val = 0;
@@ -427,12 +455,12 @@ public class UtilitiesMenuInGrid extends Fragment {
 
                     }
 
-                    /*for (int b = 0; b<jsonArray2.length();b++){
+                    *//*for (int b = 0; b<jsonArray2.length();b++){
                         JSONObject jasonObj2 = jsonArray2.getJSONObject(b);
                         val=cbohelper.insertDoctorData(jasonObj2.getString("DR_ID"), jasonObj2.getString("ITEM_ID"),jasonObj2.getString("item_name"));
                         Log.e("%%%%%%%%%%%%%%%", "doctor insert");
 
-                    }*/
+                    }*//*
 
                     for (int c = 0; c < jsonArray3.length(); c++) {
                         JSONObject jsonObject3 = jsonArray3.getJSONObject(c);
@@ -617,7 +645,7 @@ public class UtilitiesMenuInGrid extends Fragment {
         @Override
         protected void onProgressUpdate(Integer... values) {
 
-			/*--- show download progress on main UI thread---*/
+			*//*--- show download progress on main UI thread---*//*
 
             pd.setProgress((values[0]) * 100 / count);
 
@@ -646,7 +674,7 @@ public class UtilitiesMenuInGrid extends Fragment {
 
         }
 
-    }
+    }*/
 
 
     public void askForReset() {
@@ -690,7 +718,18 @@ public class UtilitiesMenuInGrid extends Fragment {
                     startActivity(i);
                     dialog.dismiss();
                 }else {
-                    new ResetTask().execute();
+                    //new ResetTask().execute();
+                    new Service_Call_From_Multiple_Classes().resetDCR(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            //customVariablesAndMethod.msgBox(context,"Data Downloded Sucessfully...");
+                        }
+
+                        @Override
+                        public void onError(String message, String description) {
+                            AppAlert.getInstance().getAlert(context,message,description);
+                        }
+                    });
                 }
                 dialog.dismiss();
             }
@@ -710,7 +749,7 @@ public class UtilitiesMenuInGrid extends Fragment {
     }
 
     //////////////////////////////
-    class ResetTask extends AsyncTask<String, String, String> {
+    /*class ResetTask extends AsyncTask<String, String, String> {
 
         ProgressDialog myProgress;
 
@@ -835,6 +874,6 @@ public class UtilitiesMenuInGrid extends Fragment {
         }
 
 
-    }
+    }*/
 
 }

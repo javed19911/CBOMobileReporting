@@ -37,6 +37,8 @@ import utils.MyConnection;
 import utils.adapterutils.SpoRptAdapter;
 import utils_new.Custom_Variables_And_Method;
 
+import static com.cbo.cbomobilereporting.ui.LayoutZoomer.CurrencyType;
+
 /**
  * Created by Akshit Udainiya on 9/14/15.
  */
@@ -267,7 +269,7 @@ public class SpoProductWiseStock extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             String spoProductWise_Result = myService.getResponse_SPOCNFViewGrid(myDataBase.getCompanyCode(),
-                    extraCompanyName, Spo_Report.mIdFrom,Spo_Report.mIdTo,""+ Custom_Variables_And_Method.PA_ID,rpt_typ);
+                    extraCompanyName, Spo_Report.mIdFrom,Spo_Report.mIdTo,""+ Custom_Variables_And_Method.PA_ID,rpt_typ,CurrencyType);
 
             return spoProductWise_Result;
         }

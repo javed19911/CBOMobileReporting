@@ -63,7 +63,7 @@ public class DcrMenu_Grid_Adapter extends BaseAdapter {
         textView.setText(listOfTab.get(position));
 
         final TextView count_tv = (TextView) gridView.findViewById(R.id.count);
-        if(count.get(position)>0){
+        if(count.get(position)>-1){
             count_tv.setText(""+count.get(position));
             count_tv.setVisibility(View.VISIBLE);
         }else {
@@ -85,14 +85,14 @@ public class DcrMenu_Grid_Adapter extends BaseAdapter {
         } else if (arrayLevel.equals("D_DRCALL")) {
             imgView.setImageResource(R.drawable.doctor_call_white);
         }
-        else if (arrayLevel.equals("D_DR_RX")) {
+        else if (arrayLevel.equals("D_DR_RX") || arrayLevel.equals("D_RX_GEN") || arrayLevel.equals("D_RX_GEN_NA")) {
             imgView.setImageResource(R.drawable.add_doctor);
         }
         else if (arrayLevel.equals("D_DRSAM")) {
             imgView.setImageResource(R.drawable.doctor_sameple_white);
         } else if (arrayLevel.equals("D_DRSAM")) {
             imgView.setImageResource(R.drawable.chemist_call_white);
-        } else if (arrayLevel.equals("D_CHEMCALL")) {
+        } else if (arrayLevel.equals("D_CHEMCALL") || arrayLevel.equals("D_CUST_CALL")) {
             imgView.setImageResource(R.drawable.chemist_call_white);
         }else if (arrayLevel.equals("D_FAR")) {
             imgView.setImageResource(R.drawable.farmer_meeting_white);

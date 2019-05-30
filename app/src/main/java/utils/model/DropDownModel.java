@@ -1,6 +1,8 @@
 package utils.model;
 
-public  class DropDownModel {
+import java.io.Serializable;
+
+public  class DropDownModel implements Serializable{
 
     private String Name;
     private String Id;

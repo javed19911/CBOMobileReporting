@@ -8,7 +8,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -27,7 +26,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,34 +39,28 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
-import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import services.Sync_service;
 
-import utils.clearAppData.MyCustumApplication;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
-import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 public class LoginFake extends CustomActivity implements  LocationListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -225,6 +217,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 if (checkDrawOverlayPermission()) {
                     LoginFake(false);
 
+                    //new CustomTextToSpeech().setTextToSpeech("1");
+
+                    /*Intent intent = new Intent(context, AttachImage.class);
+                    startActivity(intent);*/
+
                     /*Intent intent = new Intent(context, Doctor_registration_GPS.class);
                     intent.putExtra("id",0);
                     intent.putExtra("name","hg");
@@ -297,7 +294,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 "ShowSystemAlert","Y");
         //if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
         //startService(new Intent(context, MyLoctionService.class));
-        startLoctionService();
+        //startLoctionService();
         //}
 
         // int a = customVariablesAndMethod.isTimeAutomatic(context) ? Log.d("time" ,"Auto time Enabled") : Log.d("time" ,"Auto time Disabled") ;
@@ -334,6 +331,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                 //check for notification
                 myCustomMethod.notification_check();
+
+
                 if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Final_submit","N").equals("N")) {
                     if (live_km.equalsIgnoreCase("Y") || (live_km.equalsIgnoreCase("Y5"))) {
                         MyCustomMethod myCustomMethod = new MyCustomMethod(context);
@@ -375,8 +374,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                 if (gpsYN.equals("Y") && (!myCustomMethod.checkGpsEnable() || mode != 3)) {
                     customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
-                    //getGpsSetting();
-                    customVariablesAndMethod.getGpsSetting(context);
+                    if (mode !=0){
+                        customVariablesAndMethod.RequestGPSFromSetting(context);
+                    }else{
+                        customVariablesAndMethod.getGpsSetting(context);
+                    }
 
                 } else if ((dor != null) && (dos != null)) {
                     if (dor.equals("Y")) {
@@ -397,6 +399,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                         startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
                                         finish();
                                     } else {*/
+
+                            startLoctionService();
                             String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                             switch (work_type_Selected){
                                 case "l":
@@ -435,6 +439,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                         startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
                                         finish();
                                     } else {*/
+
+                            startLoctionService();
                             String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                             switch (work_type_Selected){
                                 case "l":
@@ -615,7 +621,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     }
 
     private void reset_pin_delete_all_calls(){
-        cbohelp.deleteLogin();
+        /*cbohelp.deleteLogin();
         cbohelp.deleteLoginDetail();
         cbohelp.deleteFTPTABLE();
         cbohelp.delete_Mail("");
@@ -630,8 +636,22 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         cbohelp.DropDatabase(context);
 
         Intent i = new Intent(getApplicationContext(), LoginMain.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.putExtra("picture", byteArray);
         startActivity(i);
+        finish();*/
+
+        new Service_Call_From_Multiple_Classes().resetDCRNow(context);
+
+        Intent i = new Intent(context, LoginMain.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        stopLoctionService();
+        startActivity(i);
+        finish();
     }
 
     @Override
@@ -643,7 +663,6 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     @Override
     protected void onStart() {
         super.onStart();
-        FlurryAgent.onStartSession(this, "M3GXGNKRRC8F9VPNYYY4");
     }
 
     @Override
@@ -801,67 +820,6 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
 
 
-    public void getGpsSetting() {
-
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(context)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this).build();
-            googleApiClient.connect();
-
-            locationRequest = LocationRequest.create();
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            locationRequest.setInterval(30 * 1000);
-            locationRequest.setFastestInterval(1 * 1000);
-        }
-
-        ////
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        //**************************
-        builder.setAlwaysShow(true); //this is the key ingredient
-        //**************************
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                                     @Override
-                                     public void onResult(LocationSettingsResult result) {
-                                         final Status status = result.getStatus();
-                                         final LocationSettingsStates state = result.getLocationSettingsStates();
-                                         switch (status.getStatusCode()) {
-                                             case LocationSettingsStatusCodes.SUCCESS:
-                                                 // All location settings are satisfied. The client can initialize location
-                                                 // requests here.
-
-                                                 break;
-                                             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                                 // Location settings are not satisfied. But could be fixed by showing the user
-                                                 // a dialog.
-                                                 try {
-                                                     // Show the dialog by calling startResolutionForResult(),
-                                                     // and check the result in onActivityResult().
-                                                     status.startResolutionForResult(LoginFake.this, REQUEST_CHECK_SETTINGS);
-                                                 } catch (IntentSender.SendIntentException e) {
-                                                     // Ignore the error.
-                                                 }
-                                                 break;
-                                             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                                 // Location settings are not satisfied. However, we have no way to fix the
-                                                 // settings so we won't show the dialog.
-                                                 // mycon.msgBox("you are here");
-                                                 customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS from Settings");
-                                                 break;
-                                         }
-                                     }
-                                 }
-
-
-        );
-
-
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -952,22 +910,6 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
-    }
-
-    protected void startLocationUpdates() {
-
-        try {
-
-
-            PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
-                    googleApiClient, locationRequest, this);
-
-        }catch (SecurityException e){
-
-            customVariablesAndMethod.msgBox(context,"Check Location Permission..");
-
-        }
-        Log.d("", "Location update started ..............: ");
     }
 
     private void loginMethod(View v) {

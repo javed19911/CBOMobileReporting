@@ -27,9 +27,6 @@ public class SplashScreen_2016 extends CustomActivity  {
     Context context;
     CBO_DB_Helper cbohelp;
     Cursor cursorLoginDetail;
-    Animation anim;
-    Font_helper font_helper ;
-    SampleInterface sampleInterface;
     Custom_Variables_And_Method customVariablesAndMethod;
     byte[] byteArray =null;
 
@@ -48,7 +45,6 @@ public class SplashScreen_2016 extends CustomActivity  {
         ShortcutBadger.applyCount(this, 0);
 
         cursorLoginDetail=   cbohelp.getLoginDetail();
-        font_helper = new Font_helper(context);
 
         Bundle extras = getIntent().getExtras();
 
@@ -80,7 +76,7 @@ public class SplashScreen_2016 extends CustomActivity  {
                       try{
                          // if (!customVariablesAndMethod.isBackgroundServiceRunning(context)) {
                               //startService(new Intent(context, MyLoctionService.class));
-                          startLoctionService();
+                          //startLoctionService();
                           //}
                           Intent intent=new Intent(SplashScreen_2016.this, LoginFake.class);
                           intent.putExtra("picture", byteArray);

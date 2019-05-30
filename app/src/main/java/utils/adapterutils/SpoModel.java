@@ -5,7 +5,8 @@ package utils.adapterutils;
  */
 public class SpoModel  {
 
-    String id,consignee,salAmt,saleReturn,breageExpiry,creditNotOrther,netSales,priSales,recipt,outStanding,stockAmt,target_Amount;
+   private String id,consignee,salAmt,saleReturn,breageExpiry,creditNotOrther
+            ,netSales,priSales,recipt,outStanding,stockAmt,target_Amount,Spo_bill_url = "";
 
 
 
@@ -124,5 +125,13 @@ public class SpoModel  {
 
     public void setTarget_Amount(String target_Amount) {
         this.target_Amount = target_Amount;
+    }
+
+    public String getSpo_bill_url() {
+        return Spo_bill_url;
+    }
+
+    public void setSpo_bill_url(String url) {
+        Spo_bill_url = url;
     }
 }

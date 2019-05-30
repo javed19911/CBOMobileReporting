@@ -32,6 +32,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -59,6 +61,8 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
 
 import org.json.JSONArray;
@@ -78,6 +82,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import locationpkg.Const;
 import services.CboServices;
 import services.ServiceHandler;
@@ -145,7 +150,8 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
     ArrayList<SpinnerModel> data1;
     ImageView attachnew;
     LinearLayout actual_fare_layout,actual_DA_layout;
-    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "";
+    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "",ACTUALFAREYN_MANDATORY="";
+    Double ACTUALFARE_MAXAMT = 0D;
     EditText da_root;
 
 
@@ -401,6 +407,34 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
             }
         });
 
+        distAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (ACTUALFARE_MAXAMT>0){
+                    if ((distAmt.getText().toString().trim().isEmpty() ? 0D :Double.parseDouble( distAmt.getText().toString())) > ACTUALFARE_MAXAMT){
+                        AppAlert.getInstance().Alert(context, "Alert!!!",
+                                "Your AcutaFare cannot exceed " + AddToCartView.toCurrency(String.format("%.2f", (ACTUALFARE_MAXAMT))), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        distAmt.setText(""+ACTUALFARE_MAXAMT);
+                                    }
+                                });
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         //======================================================================================================================
 
         dcr_save.setOnClickListener(new OnClickListener() {
@@ -506,7 +540,9 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     });
         } else if (routeNeeded.equals("Y")) {
 
-            if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("")) {
+            if ( actual_fare_layout.getVisibility()==View.VISIBLE
+                    && distAmt.getText().toString().equals("")
+                    && !ACTUALFAREYN_MANDATORY.equalsIgnoreCase("N")) {
                 customVariablesAndMethod.msgBox(context, "Please Enter the Actual Fare....");
             }
 //            else if (mandatory_pending_exp_head.size() != 0) {
@@ -907,6 +943,10 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
         String ext = path;
         attach_option.setVisibility(View.GONE);
 
+
+        final mExpHead[] expHead = {null};
+        final Boolean[] keyPressed = {true};
+
         add_attachment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -968,16 +1008,36 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 attach_img.setImageDrawable(null);
                 add_attachment.setChecked(false);
 
-                if (exp_id.equals("3119")) {
-                    exhAmt.setHint("K.M.");
-                    textRemark.setText("K.M. Remark.");
-                    ex_head_root_txt.setText("K.M.");
 
-                } else {
-                    exhAmt.setHint("Amt.");
-                    textRemark.setText("Exp Remark.");
-                    ex_head_root_txt.setText("Amount");
+                expHead[0] = cbohelp.getEXP_Head(exp_id);
+                Boolean allreadyAdded = false;
+                if (who.equals("0")){
+                    if (cbohelp.get_ExpenseTypeAdded(expHead[0].getEXP_TYPE_STR()).size() >0
+                            && expHead[0].getEXP_TYPE() != eExpanse.None) {
+                        allreadyAdded = true;
 
+                    }
+                }
+                if (!allreadyAdded) {
+                    if (exp_id.equals("3119")) {
+                        exhAmt.setHint("K.M.");
+                        textRemark.setText("K.M. Remark.");
+                        ex_head_root_txt.setText("K.M.");
+                    } else {
+                        exhAmt.setHint("Amt.");
+                        textRemark.setText("Exp Remark.");
+                        ex_head_root_txt.setText("Amount");
+
+                    }
+                }else{
+                    AppAlert.getInstance().Alert(context, "Alert!!!",
+                            expHead[0].getEXP_TYPE().name() +" allready submitted in another Head",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    exphead.setSelection(0);
+                                }
+                            });
                 }
             }
 
@@ -987,11 +1047,55 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
 
             }
         });
+
+
+        exhAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //if (expHead[0] != null) {
+                    Double amt = s.toString().trim().isEmpty() ? 0D : Double.parseDouble(s.toString());
+                    Double maxAmt = expHead[0].getMAX_AMT();
+                    if (maxAmt == 0) {
+                        maxAmt = amt;
+                    }
+                    if (keyPressed[0]) {
+                        keyPressed[0] = false;
+                        if (amt > maxAmt) {
+                            Double finalMaxAmt = maxAmt;
+                            AppAlert.getInstance().Alert(context, "Alert!!!",
+                                    "You are only allowed to more then " + maxAmt,
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            exhAmt.setText("" + finalMaxAmt);
+                                        }
+                                    });
+
+                        }
+                        keyPressed[0] = true;
+                    }
+               // }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         dialog.setView(dialogLayout);
         dialog.setTitle("Add Other Expences");
         dialog.show();
 
         if (who.equals("0")) {
+            adapter = new SpinAdapter(getApplicationContext(), R.layout.spin_row, cbohelp.get_ExpenseHeadNotAdded());
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
             exphead.setAdapter(adapter);
             head.setVisibility(View.GONE);
         } else {
@@ -1001,6 +1105,9 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
             head.setText(hed);
             exp_id = hed_id;
             exp_hed = hed;
+
+            expHead[0] = cbohelp.getEXP_Head(exp_id);
+
 
             exhAmt.setText(amt);
             rem_final.setText(rem);
@@ -1026,7 +1133,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     customVariablesAndMethod.msgBox(context, "First Select the Expense Head...");
                 } else if (my_Amt.trim().isEmpty()) {
                     customVariablesAndMethod.msgBox(context, "Please Enter the Expense Amt....");
-                } else if (Integer.valueOf(my_Amt) == 0) {
+                } else if (Double.valueOf(my_Amt) == 0) {
                     customVariablesAndMethod.msgBox(context, "Expense Amt. can't be zero...");
                 } else if (my_rem.trim().isEmpty()) {
                     customVariablesAndMethod.msgBox(context, "Please Enter the Remark....");
@@ -1039,25 +1146,35 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                                     dialog.dismiss();
                                 }
                             });
+                }else if (expHead[0].getATTACHYN() != 0
+                        && filename.equalsIgnoreCase("")
+                        && path.equalsIgnoreCase("")) {
+                    customVariablesAndMethod.msgBox(context,"Please add an attachment....");
                 }else {
 
 
-                    if (!filename.equals("")) {
+
+                    if (!filename.equals("")){
                         progress1.setMessage("Please Wait..\nuploading Image");
                         progress1.setCancelable(false);
                         progress1.show();
                         File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + filename);
                         new up_down_ftp().uploadFile(file2, context);
 
-                    }
-                    if (!path.equals("")) {
-                        filename = finalExt;
-                    }
-                    dialog.dismiss();
 
-                    if (filename.equals("")) {
+                    }else{
+                        filename= finalExt;
                         other_expense_commit();
                     }
+                    /*if(!path.equals("")){
+                        filename= finalExt;
+                    }*/
+                    dialog.dismiss();
+
+                    /*if (filename.equals("")) {
+                        other_expense_commit();
+                    }*/
+
 
 
                 }
@@ -1381,8 +1498,11 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
                     newlist.add(new SpinnerModel(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"), jsonObject1.getString("DA_ACTION")));
+
                     cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
-                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"));
+                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
+                            jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
+                            jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
                 }
                 if (newlist.size() > 0) {
                     adapter = new SpinAdapter(getApplicationContext(), R.layout.spin_row, newlist);
@@ -1422,8 +1542,16 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     rootdata.add((object.getString("ACTUALFAREYN")));
                     ROUTE_CLASS = object.getString("ROUTE_CLASS");
                     ACTUALDA_FAREYN = object.getString("ACTUALDA_FAREYN");
+                    ACTUALFAREYN_MANDATORY  = object.getString("ACTUALFAREYN_MANDATORY");
+                    ACTUALFARE_MAXAMT  = object.getDouble("ACTUALFARE_MAXAMT");
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN",object.getString("ACTUALFAREYN"));
 
+                    String MyDaType = object.getString("DA_TYPE_NEW");
+                    String da_val = object.getString("DA_RATE_NEW");
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",object.getString("TA_AMT_NEW"));
                 }
 
                 data = cbohelp.get_Expense();
@@ -1629,11 +1757,17 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 ArrayList<SpinnerModel> newlist = new ArrayList<SpinnerModel>();
                 newlist.add(new SpinnerModel("--Select--", ""));
 
+                cbohelp.delete_EXP_Head();
                 String table0 = result.getString("Tables2");
                 JSONArray jsonArray1 = new JSONArray(table0);
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
                     newlist.add(new SpinnerModel(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID")));
+
+                    cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
+                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
+                            jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
+                            jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
 
                 }
                 actual_fare_layout.setVisibility(View.GONE);

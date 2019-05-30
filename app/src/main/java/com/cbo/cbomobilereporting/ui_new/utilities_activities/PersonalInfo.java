@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
 
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import utils.adapterutils.Personal_info_Adapter;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -134,10 +134,11 @@ public class PersonalInfo extends AppCompatActivity {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
-            Intent i = new Intent(context, CustomWebView.class);
+          /*  Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("CHANGE_PASSWORD_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHANGE_PASSWORD_URL"));
             i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHANGE_PASSWORD_URL"));
         }
     }
 
@@ -146,10 +147,11 @@ public class PersonalInfo extends AppCompatActivity {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
-            Intent i = new Intent(context, CustomWebView.class);
+            /*Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("SALARY_SLIP_URL",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SALARY_SLIP_URL"));
             i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SALARY_SLIP_URL"));
         }
     }
 
@@ -158,10 +160,11 @@ public class PersonalInfo extends AppCompatActivity {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
-            Intent i = new Intent(context, CustomWebView.class);
+            /*Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("CIRCULAR_URL",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CIRCULAR_URL"));
             i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CIRCULAR_URL"));
         }
     }
 
@@ -170,10 +173,11 @@ public class PersonalInfo extends AppCompatActivity {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
-            Intent i = new Intent(context, CustomWebView.class);
+            /*Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("DECLARATION_OF_SAVING_URL",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DECLARATION_OF_SAVING_URL"));
             i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DECLARATION_OF_SAVING_URL"));
         }
     }
 
@@ -182,10 +186,11 @@ public class PersonalInfo extends AppCompatActivity {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
-            Intent i = new Intent(context, CustomWebView.class);
+            /*Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("PERSONAL_INFORMATION_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"PERSONAL_INFORMATION_URL"));
             i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"PERSONAL_INFORMATION_URL"));
         }
     }
 
@@ -194,10 +199,11 @@ public class PersonalInfo extends AppCompatActivity {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
-            Intent i = new Intent(context, CustomWebView.class);
+            /*Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("FORM16_URL",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"FORM16_URL"));
             i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"FORM16_URL"));
         }
     }
 
@@ -206,10 +212,12 @@ public class PersonalInfo extends AppCompatActivity {
             customVariablesAndMethod.Connect_to_Internet_Msg(context);
 
         } else {
-            Intent i = new Intent(context, CustomWebView.class);
+            /*Intent i = new Intent(context, CustomWebView.class);
             i.putExtra("HOLIDAY_URL", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"HOLIDAY_URL"));
             i.putExtra("Title", listOfAllTab.get(position));
-            startActivity(i);
+            startActivity(i);*/
+
+            MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"HOLIDAY_URL"));
         }
     }
 

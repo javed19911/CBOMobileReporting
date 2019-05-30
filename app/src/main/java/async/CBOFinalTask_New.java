@@ -22,8 +22,7 @@ public class CBOFinalTask_New {
         private CBO_DB_Helper cbohelp;
         Custom_Variables_And_Method customVariablesAndMethod;
 
-        private String dcr_id,AllItemQty,AllPob,AllGiftId,AllGiftQty;
-        private ArrayList<String> doc_id;
+
 
 
         public CBOFinalTask_New(Context context){
@@ -147,9 +146,12 @@ public class CBOFinalTask_New {
             StringBuilder sb_sDCRITEM_NOC_ARR = new StringBuilder();
             StringBuilder sb_DCRDR_RATE = new StringBuilder();
 
+            String AllItemQty,AllPob,AllGiftId,AllGiftQty;
+            ArrayList<String> doc_id;
             cbohelp=new CBO_DB_Helper(mContext);
             doc_id=cbohelp.getdoctormoreLit(updated);
             //doc_id=cbohelp.tempDrListForFinalSubmit(updated);
+            //cbohelp.getDoctorListLocal(null,"1")
             if(doc_id.size()>0) {
                 String visual_items = "0";
                 String noc_value = "0";
@@ -222,7 +224,7 @@ public class CBOFinalTask_New {
 
 
         cbohelp=new CBO_DB_Helper(mContext);
-        doc_id=cbohelp.getDr_Rx_id(updated);
+        ArrayList<String> doc_id=cbohelp.getDr_Rx_id(updated);
         if(doc_id.size()>0) {
 
             String Pob_Value="";
@@ -277,7 +279,8 @@ public class CBOFinalTask_New {
             StringBuilder sb_sDCRCHEM_FILE = new StringBuilder();
             StringBuilder sb_sCHEM_REF_LAT_LONG = new StringBuilder();
             StringBuilder sb_DCRCHEM_RATE = new StringBuilder();
-
+            StringBuilder sCHEM_STATUS = new StringBuilder();
+            StringBuilder sCOMPETITOR_REMARK = new StringBuilder();
 
 
             Map<String,String> map_Dcr_ChemistSave = new HashMap<String,String>();
@@ -344,6 +347,8 @@ public class CBOFinalTask_New {
                         sb_sDCRCHEM_FILE.append(saprator).append( cbohelp.getFileChemist(chem_id.get(i)));
                         sb_sCHEM_REF_LAT_LONG.append(saprator).append( cbohelp.getRef_LotLong_Chemist(chem_id.get(i)));
                         sb_DCRCHEM_RATE.append(saprator).append( cbohelp.getRate_Chemist(chem_id.get(i)));
+                        sCHEM_STATUS.append(saprator).append( cbohelp.getStatus_Chemist (chem_id.get(i)));
+                        sCOMPETITOR_REMARK.append(saprator).append( cbohelp.getCompProduct_Chemist (chem_id.get(i)));
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -368,6 +373,8 @@ public class CBOFinalTask_New {
                 map_Dcr_ChemistSave.put("sb_sDCRCHEM_FILE",""+sb_sDCRCHEM_FILE);
                 map_Dcr_ChemistSave.put("sb_sCHEM_REF_LAT_LONG",""+sb_sCHEM_REF_LAT_LONG);
                 map_Dcr_ChemistSave.put("sb_DCRCHEM_RATE",""+sb_DCRCHEM_RATE);
+                map_Dcr_ChemistSave.put("sCHEM_STATUS",""+sCHEM_STATUS);
+                map_Dcr_ChemistSave.put("sCOMPETITOR_REMARK",""+sCOMPETITOR_REMARK);
 
 
                 cbohelp.close();

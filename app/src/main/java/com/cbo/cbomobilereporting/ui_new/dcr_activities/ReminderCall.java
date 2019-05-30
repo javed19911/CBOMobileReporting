@@ -5,27 +5,18 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -40,14 +31,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -55,38 +44,37 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrRcCallDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall;
+import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginFake;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 
 import locationpkg.Const;
-import services.ServiceHandler;
+import services.MyAPIService;
 import services.Sync_service;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
+
 import utils.networkUtil.NetworkUtil;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Report_Registration;
@@ -108,7 +96,6 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 	LinearLayout layout;
 	ArrayList<SpinnerModel>mylist=new ArrayList<SpinnerModel>();
 	ArrayList<SpinnerModel>doclist;
-    ServiceHandler myServiceHandler;
     Boolean value;
 	NetworkUtil networkUtil;
 	String live_km;
@@ -137,6 +124,13 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 	String latLong = "";
 	String ref_latLong = "";
+	Service_Call_From_Multiple_Classes service ;
+
+
+	///firebase DB
+	mDrRCCall mdrRCCall;
+	DrRcCallDB drRcCallDB;
+	LocationDB locationDB;
 
 	public ArrayList<SpinnerModel>getDoctorFromLocal(int id)
 	{
@@ -160,7 +154,8 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 								  c.getString(c.getColumnIndex("FREQ")), c.getString(c.getColumnIndex("NO_VISITED")),
 								  c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
 								  c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN")),
-								  c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP"))));
+								  c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
+								  c.getString(c.getColumnIndex("APP_PENDING_YN"))));
 
 					  }while(c.moveToNext());
 					 
@@ -201,7 +196,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		drname=(Button)findViewById(R.id.rem_drname);
 		context=this;
 		progress1 = new ProgressDialog(this);
-		myServiceHandler = new ServiceHandler(context);
+		service =  new Service_Call_From_Multiple_Classes();
 		customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 		PA_ID=Custom_Variables_And_Method.PA_ID;
 		cbohelp=new CBO_DB_Helper(getApplicationContext());
@@ -222,6 +217,10 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 		stk= (TableLayout) findViewById(R.id.last_pob);
 		doc_detail= (TableLayout) findViewById(R.id.doc_detail);
+
+
+		locationDB = new LocationDB();
+		drRcCallDB = new DrRcCallDB();
 
 
 		//rc_time=getTime();
@@ -435,9 +434,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 					new Doback2().execute(PA_ID);
 					break;
 				case MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL:
-					Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
-					Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
-					new GPS_Timmer_Dialog(context,mHandler,"Scanning Doctors...",GPS_TIMMER).show();
+					onDownloadAllResponse();
 					break;
 				case MESSAGE_INTERNET_SEND_FCM:
 					if (networkUtil.internetConneted(ReminderCall.this)){
@@ -470,6 +467,15 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		}
 	};
 
+
+	private void onDownloadAllResponse(){
+		Custom_Variables_And_Method.GPS_STATE_CHANGED=true;
+		Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
+		new GPS_Timmer_Dialog(context,mHandler,"Scanning Doctors...",GPS_TIMMER).show();
+
+	}
+
+
 	public void submitDoctorRcInLocal()
 	{
 
@@ -487,17 +493,30 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 			}
 			else
 			{
-			
+
+
+				mdrRCCall.setRemark(remark.getText().toString())
+						.setSrno(customVariablesAndMethod.srno(context))
+						.setLOC_EXTRA(locExtra)
+						.setTime(customVariablesAndMethod.currentTime(context));
+
 				String dcrid=Custom_Variables_And_Method.DCR_ID;
 				
 				try{
 				
-					long val=cbohelp.insertDrRem(dcrid, dr_id, latLong+"!^"+loc.getText().toString(), customVariablesAndMethod.currentTime(context),Custom_Variables_And_Method.GLOBAL_LATLON,"0","0",customVariablesAndMethod.srno(context),Custom_Variables_And_Method.BATTERYLEVEL,remark.getText().toString(),"",locExtra,ref_latLong);
+					long val=cbohelp.insertDrRem(dcrid, dr_id, latLong+"!^"+loc.getText().toString(),
+							customVariablesAndMethod.currentTime(context),Custom_Variables_And_Method.GLOBAL_LATLON,
+							"0","0",mdrRCCall.getSrno(),Custom_Variables_And_Method.BATTERYLEVEL,
+							remark.getText().toString(),"",locExtra,ref_latLong);
 					Log.e("dr reminder added", ""+val);
 					if(val>0)
 					{
 						Log.e("reminder saved in local", ""+val);
 					}
+
+					drRcCallDB.insert(mdrRCCall);
+					locationDB.insert(mdrRCCall);
+
 				}catch(Exception e){
 					
 				}
@@ -768,6 +787,12 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 				for (int i = 0; i < doclist.size(); i++) {
 					if (doclist.get(i).getId().equals(Dr_id)) {
 						//drname.setSelection(i);
+
+						mdrRCCall = (mDrRCCall) new mDrRCCall()
+								.setId(dr_id)
+								.setName(doc_name)
+								.setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+								.setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
 						PopulateDr_Rc(Dr_id,i);
 					}
 				}
@@ -789,39 +814,61 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 	@Override
 	public void delete_Call(final String Dr_id, final String Dr_name) {
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-		final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
-		final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
-		final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
-		final Button Alert_Nagative= (Button) dialogLayout.findViewById(R.id.nagative);
-		Alert_title.setText("Delete!!!");
-		Alert_message.setText("Do you Really want to delete "+Dr_name+" ?");
-		Alert_Nagative.setText("Cancel");
-		Alert_Positive.setText("Delete");
 
-		AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-
-		final AlertDialog dialog = builder1.create();
-
-		dialog.setView(dialogLayout);
-		Alert_Positive.setOnClickListener(new View.OnClickListener() {
+		AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete " + Dr_name + " ?", new AppAlert.OnClickListener() {
 			@Override
-			public void onClick(View view) {
-				cbohelp.delete_DoctorRemainder_from_local_all(Dr_id);
-				customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-				finish();
+			public void onPositiveClicked(View item, String result) {
+
+				//Start of call to service
+
+				HashMap<String,String> request=new HashMap<>();
+				request.put("sCompanyFolder",  MyCustumApplication.getInstance ().getUser ().getCompanyCode ());
+				request.put("iPaId",  MyCustumApplication.getInstance ().getUser ().getID ());
+				request.put("iDCR_ID",  MyCustumApplication.getInstance ().getUser ().getDCRId ());
+				request.put("iDR_ID", Dr_id);
+				request.put("sTableName", "DOCTORRC");
+
+
+				ArrayList<Integer> tables=new ArrayList<>();
+				tables.add(0);
+
+				new MyAPIService(context)
+						.execute(new ResponseBuilder("DRCHEMDELETE_MOBILE",request)
+								.setDescription("Please Wait..." +
+										"\nDeleting "+Dr_name+" from DCR...")
+								.setResponse(new CBOServices.APIResponse() {
+									@Override
+									public void onComplete(Bundle bundle) throws Exception {
+										mdrRCCall = (mDrRCCall) new mDrRCCall().setId(Dr_id);
+										drRcCallDB.delete(mdrRCCall);
+										cbohelp.delete_DoctorRemainder_from_local_all(Dr_id);
+										customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+										finish();
+									}
+
+									@Override
+									public void onResponse(Bundle bundle) throws Exception {
+
+									}
+
+									@Override
+									public void onError(String s, String s1) {
+										AppAlert.getInstance().getAlert(context,s,s1);
+									}
+								}));
+
+				//End of call to service
+
+
+
+
+			}
+
+			@Override
+			public void onNegativeClicked(View item, String result) {
 			}
 		});
-		Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				dialog.dismiss();
-			}
-		});
-		dialog.setCancelable(false);
-		dialog.show();
+
 
 	}
 	
@@ -921,12 +968,41 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				myalertDialog.dismiss();
+
+				mdrRCCall = null;
+				SpinnerModel model = array_sort.get(position);
+
 				dr_id = ((TextView) view.findViewById(R.id.spin_id)).getText().toString();
 				doc_name = ((TextView) view.findViewById(R.id.spin_name)).getText().toString().split("-")[0];
 				drname.setText(doc_name);
 				latLong = "";
 				ref_latLong = "";
-				if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...")){
+				if (!model.getAPP_PENDING_YN().equalsIgnoreCase("0")){
+					drname.setText("---Select---");
+					dr_id="";
+					doc_name="";
+					if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
+						//customVariablesAndMethod.Connect_to_Internet_Msg(context);
+						AppAlert.getInstance().setNagativeTxt("Cancel").setPositiveTxt("Check").DecisionAlert(context,
+								"Approval Pending !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+										"DCRDRADDAREA_APP_MSG","Your Additional Area Approval is Pending... \nYou Additional Area must be approved first !!!\n" +
+												"Please contact your Head-Office for APPROVAL"),
+								new AppAlert.OnClickListener() {
+									@Override
+									public void onPositiveClicked(View item, String result) {
+										new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,"ADDAREA");
+									}
+
+									@Override
+									public void onNegativeClicked(View item, String result) {
+
+									}
+								});
+
+					} else {
+						new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,"ADDAREA");
+					}
+				}else if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...")){
 
 					if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
 						customVariablesAndMethod.Connect_to_Internet_Msg(context);
@@ -964,12 +1040,49 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 					drname.setText("---Select---");
 					dr_id="";
 					doc_name="";
+
+
+					mdrRCCall = (mDrRCCall) new mDrRCCall()
+							.setId(model.getId())
+							.setName(model.getName())
+							.setArea(model.getAREA())
+							.setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+							.setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+							.setRef_latlong(model.getREF_LAT_LONG())
+							.setLatLong(arrayAdapter.latLong)
+							.setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+					mdrRCCall.setDrColour(model.getColour())
+							.setDrClass(model.getCLASS())
+							.setDr_CRM(model.getCRM_COUNT())
+							.setDrLastVisited(model.getLastVisited())
+							.setDrPotential(model.getPOTENCY_AMT())
+							.setDRCAPM_GROUP(model.getDRCAPM_GROUP());
+
 				}else if( Integer.parseInt(array_sort.get(position).getFREQ()) != 0 && Integer.parseInt(array_sort.get(position).getFREQ()) < Integer.parseInt(array_sort.get(position).getNO_VISITED()) ) {
 					customVariablesAndMethod.getAlert(context,"Visit Freq. Exceeded",("For "+doc_name +"@ Allowed Freq. : " + array_sort.get(position).getFREQ() + "@ Visited       : "+array_sort.get(position).getNO_VISITED()).split("@"));
 					drname.setText("---Select---");
 					dr_id="";
 					doc_name="";
 				}else {
+
+					mdrRCCall = (mDrRCCall) new mDrRCCall()
+							.setId(model.getId())
+							.setName(model.getName())
+							.setArea(model.getAREA())
+							.setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+							.setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate())
+							.setRef_latlong(model.getREF_LAT_LONG())
+							.setLatLong(arrayAdapter.latLong)
+							.setBattery(MyCustumApplication.getInstance().getUser().getBattery());
+
+					mdrRCCall.setDrColour(model.getColour())
+							.setDrClass(model.getCLASS())
+							.setDr_CRM(model.getCRM_COUNT())
+							.setDrLastVisited(model.getLastVisited())
+							.setDrPotential(model.getPOTENCY_AMT())
+							.setDRCAPM_GROUP(model.getDRCAPM_GROUP());
+
 					latLong = arrayAdapter.latLong;
 					ref_latLong = array_sort.get(position).getREF_LAT_LONG();
                     PopulateDr_Rc(dr_id,position);
@@ -1024,7 +1137,18 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 							LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
 									new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
 						}else{
-							new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+							//new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+							service.DownloadAll(context, new Response() {
+								@Override
+								public void onSuccess(Bundle bundle) {
+									onDownloadAllResponse();
+								}
+
+								@Override
+								public void onError(String s, String s1) {
+									AppAlert.getInstance().getAlert(context,s,s1);
+								}
+							});
 						}
 
 						Vibrator vbr = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -1043,7 +1167,18 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		public void onReceive(Context contex, Intent intent) {
 			Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
 			if ( IsRefreshedClicked ) {
-				new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+				//new Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL);
+				service.DownloadAll(context, new Response() {
+					@Override
+					public void onSuccess(Bundle bundle) {
+						onDownloadAllResponse();
+					}
+
+					@Override
+					public void onError(String s, String s1) {
+						AppAlert.getInstance().getAlert(context,s,s1);
+					}
+				});
 			}else{
 				submitRC_Dr();
 			}

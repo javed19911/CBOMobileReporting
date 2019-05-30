@@ -2,7 +2,6 @@ package com.cbo.cbomobilereporting.emp_tracking;
 
 
 import android.Manifest;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,7 +17,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -28,11 +26,12 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui.LoginFake;
+import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
+import com.cbo.cbomobilereporting.databaseHelper.Location.mLocation;
+import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.ui_new.SplashScreen_2016;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
@@ -40,37 +39,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.File;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import android.content.IntentSender;
-import android.location.Location;
-import android.os.Bundle;
-
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.firebase.messaging.RemoteMessage;
 
 
 import utils.CBOUtils.Constants;
-import utils.MyConnection;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 public class MyLoctionService extends Service implements
@@ -90,6 +65,9 @@ public class MyLoctionService extends Service implements
     Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
     MyCustomMethod mCos;
+    LocationDB locationDB =null;
+
+    Boolean serviceStarted = false;
     Runnable dataFromOnLocationChange = new Runnable() {
         @Override
         public void run() {
@@ -124,18 +102,23 @@ public class MyLoctionService extends Service implements
     }
 
     private void startForgroungService(Intent intent){
+        if (intent.getAction() == null) {
+            Log.i(LOG_TAG, "null : "+ intent);
+            return;
+        }
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
             /*if (!mGoogleApiClient.isConnected())
                 return;*/
 
 
-            Log.i(LOG_TAG, "Received Start Foreground Intent ");
-            Intent notificationIntent = new Intent(this, SplashScreen_2016.class);
-            notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                    notificationIntent, 0);
+            if (!serviceStarted) {
+                Log.i(LOG_TAG, "Received Start Foreground Intent ");
+                Intent notificationIntent = new Intent(this, SplashScreen_2016.class);
+                notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                        notificationIntent, 0);
 
           /*  Intent previousIntent = new Intent(this, MyLoctionService.class);
             previousIntent.setAction(Constants.ACTION.PREV_ACTION);
@@ -153,21 +136,20 @@ public class MyLoctionService extends Service implements
                     nextIntent, 0);
 */
 
-            String CHANNEL_ID = "Location Service";// The id of the channel.
-            CharSequence name =  "CBO Location Notification"; //getString(R.string.channel_name);// The user-visible name of the channel.
+                String CHANNEL_ID = "Location Service";// The id of the channel.
+                CharSequence name = "CBO Location Notification"; //getString(R.string.channel_name);// The user-visible name of the channel.
 
 
-
-            Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.cbo_icon);
-            NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setContentTitle("CBO Mobile Reporting")
-                    .setContentText("Running......")
-                    .setSmallIcon(R.drawable.cbo_noti)
-                    .setTicker("CBO")
-                    .setOngoing(true)
-                    .setLargeIcon(Bitmap.createScaledBitmap(largeIcon, 128, 128, false))
-                    .setChannelId(CHANNEL_ID)
-                    .setContentIntent(pendingIntent);
+                Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.cbo_icon);
+                NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setContentTitle("CBO Mobile Reporting")
+                        .setContentText("Running......")
+                        .setSmallIcon(R.drawable.cbo_noti)
+                        .setTicker("CBO")
+                        .setOngoing(true)
+                        .setLargeIcon(Bitmap.createScaledBitmap(largeIcon, 128, 128, false))
+                        .setChannelId(CHANNEL_ID)
+                        .setContentIntent(pendingIntent);
                     /*.addAction(android.R.drawable.ic_media_previous,
                             "Previous", ppreviousIntent)
                     .addAction(android.R.drawable.ic_media_play, "Play",
@@ -176,42 +158,45 @@ public class MyLoctionService extends Service implements
                             pnextIntent);*/
 
 
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int color = 0x125688;
+                    noBuilder.setColor(color);
+                    noBuilder.setSmallIcon(R.drawable.cbo_noti);
+                }
 
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                int color = 0x125688;
-                noBuilder.setColor(color);
-                noBuilder.setSmallIcon(R.drawable.cbo_noti);
+                //Random random = new Random();
+                //int m = random.nextInt(9999 - 1000) + 1000;
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Sets an ID for the notification, so it can be updated.
+                    NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
+                    // Sets whether notifications posted to this channel should display notification lights
+                    mChannel.enableLights(true);
+                    // Sets whether notification posted to this channel should vibrate.
+                    mChannel.enableVibration(true);
+                    // Sets the notification light color for notifications posted to this channel
+                    mChannel.setLightColor(Color.GREEN);
+                    // Sets whether notifications posted to this channel appear on the lockscreen or not
+                    mChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+                    mChannel.setSound(null, null);
+                    notificationManager.createNotificationChannel(mChannel);
+                }
+
+                Notification notification = noBuilder.build();
+
+                startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,
+                        notification);
+                serviceStarted = true;
+
+                if (!mGoogleApiClient.isConnected())
+                    mGoogleApiClient.connect();
+
+                locationDB = new LocationDB();
+                //locationDB.delete(null);
             }
-
-            //Random random = new Random();
-            //int m = random.nextInt(9999 - 1000) + 1000;
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // Sets an ID for the notification, so it can be updated.
-                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
-                // Sets whether notifications posted to this channel should display notification lights
-                mChannel.enableLights(true);
-                // Sets whether notification posted to this channel should vibrate.
-                mChannel.enableVibration(true);
-                // Sets the notification light color for notifications posted to this channel
-                mChannel.setLightColor(Color.GREEN);
-                // Sets whether notifications posted to this channel appear on the lockscreen or not
-                mChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-                mChannel.setSound(null, null);
-                notificationManager.createNotificationChannel(mChannel);
-            }
-
-            Notification notification =  noBuilder.build();
-
-            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE,
-                    notification);
-
-            if (!mGoogleApiClient.isConnected())
-                mGoogleApiClient.connect();
-
         } else if (intent.getAction().equals(Constants.ACTION.LIVE_TRACKING_ACTION)) {
 
-            if (!mGoogleApiClient.isConnected()) {
+            if (!serviceStarted) {
                 intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
                 startForgroungService(intent);
             }
@@ -228,22 +213,40 @@ public class MyLoctionService extends Service implements
                     e.printStackTrace();
                 }
             }
-        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            Log.i(LOG_TAG, "Clicked Play");
-        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-            Log.i(LOG_TAG, "Clicked Next");
         } else if (intent.getAction().equals(
                 Constants.ACTION.STOPFOREGROUND_ACTION)) {
 
-            if (!mGoogleApiClient.isConnected()) {
-                intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-                startForgroungService(intent);
-            }
 
-           stopLocationUpdates();
+            /////******************************************************************
+            /// do not relay on this code its ab error
+
+
+
+            /**/
+
+            /*if (serviceStarted) {
+                Log.i(LOG_TAG, "Received Stop Foreground Intent");
+                serviceStarted = false;
+                *//*if (!mGoogleApiClient.isConnected()) {
+                    intent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                    startForgroungService(intent);
+                }
+                serviceStarted = false;*//*
+
+            }*/
+
             Log.i(LOG_TAG, "Received Stop Foreground Intent");
-            stopForeground(true);
-            stopSelf();
+            stopLocationUpdates();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (serviceStarted) {
+                    serviceStarted = false;
+                    stopForeground(true);
+                }
+                //stopSelf();
+            } else {
+                stopSelf();
+            }
         }
 
 
@@ -418,6 +421,10 @@ public class MyLoctionService extends Service implements
                // if (currentBestLocation==null) {
                     //lastLatLong = "0.0,0.0";
                     customVariablesAndMethod.putObject(context,"currentBestLocation",mCurrentLocation);
+
+
+
+
                 //}
                     if (lastLatLong.equals(msg)) {
                         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "shareLat", "" + lat);
@@ -436,8 +443,29 @@ public class MyLoctionService extends Service implements
                             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "last_location_update_time_in_minites", customVariablesAndMethod.get_currentTimeStamp());
                             Custom_Variables_And_Method.GLOBAL_LATLON = msg;
 
-                            customVariablesAndMethod.putObject(context,"currentBestLocation_Validated",mCurrentLocation);
 
+
+
+
+                            // ======================================insert in firebase database============================
+
+                            mUser mUser = MyCustumApplication.getInstance().getUser();
+                            Location last_location1 = mUser.getLocation(); //customVariablesAndMethod.getObject(context,"currentBestLocation_Validated",Location.class);
+                            Double km = DistanceCalculator.distance(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()
+                                    ,  last_location1.getLatitude(), last_location1.getLongitude(), "K");
+                            if (km>0.02) {
+                                Log.d("Location update", "Location updated on firebase ..............: ");
+
+                                mUser.setLocation(mCurrentLocation);
+                                mLocation mlocation = new mLocation(mCurrentLocation).setDCR_ID(mUser.getDCRId());
+                                locationDB.insert(mlocation);
+                                MyCustumApplication.getInstance().updateUser();
+                            }
+
+
+                            //=======================================================
+
+                            customVariablesAndMethod.putObject(context,"currentBestLocation_Validated",mCurrentLocation);
                         } else {
                             Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "shareLatLong");
                         }
@@ -457,8 +485,11 @@ public class MyLoctionService extends Service implements
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        if (mGoogleApiClient != null) {
+            if (mGoogleApiClient.isConnected())
+                LocationServices.FusedLocationApi.removeLocationUpdates(
+                        mGoogleApiClient, this);
+        }
         Log.d("", "Location update stopped .......................");
     }
 
@@ -545,6 +576,15 @@ public class MyLoctionService extends Service implements
 
     }
 
+   /* @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        stopLocationUpdates();
+        stopForeground(true);
+        //stop service
+        stopSelf();
+        super.onTaskRemoved(rootIntent);
+    }
+*/
 
 
 }

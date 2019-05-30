@@ -22,6 +22,7 @@ import android.widget.ListView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
 import utils.adapterutils.MyAdapter2;
 import utils.networkUtil.NetworkUtil;
-import utils.upload_download;
 
 public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
 
@@ -127,7 +127,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
                 item_name.clear();
 
                 for(int i=0;i<list.size();i++){
-                    if(!list.get(i).getScore().equals("") && !list.get(i).getScore().equals("")){
+                    if(!list.get(i).getScore().equals("0") && !list.get(i).getScore().equals("")){
                         item_id.add(list.get(i).getId());
                         item_qty.add(list.get(i).getScore());
                         item_name.add(list.get(i).getName());
@@ -199,7 +199,19 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
                         customVariablesAndMethod.Connect_to_Internet_Msg(context);
                     } else {
 
-                        new upload_download(context,Chemist_Gift_Dialog.this);
+                        //new upload_download(context,Chemist_Gift_Dialog.this);
+                        new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                            @Override
+                            public void onSuccess(Bundle bundle) {
+                                onDownloadComplete();
+
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+                            }
+                        });
 
                     }
 

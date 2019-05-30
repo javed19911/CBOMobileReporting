@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +46,9 @@ import java.util.ArrayList;
 
 import services.CboServices;
 import utils.adapterutils.SpinnerModel;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 /**
  * Created by Akshit on 08/03/16.
@@ -216,7 +219,9 @@ public class CustomWebView extends AppCompatActivity {
                     previous_url=url;
                 }
 
-                progressDialog.dismiss();
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
             }
 
             @Override
@@ -234,13 +239,27 @@ public class CustomWebView extends AppCompatActivity {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.cbo.cbomobilereporting&hl=en"));
             startActivity(i);
             finish();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
         }else if (url.toLowerCase().contains("play.google.com/store/apps/")) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(i);
             finish();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
         }else if (textView.getText().toString().equalsIgnoreCase("Salary Slip") && (url.toLowerCase().contains(".pdf"))){
-            webView.loadUrl("http://docs.google.com/gview?embedded=true&url=" + url);}
-        else {
+            webView.loadUrl("http://docs.google.com/gview?embedded=true&url=" + url);
+        } else if ( (url.toLowerCase().contains(".pdf"))){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(url), "application/pdf");
+            startActivity(intent);
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+
+        } else  {
 
             if(!url.toLowerCase().contains("http://") && !url.toLowerCase().contains("emulated/0")){
                 url="http://"+url;
@@ -376,9 +395,28 @@ public class CustomWebView extends AppCompatActivity {
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            if(consoleMessage.message().toLowerCase().equals("window.close();")){
-                finish();
+            switch (consoleMessage.message().toLowerCase()){
+                case "window.close();" :
+                    finish();
+                    break;
+                case "sync" :
+                    new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(String s, String s1) {
+                            AppAlert.getInstance().getAlert(context,s,s1);
+                        }
+                    });
+                    break;
+                default:
+                    Log.d("web",consoleMessage.message().toLowerCase());
+
             }
+
             return super.onConsoleMessage(consoleMessage);
         }
 
@@ -725,7 +763,14 @@ public class CustomWebView extends AppCompatActivity {
     }
 
 
-
+    @Override
+    protected void onDestroy() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+        super.onDestroy();
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

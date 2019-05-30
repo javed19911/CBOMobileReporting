@@ -12,8 +12,10 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.ConsoleMessage;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -38,7 +41,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import utils.MyConnection;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.Service_Call_From_Multiple_Classes;
 
 public class Msg_ho extends AppCompatActivity {
 
@@ -336,6 +341,38 @@ public class Msg_ho extends AppCompatActivity {
             }
 
             return title;
+        }
+
+        @Override
+        public void onCloseWindow(WebView window) {
+            super.onCloseWindow(window);
+        }
+
+        @Override
+        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+            switch (consoleMessage.message().toLowerCase()){
+                case "window.close();" :
+                    finish();
+                    break;
+                case "sync" :
+                    new Service_Call_From_Multiple_Classes().DownloadAll(context, new Response() {
+                        @Override
+                        public void onSuccess(Bundle bundle) {
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(String s, String s1) {
+                            AppAlert.getInstance().getAlert(context,s,s1);
+                        }
+                    });
+                    break;
+                default:
+                    Log.d("web",consoleMessage.message().toLowerCase());
+
+            }
+
+            return super.onConsoleMessage(consoleMessage);
         }
 
 

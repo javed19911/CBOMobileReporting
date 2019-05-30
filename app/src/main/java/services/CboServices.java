@@ -20,6 +20,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.Response;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +45,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.SendMailTask;
 
@@ -89,8 +93,49 @@ public class CboServices {
 
 
 
+    public void customMethodForAllServices(ResponseBuilder builder, Integer response_code){
+
+
+        new MyAPIService(context)
+                .execute(builder.setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle response) {
+                                Message msgObj = h1.obtainMessage(response_code);
+                                msgObj.setData(response);
+                                h1.sendMessage(msgObj);
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+                                // parser_submit_for_working(context,response,listener);
+
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                Message msgObj = h1.obtainMessage(-1);
+                                msgObj.setData(null);
+                                h1.sendMessage(msgObj);
+                                if (!s.equalsIgnoreCase("-1")) {
+                                    AppAlert.getInstance().getAlert(context, s, s1);
+                                }
+                            }
+
+
+                        })
+                );
+    }
+
 
     public void customMethodForAllServices(final HashMap<String,String> data, final String methodName, final Integer response_code, final ArrayList<Integer> table) {
+
+        /*customMethodForAllServices(new ResponseBuilder(methodName, data)
+                .setTables(table)
+                .setAsOldSevice(true)
+                .setShowProgess(false)
+                .setShowNoInternetDialog(true)
+                .setDescription("Please Wait.."),response_code);*/
+
         Runnable runnable = new Runnable() {
 
             public void run() {
@@ -103,9 +148,7 @@ public class CboServices {
 
                 for (int service_try = 0; service_try < 2; service_try++) {
                     try {
-                        /*if(service_try != 0){
-                            URL= "http://www.cboservices.com/mobilerpt.asmx";
-                        }*/
+
                         URL url = new URL(URL + "/" + methodName);
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.setRequestMethod("POST");
@@ -136,9 +179,7 @@ public class CboServices {
                                 dStream.close(); // Closing the output stream.
 
                                 int responseCode = connection.getResponseCode(); // getting the response code
-                           /* final StringBuilder output = new StringBuilder("Request URL " + url);
-                            output.append(System.getProperty("line.separatoR") + "Request Parameters " + params);
-                            output.append(System.getProperty("line.separator")  + "Response Code " + responseCode);*/
+
                                 StringBuilder responseOutput = new StringBuilder();
                                 if (responseCode == 200) {
                                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -181,35 +222,11 @@ public class CboServices {
                                 threadMsg("[ERROR] " + "service  method " + methodName + " " + e1.toString(), response_code, table, methodName);
                                 break;
                             } else {
-                                //try {
+
                                     if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", "").equals("")) {
                                         URL = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "WEBSERVICE_URL_ALTERNATE", URL);
-                                        /*url = new URL(URL + "/" + methodName);
-                                        connection = (HttpURLConnection) url.openConnection();
-                                        connection.setRequestMethod("POST");
-                                        connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
-                                        connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
-                                        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                                        connection.setDoOutput(true);*/
                                     }
 
-                                /*} catch (ProtocolException e) {
-                                    // PROTOCOL EXCEPTION
-                                    threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
-                                    e.printStackTrace();
-                                    no_of_try = 4;
-
-                                } catch (MalformedURLException e) {
-                                    //URL CONVERT Exception
-                                    e.printStackTrace();
-                                    threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
-                                    no_of_try = 4;
-                                } catch (IOException e) {
-                                    //OPEN EXCEPTION
-                                    e.printStackTrace();
-                                    threadMsg("[ERROR] " + "service  method " + methodName + " " + e.toString(), response_code, table, methodName);
-                                    no_of_try = 4;
-                                }*/
                             }
                         //}
                     } catch (ProtocolException e) {

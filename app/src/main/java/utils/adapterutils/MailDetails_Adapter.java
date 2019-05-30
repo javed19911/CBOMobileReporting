@@ -1,7 +1,6 @@
 package utils.adapterutils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -14,13 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 
 /**
  * Created by Akshit on 11/28/2015.
@@ -111,11 +111,12 @@ public class MailDetails_Adapter extends BaseAdapter {
                     }
                     /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(aT1[0]));
                     context.startActivity(browserIntent);*/
-                    Intent i = new Intent(context, CustomWebView.class);
+                    /*Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP1", aT1[0]);
                     i.putExtra("Menu_code", "");
                     i.putExtra("Title", "Attachment");
-                    context.startActivity(i);
+                    context.startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL("Attachment",aT1[0]);
                 }
             });
         }

@@ -13,30 +13,17 @@ import utils_new.Custom_Variables_And_Method;
 public class Constants {
 
     public  static String HIDE_STATUS;
-    public static String FINAL_URL;
 
-    public static String getMainUrl(Context context){
-        SharedPreferences myPrefrence = context.getSharedPreferences("FMCG_PREFRENCE", Context.MODE_PRIVATE);
-        String main_url = myPrefrence.getString("WEBSERVICE_URL", "");
-        if (!main_url.equals("")){
-            AppConstant.MAIN_URL=main_url;
-        }
-
-        return AppConstant.MAIN_URL;
-    }
 
 
     public static String getSIDE_STATUS(Context context){
         SharedPreferences pref=context.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, context.MODE_PRIVATE);
-        HIDE_STATUS=pref.getString("fmcg_value", null);
+        HIDE_STATUS=pref.getString("fmcg_value", "N");
         return HIDE_STATUS;
     }
 
     public interface ACTION {
         public static String MAIN_ACTION = "com.cbo.foregroundservice.action.main";
-        public static String PREV_ACTION = "com.cbo.foregroundservice.action.prev";
-        public static String PLAY_ACTION = "com.cbo.foregroundservice.action.play";
-        public static String NEXT_ACTION = "com.cbo.foregroundservice.action.next";
         public static String STARTFOREGROUND_ACTION = "com.cbo.foregroundservice.action.startforeground";
         public static String LIVE_TRACKING_ACTION = "com.cbo.foregroundservice.action.startforegroundtracking";
         public static String STOPFOREGROUND_ACTION = "com.cbo.foregroundservice.action.stopforeground";

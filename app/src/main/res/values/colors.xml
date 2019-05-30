@@ -7,6 +7,7 @@
 
     <color name="colorPrimary">#066199</color>
     <color name="colorPrimaryDark">#104c6c</color>
+    <color name="colorPrimaryLight">#7aa4</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>

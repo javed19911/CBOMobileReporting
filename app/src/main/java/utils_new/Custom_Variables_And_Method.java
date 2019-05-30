@@ -1,5 +1,6 @@
 package utils_new;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -39,15 +40,17 @@ import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
@@ -60,7 +63,14 @@ import java.util.List;
 import java.util.Locale;
 
 import locationpkg.LocationTest;
+import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
 import utils.networkUtil.NetworkUtil;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by pc24 on 06/01/2017.
@@ -98,8 +108,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String ROOT_NEEDED;
     public static String CHEMIST_ID;
     public static String COMPANY_NAME;
-    public static String checkVersion = "20190107";
-    public static String VERSION = "20190107";
+    public static String checkVersion = "20190527";
+    public static String VERSION = "20190527";
     public static String RPT_DATE;
     public static String EMP_ID;
     public static String DCR_DATE;
@@ -301,10 +311,11 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
             @Override
             public void onClick(View view) {
                 if (url!=null && !url.isEmpty()){
-                    Intent i = new Intent(context, CustomWebView.class);
+                    /*Intent i = new Intent(context, CustomWebView.class);
                     i.putExtra("A_TP", url);
                     i.putExtra("Title", title);
-                    context.startActivity(i);
+                    context.startActivity(i);*/
+                    MyCustumApplication.getInstance().LoadURL(title,url);
                 }
                 dialog.dismiss();
             }
@@ -511,7 +522,12 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         if (!GPS_enabled || mode != 3) {
             // showSettings();
             msgBox(context,"Please Swicth ON your GPS");
-            getGpsSetting(context);
+            if (mode !=0){
+                RequestGPSFromSetting(context);
+            }else{
+                getGpsSetting(context);
+            }
+
             return false;
         } else if (getDataFrom_FMCG_PREFRENCE(context,"MOBILEDATAYN", "N").equals("Y") && !internetConneted(context)) {
             //msgBox(context,"Not Connected to Internet....");
@@ -1150,6 +1166,18 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         return true;
     }
 
+    public void RequestGPSFromSetting(Context context){
+        AppAlert.getInstance().Alert(context,
+                "GPS !!!", "Please Switch ON your GPS with HIGH ACCURACY"
+                , new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                });
+
+    }
+
     //////////////////////////////
     public void getGpsSetting(final Context context) {
 
@@ -1173,10 +1201,43 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         //**************************
         builder.setAlwaysShow(true); //this is the key ingredient
         //**************************
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+       /* PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());*/
+        Task<LocationSettingsResponse> result =
+                LocationServices.getSettingsClient(context).checkLocationSettings( builder.build());
 
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+        result.addOnSuccessListener((Activity) context, new OnSuccessListener<LocationSettingsResponse>() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                //  GPS is already enable, callback GPS status through listener
+
+            }
+        }).addOnFailureListener((Activity) context, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult((Activity) context, REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e(TAG, errorMessage);
+                                Toast.makeText((Activity) context, errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+       /* result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
                                      @Override
                                      public void onResult(LocationSettingsResult result) {
                                          final Status status = result.getStatus();
@@ -1209,7 +1270,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
                                  }
 
 
-        );
+        );*/
 
 
     }

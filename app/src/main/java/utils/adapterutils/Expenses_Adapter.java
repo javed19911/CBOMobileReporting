@@ -77,6 +77,14 @@ public class Expenses_Adapter extends BaseAdapter {
             holder.attachment.setVisibility(View.GONE);
         }
 
+        if (dataList.get(position).get("exp_head_id").equalsIgnoreCase("-1")){
+            holder.edit_exp.setVisibility(View.GONE);
+            holder.delete_exp.setVisibility(View.GONE);
+        }else{
+            holder.edit_exp.setVisibility(View.VISIBLE);
+            holder.delete_exp.setVisibility(View.VISIBLE);
+        }
+
        holder.edit_exp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
