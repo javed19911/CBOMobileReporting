@@ -80,6 +80,9 @@ public class MyCustumApplication extends MultiDexApplication {
     }
 
     public void updateUser(){
+        if (user == null){
+            getUser();
+        }
         if (!user.getID().trim().equalsIgnoreCase("0")
                 && !user.getCompanyCode().trim().equalsIgnoreCase("")) {
             userDB.insert(user);

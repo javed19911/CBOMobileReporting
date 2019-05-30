@@ -10,10 +10,10 @@
         <item android:title="Communicate">
             <menu>
                 <item android:id="@+id/nav_share"
-                    android:icon="@drawable/vp_share1"
+                    android:icon="@drawable/ic_share_icon"
                     android:title="Share" />
                 <item android:id="@+id/nav_contact_us"
-                    android:icon="@drawable/vp_contact_us1"
+                    android:icon="@drawable/ic_contact_us"
                     android:title="Contact us" />
             </menu>
         </item>

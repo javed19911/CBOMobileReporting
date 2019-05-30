@@ -134,26 +134,62 @@ public class vmItem extends CBOViewModel<iFNewOrder> {
         return item;
     }
 
-    public void updateDiscount(){
+    public mItem updateDiscount(mItem item){
         discounts = null;
         item.setMiscDiscount(getItemDiscounts());
-    }
 
-    public void setItem(mItem item){
-        this.item = item;
-        updateDiscount();
         if (item.getMangerDiscount().getMax() == 100){
             //setManagerDiscount(null);
             item.getMangerDiscount().setMax(getManagerDiscount().getMax());
         }
+
         if (item.getNoOfDiscountAlowed()<6){
             item.getManualDiscount().setMax(0D);
         }
         if (item.getNoOfDiscountAlowed()<5){
             item.getMangerDiscount().setMax(0D);
         }
+
+        if (item.getNoOfDiscountAlowed()<4){
+            item.getMiscDiscount().get(3).setPercent(0D).setMax(0D);
+        }
+
+        if (item.getNoOfDiscountAlowed()<3){
+            item.getMiscDiscount().get(2).setPercent(0D).setMax(0D);
+        }
+
+        if (item.getNoOfDiscountAlowed()<2){
+            item.getMiscDiscount().get(1).setPercent(0D).setMax(0D);
+        }
+
+        if (item.getNoOfDiscountAlowed()<1){
+            item.getMiscDiscount().get(0).setPercent(0D).setMax(0D);
+        }
+        return item;
+    }
+
+    public void setItem(mItem item){
+
+        view.setDetaileLayoutEnabled(!item.getId().equalsIgnoreCase("0"));
+
+        this.item = item;
+        if ( item.getQty() == 0D) {
+            //updateDiscount();
+            view.setAddText("ADD");
+        }else {
+            view.setAddText("Update");
+        }
+
+
+
+
+
         view.setItemName(item.getName());
         view.setQty(item.getQty());
+        //view.updateAmt(item.getAmt());
+        view.setRemarkEnabled(item.getRemarkReqd());
+        view.setRemark(item.getRemark());
+        view.updateRate(item.getRate());
         view.ManualDiscountEnabled(item.getNoOfDiscountAlowed()<6);
         view.ManagerDiscountEnabled(item.getNoOfDiscountAlowed()<5);
         view.setManagerDiscount(item.getMangerDiscount());

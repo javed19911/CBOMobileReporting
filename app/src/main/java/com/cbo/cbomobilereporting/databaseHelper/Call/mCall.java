@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public abstract class mCall {
     private String Title = null;
-    private String srno ;
+    private String srno = "0";
     private String Id = "-1";
     private String Name ;
     private String Area ;

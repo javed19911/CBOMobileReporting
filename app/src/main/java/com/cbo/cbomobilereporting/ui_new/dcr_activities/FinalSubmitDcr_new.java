@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
@@ -796,6 +797,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     new CustomTextToSpeech().stopTextToSpeech();
 
                                     new MainDB().delete(null);
+                                    //MyCustumApplication.getInstance().updateUser();
 
                                     new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
                                     Intent i = new Intent(getApplicationContext(), LoginFake.class);

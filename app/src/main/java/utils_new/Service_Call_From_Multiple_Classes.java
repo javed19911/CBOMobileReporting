@@ -713,6 +713,7 @@ public class Service_Call_From_Multiple_Classes {
         new CustomTextToSpeech().stopTextToSpeech();
 
         new MainDB().delete(null);
+        //MyCustumApplication.getInstance().updateUser();
         Custom_Variables_And_Method.DCR_ID = "0";
         MyCustumApplication.getInstance().clearApplicationData();
 
@@ -934,6 +935,8 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("DR_DIVISION_FILTER_YN", c.getString("DR_DIVISION_FILTER_YN"));
                 editor.putString("DR_RXGEN_VALIDATE", c.getString("DR_RXGEN_VALIDATE"));
                 editor.putString("FIREBASE_SYNCYN", c.getString("FIREBASE_SYNCYN"));
+
+
                 editor.putString("DCRDRADDAREA_APP_MSG", c.getString("DCRDRADDAREA_APP_MSG"));
                 editor.putString("DRGIFTMANDATORY", c.getString("DRGIFTMANDATORY"));
                 editor.putString("DCR_MULTIPLE_ROUTEYN", c.getString("DCR_MULTIPLE_ROUTEYN"));
@@ -942,6 +945,9 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("FY_FDATE", c.getString("FY_FDATE"));
                 editor.putString("FY_TDATE", c.getString("FY_TDATE"));
                 editor.putString("ORD_DISC_TYPE", c.getString("ORD_DISC_TYPE"));
+                editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
+                editor.putString("ORD_DISC_EDITCOLS", c.getString("ORD_DISC_EDITCOLS"));
+
 
                 editor.commit();
 

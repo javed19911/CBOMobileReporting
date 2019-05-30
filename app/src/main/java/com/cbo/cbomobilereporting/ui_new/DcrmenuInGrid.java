@@ -1097,7 +1097,11 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         ArrayList<String> drInLocal = new ArrayList<String>();
         drInLocal = cboDbHelper.tempDrListForFinalSubmit();
 
-        if (!customVariablesAndMethod.IsCallAllowedToday(context)) {
+        if (!networkUtil.internetConneted(getActivity())) {
+
+            customVariablesAndMethod.Connect_to_Internet_Msg(context);
+
+        } else if (!customVariablesAndMethod.IsCallAllowedToday(context)) {
 
             if (DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
                 customVariablesAndMethod.msgBox(context,"Please open your DCR Days first.....");
@@ -1158,82 +1162,35 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
         } else {
 
+            int mode = new MyCustomMethod(getActivity()).getLocationMode(getActivity());
 
-            if (!networkUtil.internetConneted(getActivity())) {
+            if ((!myCustomMethod.checkGpsEnable() || mode != 3)  && GPS_STATUS_IS.equals("Y")) {
 
-                customVariablesAndMethod.Connect_to_Internet_Msg(context);
+                customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
+                if (mode !=0){
+                    customVariablesAndMethod.RequestGPSFromSetting(context);
+                }else{
+                    customVariablesAndMethod.getGpsSetting(context);
+                }
+                // showSettings();
 
             } else {
 
-                if (GPS_STATUS_IS.equals("Y")) {
+                if (!DCR_ID.equals("0")) {
+                    try {
 
-                    int mode = new MyCustomMethod(getActivity()).getLocationMode(getActivity());
+                        //result4FinalSubmit();
+                        PreFinalSubmit();
 
-                    if (!myCustomMethod.checkGpsEnable() || mode != 3) {
-
-                        customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
-                        if (mode !=0){
-                            customVariablesAndMethod.RequestGPSFromSetting(context);
-                        }else{
-                            customVariablesAndMethod.getGpsSetting(context);
-                        }
-                        // showSettings();
-
-                    } else {
-
-
-                        if (!networkUtil.internetConneted(getActivity())) {
-                            customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-                        } else {
-
-                            if (!DCR_ID.equals("0")) {
-                                try {
-
-                                    //result4FinalSubmit();
-                                    PreFinalSubmit();
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                customVariablesAndMethod.msgBox(context,"Please open your DCR Days first....");
-                            }
-
-                        }
-
-
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-
                 } else {
-
-
-                    if (!networkUtil.internetConneted(getActivity())) {
-                        customVariablesAndMethod.Connect_to_Internet_Msg(context);
-
-                    } else {
-
-                        if (!DCR_ID.equals("0")) {
-                            try {
-                                //result4FinalSubmit();
-
-                                PreFinalSubmit();
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            customVariablesAndMethod.msgBox(context,"Please open your DCR Days first....");
-                        }
-
-                    }
-
+                    customVariablesAndMethod.msgBox(context,"Please open your DCR Days first....");
                 }
 
+
             }
-
-
         }
 
 

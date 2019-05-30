@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
@@ -83,6 +84,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import services.CboServices;
 import services.ServiceHandler;
 import utils.ExceptionHandler;
@@ -134,6 +136,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
     Boolean resultTrue, myval=false;
     ImageView attach_img,attachnew;
     String ROUTE_CLASS = "",ACTUALDA_FAREYN = "",ACTUALFAREYN_MANDATORY="";
+    Double ACTUALFARE_MAXAMT = 0D;
 
     ArrayList<Map<String, String>> data = null;
 
@@ -250,7 +253,33 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
         });
 
 
+        distAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (ACTUALFARE_MAXAMT>0){
+                    if ((distAmt.getText().toString().trim().isEmpty() ? 0D :Double.parseDouble( distAmt.getText().toString())) > ACTUALFARE_MAXAMT){
+                        AppAlert.getInstance().Alert(context, "Alert!!!",
+                                "Your AcutaFare cannot exceed " + AddToCartView.toCurrency(String.format("%.2f", (ACTUALFARE_MAXAMT))), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        distAmt.setText(""+ACTUALFARE_MAXAMT);
+                                    }
+                                });
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         save_exp.setOnClickListener(new OnClickListener() {
@@ -262,7 +291,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 if (datype_val.equals("--Select--")) {
                     customVariablesAndMethod.msgBox(context,"Please Select your DA TYPE");
                 } else */
-                if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("") && !ACTUALFAREYN_MANDATORY.equalsIgnoreCase("N")) {
+                if ( actual_fare_layout.getVisibility()==View.VISIBLE
+                        && distAmt.getText().toString().equals("")
+                        && !ACTUALFAREYN_MANDATORY.equalsIgnoreCase("N")) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Actual Fare....");
                 }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"EXP_ATCH_YN","N").equals("Y") &&  actual_fare_layout.getVisibility()==View.VISIBLE && attach_txt.getText().toString().equals("* Attach Picture....")) {
                     customVariablesAndMethod.msgBox(context,"Please Attach supporting File for Actual Fare....");
@@ -690,7 +721,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                         if (amt > maxAmt) {
                             Double finalMaxAmt = maxAmt;
                             AppAlert.getInstance().Alert(context, "Alert!!!",
-                                    "You are only allowed to more then " + maxAmt,
+                                    "You are not allowed to enter more then " + maxAmt,
                                     new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -1362,6 +1393,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                     ROUTE_CLASS = object.getString("ROUTE_CLASS");
                     ACTUALDA_FAREYN = object.getString("ACTUALDA_FAREYN");
                     ACTUALFAREYN_MANDATORY  = object.getString("ACTUALFAREYN_MANDATORY");
+                    ACTUALFARE_MAXAMT  = object.getDouble("ACTUALFARE_MAXAMT");
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN",object.getString("ACTUALFAREYN"));
 
 
@@ -1388,7 +1420,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",object.getString("KM_NEW"));
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",object.getString("TA_AMT_NEW"));
                 }
 
 

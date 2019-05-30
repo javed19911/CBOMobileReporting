@@ -82,6 +82,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import locationpkg.Const;
 import services.CboServices;
 import services.ServiceHandler;
@@ -149,7 +150,8 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
     ArrayList<SpinnerModel> data1;
     ImageView attachnew;
     LinearLayout actual_fare_layout,actual_DA_layout;
-    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "";
+    String ROUTE_CLASS = "",ACTUALDA_FAREYN = "",ACTUALFAREYN_MANDATORY="";
+    Double ACTUALFARE_MAXAMT = 0D;
     EditText da_root;
 
 
@@ -405,6 +407,34 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
             }
         });
 
+        distAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (ACTUALFARE_MAXAMT>0){
+                    if ((distAmt.getText().toString().trim().isEmpty() ? 0D :Double.parseDouble( distAmt.getText().toString())) > ACTUALFARE_MAXAMT){
+                        AppAlert.getInstance().Alert(context, "Alert!!!",
+                                "Your AcutaFare cannot exceed " + AddToCartView.toCurrency(String.format("%.2f", (ACTUALFARE_MAXAMT))), new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        distAmt.setText(""+ACTUALFARE_MAXAMT);
+                                    }
+                                });
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         //======================================================================================================================
 
         dcr_save.setOnClickListener(new OnClickListener() {
@@ -510,7 +540,9 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     });
         } else if (routeNeeded.equals("Y")) {
 
-            if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("")) {
+            if ( actual_fare_layout.getVisibility()==View.VISIBLE
+                    && distAmt.getText().toString().equals("")
+                    && !ACTUALFAREYN_MANDATORY.equalsIgnoreCase("N")) {
                 customVariablesAndMethod.msgBox(context, "Please Enter the Actual Fare....");
             }
 //            else if (mandatory_pending_exp_head.size() != 0) {
@@ -1121,22 +1153,28 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 }else {
 
 
-                    if (!filename.equals("")) {
+
+                    if (!filename.equals("")){
                         progress1.setMessage("Please Wait..\nuploading Image");
                         progress1.setCancelable(false);
                         progress1.show();
                         File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + filename);
                         new up_down_ftp().uploadFile(file2, context);
 
-                    }
-                    if (!path.equals("")) {
-                        filename = finalExt;
-                    }
-                    dialog.dismiss();
 
-                    if (filename.equals("")) {
+                    }else{
+                        filename= finalExt;
                         other_expense_commit();
                     }
+                    /*if(!path.equals("")){
+                        filename= finalExt;
+                    }*/
+                    dialog.dismiss();
+
+                    /*if (filename.equals("")) {
+                        other_expense_commit();
+                    }*/
+
 
 
                 }
@@ -1504,8 +1542,16 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     rootdata.add((object.getString("ACTUALFAREYN")));
                     ROUTE_CLASS = object.getString("ROUTE_CLASS");
                     ACTUALDA_FAREYN = object.getString("ACTUALDA_FAREYN");
+                    ACTUALFAREYN_MANDATORY  = object.getString("ACTUALFAREYN_MANDATORY");
+                    ACTUALFARE_MAXAMT  = object.getDouble("ACTUALFARE_MAXAMT");
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN",object.getString("ACTUALFAREYN"));
 
+                    String MyDaType = object.getString("DA_TYPE_NEW");
+                    String da_val = object.getString("DA_RATE_NEW");
+
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",MyDaType);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
+                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",object.getString("TA_AMT_NEW"));
                 }
 
                 data = cbohelp.get_Expense();

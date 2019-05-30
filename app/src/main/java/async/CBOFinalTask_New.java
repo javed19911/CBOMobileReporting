@@ -149,8 +149,8 @@ public class CBOFinalTask_New {
             String AllItemQty,AllPob,AllGiftId,AllGiftQty;
             ArrayList<String> doc_id;
             cbohelp=new CBO_DB_Helper(mContext);
-            //doc_id=cbohelp.getdoctormoreLit(updated);
-            doc_id=cbohelp.tempDrListForFinalSubmit(updated);
+            doc_id=cbohelp.getdoctormoreLit(updated);
+            //doc_id=cbohelp.tempDrListForFinalSubmit(updated);
             //cbohelp.getDoctorListLocal(null,"1")
             if(doc_id.size()>0) {
                 String visual_items = "0";

@@ -90,6 +90,10 @@ public class CartAdapter extends RecyclerView.Adapter {
                 ((ProductViewHolder) holder).SGST_amt.setText(AddToCartView.toCurrency(String.format("%.2f",(item.getSGSTAmt()))));
                 ((ProductViewHolder) holder).brand_tot_amt.setText(AddToCartView.toCurrency(String.format("%.2f",(item.getTotAmt()))));
 
+                ((ProductViewHolder) holder).remark.setText(item.getRemark());
+                ((ProductViewHolder) holder).remarkLayout.setVisibility(item.getRemarkReqd()? View.VISIBLE: View.GONE);
+
+
 
 
                 break;
@@ -180,11 +184,11 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         private TextView brand,pack,rate,amount,net_amount,brand_tot_amt,SGST_amt,CGST_amt;
-        private TextView Qty,discountName,discount,centralTaxName,LocalTaxName;
+        private TextView Qty,discountName,discount,centralTaxName,LocalTaxName,remark;
         private ImageView delete,edit;
         private ImageButton more;
         private RelativeLayout sapratorLayout;
-        private LinearLayout extraLayout,centralTax,LocalTax;
+        private LinearLayout extraLayout,centralTax,LocalTax,remarkLayout;
 
         public ProductViewHolder(View view) {
             super(view);
@@ -212,6 +216,9 @@ public class CartAdapter extends RecyclerView.Adapter {
 
             sapratorLayout = view.findViewById(R.id.sapratorLayout);
             extraLayout = view.findViewById(R.id.extraLayout);
+
+            remark = view.findViewById(R.id.remark);
+            remarkLayout = view.findViewById(R.id.remarkLayout);
 
 
             more.setOnClickListener(new View.OnClickListener() {

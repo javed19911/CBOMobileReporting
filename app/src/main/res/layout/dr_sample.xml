@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
+
+        <!---->
+
+        <!--&lt;!&ndash;<utils.font_package.Button_Bold&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/dr_sample_save"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="30dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_margin="7dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:background="@drawable/button_text_view_selector"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="Done"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textAllCaps="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/textColorPrimary"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="18dp" />&ndash;&gt;-->
+
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:id="@+id/headder"
+        android:layout_alignParentTop="true"
         android:background="@color/colorPrimary">
 
         <TextView
@@ -37,13 +58,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/search"
+        android:layout_below="@+id/headder"
         android:hint="Search product by name"
         android:drawableLeft="@drawable/search"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/search"
+        android:id="@+id/titleheader"
         android:layout_height="wrap_content">
 
         <utils.font_package.Text_view_Bold_10
@@ -99,7 +122,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_margin="2dp"
-        android:layout_weight="1"
+        android:layout_below="@+id/titleheader"
+        android:layout_above="@+id/dr_sample_save"
         android:orientation="vertical">
 
         <ListView
@@ -109,15 +133,33 @@
             android:descendantFocusability="afterDescendants"/>
     </LinearLayout>
 
-    <utils.font_package.Button_Bold
-        android:id="@+id/dr_sample_save"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_margin="7dp"
-        android:background="@drawable/button_text_view_selector"
-        android:text="Done"
-        android:textAllCaps="false"
-        android:textColor="@color/textColorPrimary"
-        android:textSize="18dp" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/dr_sample_save"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/itemincart"
+            android:padding="10dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:text=""/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="end"
+            android:layout_weight="2"
+            android:textColor="@android:color/white"
+            android:text="CONTINUE >>"/>
+    </LinearLayout>
+
+
+</RelativeLayout>
+

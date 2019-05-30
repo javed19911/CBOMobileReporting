@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
+import interfaces.Ipob;
 import services.CboServices;
 import services.Up_Dwn_interface;
 import utils.adapterutils.PobAdapter;
@@ -46,7 +49,7 @@ import utils.model.DropDownModel;
 import utils.networkUtil.NetworkUtil;
 import utils_new.CustomDialog.Spinner_Dialog;
 
-public class Dr_Sample_Dialog implements Up_Dwn_interface {
+public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
 
     Handler h1;
     Integer response_code;
@@ -54,7 +57,8 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
 
 
     ListView mylist;
-    Button save;
+    LinearLayout save;
+    TextView itemincart;
     Custom_Variables_And_Method customVariablesAndMethod;
     int PA_ID = 0;
     String dr_id="0";
@@ -123,7 +127,8 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
 
         search= (EditText) view.findViewById(R.id.search);
         mylist = (ListView) view.findViewById(R.id.dr_sample_list);
-        save = (Button) view.findViewById(R.id.dr_sample_save);
+        save =  view.findViewById(R.id.dr_sample_save);
+        itemincart = view.findViewById(R.id.itemincart);
         speciality_filter = view.findViewById(R.id.filter);
 
         cbohelp = new CBO_DB_Helper(context);
@@ -266,6 +271,25 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
 
     }
 
+    @Override
+    public void onItemSelectedListChanged(){
+        Double total_pob=0D;
+        int items = 0;
+        for (int i = 0; i < display_item_list.size(); i++) {
+            check = display_item_list.get(i).isSelected();
+
+            if (check) {
+                items ++;
+                total_pob += Double.parseDouble( display_item_list.get(i).getPob()) * Double.parseDouble( display_item_list.get(i).getRate());
+
+            }
+        }
+        if (total_pob>0){
+            itemincart.setText( AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
+        }else{
+            itemincart.setText(items + " item");
+        }
+    }
 
 
     public ArrayList<Integer> getdoclist() {
@@ -289,14 +313,18 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
 
             }
         }
-        adapter = new PobAdapter((Activity) context, display_item_list,customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty());
+        adapter = new PobAdapter((Activity) context, display_item_list,customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),this::onItemSelectedListChanged);
         mylist.setAdapter(adapter);
+        onItemSelectedListChanged();
     }
 
     @Override
     public void onDownloadComplete() {
         new Doback().execute(dr_id,"1");
     }
+
+
+
 
     class Doback extends AsyncTask<String, String, List<PobModel>> {
         ProgressDialog pd;
@@ -341,7 +369,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
         protected void onPostExecute(List<PobModel> result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            adapter = new PobAdapter((Activity) context, result,customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty());
+            adapter = new PobAdapter((Activity) context, result,customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),Dr_Sample_Dialog.this);
 
             if (adapter.getCount() != 0) {
 
@@ -357,11 +385,13 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface {
                             result.get(j).setScore(sample_qty1[i]);
                             result.get(j).setNOC(sample_noc1[i]);
                             result.get(j).setBalance( result.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
+                            break;
                         }
                     }
                 }
 
                 mylist.setAdapter(adapter);
+                onItemSelectedListChanged();
                 dialog.show();
 
             } else if(who.equals("0")){

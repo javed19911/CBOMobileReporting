@@ -150,7 +150,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone"
                         android:id="@+id/extraLayout">
 
                         <LinearLayout
@@ -348,6 +347,35 @@
                                 android:textStyle="bold"
                                 android:textSize="13dp"
                                 android:id="@+id/brand_tot_amt"
+                                android:textColor="@android:color/black"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:id="@+id/remarkLayout"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Remark"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:textSize="13dp"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textSize="9dp"
+                                android:id="@+id/remark"
                                 android:textColor="@android:color/black"/>
 
                         </LinearLayout>

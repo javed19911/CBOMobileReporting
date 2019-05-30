@@ -111,10 +111,10 @@ public class vmOrder extends CBOViewModel<iOrder> {
 
                 String table0 = result.getString("Tables0");
                 JSONArray jsonArray1 = new JSONArray(table0);
-                if (jsonArray1.length() > 0) {
+                //if (jsonArray1.length() > 0) {
                     //dbHelper.deleteOrder();
                     orderDB.delete();
-                }
+                //}
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
 
@@ -238,6 +238,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
             JSONArray jsonArray1 = new JSONArray(table0);
             order.getItems().clear();
 
+
             for (int i = 0; i < jsonArray1.length(); i++) {
                 JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
                 ArrayList<mDiscount> discounts = new ArrayList<>();
@@ -255,7 +256,9 @@ public class vmOrder extends CBOViewModel<iOrder> {
                         .setAmt(jsonObject2.getDouble("AMOUNT"))
                         .setMiscDiscount(discounts)
                         .setGropuID(jsonObject2.getInt("ITEM_GROUP_ID"))
+                        .setRemark(jsonObject2.getString("PREMARK"))
                         .setNoOfDiscountAlowed(Integer.parseInt( MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("ORD_DISC_TYPE","6")))
+                        .setRemarkReqd(MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SALE_ORDER_REMARKYN","N").equalsIgnoreCase("Y"))
                         .setMangerDiscount(new mDiscount().setType(eDiscount.M).setPercent(jsonObject2.getDouble("DISC_PERCENT4")) )
                         .setManualDiscount(new mDiscount().setPercent(jsonObject2.getDouble("DISC_PERCENT5")) );
 

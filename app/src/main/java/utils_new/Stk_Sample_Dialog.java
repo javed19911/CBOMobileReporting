@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +35,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
+import interfaces.Ipob;
 import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
 import utils.adapterutils.MyAdapter;;
@@ -41,7 +44,7 @@ import utils.model.DropDownModel;
 import utils.networkUtil.NetworkUtil;
 import utils_new.CustomDialog.Spinner_Dialog;
 
-public class Stk_Sample_Dialog implements Up_Dwn_interface {
+public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
 
     Handler h1;
     Integer response_code;
@@ -49,7 +52,8 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface {
 
 
     ListView mylist;
-    Button save;
+    LinearLayout save;
+    TextView itemincart;
     Custom_Variables_And_Method customVariablesAndMethod;
     Context context;
     int PA_ID = 0;
@@ -109,7 +113,8 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface {
         mylist = (ListView) view.findViewById(R.id.stk_sample_list);
         mylist.setItemsCanFocus(true);
         mylist.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-        save = (Button) view.findViewById(R.id.stk_sample_save);
+        save = view.findViewById(R.id.stk_sample_save);
+        itemincart = view.findViewById(R.id.itemincart);
         speciality_filter = view.findViewById(R.id.filter);
         PA_ID = Custom_Variables_And_Method.PA_ID;
         data1 = new ArrayList<String>();
@@ -138,8 +143,9 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface {
         getModelLocal();
 
         if (main_item_list.size()>0) {
-            adapter = new MyAdapter((Activity) context, display_item_list);
-            mylist.setAdapter(adapter);
+            adapter = new MyAdapter((Activity) context, display_item_list,this);
+
+
 
             String[] sample_name1= sample_name.split(",");
             String[] sample_qty1= sample_sample.split(",");
@@ -151,6 +157,7 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface {
                         main_item_list.get(j).setScore(sample_pob1[i]);
                         main_item_list.get(j).setSample(sample_qty1[i]);
                         //display_item_list.get(j).setBalance( display_item_list.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
+                        break;
                     }
                 }
             }
@@ -166,6 +173,8 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface {
                     }
                 }
             }
+            mylist.setAdapter(adapter);
+            onItemSelectedListChanged();
 
         }else{
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
@@ -434,14 +443,16 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface {
 
             }
         }
-        adapter = new MyAdapter((Activity) context, display_item_list);
+        adapter = new MyAdapter((Activity) context, display_item_list,this::onItemSelectedListChanged);
         mylist.setAdapter(adapter);
+        onItemSelectedListChanged();
     }
     @Override
     public void onDownloadComplete() {
         getModelLocal();
-        adapter = new MyAdapter((Activity) context, display_item_list);
+        adapter = new MyAdapter((Activity) context, display_item_list,this::onItemSelectedListChanged);
         mylist.setAdapter(adapter);
+        onItemSelectedListChanged();
     }
 
     private void threadMsg(Bundle Msg) {
@@ -452,4 +463,22 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface {
         h1.sendMessage(msgObj);
     }
 
+    @Override
+    public void onItemSelectedListChanged(){
+        Double total_pob=0D;
+        int items = 0;
+        for (int i = 0; i < display_item_list.size(); i++) {
+
+            if (display_item_list.get(i).isSelected()) {
+                items ++;
+                total_pob += Double.parseDouble( display_item_list.get(i).getScore()) * Double.parseDouble( display_item_list.get(i).getRate());
+
+            }
+        }
+        if (total_pob>0){
+            itemincart.setText( AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
+        }else{
+            itemincart.setText(items + " item");
+        }
+    }
 }

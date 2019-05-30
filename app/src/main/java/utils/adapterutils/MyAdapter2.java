@@ -125,7 +125,7 @@ public class MyAdapter2 extends ArrayAdapter<GiftModel> {
     		holder.text.setText(list.get(position).getName()); 
     		holder.rate.setText(list.get(position).getRate());
     		holder.id.setText(list.get(position).getId());
-    		holder.scores.setText(list.get(position).getScore());
+    		holder.scores.setText(list.get(position).getScore().equalsIgnoreCase("0")?"":list.get(position).getScore());
 		clicked = true;
     		//holder.checkbox.setChecked(list.get(position).isSelected());     
     		return view;

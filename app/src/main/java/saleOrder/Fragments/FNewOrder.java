@@ -26,7 +26,10 @@ import java.util.ArrayList;
 import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
+import cbomobilereporting.cbo.com.cboorder.Model.mTax;
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import saleOrder.Activities.ItemFilterActivity;
+import saleOrder.Adaptor.CartAdapter;
 import saleOrder.Enum.eItem;
 import saleOrder.ViewModel.vmFCart;
 import saleOrder.ViewModel.vmItem;
@@ -40,11 +43,13 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     Activity context;
     private static final int NEW_ORDER_ITEM_FILTER = 10;
     private vmItem viewModel;
-    EditText QtyTxt,Manualdiscount,managerDiscount;
+    EditText QtyTxt,Manualdiscount,managerDiscount,remarkTxt;
+    EditText dis1,dis2,dis3,dis4;
     Button Add;
     mOrder order;
     Boolean keyPressed = true;
-    LinearLayout mainLayout;
+    LinearLayout mainLayout,detailLayout;
+    TextView RateTxt,AmtTxt;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate (R.layout.fragment_new_order_view, container, false);
@@ -85,6 +90,16 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
         managerDiscount = view.findViewById(R.id.managerDiscount);
         Add = view.findViewById(R.id.add);
         mainLayout = view.findViewById(R.id.mainLayout);
+        detailLayout = view.findViewById(R.id.detail_layout);
+
+        RateTxt = view.findViewById(R.id.rate);
+        AmtTxt = view.findViewById(R.id.amount);
+        remarkTxt = view.findViewById(R.id.remark);
+
+        dis1 = view.findViewById(R.id.Discount1);
+        dis2 = view.findViewById(R.id.discount2);
+        dis3 = view.findViewById(R.id.Discount3);
+        dis4 = view.findViewById(R.id.discount4);
 
         viewModel = ViewModelProviders.of (this).get (vmItem.class);
         viewModel.setView (context, this);
@@ -115,6 +130,7 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getItem().setQty(s.toString().trim().isEmpty() ? 0D: Double.parseDouble(s.toString()) );
+                updateAmt(getItem().getAmt());
             }
 
             @Override
@@ -122,6 +138,165 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
 
             }
         });
+
+        remarkTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                getItem().setRemark(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        dis1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mDiscount discount =  getItem().getMiscDiscount().get(0);
+                final Double[] dis = {s.toString().trim().isEmpty() ? 0.0 : Double.parseDouble(s.toString().trim())};
+                if (keyPressed ) {
+                    keyPressed = false;
+                    if(discount.getMax() < dis[0]){
+                        AppAlert.getInstance().Alert(context,
+                                "Alert!!!", "Maximum discount allowed is : " + discount.getMax(),
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dis[0] = discount.getMax();
+                                        dis1.setText(""+ dis[0]);
+                                    }
+                                });
+                    }
+                    getItem().getMiscDiscount().get(0).setPercent(dis[0]);
+                    keyPressed = true;
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        dis2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mDiscount discount =  getItem().getMiscDiscount().get(1);
+                final Double[] dis = {s.toString().trim().isEmpty() ? 0.0 : Double.parseDouble(s.toString().trim())};
+                if (keyPressed ) {
+                    keyPressed = false;
+                    if(discount.getMax() < dis[0]){
+                        AppAlert.getInstance().Alert(context,
+                                "Alert!!!", "Maximum discount allowed is : " + discount.getMax(),
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dis[0] = discount.getMax();
+                                        dis2.setText(""+ dis[0]);
+                                    }
+                                });
+                    }
+                    getItem().getMiscDiscount().get(1).setPercent(dis[0]);
+                    keyPressed = true;
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        dis3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mDiscount discount =  getItem().getMiscDiscount().get(2);
+                final Double[] dis = {s.toString().trim().isEmpty() ? 0.0 : Double.parseDouble(s.toString().trim())};
+                if (keyPressed ) {
+                    keyPressed = false;
+                    if(discount.getMax() < dis[0]){
+                        AppAlert.getInstance().Alert(context,
+                                "Alert!!!", "Maximum discount allowed is : " + discount.getMax(),
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dis[0] = discount.getMax();
+                                        dis3.setText(""+ dis[0]);
+                                    }
+                                });
+                    }
+                    getItem().getMiscDiscount().get(2).setPercent(dis[0]);
+                    keyPressed = true;
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        dis4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mDiscount discount =  getItem().getMiscDiscount().get(3);
+                final Double[] dis = {s.toString().trim().isEmpty() ? 0.0 : Double.parseDouble(s.toString().trim())};
+                if (keyPressed ) {
+                    keyPressed = false;
+                    if(discount.getMax() < dis[0]){
+                        AppAlert.getInstance().Alert(context,
+                                "Alert!!!", "Maximum discount allowed is : " + discount.getMax(),
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dis[0] = discount.getMax();
+                                        dis4.setText(""+ dis[0]);
+                                    }
+                                });
+                    }
+                    getItem().getMiscDiscount().get(3).setPercent(dis[0]);
+                    keyPressed = true;
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         managerDiscount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -202,10 +377,31 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
             @Override
             public void onClick(View v) {
                 if(!getItem().getId().equals("0")) {
-                    viewModel.updateDiscount();
+                    //if (getEditableDiscount().trim().isEmpty()) {
+                      viewModel.updateDiscount(getItem());
+                    //}
+                    if (getEditableDiscount().contains("1")){
+                        getItem().getMiscDiscount().get(0).setPercent(dis1.getText().toString().trim().isEmpty() ? 0.0 : Double.parseDouble(dis1.getText().toString().trim()));
+                    }
+
+                    if (getEditableDiscount().contains("2")){
+                        getItem().getMiscDiscount().get(1).setPercent(dis2.getText().toString().trim().isEmpty() ? 0.0 : Double.parseDouble(dis2.getText().toString().trim()));
+                    }
+
+                    if (getEditableDiscount().contains("3")){
+                        getItem().getMiscDiscount().get(2).setPercent(dis3.getText().toString().trim().isEmpty() ? 0.0 : Double.parseDouble(dis3.getText().toString().trim()));
+                    }
+
+                    if (getEditableDiscount().contains("4")){
+                        getItem().getMiscDiscount().get(3).setPercent(dis4.getText().toString().trim().isEmpty() ? 0.0 : Double.parseDouble(dis4.getText().toString().trim()));
+                    }
+
+                    getItem().CalculateTotalAmount();
+
                     if (context instanceof iCart) {
                         ((iCart) context).onItemAdded(getItem());
                     }
+
                 }else{
                     AppAlert.getInstance().getAlert(context,"No Item !!!","Please select an Item to add in the cart... ");
                 }
@@ -238,11 +434,43 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     @Override
     public void setItem(mItem item) {
         item.setNoOfDiscountAlowed(getNoOfDiscountAllowed());
+        item.setRemarkReqd(IsRemarkReqd());
+
         if (getPartyId() == null) {
             if (context instanceof iCart) {
                 order = (((iCart) context).getOrder());
             }
         }
+
+        if (item.getMiscDiscount().size() == 0) {
+            //viewModel.updateDiscount(item);
+            item = viewModel.updateDiscount(item);
+        }
+
+
+        if (!getEditableDiscount().contains("1")){
+            item.getMiscDiscount().get(0).setMax(0D);
+        }
+
+        if (!getEditableDiscount().contains("2")){
+            item.getMiscDiscount().get(1).setMax(0D);
+        }
+
+        if (!getEditableDiscount().contains("3")){
+            item.getMiscDiscount().get(2).setMax(0D);
+        }
+
+        if (!getEditableDiscount().contains("4")){
+            item.getMiscDiscount().get(3).setMax(0D);
+        }
+
+        if (item.getNoOfDiscountAlowed()<6){
+            item.getManualDiscount().setMax(0D);
+        }
+        if (item.getNoOfDiscountAlowed()<5){
+            item.getMangerDiscount().setMax(0D);
+        }
+
 
         viewModel.setItem(item);
 
@@ -261,8 +489,23 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     }
 
     @Override
+    public void setAddText(String text) {
+        Add.setText(text);
+    }
+
+    @Override
     public int getNoOfDiscountAllowed() {
         return Integer.parseInt( MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("ORD_DISC_TYPE","6"));
+    }
+
+    @Override
+    public String getEditableDiscount() {
+        return MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("ORD_DISC_EDITCOLS","");
+    }
+
+    @Override
+    public void setDetaileLayoutEnabled(Boolean enabled) {
+        detailLayout.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -288,7 +531,43 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
 
     @Override
     public void setMiscDiscount(ArrayList<mDiscount> discounts) {
+        mDiscount discount = discounts.get(0);
+        dis1.setEnabled(discount.getMax() != 0);
+        dis1.setText(discount.getPercent() == 0D ?"":""+discount.getPercent());
+        if (discount.getPercent() == 0 && discount.getMax() == 0){
+            dis1.setVisibility(View.GONE);
+        }else{
+            dis1.setVisibility(View.VISIBLE);
+        }
 
+
+        discount = discounts.get(1);
+        dis2.setEnabled(discount.getMax() != 0);
+        dis2.setText(discount.getPercent() == 0D ?"":""+discount.getPercent());
+        if (discount.getPercent() == 0 && discount.getMax() == 0){
+            dis2.setVisibility(View.GONE);
+        }else{
+            dis2.setVisibility(View.VISIBLE);
+        }
+
+
+        discount = discounts.get(2);
+        dis3.setEnabled(discount.getMax() != 0);
+        dis3.setText(discount.getPercent() == 0D ?"":""+discount.getPercent());
+        if (discount.getPercent() == 0 && discount.getMax() == 0){
+            dis3.setVisibility(View.GONE);
+        }else{
+            dis3.setVisibility(View.VISIBLE);
+        }
+
+        discount = discounts.get(3);
+        dis4.setEnabled(discount.getMax() != 0);
+        Manualdiscount.setText(discount.getPercent() == 0D ?"":""+discount.getPercent());
+        if (discount.getPercent() == 0 && discount.getMax() == 0){
+            dis4.setVisibility(View.GONE);
+        }else{
+            dis4.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -306,6 +585,23 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
         }else{
             managerDiscount.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public Boolean IsRemarkReqd() {
+        return MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SALE_ORDER_REMARKYN","N").equalsIgnoreCase("Y");
+    }
+
+    @Override
+    public void setRemarkEnabled(Boolean required) {
+        remarkTxt.setVisibility(required? View.VISIBLE:View.GONE);
+    }
+
+
+
+    @Override
+    public void setRemark(String remark) {
+        remarkTxt.setText(remark);
     }
 
 
@@ -330,5 +626,35 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(Add.getWindowToken(), 0);
         }
+    }
+
+    @Override
+    public void updateRate(Double rate) {
+        RateTxt.setText(" X " +  AddToCartView.toCurrency(String.format("%.2f", rate)));
+    }
+
+    @Override
+    public void updateAmt(Double amt) {
+        AmtTxt.setText(AddToCartView.toCurrency(String.format("%.2f", amt)));
+    }
+
+    @Override
+    public void updateDiscountAmt(Double DisAmt) {
+
+    }
+
+    @Override
+    public void updateDiscountStr(String DisStr) {
+
+    }
+
+    @Override
+    public void updateTAX(mTax GST) {
+
+    }
+
+    @Override
+    public void updateNetAmount(Double NetAmt) {
+
     }
 }

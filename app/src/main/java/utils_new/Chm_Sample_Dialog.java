@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +41,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
+import interfaces.Ipob;
 import services.CboServices;
 import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
@@ -49,14 +52,15 @@ import utils.model.DropDownModel;
 import utils.networkUtil.NetworkUtil;
 import utils_new.CustomDialog.Spinner_Dialog;
 
-public class Chm_Sample_Dialog  implements Up_Dwn_interface {
+public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
 
     Handler h1;
     Integer response_code;
     Bundle Msg;
 
     ListView mylist;
-    Button save;
+    LinearLayout save;
+    TextView itemincart;
     Custom_Variables_And_Method customVariablesAndMethod;
     int PA_ID = 0;
     ResultSet rs;
@@ -152,7 +156,8 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
         mylist = (ListView) view.findViewById(R.id.chm_sample_list);
         mylist.setItemsCanFocus(true);
         mylist.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-        save = (Button) view.findViewById(R.id.chm_sample_save);
+        save = view.findViewById(R.id.chm_sample_save);
+        itemincart = view.findViewById(R.id.itemincart);
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 
@@ -474,14 +479,34 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
         if (callFromRcpa.equals("intent_fromRcpaCAll")) {
             adapter = new RCPA_Adapter((Activity) context, display_item_list);
         }else {
-            adapter = new MyAdapter((Activity) context, display_item_list);
+            adapter = new MyAdapter((Activity) context, display_item_list,this);
         }
         mylist.setAdapter(adapter);
+        onItemSelectedListChanged();
     }
 
     @Override
     public void onDownloadComplete() {
         new Doback().execute(PA_ID,1);
+    }
+
+    @Override
+    public void onItemSelectedListChanged(){
+        Double total_pob=0D;
+        int items = 0;
+        for (int i = 0; i < display_item_list.size(); i++) {
+
+            if (display_item_list.get(i).isSelected()) {
+                items ++;
+                total_pob += Double.parseDouble( display_item_list.get(i).getScore()) * Double.parseDouble( display_item_list.get(i).getRate());
+
+            }
+        }
+        if (total_pob>0){
+            itemincart.setText( AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
+        }else{
+            itemincart.setText(items + " item");
+        }
     }
 
     class Doback extends AsyncTask<Integer, String, List<GiftModel>> {
@@ -537,14 +562,14 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
             if (callFromRcpa.equals("intent_fromRcpaCAll")) {
                 adapter = new RCPA_Adapter((Activity) context, result);
             }else {
-                adapter = new MyAdapter((Activity) context, result);
+                adapter = new MyAdapter((Activity) context, result,Chm_Sample_Dialog.this::onItemSelectedListChanged);
             }
 
             pd.dismiss();
 
 
             if (adapter.getCount() != 0) {
-                mylist.setAdapter(adapter);
+
                 String[] sample_name1= sample_name.split(",");
                 String[] sample_qty1= sample_sample.split(",");
                 String[] sample_pob1= sample_pob.split(",");
@@ -556,6 +581,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
                             result.get(j).setSample(sample_qty1[i]);
 
                            // display_item_list.get(j).setBalance( display_item_list.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
+                            break;
                         }
                     }
                 }
@@ -570,6 +596,8 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface {
                         }
                     }
                 }
+                mylist.setAdapter(adapter);
+                onItemSelectedListChanged();
                 dialog.show();
 
             } else if(who == 0){

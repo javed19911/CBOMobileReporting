@@ -81,7 +81,7 @@ public class PobModel implements Serializable{
     }
 
     public String getPob() {
-        return pob;
+        return pob.trim().isEmpty()?"0":pob.trim();
     }
     public boolean isHighlighted() {
         return highlight;
@@ -104,7 +104,7 @@ public class PobModel implements Serializable{
     }
 
     public String getRate() {
-        return rate;
+        return rate.trim().isEmpty()?"0":rate.trim();
     }
 
     public void setRate(String rate) {

@@ -127,7 +127,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
                 item_name.clear();
 
                 for(int i=0;i<list.size();i++){
-                    if(!list.get(i).getScore().equals("") && !list.get(i).getScore().equals("")){
+                    if(!list.get(i).getScore().equals("0") && !list.get(i).getScore().equals("")){
                         item_id.add(list.get(i).getId());
                         item_qty.add(list.get(i).getScore());
                         item_name.add(list.get(i).getName());

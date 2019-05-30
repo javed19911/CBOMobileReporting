@@ -45,6 +45,7 @@ public class vmFCart extends CBOViewModel<iFCart> {
         String sDisc_Amt = "";
         String sDisc_Percent = "",sDisc_Percent1= "",sDisc_Percent2= "",
                 sDisc_Percent3= "",sDisc_Percent4= "",sDisc_Percent5= "";
+        String sRemark ="";
 
         for(mItem item : order.getItems()){
             if (item.getQty() != 0.0) {
@@ -64,6 +65,7 @@ public class vmFCart extends CBOViewModel<iFCart> {
                 sDisc_Percent3 = item.getMiscDiscount().get(3).getPercent() + "," + sDisc_Percent3;
                 sDisc_Percent4 = item.getMangerDiscount().getPercent() + "," + sDisc_Percent4;
                 sDisc_Percent5 = item.getManualDiscount().getPercent() + "," + sDisc_Percent5;
+                sRemark = item.getRemark() + "|^" + sRemark;
             }
         }
 
@@ -94,6 +96,7 @@ public class vmFCart extends CBOViewModel<iFCart> {
         request.put("sDisc_Percent3", sDisc_Percent3);
         request.put("sDisc_Percent4", sDisc_Percent4);
         request.put("sDisc_Percent5", sDisc_Percent5);
+        request.put("sRemark", sRemark);
 
 
         ArrayList<Integer> tables=new ArrayList<>();

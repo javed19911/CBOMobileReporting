@@ -169,7 +169,7 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
 
                     Qty=list.get(cnt).getScore();
 
-                    if(!list.get(cnt).getScore().equals("") && !list.get(cnt).getScore().equals("")){
+                    if(!list.get(cnt).getScore().equals("0") && !list.get(cnt).getScore().equals("")){
                         cbohelp.insertdata(Custom_Variables_And_Method.DR_ID, list.get(cnt).getId(), list.get(cnt).getName(), Qty, POB, Rate,"0","0");
                     }
 

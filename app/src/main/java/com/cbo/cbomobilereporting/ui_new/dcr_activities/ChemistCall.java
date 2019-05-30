@@ -1004,114 +1004,111 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
         final AlertDialog dialog = builder1.create();
 
         dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        Alert_Positive.setOnClickListener(view -> {
 
-                call_layout.setVisibility(View.VISIBLE);
-                summary_layout.setVisibility(View.GONE);
-                tab_call.setBackgroundResource(R.drawable.tab_selected);
-                tab_summary.setBackgroundResource(R.drawable.tab_deselected);
+            call_layout.setVisibility(View.VISIBLE);
+            summary_layout.setVisibility(View.GONE);
+            tab_call.setBackgroundResource(R.drawable.tab_selected);
+            tab_summary.setBackgroundResource(R.drawable.tab_deselected);
 
 
-                chm_id = Dr_id;
-                chm_name = Dr_name;
-                Custom_Variables_And_Method.CHEMIST_ID = chm_id;
-                ch_name.setText(chm_name);
+            chm_id = Dr_id;
+            chm_name = Dr_name;
+            Custom_Variables_And_Method.CHEMIST_ID = chm_id;
+            ch_name.setText(chm_name);
 
 
-                mchemistCall = (mChemistCall) new mChemistCall()
-                        .setId(Dr_id)
-                        .setName(Dr_name)
-                        .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
-                        .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
+            mchemistCall = (mChemistCall) new mChemistCall()
+                    .setId(Dr_id)
+                    .setName(Dr_name)
+                    .setDcr_id(MyCustumApplication.getInstance().getUser().getDCRId())
+                    .setDcr_date(MyCustumApplication.getInstance().getUser().getDCRDate());
 
 
-                TextView last_visited= (TextView) findViewById(R.id.last_visited);
-                for (int i=0;i<chemist.size();i++){
-                    if (chemist.get(i).getId().equals(Dr_id)){
-                        last_visited.setVisibility(View.VISIBLE);
-                        last_visited.setText("Last visited on : "+chemist.get(i).getLastVisited());
-                        break;
-                    }
+            TextView last_visited= (TextView) findViewById(R.id.last_visited);
+            for (int i=0;i<chemist.size();i++){
+                if (chemist.get(i).getId().equals(Dr_id)){
+                    last_visited.setVisibility(View.VISIBLE);
+                    last_visited.setText("Last visited on : "+chemist.get(i).getLastVisited());
+                    break;
                 }
+            }
 
-                if (cbohelp.searchChemist(Dr_id).contains(Dr_id)) {
-                    chemist_list=cbohelp.getCallDetail("chemisttemp",Dr_id,"0");
-
-
-                    String remarkWithPOB = chemist_list.get("remark").get(0);
-                    if (remarkWithPOB.contains("\u20B9")) {
-
-                        mchemistCall.setPOBAmt(remarkWithPOB.substring(remarkWithPOB.indexOf("\u20B9")+1,remarkWithPOB.indexOf("\n")));
-                        pob.setText(mchemistCall.getPOBAmt());
-                        remarkWithPOB = remarkWithPOB.substring(remarkWithPOB.indexOf("\n")+1);
-                    }
-                    remark.setText(remarkWithPOB);
+            if (cbohelp.searchChemist(Dr_id).contains(Dr_id)) {
+                chemist_list=cbohelp.getCallDetail("chemisttemp",Dr_id,"0");
 
 
-                    if (!chemist_list.get("sample_name").get(0).equals("")) {
-                        String[] sample_name1= chemist_list.get("sample_name").get(0).split(",");
-                        String[] sample_qty1= chemist_list.get("sample_qty").get(0).split(",");
-                        String[] sample_pob1= chemist_list.get("sample_pob").get(0).split(",");
+                String remarkWithPOB = chemist_list.get("remark").get(0);
+                if (remarkWithPOB.contains("\u20B9")) {
 
-                        sample_name=chemist_list.get("sample_name").get(0);
-                        sample_sample=chemist_list.get("sample_qty").get(0);
-                        sample_pob=chemist_list.get("sample_pob").get(0);
-
-                        init(sample_name1, sample_qty1, sample_pob1);
-                    }else{
-                        sample_name = "";
-                        sample_pob = "";
-                        sample_sample = "";
-                        stk.removeAllViews();
-                    }
-
-                    if (!chemist_list.get("gift_name").get(0).equals("")) {
-                        String[] gift_name1= chemist_list.get("gift_name").get(0).split(",");
-                        String[] gift_qty1= chemist_list.get("gift_qty").get(0).split(",");
-
-                        gift_name=chemist_list.get("gift_name").get(0);
-                        gift_qty=chemist_list.get("gift_qty").get(0);
-
-                        init_gift(gift_layout,gift_name1,gift_qty1);
-                    }else{
-                        gift_name = "";
-                        gift_qty = "";
-                        gift_layout.removeAllViews();
-                    }
+                    mchemistCall.setPOBAmt(remarkWithPOB.substring(remarkWithPOB.indexOf("\u20B9")+1,remarkWithPOB.indexOf("\n")));
+                    pob.setText(mchemistCall.getPOBAmt());
+                    remarkWithPOB = remarkWithPOB.substring(remarkWithPOB.indexOf("\n")+1);
+                }
+                remark.setText(remarkWithPOB);
 
 
+                if (!chemist_list.get("sample_name").get(0).equals("")) {
+                    String[] sample_name1= chemist_list.get("sample_name").get(0).split(",");
+                    String[] sample_qty1= chemist_list.get("sample_qty").get(0).split(",");
+                    String[] sample_pob1= chemist_list.get("sample_pob").get(0).split(",");
 
-                    save.setText("Update Chemist");
-                    retail_save.setText("Update Retailer");
+                    sample_name=chemist_list.get("sample_name").get(0);
+                    sample_sample=chemist_list.get("sample_qty").get(0);
+                    sample_pob=chemist_list.get("sample_pob").get(0);
+
+                    init(sample_name1, sample_qty1, sample_pob1);
                 }else{
-
                     sample_name = "";
                     sample_pob = "";
                     sample_sample = "";
-
-                    gift_name = "";
-                    gift_qty = "";
+                    stk.removeAllViews();
                 }
 
-                sample_name_previous=sample_name;
-                sample_pob_previous=sample_pob;
-                sample_sample_previous=sample_sample;
+                if (!chemist_list.get("gift_name").get(0).equals("")) {
+                    String[] gift_name1= chemist_list.get("gift_name").get(0).split(",");
+                    String[] gift_qty1= chemist_list.get("gift_qty").get(0).split(",");
 
-                gift_name_previous = gift_name;
-                gift_qty_previous = gift_qty;
+                    gift_name=chemist_list.get("gift_name").get(0);
+                    gift_qty=chemist_list.get("gift_qty").get(0);
+
+                    init_gift(gift_layout,gift_name1,gift_qty1);
+                }else{
+                    gift_name = "";
+                    gift_qty = "";
+                    gift_layout.removeAllViews();
+                }
 
 
-                mchemistCall.setGift_name_Arr(gift_name)
-                        .setGift_qty_Arr(gift_qty)
-                        .setSample_name_Arr(sample_name)
-                        .setSample_pob_Arr(sample_pob)
-                        .setSample_qty_Arr(sample_sample);
 
+                save.setText("Update Chemist");
+                retail_save.setText("Update Retailer");
+            }else{
 
-                dialog.dismiss();
+                sample_name = "";
+                sample_pob = "";
+                sample_sample = "";
+
+                gift_name = "";
+                gift_qty = "";
             }
+
+            sample_name_previous=sample_name;
+            sample_pob_previous=sample_pob;
+            sample_sample_previous=sample_sample;
+
+            gift_name_previous = gift_name;
+            gift_qty_previous = gift_qty;
+
+
+            mchemistCall.setGift_name_Arr(gift_name)
+                    .setGift_qty_Arr(gift_qty)
+                    .setSample_name_Arr(sample_name)
+                    .setSample_pob_Arr(sample_pob)
+                    .setSample_qty_Arr(sample_sample);
+
+
+            dialog.dismiss();
         });
         Alert_Nagative.setOnClickListener(new View.OnClickListener() {
             @Override

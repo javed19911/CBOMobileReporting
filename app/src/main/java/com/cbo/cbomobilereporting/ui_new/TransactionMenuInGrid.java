@@ -50,6 +50,7 @@ public class TransactionMenuInGrid extends Fragment {
     Map<String,String> keyValue = new LinkedHashMap<>();
     Custom_Variables_And_Method customVariablesAndMethod;
     String MenuCode = "TRANSACTION";
+    GridView gridView;
 
 
 
@@ -68,7 +69,7 @@ public class TransactionMenuInGrid extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         context = getActivity();
-        GridView gridView = (GridView) v.findViewById(R.id.grid_view_example);
+        gridView = (GridView) v.findViewById(R.id.grid_view_example);
         cboDbHelper = new CBO_DB_Helper(context);
         networkUtil = new NetworkUtil(context);
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
@@ -185,6 +186,34 @@ public class TransactionMenuInGrid extends Fragment {
     }
 
 
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            //Only manually call onResume if fragment is already visible
+            //Otherwise allow natural fragment lifecycle to call onResume
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!getUserVisibleHint())
+        {
+            return;
+        }
+
+        addDataInList();
+        //cboDbHelper.getDetailsForOffline();
+
+        gridView.setAdapter(new Transaction_Grid_Adapter(context, listOfAllTab, getKeyList));
+
+    }
+
 
     private void onClickSalesOrder() {
 
@@ -196,6 +225,7 @@ public class TransactionMenuInGrid extends Fragment {
     public void addDataInList() {
 
         keyValue = cboDbHelper.getMenu(MenuCode,"");
+        getKeyList = new ArrayList<>();
         listOfAllTab = new ArrayList<String>();
         for (String key : keyValue.keySet()) {
             getKeyList.add(key);

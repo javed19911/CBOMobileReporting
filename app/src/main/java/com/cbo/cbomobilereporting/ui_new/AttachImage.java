@@ -120,6 +120,11 @@ public class AttachImage extends CustomActivity {
         ContentValues values = new ContentValues(1);
         values.put( MediaStore.Images.ImageColumns.DATA, output.getPath() );
         cameraUrl = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        //getContentResolver().delete()
+        if (cameraUrl == null){
+            getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Images.ImageColumns.DATA +"='"+output.getPath()+"'",null);
+            cameraUrl = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        }
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUrl);
         cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 

@@ -981,6 +981,10 @@ public class DCR_Root_new extends AppCompatActivity {
         if (getWorkwith().equalsIgnoreCase("")
                 && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
             part1 = MyCustumApplication.getInstance().getUser().getID();
+
+            cbo_helper.deleteDRWorkWith();
+            cbo_helper.insertDrWorkWith("Independent", part1);
+
         }else {
             if (parts.length == 1) {
                 part1 = parts[0];

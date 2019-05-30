@@ -66,6 +66,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import services.Sync_service;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
@@ -89,7 +90,8 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     NetworkUtil networkUtil;
     TabLayout tabLayout;
     private Bitmap bmImg;
-    private ImageView user_pic,company_pic;
+    private ImageView company_pic;
+    private CircleImageView user_pic;
     private File USER_PIC,COMPANY_PIC;
     Boolean showProfile=false;
     LinearLayout Sync;
@@ -208,7 +210,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
         hadder_text = (TextView) findViewById(R.id.hadder_text);
 
         hadder_text.setText( cbo_db_helper.getCOMP_NAME());
-        user_pic = (ImageView)  navigationView.getHeaderView(0).findViewById(R.id.user_pic);
+        user_pic =  navigationView.getHeaderView(0).findViewById(R.id.user_pic);
         company_pic = (ImageView)  navigationView.getHeaderView(0).findViewById(R.id.company_pic);
         emplyoyee_name = (TextView)  navigationView.getHeaderView(0).findViewById(R.id.emp_name_drawer);
         company_name = (TextView) navigationView.getHeaderView(0).findViewById(R.id.company_name_drawer);
@@ -273,36 +275,38 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
         tabs = cbo_db_helper.getTab();
         MenuItem menuItem;
         menuItem = menu.add(R.id.group1, 0, 0, "Home");
-        menuItem.setIcon(R.drawable.vp_home1);
+        menuItem.setIcon(R.drawable.ic_home_icon);
+
         for (int i = 1; i <= tabs.size(); i++) {
             switch (tabs.get(i - 1)) {
                 case "DCR":
                     menuItem = menu.add(R.id.group1, i, i, "DCR");
-                    menuItem.setIcon(R.drawable.vp_dcr1);
+                    menuItem.setIcon(R.drawable.ic_manager);
                     break;
                 case "MAIL":
                     menuItem = menu.add(R.id.group1, i, i, "Mails");
-                    menuItem.setIcon(R.drawable.vp_mail1);
+                    menuItem.setIcon(R.drawable.ic_mail_icon);
                     break;
                 case "TRANSACTION":
                     menuItem = menu.add(R.id.group1, i, i, "Transaction");
-                    menuItem.setIcon(R.drawable.vp_trans1);
+                    menuItem.setIcon(R.drawable.ic_transaction_icon);
+
                     break;
                 case "REPORTS":
                     menuItem = menu.add(R.id.group1, i, i, "Reports");
-                    menuItem.setIcon(R.drawable.vp_reports1);
+                    menuItem.setIcon(R.drawable.ic_reports_icon);
                     break;
                 case "UTILITY":
                     menuItem = menu.add(R.id.group1, i, i, "Utility");
-                    menuItem.setIcon(R.drawable.vp_utility1);
+                    menuItem.setIcon(R.drawable.ic_upload_download_icon);
                     break;
                 case "PERSONAL_INFO":
                     menuItem = menu.add(R.id.group1, i, i, "Personal Info");
-                    menuItem.setIcon(R.drawable.vp_home1);
+                    menuItem.setIcon(R.drawable.ic_userinfo_icon);
                     break;
                 case "APPROVAL":
                     menuItem = menu.add(R.id.group1, i, i, "Approval");
-                    menuItem.setIcon(R.drawable.approval_menu);
+                    menuItem.setIcon(R.drawable.ic_approved_icon);
                     break;
 
             }
@@ -630,7 +634,6 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                 Log.i("in save()", "after file");
                 FileOutputStream out = new FileOutputStream(filename);
                 Log.i("in save()", "after outputstream");
-                bmImg.compress(Bitmap.CompressFormat.JPEG, 90, out);
                 FileOutputStream fo = new FileOutputStream(filename);
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bmImg.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
