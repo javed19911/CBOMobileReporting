@@ -108,6 +108,12 @@ public class MyCustumApplication extends MultiDexApplication {
          Custom_Variables_And_Method.getInstance().setDataInTo_FMCG_PREFRENCE(getInstance(),key,value);
     }
 
+
+    public Boolean IsSubmitDCR_WithoutCalls(){
+        return getDataFrom_FMCG_PREFRENCE("working_code","W").contains("NR")
+                && getDataFrom_FMCG_PREFRENCE("working_code","W").contains("X");
+    }
+
     @SuppressLint("MissingPermission")
     private void getDEVICE_ID() {
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);

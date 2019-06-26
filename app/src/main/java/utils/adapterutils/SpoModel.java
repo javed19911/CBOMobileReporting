@@ -1,9 +1,11 @@
 package utils.adapterutils;
 
+import java.io.Serializable;
+
 /**
  * Created by RAM on 9/4/15.
  */
-public class SpoModel  {
+public class SpoModel  implements Serializable {
 
    private String id,consignee,salAmt,saleReturn,breageExpiry,creditNotOrther
             ,netSales,priSales,recipt,outStanding,stockAmt,target_Amount,Spo_bill_url = "";

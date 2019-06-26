@@ -327,6 +327,7 @@ public class CustomWebView extends AppCompatActivity {
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
         settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
         // settings.setPluginsEnabled(true);
         methodInvoke(settings, "setPluginsEnabled", new Class[] { boolean.class }, new Object[] { true });
         // settings.setPluginState(PluginState.ON);

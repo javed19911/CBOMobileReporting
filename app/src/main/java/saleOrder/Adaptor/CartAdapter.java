@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.cbo.cbomobilereporting.R;
 
 import cbomobilereporting.cbo.com.cboorder.DBHelper.ItemDB;
+import cbomobilereporting.cbo.com.cboorder.Enum.eDeal;
 import cbomobilereporting.cbo.com.cboorder.Enum.eTax;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
@@ -72,7 +73,14 @@ public class CartAdapter extends RecyclerView.Adapter {
                 ((ProductViewHolder) holder).pack.setText("Pack : "+item.getPack());
                 ((ProductViewHolder) holder).amount.setText( AddToCartView.toCurrency(String.format("%.2f", item.getAmt())));
                 ((ProductViewHolder) holder).Qty.setText(String.format("%.0f",item.getQty()));
-                ((ProductViewHolder) holder).rate.setText(String.format("%.0f",item.getQty()) + " X " +  AddToCartView.toCurrency(String.format("%.2f", item.getRate())));
+                if (item.getDeal().getType() != eDeal.NA) {
+                    ((ProductViewHolder) holder).rate.setText(String.format("%.0f", item.getQty()) +
+                            " X " + AddToCartView.toCurrency(String.format("%.2f", item.getRate())) +
+                            " + " + item.getFreeQty());
+                }else{
+                    ((ProductViewHolder) holder).rate.setText(String.format("%.0f", item.getQty()) +
+                            " X " + AddToCartView.toCurrency(String.format("%.2f", item.getRate())));
+                }
                 ((ProductViewHolder) holder).discountName.setText("Discount " + item.getDiscountStr());
                 ((ProductViewHolder) holder).discount.setText(AddToCartView.toCurrency(String.format("%.2f",(item.getAmt() - item.getNetAmt()))));
 

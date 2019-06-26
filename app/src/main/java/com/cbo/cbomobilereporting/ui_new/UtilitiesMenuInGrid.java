@@ -20,12 +20,14 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Sync.SyncAllDataFirebase;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.CaptureSignatureMain;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DivisionWise_Map;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
+import com.cbo.cbomobilereporting.ui_new.utilities_activities.SyncFirebaseActivity;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity;
 import com.uenics.javed.CBOLibrary.Response;
@@ -167,7 +169,13 @@ public class UtilitiesMenuInGrid extends Fragment {
                             onClickPI();
                             break;
                         }
+                        case "U_SYNC": {
 
+                            //onClickPI();
+                            startActivity(new Intent(getActivity(), SyncFirebaseActivity.class));
+
+                            break;
+                        }
                         case "Show Demo Kilometer": {
 
                             // mycon.msgBox(mycon.currentTime());
@@ -198,6 +206,7 @@ public class UtilitiesMenuInGrid extends Fragment {
     public void addDataInList() {
 
         keyValue = cboDbHelper.getMenu("UTILITY","");
+        keyValue.put("U_SYNC","Sync data for Support");
         listOfAllTab = new ArrayList<String>();
         for (String key : keyValue.keySet()) {
             getKeyList.add(key);

@@ -1392,14 +1392,14 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         // new concept of working type is if any validation for final submit is to be skiped for a menu then
         //workingcode = NR
         //
-        if (drInLocal.size() <= 0 && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")  &&
+        if ((drInLocal.size() <= 0  && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls()) &&
                 (cboDbHelper.getmenu_count("chemisttemp") == 0 && (cboDbHelper.getmenu_count("phdcrstk") == 0))
                 && (cboDbHelper.getCountphdairy_dcr("D") == 0 && (cboDbHelper.getCountphdairy_dcr("P") == 0))) {
             if (listener != null) {
                 listener.onError("No Calls found !!!", "Please make atleast One Call....");
             }
 
-        }else if (dr_call_size <= 0 &&
+        }else if (dr_call_size <= 0 && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 (Hide_status.equalsIgnoreCase("N") &&
                         !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Doctor_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
@@ -1417,7 +1417,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         int chemist_status = cboDbHelper.getmenu_count("chemisttemp");
         String menuName = cboDbHelper.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL");
 
-        if ((chemist_status == 0) &&
+        if ((chemist_status == 0) && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED").equals("Y") &&
                         !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
@@ -1436,7 +1436,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         String menuName = cboDbHelper.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL");
 
         String working_code = MyCustumApplication.getInstance().getDCR().getWorkTypeId();
-        if ((chemist_status == 0) &&
+        if ((chemist_status == 0) && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CUSTOMER_NOT_REQUIRED").equals("Y")
                 && (working_code.equals("OCC") || (working_code.contains("NR") && !working_code.contains("C")))) {
             if (listener != null) {
@@ -1454,7 +1454,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
         int stockist_count = cboDbHelper.getmenu_count("phdcrstk");
 
-        if ((stockist_count == 0) &&
+        if ((stockist_count == 0) && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED").equals("Y") &&
                         !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {

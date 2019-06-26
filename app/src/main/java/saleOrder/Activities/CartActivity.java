@@ -35,6 +35,7 @@ public class CartActivity extends AppCompatActivity implements iCart {
     AppBarLayout appBarLayout;
     mParty party;
     Boolean orderChanged = false;
+    MenuItem additem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,10 @@ public class CartActivity extends AppCompatActivity implements iCart {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cart_menu, menu);
+        additem = menu.findItem(R.id.add);
+        if  (subTitle.getText().toString().equalsIgnoreCase("New Order") && additem != null){
+            additem.setVisible(false);
+        }
         return true;
     }
     @Override
@@ -106,8 +111,16 @@ public class CartActivity extends AppCompatActivity implements iCart {
 
     @Override
     public void setTitle(String header) {
-        title.setText(party.getName() + "("+ party.getHeadQtr()+")");
+        if (party.getHeadQtr().equalsIgnoreCase("")){
+            title.setText(party.getName());
+        }else{
+            title.setText(party.getName() + "("+ party.getHeadQtr()+")");
+        }
+
         subTitle.setText(header);
+        if  (header.equalsIgnoreCase("New Order") && additem != null){
+            additem.setVisible(false);
+        }
     }
 
     @Override

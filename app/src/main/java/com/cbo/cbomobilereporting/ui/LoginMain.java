@@ -323,6 +323,9 @@ public class LoginMain extends CustomActivity {
                     }else if (c.getString("STATUS").equals("L")) {
                         startActivity(new Intent(getApplicationContext(), Load_New.class));
                         //progress1.dismiss();
+                    }else if (!c.getString("MOBILE_ID_ORIGINAL").equals("") && !c.getString("MOBILE_VERSION_ORIGINAL").equals("")) {
+                        AppAlert.getInstance().getAlert(context,"Alert !!!",c.getString("STATUS"));
+                        //progress1.dismiss();
                     }else{
                         AppAlert.getInstance().getAlert(context,"Alert !!!",c.getString("STATUS"));
                         //progress1.dismiss();

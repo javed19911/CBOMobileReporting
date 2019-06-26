@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
+import com.sun.mail.imap.protocol.BODY;
+
 import java.util.HashMap;
 
 import saleOrder.Fragments.OrderListFragment;
@@ -22,12 +24,14 @@ public class OrderListPageViewAdaptor extends FragmentPagerAdapter {
 
     TabLayout tabLayout;
     mParty party;
+    Boolean ShowParty = false;
     @SuppressLint("UseSparseArrays")
     private HashMap<Integer,OrderListFragment> mPageReferenceMap= new HashMap<>();
-    public OrderListPageViewAdaptor(FragmentManager fm, TabLayout tb, mParty party) {
+    public OrderListPageViewAdaptor(FragmentManager fm, TabLayout tb, mParty party,Boolean ShowParty) {
         super(fm);
         tabLayout = tb;
         this.party = party;
+        this.ShowParty = ShowParty;
     }
 
     @Override
@@ -37,6 +41,7 @@ public class OrderListPageViewAdaptor extends FragmentPagerAdapter {
         Bundle data = new Bundle();//Use bundle to pass data
         data.putString("OrderType", tabLayout.getTabAt(position).getText().toString());
         data.putSerializable("party", party);
+        data.putSerializable("ShowParty", ShowParty);
         myFragment.setArguments(data);
         return myFragment;
     }

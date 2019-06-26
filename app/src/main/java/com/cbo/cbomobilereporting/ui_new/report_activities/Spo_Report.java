@@ -22,6 +22,7 @@ import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.LayoutZoomer;
+import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mUser;
 
 import org.json.JSONArray;
@@ -50,8 +51,8 @@ public class Spo_Report extends AppCompatActivity {
     ProgressDialog pd;
 
     String uid, uname, mName;
-    public static String mIdFrom, mIdTo;
-    public static String mUnitID,mUnitName;
+    public  String mIdFrom, mIdTo;
+    public  String mUnitID,mUnitName;
     private AlertDialog myalertDialog = null;
 
     ArrayList<SpinnerModel> nameList = new ArrayList<SpinnerModel>();
@@ -200,14 +201,15 @@ public class Spo_Report extends AppCompatActivity {
         btShowReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Custom_Variables_And_Method.extraFrom=btFrom.getText().toString();
-                Custom_Variables_And_Method.extraTo =btTo.getText().toString();
+                /*Custom_Variables_And_Method.extraFrom=btFrom.getText().toString();
+                Custom_Variables_And_Method.extraTo =btTo.getText().toString();*/
                 Intent spoDetails = new Intent(getApplicationContext(), LayoutZoomer.class);
 
-                spoDetails.putExtra("uid", uid);
+                /*spoDetails.putExtra("uid", uid);
                 spoDetails.putExtra("mIdFrom", mIdFrom);
                 spoDetails.putExtra("mIdTo", mIdTo);
-                spoDetails.putExtra ("CurrencyType",mUnitID);
+                spoDetails.putExtra ("CurrencyType",mUnitID);*/
+                spoDetails.putExtra("mSPO", new mSPO(mIdFrom,mIdTo,mUnitID));
                 startActivity(spoDetails);
 
             }

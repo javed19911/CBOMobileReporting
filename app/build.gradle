@@ -7,8 +7,8 @@ android {
         applicationId "com.cbo.cbomobilereporting"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 313
-        versionName "3.13"
+        versionCode 314
+        versionName "3.14"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        jackOptions {
@@ -20,6 +20,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    lintOptions {
+
+        checkReleaseBuilds false
+
     }
 
     dexOptions {
@@ -41,6 +47,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:support-v4:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -62,6 +69,7 @@ dependencies {
     implementation project(path: ':CBOLibrary')
     implementation project(path: ':cboorder')
     implementation project(path: ':dbhelper')
+    implementation project(path: ':cbo_utils')
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
 
     implementation 'com.google.android.gms:play-services-location:11.8.0'

@@ -8,7 +8,7 @@ import com.cbo.cbomobilereporting.MyCustumApplication;
 
 public abstract class FirebaseDbhelper<T> extends FirebsaeDB<T> {
 
-    private Boolean checkForSuppotLoggin = false;
+    private Boolean checkForSuppotLoggin = true;
     public FirebaseDbhelper() {
         super ("", "");
     }
@@ -35,6 +35,12 @@ public abstract class FirebaseDbhelper<T> extends FirebsaeDB<T> {
         }
 
         return false;
+    }
+
+    public void getDbRef(ILogin response) {
+        if (isSessionActive()) {
+            super.login(response);
+        }
     }
 
     @Override
@@ -64,4 +70,5 @@ public abstract class FirebaseDbhelper<T> extends FirebsaeDB<T> {
             super.delete(model, primerykey);
         }
     }
+
 }

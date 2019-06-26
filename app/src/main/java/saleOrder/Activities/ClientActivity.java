@@ -120,6 +120,7 @@ public class ClientActivity extends AppCompatActivity implements iClient {
     public void openOrder(mParty party) {
         Intent intent = new Intent(context, MyOrder.class);
         intent.putExtra("party", party);
+        intent.putExtra("ShowParty", false);
         startActivity(intent);
     }
 

@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,6 @@ import utils.adapterutils.SpoModel;
 import utils.adapterutils.SpoRptAdapter;
 import utils_new.Custom_Variables_And_Method;
 
-import static com.cbo.cbomobilereporting.ui.LayoutZoomer.CurrencyType;
 
 /**
  * Created by Akshit udainiya on 9/10/15.
@@ -53,7 +53,7 @@ public class SpoHeadquarterWise extends AppCompatActivity {
     ServiceHandler myService;
     String spoIdExtra;
     SpoRptAdapter spoRptAdapter;
-    SpoModel spoModel;
+    mSPO _mSPO = null;
     ArrayList<SpoModel>dataList;
     ListView listView;
     ZoomView zoomView;
@@ -103,6 +103,7 @@ public class SpoHeadquarterWise extends AppCompatActivity {
         myConnection = new MyConnection(context);
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         intent = getIntent();
+        _mSPO = (mSPO) intent.getSerializableExtra("mSPO");
         spoIdExtra  =intent.getStringExtra("spoId");
         dataList = new ArrayList<SpoModel>();
 
@@ -170,8 +171,10 @@ public class SpoHeadquarterWise extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String  resultHeadquator = myService.getResponse_SpoCNFGrid(cboDbHelper.getCompanyCode(),""+ Custom_Variables_And_Method.PA_ID, LayoutZoomer.extraFrom,
-                    LayoutZoomer.extraTo,"h",spoIdExtra,"0",CurrencyType);
+            String  resultHeadquator = myService.getResponse_SpoCNFGrid(cboDbHelper.getCompanyCode(),
+                    ""+ Custom_Variables_And_Method.PA_ID,
+                    _mSPO.getFDate(),_mSPO.getTDate(), _mSPO.getType().getValue(),_mSPO.getConsigneeId(),
+                    _mSPO.getHqId(),_mSPO.getCurrencyType(),_mSPO.getStkId());
             return resultHeadquator;
         }
 
@@ -297,7 +300,7 @@ public class SpoHeadquarterWise extends AppCompatActivity {
 
 */
 
-                spoRptAdapter = new SpoRptAdapter(context,dataList);
+                spoRptAdapter = new SpoRptAdapter(context,dataList,_mSPO);
                     listView.setAdapter(spoRptAdapter);
                     pd.dismiss();
 

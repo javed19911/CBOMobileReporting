@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import saleOrder.Activities.ClientActivity;
+import saleOrder.Activities.MyOrder;
+import saleOrder.Model.mParty;
 import utils.adapterutils.ReportMenu_Grid_Adapter;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
@@ -141,6 +144,11 @@ public class ReportMenuInGrid extends Fragment {
                             onClickmsg_ho();
                             break;
                         }
+                        case "R_SORD_SUM": {
+
+                            onClickSalesOrderSummary();
+                            break;
+                        }
                         default: {
                             url = new CBO_DB_Helper(getActivity()).getMenuUrl("REPORTS", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
@@ -165,6 +173,17 @@ public class ReportMenuInGrid extends Fragment {
 
 
     }
+
+
+    private void onClickSalesOrderSummary() {
+
+        Intent intent = new Intent(context, MyOrder.class);
+        intent.putExtra("party", new mParty());
+        intent.putExtra("ShowParty", true);
+        startActivity(intent);
+
+    }
+
 
     private void onClickmsg_ho() {
         if (!networkUtil.internetConneted(context)) {

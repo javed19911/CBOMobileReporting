@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -31,26 +32,49 @@ public class MyOrder extends AppCompatActivity implements iOrder {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    private static final int OVER_DUE = 0;
+    Boolean ShowParty = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         context = this;
+        ShowParty = getIntent().getBooleanExtra("ShowParty",false);
         party = ((mParty) getIntent().getSerializableExtra("party"));
         viewModel = ViewModelProviders.of(this).get(vmOrder.class);
         viewModel.setView(context,this);
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case OVER_DUE:
+                    newOrder();
+                    break;
+                default:
+
+            }
+        }
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.dashboard_menu, menu);
+        if  (party.getId().equalsIgnoreCase("0") ){
+            menu.findItem(R.id.add).setVisible(false);
+        }
         return true;
     }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
-                newOrder();
+                showPartyOverDue(new mOrder().setPartyId(getPartyID()));
                 return true;
             default:
                 finish();
@@ -77,7 +101,7 @@ public class MyOrder extends AppCompatActivity implements iOrder {
 
 
         //create and set ViewPager adapter
-        OrderListPageViewAdaptor adapter = new OrderListPageViewAdaptor(getSupportFragmentManager(),tabLayout,party);
+        OrderListPageViewAdaptor adapter = new OrderListPageViewAdaptor(getSupportFragmentManager(),tabLayout,party,ShowParty);
         viewPager.setAdapter(adapter);
 
 
@@ -106,6 +130,11 @@ public class MyOrder extends AppCompatActivity implements iOrder {
     @Override
     public String getPartyID() {
         return party.getId();
+    }
+
+    @Override
+    public String getUserID() {
+        return MyCustumApplication.getInstance().getUser().getID();
     }
 
     @Override
@@ -139,7 +168,12 @@ public class MyOrder extends AppCompatActivity implements iOrder {
         TextView title = toolbar.findViewById(R.id.title);
         TextView subTitle = toolbar.findViewById(R.id.subTitle);
         title.setText(s);
-        subTitle.setText(party.getHeadQtr());
+        if (party.getId().equalsIgnoreCase("0")){
+            subTitle.setVisibility(View.GONE);
+        }else{
+            subTitle.setText(party.getHeadQtr());
+        }
+
     }
 
     @Override
@@ -150,6 +184,19 @@ public class MyOrder extends AppCompatActivity implements iOrder {
     @Override
     public void onOrderChanged(mOrder mOrder) {
 
+    }
+
+    @Override
+    public void showPartyOverDue(mOrder order) {
+        Intent intent = new Intent(context, PartyOverDue.class);
+        if (party.getId().equalsIgnoreCase("0")){
+            ShowParty = true;
+            party.setId(order.getPartyId());
+            party.setName(order.getPartyName());
+        }
+        intent.putExtra("party",party);
+        intent.putExtra("order",order);
+        startActivityForResult(intent,OVER_DUE);
     }
 
     @Override
@@ -167,7 +214,7 @@ public class MyOrder extends AppCompatActivity implements iOrder {
     @Override
     public void onResume() {
         super.onResume();
-        OrderListPageViewAdaptor adapter = new OrderListPageViewAdaptor(getSupportFragmentManager(),tabLayout,party);
+        OrderListPageViewAdaptor adapter = new OrderListPageViewAdaptor(getSupportFragmentManager(),tabLayout,party,ShowParty);
         viewPager.setAdapter(adapter);
 
     }

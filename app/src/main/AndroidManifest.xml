@@ -55,9 +55,15 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="saleOrder.Activities.CartAttachment"
+        <activity android:name=".ui_new.utilities_activities.SyncFirebaseActivity"></activity>
+        <activity
+            android:name="saleOrder.Activities.CartAttachment"
             android:label="@string/title_activity_location_test"
-            android:theme="@style/Appdilogtheme"/>
+            android:theme="@style/AppThemeNoBar"/>
+        <activity
+            android:name="saleOrder.Activities.PartyOverDue"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme" />
         <activity
             android:name=".ui_new.AttachImage"
             android:label="@string/title_activity_location_test"

@@ -8,12 +8,12 @@ import java.io.Serializable;
 
 public class mParty implements Serializable {
 
-    private String Id;
-    private String Name;
-    private String Balance;
-    private String HeadQtr;
-    private String Division;
-    private String Phone;
+    private String Id = "0";
+    private String Name= "All";
+    private String Balance= "0";
+    private String HeadQtr= "";
+    private String Division= "";;
+    private String Phone= "";;
 
     //getter
 

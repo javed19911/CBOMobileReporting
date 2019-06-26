@@ -188,6 +188,7 @@ public class LoggedUnlogged_Dat extends AppCompatActivity{
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(0);
         tables.add(1);
+        tables.add(2);
 
         progress1.setMessage("Please Wait.. \n Fetching data");
         progress1.setCancelable(false);
@@ -243,9 +244,13 @@ public class LoggedUnlogged_Dat extends AppCompatActivity{
                  String table1 = result.getString("Tables1");
                  JSONArray rows1 = new JSONArray(table1);
 
+                 String table2 = result.getString("Tables2");
+                 JSONArray rows2 = new JSONArray(table2);
+
                  summary_list = new LinkedHashMap<>();
                  summary_list.put("Logged", getDoctor_list(rows));
                  summary_list.put("Un-Logged", getDoctor_list(rows1));
+                 summary_list.put("Leave", getDoctor_list(rows2));
 
                  final ArrayList<String> header_title = new ArrayList<>();
                  header_title.addAll(summary_list.keySet());

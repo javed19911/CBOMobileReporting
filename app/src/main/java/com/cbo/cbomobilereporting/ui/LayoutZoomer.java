@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,8 +52,9 @@ public class LayoutZoomer extends AppCompatActivity {
     MyConnection myCon;
     Custom_Variables_And_Method customVariablesAndMethod;
     CBO_DB_Helper myCbo_help;
-    String extraPID;
-    public static String extraFrom,extraTo,CurrencyType;
+    mSPO _mSPO = null;
+    //String extraPID;
+    //public String extraFrom,extraTo,CurrencyType;
     ArrayList<Map<String,String>> data = new ArrayList<Map<String, String>>();
     SpoRptAdapter spoRptAdapter;
     ArrayList<SpoModel> dataList = new ArrayList<SpoModel>();
@@ -87,10 +89,13 @@ public class LayoutZoomer extends AppCompatActivity {
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         myCbo_help = new CBO_DB_Helper(context);
         Intent intent = getIntent();
-        extraPID = intent.getStringExtra("uid");
+        _mSPO = (mSPO) intent.getSerializableExtra("mSPO");
+        _mSPO.setType(mSPO.eSPO.CONSIGNEE);
+
+        /*extraPID = intent.getStringExtra("uid");
         extraFrom = intent.getStringExtra("mIdFrom");
         extraTo = intent.getStringExtra("mIdTo");
-        CurrencyType = intent.getStringExtra("CurrencyType");
+        CurrencyType = intent.getStringExtra("CurrencyType");*/
 
         //spoRptAdapter = new SpoRptAdapter(context,dataList);
 
@@ -250,7 +255,7 @@ public class LayoutZoomer extends AppCompatActivity {
                         }
                         finish();
                     }else {
-                        spoRptAdapter = new SpoRptAdapter(context, dataList);
+                        spoRptAdapter = new SpoRptAdapter(context, dataList,_mSPO);
                         listView.setAdapter(spoRptAdapter);
                     }
 
@@ -274,8 +279,10 @@ public class LayoutZoomer extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String responseFromSpo = myService.getResponse_SpoCNFGrid(myCbo_help.getCompanyCode(),""+ Custom_Variables_And_Method.PA_ID,
-                    extraFrom,extraTo, "c","0","0",CurrencyType);
+            String responseFromSpo = myService.getResponse_SpoCNFGrid(myCbo_help.getCompanyCode(),
+                    ""+ Custom_Variables_And_Method.PA_ID,
+                    _mSPO.getFDate(),_mSPO.getTDate(), _mSPO.getType().getValue(),_mSPO.getConsigneeId(),
+                    _mSPO.getHqId(),_mSPO.getCurrencyType(),_mSPO.getStkId());
 
             return responseFromSpo;
         }

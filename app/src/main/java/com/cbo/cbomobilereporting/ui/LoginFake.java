@@ -38,8 +38,8 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Sync.SyncAllDataFirebase;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
@@ -215,6 +215,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             public void onClick(View v) {
                 view = v;
                 if (checkDrawOverlayPermission()) {
+                    //new SyncAllDataFirebase(context);
                     LoginFake(false);
 
                     //new CustomTextToSpeech().setTextToSpeech("1");
