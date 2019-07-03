@@ -618,9 +618,14 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
 
     @Override
     public void setRemarkEnabled(Boolean required) {
+        remarkTxt.setHint(getRemarkTitle());
         remarkTxt.setVisibility(required? View.VISIBLE:View.GONE);
     }
 
+    @Override
+    public String getRemarkTitle() {
+        return MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SALE_ORDER_REMARK_TITLE","Remark");
+    }
 
 
     @Override

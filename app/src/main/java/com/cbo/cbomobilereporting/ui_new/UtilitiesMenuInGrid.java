@@ -300,9 +300,9 @@ public class UtilitiesMenuInGrid extends Fragment {
 
     ///////////////////onClickUpload Pic
     private void onClickResetDayplan() {
-
-
-        if (networkUtil.internetConneted(context)) {
+        if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
+            AppAlert.getInstance().getAlert(context,"Logged-In as Support!!!","You are not allowed to Reset DCR....");
+        }else if (networkUtil.internetConneted(context)) {
             if (Custom_Variables_And_Method.DCR_ID.equals("0")) {
                 customVariablesAndMethod.msgBox(context,"Please Plan your Dcr Day..");
             } else {

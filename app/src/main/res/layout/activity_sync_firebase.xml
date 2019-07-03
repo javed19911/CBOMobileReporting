@@ -1,26 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:orientation="vertical"
-    android:gravity="center"
+    android:padding="5dp"
     tools:context=".ui_new.utilities_activities.SyncFirebaseActivity">
 
-    <Button
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/close"
+        android:background="@drawable/button_gradient_corner"
+        android:src="@drawable/close_btn"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sync to Firebase"
-        android:id="@+id/upload"
-        android:layout_gravity="center"/>
+        android:padding="5dp"
+        android:layout_centerInParent="true">
 
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/download"
-        android:text="Download from Firebase"
-        android:layout_gravity="center"/>
+        <RelativeLayout
+            android:id="@+id/container_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</LinearLayout>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caviardreams"
+                android:gravity="center"
+                android:layout_alignParentTop="true"
+                android:text="Welcome CBO Support"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_below="@+id/title"
+                android:text="APP Data Center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/download_view"
+                android:layout_width="221dp"
+                android:layout_height="267dp"
+                android:padding="5dp"
+                android:layout_below="@+id/subtitle"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_sync_downloadicon"
+                android:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/progressbar"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_below="@+id/download_view"
+                android:indeterminate="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textprogressbar"
+                android:layout_below="@+id/progressbar"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="0/100"/>
+
+
+
+
+            <Button
+                android:id="@+id/upload"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textprogressbar"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/caviardreams"
+                android:textStyle="bold"
+                android:background="@drawable/button_gradient_corner"
+                android:text="Backup APP Data "
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/request"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/upload"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/caviardreams"
+                android:textStyle="bold"
+                android:background="@drawable/button_gradient_corner"
+                android:text="Request APP Data "
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/request"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="@font/caviardreams"
+                android:textStyle="bold"
+                android:background="@drawable/button_gradient_corner"
+                android:text="Download APP Data"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="visible"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/download"
+                android:textColor="@color/red"
+                android:gravity="right"
+                android:visibility="gone"
+                android:textStyle="italic"
+                android:layout_marginRight="25dp"
+                android:text="60 sec left"/>
+
+        </RelativeLayout>
+
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

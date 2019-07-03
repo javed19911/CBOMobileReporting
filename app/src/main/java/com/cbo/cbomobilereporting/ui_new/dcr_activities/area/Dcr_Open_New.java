@@ -50,7 +50,6 @@ import java.util.HashMap;
 import locationpkg.Const;
 import services.CboServices;
 import services.MyAPIService;
-import utils.CBOUtils.SystemArchitecture;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -132,7 +131,6 @@ public class Dcr_Open_New extends AppCompatActivity {
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 
-        new SystemArchitecture(context).getDEVICE_ID(context);
 
         ROUTEDIVERTYN= (CheckBox) findViewById(R.id.ROUTEDIVERTYN);
         lay_late_remark = findViewById(R.id.lay_late_remark);
@@ -1555,7 +1553,7 @@ public class Dcr_Open_New extends AppCompatActivity {
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"dcr_date_real", real_date);
 
-            Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
+
 
             dayPlan.setTime(customVariablesAndMethod.currentTime(context));
             dayPlan.setLatLong(customVariablesAndMethod.get_best_latlong(context));

@@ -64,9 +64,7 @@ import utils.networkUtil.NetworkUtil;
 import utils_new.SendMailTask;
 import utils_new.Service_Call_From_Multiple_Classes;
 
-/**
- * Created by Akshit on 1/5/2016.
- */
+
 public class FinalSubmitDcr_new extends CustomActivity {
 
 
@@ -607,13 +605,13 @@ public class FinalSubmitDcr_new extends CustomActivity {
         if (ACTUALFARE.equals(""))
             ACTUALFARE=""+0;
 
-        Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
+
 
 
         HashMap<String, String> request = new HashMap<>();
 
-        request.put("sCompanyFolder", cbohelp.getCompanyCode());
-        request.put("iDcrId", "" + Custom_Variables_And_Method.DCR_ID);
+        request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
+        request.put("iDcrId", MyCustumApplication.getInstance().getUser().getDCRId());
         request.put("iNoChemist", "1");
         request.put("iNoStockist", "1");
         request.put("sChemistRemark", "");
@@ -708,11 +706,11 @@ public class FinalSubmitDcr_new extends CustomActivity {
         request.put("sDCRRX_ITEMID_ARR", sDCR_ITM_RX);
 
         request.put("iFinalKM", sFinalKm);
-        request.put("iPaId",  "" + Custom_Variables_And_Method.PA_ID);
+        request.put("iPaId",  MyCustumApplication.getInstance().getUser().getID());
 
-        request.put("sGCM_TOKEN", Custom_Variables_And_Method.GCMToken);
+        request.put("sGCM_TOKEN", MyCustumApplication.getInstance().getUser().getGCMToken());
         request.put("sAPI_PATTERN", sAPI_Pattern);
-        request.put("sBATTERY_PERCENT", Custom_Variables_And_Method.BATTERYLEVEL);
+        request.put("sBATTERY_PERCENT", MyCustumApplication.getInstance().getUser().getBattery());
 
         request.put("REG_ID_ARR", DCS_ID_ARR);
         request.put("REG_LAT_LONG_ARR", LAT_LONG_ARR);

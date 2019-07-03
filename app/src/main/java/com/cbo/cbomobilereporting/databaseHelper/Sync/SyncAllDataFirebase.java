@@ -4,7 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -12,12 +16,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.CboProgressDialog;
+import com.uenics.javed.CBOLibrary.Response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import FirebaseDatabase.FirebsaeDB;
+import utils_new.AppAlert;
 
 import static utils_new.Custom_Variables_And_Method.FMCG_PREFRENCE;
 import static utils_new.Custom_Variables_And_Method.db;
@@ -29,8 +39,13 @@ public class SyncAllDataFirebase {
     SyncDB syncDB;
     CboProgressDialog cboProgressDialog ;
 
+    ArrayList<String> privateKeys = new ArrayList<>();
+
     public SyncAllDataFirebase(Context context) {
         this.context = context;
+        privateKeys.add("LoggedInAsSupport");
+        privateKeys.add("GCMToken");
+        privateKeys.add("IMEI");
         db_helper = new CBO_DB_Helper(context);
         syncDB = new SyncDB();
 
@@ -39,10 +54,42 @@ public class SyncAllDataFirebase {
     }
 
     public void upload(){
-        syncDB.delete(null);
 
-        syncDB.insert(getAllPreferences(),"Preferences");
-        syncDB.insert(getAllTableData(),"DB_OLD");
+        CBOServices.checkConnection(context, new Response() {
+            @Override
+            public void onSuccess(Bundle bundle) {
+                cboProgressDialog = new CboProgressDialog(context, "Please Wait..\nUploading data for Support ");
+                cboProgressDialog.show();
+                if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
+                    AppAlert.getInstance().getAlert(context,"Logged-In as Support!!!","You are not allowed to upload data to server!!!");
+                }else {
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            uploadfromOutside();
+                            cboProgressDialog.dismiss();
+
+                        }
+                    }, 3000);
+
+                }
+
+            }
+
+            @Override
+            public void onError(String s, String description) {
+                AppAlert.getInstance().getAlert(context,s,description);
+
+            }
+        });
+
+    }
+
+    public void uploadfromOutside(){
+            syncDB.delete(null);
+            syncDB.insert(getAllPreferences(), "Preferences");
+            syncDB.insert(getAllTableData(), "DB_OLD");
     }
 
     public Map<String, ?> getAllPreferences(){
@@ -127,8 +174,10 @@ public class SyncAllDataFirebase {
                                 case "Preferences" :
                                     cboProgressDialog.setDescription("Please Wait..\nDownloading data for Support \nDownloading User Settings...");
                                     for (DataSnapshot preferences : postSnapshot.getChildren()) {
-                                        Log.d("map values", preferences.getKey() + ": " + preferences.getValue());
-                                        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE(preferences.getKey(),preferences.getValue().toString());
+                                        if (!privateKeys.contains( preferences.getKey())) {
+                                            Log.d("map values", preferences.getKey() + ": " + preferences.getValue());
+                                            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE(preferences.getKey(), preferences.getValue().toString());
+                                        }
                                     }
                                     break;
                                 case "DB_OLD":

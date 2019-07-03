@@ -232,7 +232,7 @@
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:hint="Discount1"
+                        android:hint="Discount1 %"
                         android:selectAllOnFocus="true"
                         android:background="@drawable/input_txt"/>
 
@@ -246,7 +246,7 @@
                         android:padding="5dp"
                         android:layout_marginLeft="5dp"
                         android:gravity="center"
-                        android:hint="Discount 2"
+                        android:hint="Discount 2 %"
                         android:selectAllOnFocus="true"
                         android:textSize="13sp"
                         android:background="@drawable/input_txt"/>
@@ -272,7 +272,7 @@
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:hint="Discount 3"
+                        android:hint="Discount 3 %"
                         android:selectAllOnFocus="true"
                         android:background="@drawable/input_txt"/>
 
@@ -286,7 +286,7 @@
                         android:padding="5dp"
                         android:layout_marginLeft="5dp"
                         android:gravity="center"
-                        android:hint="Discount 4"
+                        android:hint="Discount 4 %"
                         android:selectAllOnFocus="true"
                         android:textSize="13sp"
                         android:background="@drawable/input_txt"/>
@@ -310,7 +310,7 @@
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:hint="Staff Discount"
+                        android:hint="Staff Discount %"
                         android:selectAllOnFocus="true"
                         android:background="@drawable/input_txt"/>
 
@@ -324,7 +324,7 @@
                         android:padding="5dp"
                         android:layout_marginLeft="5dp"
                         android:gravity="center"
-                        android:hint="Misc. Discount"
+                        android:hint="Misc. Discount %"
                         android:selectAllOnFocus="true"
                         android:textSize="13sp"
                         android:background="@drawable/input_txt"/>

@@ -87,7 +87,7 @@ public class Doctor_Sample extends AppCompatActivity {
     HashMap<String, HashMap<String, ArrayList<String>>> summary_list=new HashMap<>();
     HashMap<String, ArrayList<String>> doctor_list_summary=new HashMap<>();
     ExpandableListAdapter listAdapter;
-    String sample_name="",sample_pob="",sample_sample="",sample_noc="";
+    String sample_name="",sample_pob="",sample_sample="",sample_noc="",sample_rate;
     String gift_name="",gift_qty="",call="N";
     String workwith1,workwith2,workwith34,loc,time;
     Boolean sample_added=false;
@@ -318,13 +318,17 @@ public class Doctor_Sample extends AppCompatActivity {
                         String[] sample_qty1= doctor_list.get("sample_qty").get(0).split(",");
                         String[] sample_pob1= doctor_list.get("sample_pob").get(0).split(",");
                         String[] sample_noc1= doctor_list.get("sample_noc").get(0).split(",");
+                        String[] sample_rate1= doctor_list.get("sample_rate").get(0).split(",");
 
                         sample_name=doctor_list.get("sample_name").get(0);
                         sample_sample=doctor_list.get("sample_qty").get(0);
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
-
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        String[] sample_rate = null;
+                       /* if (childText.containsKey("sample_rate")) {
+                            sample_rate = childText.get("sample_rate").get(childPosition).isEmpty()? null : childText.get("sample_rate").get(childPosition).split(",");
+                        }*/
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }else{
                         sample_added=false;
                         sample_name="";
@@ -680,7 +684,7 @@ public class Doctor_Sample extends AppCompatActivity {
         return drlist;
     }
 
-    private void init(String[] sample_name, String[] sample_qty, String[] sample_pob,String[] sample_noc) {
+    private void init(String[] sample_name, String[] sample_qty, String[] sample_pob,String[] sample_noc,String[] sample_rate ) {
 
         Boolean showNOC=true;
         if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty()){
@@ -718,6 +722,16 @@ public class Doctor_Sample extends AppCompatActivity {
             tv3.setTypeface(null, Typeface.BOLD);
             tbrow0.addView(tv3);
         }
+
+        if (sample_rate != null) {
+            TextView tv4 = new TextView(context);
+            tv4.setPadding(5, 5, 5, 0);
+            tv4.setText("Amt.");
+            tv4.setTextColor(Color.WHITE);
+            tv4.setTypeface(null, Typeface.BOLD);
+            tbrow0.addView(tv4);
+        }
+
         stk.removeAllViews();
         stk.addView(tbrow0);
         for (int i = 0; i < sample_name.length; i++) {
@@ -743,6 +757,14 @@ public class Doctor_Sample extends AppCompatActivity {
             if (showNOC) {
                 TextView t4v = new TextView(context);
                 t4v.setText(sample_noc[i]);
+                t4v.setPadding(5, 5, 5, 0);
+                t4v.setTextColor(Color.BLACK);
+                t4v.setGravity(Gravity.CENTER);
+                tbrow.addView(t4v);
+            }
+            if (sample_rate != null) {
+                TextView t4v = new TextView(context);
+                t4v.setText(""+ String.format("%.2f",(Double.parseDouble( sample_pob[i]) * Double.parseDouble( sample_rate[i]))));
                 t4v.setPadding(5, 5, 5, 0);
                 t4v.setTextColor(Color.BLACK);
                 t4v.setGravity(Gravity.CENTER);
@@ -840,7 +862,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }
                     if (!doctor_list.get("gift_name").get(0).equals("")) {
                         String[] gift_name1= doctor_list.get("gift_name").get(0).split(",");
@@ -872,7 +894,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }
                     if (!doctor_list.get("gift_name").get(0).equals("")) {
                         String[] gift_name1= doctor_list.get("gift_name").get(0).split(",");
@@ -1004,7 +1026,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }else{
                         sample_added=false;
                         sample_name = "";
@@ -1058,7 +1080,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }else{
                         sample_added=false;
                         sample_name = "";

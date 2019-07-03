@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 
 import java.util.ArrayList;
@@ -78,7 +80,11 @@ public class ExpandableDashboardAdapter extends BaseExpandableListAdapter {
         TextView amount = (TextView) convertView.findViewById(R.id.amount_marketing);
         TextView amount_cumm = (TextView) convertView.findViewById(R.id.amount_cumm_marketing);
 
-        remark.setText(childText.get(childPosition).get("REMARK"));
+        if (childText.get(childPosition).get("URL").equals("")){
+            remark.setText(childText.get(childPosition).get("REMARK"));
+        }else {
+            remark.setText(Html.fromHtml("<u>"+childText.get(childPosition).get("REMARK")+"</u>"));
+        }
         amount.setText(childText.get(childPosition).get("AMOUNT"));
         amount_cumm.setText(childText.get(childPosition).get("AMOUNT_CUMM"));
 
@@ -98,6 +104,15 @@ public class ExpandableDashboardAdapter extends BaseExpandableListAdapter {
             remark.setTextColor(ContextCompat.getColor(_context, R.color.colorPrimary));
             remark.setTypeface(null, Typeface.NORMAL);
         }
+
+        remark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!childText.get(childPosition).get("URL").equals("")){
+                    MyCustumApplication.getInstance().LoadURL(childText.get(childPosition).get("REMARK"),childText.get(childPosition).get("URL"));
+                }
+            }
+        });
 
         return convertView;
     }

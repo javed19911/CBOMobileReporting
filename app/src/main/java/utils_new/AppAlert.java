@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.BottomSheetDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -254,6 +256,7 @@ public class AppAlert {
 
 
         final AlertDialog dialog = builder1.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setView(dialogLayout);
         Alert_Positive.setOnClickListener(new View.OnClickListener() {
@@ -268,6 +271,38 @@ public class AppAlert {
 
         dialog.setCancelable(false);
         dialog.show();
+
+     /*   LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        BottomSheetDialog dialog = new BottomSheetDialog(context);
+        final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
+
+        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
+
+        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
+        final TableLayout Alert_message_list= (TableLayout) dialogLayout.findViewById(R.id.table_view);
+        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
+        Alert_title.setText(title);
+
+        final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
+        pa_id_txt.setText(""+ Custom_Variables_And_Method.PA_ID);
+
+        Alert_message.setText(massege);
+        Alert_message_list.setVisibility(View.GONE);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+
+
+        Alert_Positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null ){
+                    listener.onClick(view);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(dialogLayout);
+        dialog.show();*/
 
     }
 
@@ -311,6 +346,7 @@ public class AppAlert {
 
 
         final AlertDialog dialog = builder1.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setView(dialogLayout);
         Alert_Positive.setOnClickListener(new View.OnClickListener() {

@@ -503,7 +503,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             }
         }
         if (total_pob>0){
-            itemincart.setText( AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
+            itemincart.setText("POB : " + AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
         }else{
             itemincart.setText(items + " item");
         }

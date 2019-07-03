@@ -32,7 +32,7 @@ import java.util.HashMap;
 
 import services.CboServices;
 import services.MyAPIService;
-import utils.CBOUtils.SystemArchitecture;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 
 /**
@@ -529,7 +529,6 @@ public class Service_Call_From_Multiple_Classes {
 
 
     public void DownloadAll(Context context, Response listener){
-        new SystemArchitecture(context).getDEVICE_ID(context);
         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
 
 
@@ -540,9 +539,9 @@ public class Service_Call_From_Multiple_Classes {
         request.put("iPA_ID", MyCustumApplication.getInstance().getUser().getID());
         request.put("sDcrId",MyCustumApplication.getInstance().getDCR().getId());
         request.put("sRouteYn", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed"));
-        request.put("sGCM_TOKEN", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken"));
-        request.put("sMobileId", SystemArchitecture.COMPLETE_DEVICE_INFO);
-        request.put("sVersion", Custom_Variables_And_Method.VERSION);
+        request.put("sGCM_TOKEN", MyCustumApplication.getInstance().getUser().getGCMToken());
+        request.put("sMobileId", MyCustumApplication.getInstance().getUser().getIMEI());
+        request.put("sVersion", MyCustumApplication.getInstance().getUser().getAppVersion());
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -945,8 +944,9 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("FY_FDATE", c.getString("FY_FDATE"));
                 editor.putString("FY_TDATE", c.getString("FY_TDATE"));
                 editor.putString("ORD_DISC_TYPE", c.getString("ORD_DISC_TYPE"));
-                editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
                 editor.putString("ORD_DISC_EDITCOLS", c.getString("ORD_DISC_EDITCOLS"));
+                editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
+                editor.putString("SALE_ORDER_REMARK_TITLE", c.getString("SALE_ORDER_REMARK_TITLE"));
 
 
                 editor.commit();

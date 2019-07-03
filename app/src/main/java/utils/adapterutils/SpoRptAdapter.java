@@ -143,7 +143,7 @@ public class SpoRptAdapter extends BaseAdapter {
                     Intent spoHeadquarterWise = new Intent(context, SpoHeadquarterWise.class);
                     _mSPO.setType(mSPO.eSPO.HEADQUATER);
                     _mSPO.setConsigneeId(spoIdFromList);
-                    _mSPO.setHqId("0");
+                    //_mSPO.setHqId("0");
                     _mSPO.setStkId("0");
                     spoHeadquarterWise.putExtra("mSPO", _mSPO);
                     spoHeadquarterWise.putExtra("spoId", spoIdFromList);

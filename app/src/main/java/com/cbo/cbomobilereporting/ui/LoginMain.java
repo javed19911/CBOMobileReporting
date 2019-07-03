@@ -5,20 +5,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
@@ -45,19 +42,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import services.CboServices;
 import services.MyAPIService;
-import utils.CBOUtils.SystemArchitecture;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
 
-/**
- * Created by Akshit on 5/9/2015.
- */
+
 public class LoginMain extends CustomActivity {
     private static final int MY_PERMISSIONS_REQUEST_DEVICE_ID = 22;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 11;
@@ -67,16 +60,12 @@ public class LoginMain extends CustomActivity {
     String mylog, mypass, pincode, repincode;
     String company_code;
     String networkStatus;
-    int count = 0;
-    int chem_count = 0;
 
     Custom_Variables_And_Method customVariablesAndMethod;
     NetworkUtil mynetwork;
     Button login_text;
     Context context;
     MyCustomMethod customMethod;
-    public ProgressDialog progress1;
-    private  static final int MESSAGE_INTERNET_LOGIN=1,MESSAGE_INTERNET_UTILITES=2;
 
 
 
@@ -87,8 +76,7 @@ public class LoginMain extends CustomActivity {
         //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.login_main_2016);
 
-        context = LoginMain.this;
-        progress1 = new ProgressDialog(this);
+        context = this;
         loginId = (EditText) findViewById(R.id.userid_2016);
         loginpwd = (EditText) findViewById(R.id.pass_2016);
         companyCode = (EditText) findViewById(R.id.ccode_2016);
@@ -127,6 +115,7 @@ public class LoginMain extends CustomActivity {
         }
 
         customVariablesAndMethod.deleteFmcg_ByKey(context,"WEBSERVICE_URL");
+        MyCustumApplication.getInstance().getUser().setLoggedInAsSupport(false);
 
         login_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +154,6 @@ public class LoginMain extends CustomActivity {
             // }
 
 
-            new SystemArchitecture(context).getDEVICE_ID(context);
 
             networkStatus = NetworkUtil.getConnectivityStatusString(getApplicationContext());
 
@@ -250,28 +238,17 @@ public class LoginMain extends CustomActivity {
 
     public void Login(){
 
-        Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
         //Start of call to service
 
         HashMap<String, String> request = new HashMap<>();
         request.put("sCompanyFolder", company_code);
         request.put("USERNAME", mylog);
         request.put("PASSWORD",mypass);
-        request.put("MobileID",SystemArchitecture.COMPLETE_DEVICE_INFO);
-        request.put("MobileVersion",Custom_Variables_And_Method.VERSION);
-        request.put("GCM_TOCKEN", Custom_Variables_And_Method.GCMToken);
-
-        /*ArrayList<Integer> tables = new ArrayList<>();
-        tables.add(-1);  // to get all the tables
-
-        progress1.setMessage("Please Wait.. \n Login in progress...");
-        progress1.setCancelable(false);
-        progress1.show();
+        request.put("MobileID",MyCustumApplication.getInstance().getUser().getIMEI());
+        request.put("MobileVersion",MyCustumApplication.getInstance().getUser().getAppVersion());
+        request.put("GCM_TOCKEN", MyCustumApplication.getInstance().getUser().getGCMToken());
 
 
-        new CboServices(this, mHandler).customMethodForAllServices(request, "LOGIN_MOBILE_2", MESSAGE_INTERNET_LOGIN, tables);
-
-        //End of call to service*/
 
         new MyAPIService(context)
                 .execute(new ResponseBuilder("LOGIN_MOBILE_2", request)
@@ -317,14 +294,52 @@ public class LoginMain extends CustomActivity {
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject c = jsonArray1.getJSONObject(i);
                     if (c.getString("STATUS").equals("Y")) {
-                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,
-                                "ShowSystemAlert","Y");
-                       process_login_data(result);
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "ShowSystemAlert","Y");
+
+                        process_login_data(result);
+
                     }else if (c.getString("STATUS").equals("L")) {
                         startActivity(new Intent(getApplicationContext(), Load_New.class));
                         //progress1.dismiss();
                     }else if (!c.getString("MOBILE_ID_ORIGINAL").equals("") && !c.getString("MOBILE_VERSION_ORIGINAL").equals("")) {
-                        AppAlert.getInstance().getAlert(context,"Alert !!!",c.getString("STATUS"));
+                        String MOBILE_ID_ORIGINAL = c.getString("MOBILE_ID_ORIGINAL");
+                        if (c.getInt("MOBILE_VERSION_ORIGINAL")> Integer.parseInt( MyCustumApplication.getInstance().getUser().getAppVersion())){
+                            AppAlert.getInstance().DecisionAlert(context, "Alert !!!", "User is currently Logged-In with some other device\n" +
+                                            "To Login as Support...\nPlease update the Your App...",
+                                    new AppAlert.OnClickListener() {
+                                        @Override
+                                        public void onPositiveClicked(View item, String result) {
+                                            Intent i = new Intent(Intent.ACTION_VIEW,
+                                                    Uri.parse("https://play.google.com/store/apps/details?id=com.cbo.cbomobilereporting&hl=en"));
+                                            context.startActivity(i);
+                                        }
+
+                                        @Override
+                                        public void onNegativeClicked(View item, String result) {
+
+                                        }
+                                    });
+                        }else if (c.getInt("MOBILE_VERSION_ORIGINAL")< Integer.parseInt( MyCustumApplication.getInstance().getUser().getAppVersion())){
+                            AppAlert.getInstance().getAlert(context,"Alert !!!","User is currently Logged-In with some other device\n" +
+                                    "To Login as Support...\nPlease ask the user to update his App from Play Store....");
+                        }else{
+                            AppAlert.getInstance().setPositiveTxt("Support LogIn?").DecisionAlert(context, "Alert !!!", "User is currently Logged-In with some other device\n" +
+                                            "Do You want to Login for Support?",
+                                    new AppAlert.OnClickListener() {
+                                        @Override
+                                        public void onPositiveClicked(View item, String result) {
+                                            MyCustumApplication.getInstance().getUser().setLoggedInAsSupport(true);
+                                            MyCustumApplication.getInstance().getUser().setIMEIasSupport(MOBILE_ID_ORIGINAL);
+                                            Login();
+                                        }
+
+                                        @Override
+                                        public void onNegativeClicked(View item, String result) {
+
+                                        }
+                                    });
+                        }
+                        //AppAlert.getInstance().getAlert(context,"Alert !!!",c.getString("STATUS"));
                         //progress1.dismiss();
                     }else{
                         AppAlert.getInstance().getAlert(context,"Alert !!!",c.getString("STATUS"));
@@ -335,7 +350,6 @@ public class LoginMain extends CustomActivity {
 
 
             } catch (JSONException e) {
-                progress1.dismiss();
                 Log.d("MYAPP", "objects are: " + e.toString());
                 CboServices.getAlert(this,"Missing field error",getResources().getString(R.string.service_unavilable) +e.toString());
                 e.printStackTrace();
@@ -428,23 +442,6 @@ public class LoginMain extends CustomActivity {
                        AppAlert.getInstance().getAlert(context,message,description);
                    }
                });
-               /* //Start of call to service
-
-                HashMap<String, String> request = new HashMap<>();
-                request.put("sCompanyFolder", company_code);
-                request.put("iPaId", ""+ Custom_Variables_And_Method.PA_ID );
-
-                ArrayList<Integer> tables = new ArrayList<>();
-                tables.add(-1);  // to get all the tables
-
-                progress1.setMessage("Downloading Miscellaneous data.." + "\n" + "please wait");
-               // progress1.setCancelable(false);
-               // progress1.show();
-
-
-                new CboServices(this, mHandler).customMethodForAllServices(request, "GetItemListForLocal", MESSAGE_INTERNET_UTILITES, tables);
-
-                //End of call to service*/
 
 
 
@@ -516,8 +513,6 @@ public class LoginMain extends CustomActivity {
             case MY_PERMISSIONS_REQUEST_DEVICE_ID: {
 
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-
-                    new SystemArchitecture(context).getDEVICE_ID(context);
                     // mycon.msgBox("Permission Granted For Device IMEI.......");
                     preLogin(login_text);
                 } else {

@@ -25,6 +25,7 @@ public interface iFNewOrder {
     void setManagerDiscount(mDiscount discount);
     Boolean IsRemarkReqd();
     void setRemarkEnabled(Boolean required);
+    String getRemarkTitle();
     void setRemark(String remark);
     void setQty(Double Qty);
     void setFocusQty(Boolean focusQty);

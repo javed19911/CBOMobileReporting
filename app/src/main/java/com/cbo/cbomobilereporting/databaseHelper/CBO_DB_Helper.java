@@ -1244,7 +1244,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return sd.rawQuery(" Select  T.item_id, ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID,T.GENERIC_NAME as item_name from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID,GENERIC_NAME from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
                " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID,phitem.GENERIC_NAME from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
                 "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
-                "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' "+
+                "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and (PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' or PH_STK_ITEM_RATE.STK_ID ='0') " +
                 "where T.GENERIC_NAME != '' ", null);
         // phitem.SHOW_YN = '1' and
         //return sd.rawQuery("select item_id, item_name,'0' as stk_rate, '0' as sn from phdoctoritem where dr_id='"+itemidnotin+"'", null);
@@ -1256,7 +1256,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             return sd.rawQuery(" Select  T.item_id, item_name,ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
                     " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
                     "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
-                    "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"'", null);
+                    "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and (PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' or PH_STK_ITEM_RATE.STK_ID ='0')", null);
             // phitem.SHOW_YN = '1' and
             //return sd.rawQuery("select item_id, item_name,'0' as stk_rate, '0' as sn from phdoctoritem where dr_id='"+itemidnotin+"'", null);
         } finally {
@@ -4942,7 +4942,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String time="";
         String id="";
         String where_cluse="";
-        ArrayList<String> idList,nameList,timeList,sample_name,sample_qty,sample_pob,sample_noc,remark,gift_name,gift_qty,
+        ArrayList<String> idList,nameList,timeList,sample_name,sample_qty,sample_pob,sample_rate,sample_noc,remark,gift_name,gift_qty,
                 show_edit_delete_list,dr_class_list,dr_potential_list,dr_area_list,dr_work_with_list,attachment_list,
                 dr_work_with_id_list,dr_camp_group_list,dr_crm_count_list,color_list;
         ArrayList<String> visible_status=new ArrayList<>();
@@ -4956,6 +4956,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         gift_qty=new ArrayList<String>();
 
         sample_pob=new ArrayList<String>();
+        sample_rate=new ArrayList<String>();
         sample_noc=new ArrayList<String>();
         remark=new ArrayList<String>();
         show_edit_delete_list=new ArrayList<String>();
@@ -5062,6 +5063,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                         String dr_gift_name = "";
                         String dr_gift_qty = "";
                         String dr_sample_pob = "";
+                        String dr_sample_rate = "";
                         String dr_sample_noc="";
                         String pob_amt="0";
                         String dr_remark="";
@@ -5097,7 +5099,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                             }
 
 
-                            Cursor c2 = sd.rawQuery("select allitemid,allitemqty,sample,pob_amt,allgiftqty,allgiftid  from phdcrstk where stk_id='" + dr_id + "'", null);
+                            Cursor c2 = sd.rawQuery("select allitemid,allitemqty,sample,pob_amt,allgiftqty,allgiftid,rate  from phdcrstk where stk_id='" + dr_id + "'", null);
 
                             try {
                                 if (c2.moveToFirst()) {
@@ -5105,6 +5107,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                         dr_sample_id = c2.getString(c2.getColumnIndex("allitemid"));
                                         dr_sample_qty = c2.getString(c2.getColumnIndex("sample"));
                                         dr_sample_pob = c2.getString(c2.getColumnIndex("allitemqty"));
+                                        dr_sample_rate = c2.getString(c2.getColumnIndex("rate"));
 
                                         dr_gift_id = c2.getString(c2.getColumnIndex("allgiftid"));
                                         dr_gift_qty = c2.getString(c2.getColumnIndex("allgiftqty"));
@@ -5219,6 +5222,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                             dr_sample_name = c1.getString(c1.getColumnIndex("item_name")) + "," + dr_sample_name;
                                             dr_sample_qty = c1.getString(c1.getColumnIndex("qty")) + "," + dr_sample_qty;
                                             dr_sample_pob = c1.getString(c1.getColumnIndex("pob")) + "," + dr_sample_pob;
+                                            dr_sample_rate = c1.getString(c1.getColumnIndex("stk_rate")) + "," + dr_sample_rate;
                                             dr_sample_noc = c1.getString(c1.getColumnIndex("noc")) + "," + dr_sample_noc;
                                             pob+=Float.parseFloat(c1.getString(c1.getColumnIndex("pob")))*Float.parseFloat(c1.getString(c1.getColumnIndex("stk_rate")));
                                         }
@@ -5266,6 +5270,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
 
+
                             String dr_sample_id_list[] = dr_sample_id.split(",");
                             for (int i = 0; i < dr_sample_id_list.length; i++) {
                                 Cursor c2 = sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='ORIGINAL' and item_id='" + dr_sample_id_list[i] + "'", null);
@@ -5309,7 +5314,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                         } else if (table.equals("chemisttemp")) {
                             String dr_sample_id = "", dr_gift_id = "";
                             //Cursor c1 =  sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='ORIGINAL' ", null);
-                            Cursor c1 = sd.rawQuery("select allitemid,allitemqty,sample,allgiftid,allgiftqty,pob_amt,remark,file from phdcrchem where chem_id='" + dr_id + "'", null);
+                            Cursor c1 = sd.rawQuery("select allitemid,allitemqty,sample,allgiftid,allgiftqty,pob_amt,remark,file,rate from phdcrchem where chem_id='" + dr_id + "'", null);
 
                             try {
                                 if (c1.moveToFirst()) {
@@ -5318,6 +5323,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                         dr_sample_id = c1.getString(c1.getColumnIndex("allitemid"));
                                         dr_sample_qty = c1.getString(c1.getColumnIndex("sample"));
                                         dr_sample_pob = c1.getString(c1.getColumnIndex("allitemqty"));
+                                        dr_sample_rate = c1.getString(c1.getColumnIndex("rate"));
 
                                         dr_gift_id = c1.getString(c1.getColumnIndex("allgiftid"));
                                         dr_gift_qty = c1.getString(c1.getColumnIndex("allgiftqty"));
@@ -5430,6 +5436,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                         sample_name.add(dr_sample_name);
                         sample_qty.add(dr_sample_qty);
                         sample_pob.add(dr_sample_pob);
+                        sample_rate.add(dr_sample_rate);
                         sample_noc.add(dr_sample_noc);
 
                         gift_name.add(dr_gift_name);
@@ -5460,6 +5467,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             sample_name.add("");
             sample_qty.add("");
             sample_pob.add("");
+            sample_rate.add("");
             visible_status.add("0");
             remark.add("");
 
@@ -5484,6 +5492,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         Tabs.put("gift_qty", gift_qty);
 
         Tabs.put("sample_pob", sample_pob);
+        Tabs.put("sample_rate", sample_rate);
         Tabs.put("sample_noc", sample_noc);
         Tabs.put("visible_status", visible_status);
         Tabs.put("remark", remark);

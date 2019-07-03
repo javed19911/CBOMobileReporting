@@ -50,7 +50,6 @@ import java.util.HashMap;
 import locationpkg.Const;
 import services.CboServices;
 import services.MyAPIService;
-import utils.CBOUtils.SystemArchitecture;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -190,7 +189,6 @@ public class DCR_Root_new extends AppCompatActivity {
 
         progress1 = new ProgressDialog(this);
         customVariablesAndMethod= Custom_Variables_And_Method.getInstance();
-        new SystemArchitecture(context).getDEVICE_ID(context);
         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
 
         cbo_helper = new CBO_DB_Helper(context);
@@ -1805,7 +1803,6 @@ public class DCR_Root_new extends AppCompatActivity {
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"dcr_date_real", real_date);
             cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
-            Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
 
             dayPlan.setTime(customVariablesAndMethod.currentTime(context));
             dayPlan.setLatLong(customVariablesAndMethod.get_best_latlong(context));

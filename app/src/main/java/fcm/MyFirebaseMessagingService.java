@@ -19,6 +19,7 @@ import android.util.Log;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Sync.SyncAllDataFirebase;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.approval_activities.BackgroundNotification.BackGroundAppAlert;
@@ -332,6 +333,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent.putExtra("response", jsonObject2.getString("msg"));
                 startService(intent);
                 //insert=false;
+            }else if (msgtyp.equals("FIREBASE_SYNC")) {
+                new SyncAllDataFirebase(context).uploadfromOutside();
+                insert=false;
             }
             //if (msgtyp.equals("WISHES")) {
             else{

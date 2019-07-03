@@ -1,9 +1,11 @@
 package com.cbo.cbomobilereporting.ui;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 
+import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +16,9 @@ import android.database.Cursor;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.hardware.fingerprint.FingerprintManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -22,6 +27,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -36,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cbo.cbomobilereporting.FingerprintHandler;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Sync.SyncAllDataFirebase;
@@ -56,6 +65,21 @@ import services.Sync_service;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
@@ -68,7 +92,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
     final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public final static int REQUEST_CODE = 10101;
-    EditText pin;
+    public EditText pin;
     Button login;
 
     Custom_Variables_And_Method customVariablesAndMethod;
@@ -83,10 +107,18 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     View view;
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
-    public static final int REQUEST_PERMISSION = 1;
+    public static final int REQUEST_PERMISSION = 1,REQUEST_FINGERPRINT_PERMISSION =2;
     private byte[] byteArray =null;
     Bundle extras;
     Boolean longClick=false;
+    public String MyPin ="";
+
+
+    private KeyStore keyStore;
+    // Variable used for storing the key in the Android Keystore container
+    private static final String KEY_NAME = "CBOFingerPrint";
+    private Cipher cipher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +136,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         login = (Button) findViewById(R.id.submit_login22_enter_pin);
         version = (TextView) findViewById(R.id.version_code);
         reset_pin = (TextView) findViewById(R.id.reset_pin_enter_pin);
-        version.setText("Version :" + Custom_Variables_And_Method.VERSION);
+        version.setText("Version :" + MyCustumApplication.getInstance().getUser().getAppVersion());
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"MethodCallFinal", "N");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "N");
 
@@ -147,6 +179,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         Custom_Variables_And_Method.pub_area = cbohelp.getPUB_AREA();
         Custom_Variables_And_Method.pub_area = cbohelp.getPUB_AREA();
         getDetailsForOffline();
+
 
         /*AnimatedVectorDrawable drawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(context, R.drawable.ic_menu_animatable);
         ImageView imageView= (ImageView) findViewById(R.id.center_logo);
@@ -243,8 +276,120 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         });
 
 
+        initFingerprintManager();
+
+
+
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    private void initFingerprintManager(){
+
+        MyPin = cbohelp.getPin();
+        // Initializing both Android Keyguard Manager and Fingerprint Manager
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+
+        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+        // Check whether the device has a Fingerprint sensor.
+        if(!fingerprintManager.isHardwareDetected()){
+            /**
+             * An error message will be displayed if the device does not contain the fingerprint hardware.
+             * However if you plan to implement a default authentication method,
+             * you can redirect the user to a default authentication activity from here.
+             * Example:
+             * Intent intent = new Intent(this, DefaultAuthenticationActivity.class);
+             * startActivity(intent);
+             */
+            //textView.setText("Your Device does not have a Fingerprint Sensor");
+        }else {
+            // Checks whether fingerprint permission is set on manifest
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                //textView.setText("Fingerprint authentication permission not enabled");
+                ActivityCompat.requestPermissions(LoginFake.this,
+                        new String[] { Manifest.permission.USE_FINGERPRINT},
+                        REQUEST_FINGERPRINT_PERMISSION);
+            }else{
+                // Check whether at least one fingerprint is registered
+                if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    //textView.setText("Register at least one fingerprint in Settings");
+                }else{
+                    // Checks whether lock screen security is enabled or not
+                    if (!keyguardManager.isKeyguardSecure()) {
+                        // textView.setText("Lock screen security not enabled in Settings");
+                    }else{
+                        generateKey();
+
+
+                        if (cipherInit()) {
+                            FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                            FingerprintHandler helper = new FingerprintHandler(this);
+                            helper.startAuth(fingerprintManager, cryptoObject);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    protected void generateKey() {
+        try {
+            keyStore = KeyStore.getInstance("AndroidKeyStore");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        KeyGenerator keyGenerator;
+        try {
+            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new RuntimeException("Failed to get KeyGenerator instance", e);
+        }
+
+
+        try {
+            keyStore.load(null);
+            keyGenerator.init(new
+                    KeyGenParameterSpec.Builder(KEY_NAME,
+                    KeyProperties.PURPOSE_ENCRYPT |
+                            KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    .setUserAuthenticationRequired(true)
+                    .setEncryptionPaddings(
+                            KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                    .build());
+            keyGenerator.generateKey();
+        } catch (NoSuchAlgorithmException |
+                InvalidAlgorithmParameterException
+                | CertificateException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public boolean cipherInit() {
+        try {
+            cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new RuntimeException("Failed to get Cipher", e);
+        }
+
+
+        try {
+            keyStore.load(null);
+            SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME,
+                    null);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return true;
+        } catch (KeyPermanentlyInvalidatedException e) {
+            return false;
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Failed to init Cipher", e);
+        }
+    }
 
     private class GetFmcg extends AsyncTask<Void, Void, String> {
         ProgressDialog commitDialog;
@@ -286,10 +431,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     //19.2494793,73.1319805
     //19.2369817,73.12641
 
-    private void LoginFake(Boolean SkipValidation){
-        String PIN_ALLOWED_MSG = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"PIN_ALLOWED_MSG","");
+    public void LoginFake(Boolean SkipValidation){
 
+        //initFingerprintManager();
 
+        String PIN_ALLOWED_MSG =  customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"PIN_ALLOWED_MSG","");
         longClick=false;
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,
                 "ShowSystemAlert","Y");
@@ -311,6 +457,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         } else if (pin.getText().toString().equals(cbohelp.getPin())) {
 
             if(!PIN_ALLOWED_MSG.equals("")){
+                initFingerprintManager();
                 if (!SkipValidation){
                     new GetFmcg().execute();
                 }else{
@@ -374,6 +521,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             }else {
 
                 if (gpsYN.equals("Y") && (!myCustomMethod.checkGpsEnable() || mode != 3)) {
+                    initFingerprintManager();
                     customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
                     if (mode !=0){
                         customVariablesAndMethod.RequestGPSFromSetting(context);
@@ -383,8 +531,10 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                 } else if ((dor != null) && (dos != null)) {
                     if (dor.equals("Y")) {
+                        initFingerprintManager();
                         customVariablesAndMethod.msgBox(context,"Please contact your Administrator");
                     } else if (dos.equals("Y")) {
+                        initFingerprintManager();
                         customVariablesAndMethod.msgBox(context,"Please contact your Administrator");
                     } else if (dbVersion > appVersion) {
 
@@ -501,12 +651,13 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
+            final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
             final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
             final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
             final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-            final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.nagative);
+            final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.negative);
 
+            Alert_Nagative.setVisibility(View.VISIBLE);
             if (IscallsFound()){
                 Alert_Nagative.setText("Forgot pin ?");
             }else {
@@ -520,6 +671,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
             final AlertDialog dialog = builder1.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             dialog.setView(dialogLayout);
             Alert_Positive.setOnClickListener(new View.OnClickListener() {
@@ -582,67 +734,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         return result>0;
     }
 
-    private void AlertForCallsFound(){
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
-        final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
-        final TextView Alert_message = (TextView) dialogLayout.findViewById(R.id.message);
-        final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
-        final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.nagative);
-        Alert_Nagative.setText("Logout-->");
-        Alert_Positive.setText("Forgot pin ?");
-        Alert_title.setText("Calls Found !!!");
-        Alert_message.setText("Some Calls found in your dcr!!!! \n All your calls will be deleted if you \"LOGOUT\" \n ");
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-
-        final AlertDialog dialog = builder1.create();
-
-        dialog.setView(dialogLayout);
-        Alert_Positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), FogetPin.class);
-                startActivity(i);
-                dialog.dismiss();
-            }
-        });
-        Alert_Nagative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), DCR_Summary_new.class);
-                i.putExtra("who",1);
-                startActivity(i);
-                dialog.dismiss();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
-    }
 
     private void reset_pin_delete_all_calls(){
-        /*cbohelp.deleteLogin();
-        cbohelp.deleteLoginDetail();
-        cbohelp.deleteFTPTABLE();
-        cbohelp.delete_Mail("");
-        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "WEBSERVICE_URL", "");
-        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DOB_DOA_notification_date", "");
-        myCustomMethod.stopAlarm10Sec();
-        myCustomMethod.stopAlarm10Minute();
-        myCustomMethod.stopDOB_DOA_Remainder();
-        new CustomTextToSpeech().stopTextToSpeech();
-        stopLoctionService();
-
-        cbohelp.DropDatabase(context);
-
-        Intent i = new Intent(getApplicationContext(), LoginMain.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        i.putExtra("picture", byteArray);
-        startActivity(i);
-        finish();*/
 
         new Service_Call_From_Multiple_Classes().resetDCRNow(context);
 
@@ -664,6 +757,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     @Override
     protected void onStart() {
         super.onStart();
+        initFingerprintManager();
     }
 
     @Override
@@ -830,6 +924,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 //capture_Image();
                 customVariablesAndMethod.msgBox(context,"Permission granted");
             }
+        }else if (requestCode ==  REQUEST_FINGERPRINT_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                initFingerprintManager();
+            }
+
         }
     }
 

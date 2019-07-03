@@ -108,8 +108,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String ROOT_NEEDED;
     public static String CHEMIST_ID;
     public static String COMPANY_NAME;
-    public static String checkVersion = "20190625";
-    public static String VERSION = "20190625";
+    public static String checkVersion = "20190628";
+    public static String VERSION = "20190628";
     public static String RPT_DATE;
     public static String EMP_ID;
     public static String DCR_DATE;
@@ -128,7 +128,6 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String lastLocation;
     public static String SELECTED_AREA;
     public static String INTERNET_REQ = "";
-    public static String GCMToken = "";
 
     public static String extraFrom = "";
     public static String extraTo = "";

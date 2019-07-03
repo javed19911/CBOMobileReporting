@@ -242,6 +242,7 @@ public class DashboardReport extends AppCompatActivity {
                     datanum1.put("REMARK", jobj.getString("REMARK"));
                     datanum1.put("AMOUNT", jobj.getString("AMOUNT"));
                     datanum1.put("AMOUNT_CUMM", jobj.getString("AMOUNT_CUMM"));
+                    datanum1.put("URL", jobj.getString("URL"));
                     data1.add(datanum1);
 
                 }
@@ -253,6 +254,7 @@ public class DashboardReport extends AppCompatActivity {
                     datanum2.put("REMARK", jobj.getString("REMARK"));
                     datanum2.put("AMOUNT", jobj.getString("AMOUNT"));
                     datanum2.put("AMOUNT_CUMM", jobj.getString("AMOUNT_CUMM"));
+                    datanum2.put("URL", jobj.getString("URL"));
                     data2.add(datanum2);
 
                 }
