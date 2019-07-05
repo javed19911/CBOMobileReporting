@@ -1,56 +1,36 @@
 package com.cbo.cbomobilereporting.ui_new.mail_activities;
 
-import java.sql.ResultSet;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui.Inbox_Msg;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
-import com.flurry.android.FlurryAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.serialization.SoapObject;
 
 import services.CboServices;
-import services.ServiceHandler;
-import utils.MyConnection;
-import utils.adapterutils.InboxMail_Adapter;
-import utils.adapterutils.InboxMail_Model;
 import utils.adapterutils.OutboxMail_Adapter;
-import utils.adapterutils.SpinAdapter;
-import utils.adapterutils.SpinnerModel;
 import utils_new.Custom_Variables_And_Method;
 
 

@@ -7,23 +7,15 @@ import java.util.ArrayList;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
-import android.view.Surface;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.WindowManager;
+import androidx.viewpager.widget.ViewPager;
+
 import android.widget.Button;
 
 
 import com.cbo.cbomobilereporting.R;
 
-import utils.ExceptionHandler;
 import utils.Utils;
 import utils.adapterutils.FullScreenImageAdapter;
 import utils.adapterutils.ImageLoader;

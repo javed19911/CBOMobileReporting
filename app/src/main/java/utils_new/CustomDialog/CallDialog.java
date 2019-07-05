@@ -1,6 +1,5 @@
 package utils_new.CustomDialog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,10 +8,10 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -29,10 +28,8 @@ import com.uenics.javed.CBOLibrary.Response;
 import java.util.ArrayList;
 
 import locationpkg.Const;
-import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
-import utils.model.DropDownModel;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Report_Registration;

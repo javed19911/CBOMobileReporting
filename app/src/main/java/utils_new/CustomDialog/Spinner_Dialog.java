@@ -1,51 +1,21 @@
 package utils_new.CustomDialog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mUser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
-import services.CboServices;
-import utils.adapterutils.Dcr_Workwith_Adapter;
-import utils.adapterutils.Dcr_Workwith_Model;
 import utils.adapterutils.SpinAdapter;
-import utils.adapterutils.SpinnerModel;
 import utils.model.DropDownModel;
-import utils_new.Custom_Variables_And_Method;
 
 /**
  * Created by pc24 on 28/11/2017.

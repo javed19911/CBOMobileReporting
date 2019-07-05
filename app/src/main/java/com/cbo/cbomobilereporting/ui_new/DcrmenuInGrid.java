@@ -11,12 +11,13 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,7 @@ import utils.adapterutils.DcrMenu_Grid_Adapter;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Service_Call_From_Multiple_Classes;
 
-public class DcrmenuInGrid extends android.support.v4.app.Fragment {
+public class DcrmenuInGrid extends Fragment {
 
 
     private static final int MESSAGE_INTERNET_DCR_PLAN = 1;

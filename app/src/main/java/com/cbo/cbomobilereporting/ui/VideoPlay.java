@@ -1,12 +1,10 @@
 package com.cbo.cbomobilereporting.ui;
 
 import android.content.Context;
-import android.media.session.MediaController;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.SurfaceView;

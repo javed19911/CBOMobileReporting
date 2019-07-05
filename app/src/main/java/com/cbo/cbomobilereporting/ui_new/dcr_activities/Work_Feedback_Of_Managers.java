@@ -2,17 +2,15 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -21,7 +19,6 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +28,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -46,13 +42,10 @@ import java.util.Map;
 
 import services.CboServices;
 import services.ServiceHandler;
-import utils.MyConnection;
 import utils.adapterutils.Apprisal_Spinner_Model;
 import utils.adapterutils.Array_Adapter_work_feedback;
 import utils.adapterutils.Appraisal_Model;
 
-import utils.adapterutils.Dcr_Workwith_Adapter;
-import utils.adapterutils.Dcr_Workwith_Model;
 import utils.adapterutils.SpinnerModel;
 import utils.adapterutils.Spinner_Apprisal_Adapter;
 import utils.networkUtil.NetworkUtil;

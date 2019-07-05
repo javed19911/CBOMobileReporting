@@ -1,9 +1,8 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +10,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
-import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.M_TeamMonthDivision;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mDivision;

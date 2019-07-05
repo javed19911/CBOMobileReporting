@@ -1,28 +1,23 @@
 package com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -38,11 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import services.MyAPIService;
-import services.ServiceHandler;
-import utils.ExceptionHandler;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
-import utils_new.interfaces.RecycleViewOnItemClickListener;
 import utils_new.up_down_ftp;
 
 public class VisualAdsDownloadActivity extends AppCompatActivity {

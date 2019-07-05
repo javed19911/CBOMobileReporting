@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.uenics.javed.CBOLibrary.Response;
@@ -32,7 +31,7 @@ import static java.lang.Thread.sleep;
 
 public class DCR_Summary_new extends CustomActivity {
 
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
 
     ExpandableListView doctor;
     Context context;
@@ -63,7 +62,7 @@ public class DCR_Summary_new extends CustomActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dcr__summary_new);
 
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
 

@@ -2,8 +2,6 @@
 package utils.adapterutils;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -24,7 +22,6 @@ import java.util.List;
 import interfaces.Ipob;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
-import utils_new.Dr_Sample_Dialog;
 import utils_new.InputFilterMinMax;
 
 

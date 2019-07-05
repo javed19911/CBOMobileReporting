@@ -2,25 +2,23 @@ package saleOrder.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -38,13 +36,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import CameraGalaryPkg.ChoosePhoto;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import saleOrder.MyOrderAPIService;
-import utils.adapterutils.Dcr_Workwith_Model;
-import utils.adapterutils.ExpandableListAdapter;
-import utils.adapterutils.PobModel;
-import utils.adapterutils.SpinnerModel;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.cboUtils.CBOImageView;
@@ -78,7 +71,7 @@ public class CartAttachment extends CustomActivity implements  up_down_ftp.Adapt
         order = (mOrder) getIntent().getSerializableExtra("order");
 
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar()!=null) {

@@ -12,7 +12,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
 
@@ -24,7 +24,6 @@ import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.approval_activities.BackgroundNotification.BackGroundAppAlert;
 import com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder.FloatingRemainderApproval;
-import com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder.RemainderActivity;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Mail;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;

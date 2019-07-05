@@ -1,13 +1,12 @@
 package utils_new;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
@@ -15,9 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
-import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui_new.DcrmenuInGrid;
 import com.uenics.javed.CBOLibrary.Response;
 
 /**

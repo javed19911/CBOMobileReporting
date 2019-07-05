@@ -5,8 +5,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
@@ -142,11 +142,16 @@ public class CBOReportView extends AppCompatActivity {
                          rptModel.setTtlDrRiminder(nonListedDistributor);
 
                          rptModel.setTtlTenivia(c.getString("DRRX_TOTAL"));
+                         rptModel.setBlinkRemark(c.getString("FINAL_SUBMITYN").equalsIgnoreCase("N"));
 
                          String exp=c.getString("DA_TYPE");
                             rptModel.setTtlexp(exp);
                             rptData.add(rptModel);
+
                         }
+
+
+
                         rptAdapter=new RptAdapter(context,rptData);
                         listView.setAdapter(rptAdapter);
 

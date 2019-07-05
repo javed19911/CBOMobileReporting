@@ -1,7 +1,6 @@
 package com.cbo.cbomobilereporting.ui;
 
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +12,14 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -34,7 +32,6 @@ import org.json.JSONObject;
 import async.CBORootTask;
 import services.ServiceHandler;
 import services.TaskListener;
-import utils.MyConnection;
 import utils.adapterutils.DcrRootAdapter;
 import utils.adapterutils.RootModel;
 import utils_new.Custom_Variables_And_Method;

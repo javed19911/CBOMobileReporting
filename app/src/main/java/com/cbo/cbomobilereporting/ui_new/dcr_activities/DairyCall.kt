@@ -11,8 +11,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.location.Location
 import android.os.*
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -170,7 +170,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
         setContentView(R.layout.activity_dairy_call)
 
 
-        val toolbar : android.support.v7.widget.Toolbar= findViewById(R.id.toolbar_hadder)
+        val toolbar : androidx.appcompat.widget.Toolbar= findViewById(R.id.toolbar_hadder)
         val hader_text : TextView = findViewById(R.id.hadder_text_1)
 
 
@@ -604,7 +604,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
         } else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,Skip_Verification)) {
                 customVariablesAndMethod.msgBox(context,"Verifing Your Location");
              IsRefreshedClicked = false
-            LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
+            androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                     IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE))
         }else {
 
@@ -1073,7 +1073,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                         if ((!customVariablesAndMethod.checkIfCallLocationValid(context, true, false))!!) {
                             customVariablesAndMethod.msgBox(context, "Verifing Your Location")
                             IsRefreshedClicked = true
-                            LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
+                            androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                                     IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE))
                         } else {
                             //Service_Call_From_Multiple_Classes().DownloadAll(context, mHandler, MESSAGE_INTERNET_DCRCOMMIT_DOWNLOADALL)
@@ -1117,7 +1117,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             } else {
                 submitDoctor(true)
             }
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(this)
+            androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).unregisterReceiver(this)
 
         }
     }
@@ -1549,7 +1549,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                     drname.text = doc_name
 
                     if (Custom_Variables_And_Method.internetConneted(context)) {
-                        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, IntentFilter("SyncComplete"))
+                        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver, IntentFilter("SyncComplete"))
                         Sync_service.ReplyYN = "Y"
                         progress1?.setMessage("Please Wait..\n" +
                                 dr_name_reg + " is being Registered")
@@ -1595,8 +1595,8 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
             if (progress1 != null) {
                 progress1?.dismiss()
             }
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(this)
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(this)
+            androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).unregisterReceiver(this)
+            androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(context).unregisterReceiver(this)
             if (intent.getStringExtra("message") == "Y") {
                 customVariablesAndMethod.getAlert(context, "Registered", "$dr_name_reg Successfully Re-Registered($dr_id_index)")
             }

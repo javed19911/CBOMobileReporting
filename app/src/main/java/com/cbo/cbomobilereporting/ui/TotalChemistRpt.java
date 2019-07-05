@@ -1,13 +1,10 @@
 package com.cbo.cbomobilereporting.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,9 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import async.Che_RptTask;
 import services.MyAPIService;
-import services.TaskListener;
 import utils.adapterutils.ExpandableListAdapter;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -141,7 +136,7 @@ public class TotalChemistRpt extends AppCompatActivity {
                                 data.clear();
 
 
-                                ArrayList<String> nameList,timeList,sample_name,sample_qty,sample_pob,sample_noc,remark,gift_name,gift_qty,dr_class_list
+                                ArrayList<String> nameList,timeList,sample_name,sample_qty,sample_pob,sample_rate,sample_noc,remark,gift_name,gift_qty,dr_class_list
                                         ,dr_potential_list,dr_area_list,dr_work_with_list,dr_crm_count_list, dr_camp_group_list;
                                 ArrayList<String> visible_status=new ArrayList<>();
                                 nameList=new ArrayList();
@@ -149,6 +144,7 @@ public class TotalChemistRpt extends AppCompatActivity {
                                 sample_name=new ArrayList();
                                 sample_qty=new ArrayList();
                                 sample_pob=new ArrayList();
+                                sample_rate=new ArrayList();
                                 remark=new ArrayList();
                                 sample_noc=new ArrayList();
 
@@ -178,6 +174,7 @@ public class TotalChemistRpt extends AppCompatActivity {
                                     sample_name.add(c.getString("PRODUCT"));
                                     sample_qty.add(c.getString("QTY"));
                                     sample_pob.add(c.getString("POB_QTY"));
+                                    sample_rate.add(c.getString("RATE"));
                                     sample_noc.add("0");
                                     remark.add(c.getString("REMARK"));
                                     visible_status.add("1");
@@ -203,6 +200,7 @@ public class TotalChemistRpt extends AppCompatActivity {
                                 doctor_list.put("sample_name",sample_name);
                                 doctor_list.put("sample_qty",sample_qty);
                                 doctor_list.put("sample_pob",sample_pob);
+                                doctor_list.put("sample_rate",sample_rate);
                                 doctor_list.put("sample_noc",sample_noc);
                                 doctor_list.put("visible_status",visible_status);
                                 doctor_list.put("remark",remark);

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.cbo.cbomobilereporting.R;
@@ -476,6 +476,8 @@ public class Sync_service extends Service {
                 request.put("sSTK_REF_LAT_LONG", sSTK_REF_LAT_LONG);
                 request.put("sDAIRY_REF_LAT_LONG", sDAIRY_REF_LAT_LONG);
                 request.put("sRC_REF_LAT_LONG", sRC_REF_LAT_LONG);
+
+
 
 
                 request.put("sCHEM_STATUS", sCHEM_STATUS);

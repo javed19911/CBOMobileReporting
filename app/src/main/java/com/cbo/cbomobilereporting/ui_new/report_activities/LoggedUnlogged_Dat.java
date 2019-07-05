@@ -2,13 +2,12 @@ package com.cbo.cbomobilereporting.ui_new.report_activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +26,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import services.CboServices;
 import utils.adapterutils.ExpandableListAdapter;

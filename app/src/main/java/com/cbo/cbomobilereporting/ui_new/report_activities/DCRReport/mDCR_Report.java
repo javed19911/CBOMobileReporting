@@ -12,6 +12,7 @@ public class mDCR_Report {
     String ttlDrRiminder, ttlNonDoctor, ttlTenivia;
     String dairyCount, PolutaryCount;
     String remark;
+    boolean blinkRemark = false;
 
 
     public mDCR_Report() {
@@ -137,6 +138,14 @@ public class mDCR_Report {
         return  this;
     }
 
+
+    public boolean isBlinkRemark() {
+        return blinkRemark;
+    }
+
+    public void setBlinkRemark(boolean blinkRemark) {
+        this.blinkRemark = blinkRemark;
+    }
 
 }
 

@@ -21,9 +21,9 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,16 +43,11 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.text.SimpleDateFormat;
@@ -173,7 +168,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     }
 
     public void snackBar(String msg, View v) {
-        android.support.design.widget.Snackbar snackbar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
         snackbar.setAction("RETRY", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,7 +176,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         });
         snackbar.setActionTextColor(Color.RED);
         View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
         textView.setTextColor(Color.WHITE);
         sbView.performClick();
 

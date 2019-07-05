@@ -2,23 +2,23 @@ package com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor;
 
 import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.view.MenuItemCompat;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +30,7 @@ import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.F_T
 
 import java.util.ArrayList;
 
-import services.CboServices;
 import utils_new.AppAlert;
-import utils_new.interfaces.RecycleViewOnItemClickListener;
 
 public class MissedDoctorActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 

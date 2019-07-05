@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.Button;
 
 /**
  * Created by Shivam on 2/23/2016.
  */
-public class Button_Regular_black_text extends android.support.v7.widget.AppCompatButton {
+public class Button_Regular_black_text extends androidx.appcompat.widget.AppCompatButton {
 
 
     public Button_Regular_black_text(Context context, AttributeSet set) {

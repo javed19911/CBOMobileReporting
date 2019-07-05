@@ -1,7 +1,7 @@
 package saleOrder.Adaptor;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,6 @@ import com.cbo.cbomobilereporting.R;
 
 import java.util.ArrayList;
 
-import cbomobilereporting.cbo.com.cboorder.Adaptor.MedicineAdapter;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;

@@ -1,7 +1,6 @@
 package com.cbo.cbomobilereporting.ui;
 
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -36,8 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import services.ServiceHandler;
-import utils.ExceptionHandler;
-import utils.MyConnection;
 import utils_new.Custom_Variables_And_Method;
 
 public class Rpt_Unlogged extends AppCompatActivity {

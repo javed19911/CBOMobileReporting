@@ -1,22 +1,19 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.MenuItem;
 import android.view.View;
 
@@ -42,18 +39,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import async.CBOFinalTask_New;
 import async.CBOFinalTasks;
 import locationpkg.Const;
-import services.CboServices;
 import services.MyAPIService;
-import services.ServiceHandler;
-import services.TaskListener;
 import utils_new.AppAlert;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
@@ -61,7 +53,6 @@ import utils_new.GPS_Timmer_Dialog;
 import utils_new.GetVersionCode;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
-import utils_new.SendMailTask;
 import utils_new.Service_Call_From_Multiple_Classes;
 
 
@@ -132,7 +123,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
         TextView Dcr_date = (TextView) findViewById(R.id.DCR_Date);

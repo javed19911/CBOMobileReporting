@@ -2,9 +2,9 @@ package utils_new.cboUtils;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 import com.cbo.utils.MultiSelectView;
 
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;

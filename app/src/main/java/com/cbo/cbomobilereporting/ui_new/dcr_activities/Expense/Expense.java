@@ -1,14 +1,14 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
+
+import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,27 +19,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
 import com.uenics.javed.CBOLibrary.CboProgressDialog;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
 
-import services.ServiceHandler;
-import utils.adapterutils.Expenses_Adapter;
-import utils.adapterutils.SpinAdapter;
 import utils_new.AppAlert;
-import utils_new.Custom_Variables_And_Method;
 import utils_new.up_down_ftp;
 
 public class Expense extends CustomActivity implements IExpense,aExpense.Expense_interface,up_down_ftp.AdapterCallback{
@@ -93,7 +85,7 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
 
     @Override
     public void getReferencesById() {
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar()!=null) {

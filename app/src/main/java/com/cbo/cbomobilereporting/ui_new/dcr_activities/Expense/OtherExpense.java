@@ -1,9 +1,9 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,8 +13,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,13 +20,11 @@ import android.widget.TextView;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
 import com.uenics.javed.CBOLibrary.CboProgressDialog;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import utils.adapterutils.SpinAdapter;
 import utils_new.AppAlert;
 import utils_new.up_down_ftp;
 

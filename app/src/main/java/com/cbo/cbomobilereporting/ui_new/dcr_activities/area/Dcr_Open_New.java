@@ -10,10 +10,10 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,7 +77,7 @@ public class Dcr_Open_New extends AppCompatActivity {
     String workwith1 = "", workwith2 = "", workwith34 = "", workWith4 = "", workWith5 = "", workWith6 = "", workWith7 = "", workWith8 = "", address = "", work_withme = "", work_name = "";
     String real_date = null;
     String work_val = "",work_type_code = "";
-    String work_with_name = "", work_with_id = "", area_name = "", area_id = "";
+    String work_with_name = "", work_with_id = "", area_name = "", area_id = "",work_with_name_ind = "", work_with_id_ind  = "";
     String TP_work_with_name = "", TP_work_with_id = "", TP_area_name = "", TP_area_id = "";
     LinearLayout locationLayout, dcrPendingDatesLayout;
     CBO_DB_Helper cbo_helper;
@@ -650,6 +650,7 @@ public class Dcr_Open_New extends AppCompatActivity {
 
 
         setUITitles();
+        getWorkwith();
 
 //        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y")){
 //            ROUTEDIVERTYN.setEnabled(false);
@@ -1319,12 +1320,19 @@ public class Dcr_Open_New extends AppCompatActivity {
                 JSONObject c = jsonArray2.getJSONObject(i);
                 work_with_id =  c.getString("PA_ID") + "," + work_with_id ;
                 work_with_name = c.getString("PA_NAME")  + "," + work_with_name;
-                cbo_helper.insertDrWorkWith(c.getString("PA_NAME"), c.getString("PA_ID"));
+                if (!c.getString("INDEPENDENT_YN").equalsIgnoreCase("Y")) {
+                    cbo_helper.insertDrWorkWith(c.getString("PA_NAME"), c.getString("PA_ID"));
+                }else{
+                    work_with_id_ind =  c.getString("PA_ID") + "," + work_with_id_ind ;
+                    work_with_name_ind = c.getString("PA_NAME")  + "," + work_with_name_ind;
+                }
             }
             cbo_helper.insertDrWorkWith("Independent", ""+Custom_Variables_And_Method.PA_ID);
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name",work_with_name);
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id",work_with_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_individual_name",work_with_name_ind);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_individual_id",work_with_id_ind);
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_name",area_name);
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_id",area_id);
 
@@ -1391,6 +1399,11 @@ public class Dcr_Open_New extends AppCompatActivity {
     }
 
     private String getWorkwith(){
+        if (wwith.getText().toString().isEmpty()
+                && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")){
+            setWorkwith(MyCustumApplication.getInstance().getUser().getName());
+            work_with_id = MyCustumApplication.getInstance().getUser().getID();
+        }
       return   wwith.getText().toString().replace("\u2022 ","").replace("\n",",");
     }
 
