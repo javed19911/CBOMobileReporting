@@ -36,7 +36,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 44;
+    private static final int DATABASE_VERSION = 45;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -150,7 +150,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_DOCTOR_SAMPLE = "CREATE TABLE " + DOCTOR_ITEM_TABLE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text, updated text, noc  text DEFAULT '0')";
         String CREATE_DR_RX_TABLE = "CREATE TABLE " + DR_RX_TABLE + "(id integer primary key, dr_id text,item_id text)";
         String CREATE_DOCTOR_PRESCRIBE = "CREATE TABLE " + Dr_PRESCRIBE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text)";
-        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer,GENERIC_NAME text)";
+        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer,GENERIC_NAME text,chem_rate double,dr_rate double)";
         String PH_DOCTOR_IETM = "CREATE TABLE " + PH_DOCTOR_ITEM_TABLE + "( id integer primary key,dr_id integer,item_id integer,item_name text)";
 
         String ALLMST = "CREATE TABLE phallmst ( id integer primary key,allmst_id integer,table_name text,field_name text,remark text )";
@@ -523,6 +523,10 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN ATTACHYN text DEFAULT 'N'");
                 db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN MAX_AMT float DEFAULT 0");
                 db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN TAMST_VALIDATEYN text DEFAULT 'N'");
+            case 44:
+                db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN chem_rate double DEFAULT '0'");
+                db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN dr_rate double DEFAULT '0'");
+                db.execSQL("UPDATE " + DOCTOR_PRODUCTS_TABLE + " SET dr_rate= stk_rate,chem_rate= stk_rate");
 
         }
     }
@@ -1130,7 +1134,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     sb_pob.append(c.getString(c.getColumnIndex("pob"))).append(",");
                     sb_visual.append(c.getString(c.getColumnIndex("visual"))).append(",");
                     sb_noc.append(c.getString(c.getColumnIndex("noc"))).append(",");
-                    sb_rate.append(c.getString(c.getColumnIndex("stk_rate"))).append(",");
+                    sb_rate.append(c.getString(c.getColumnIndex("stk_rate")).equals("x")? "0":c.getString(c.getColumnIndex("stk_rate"))).append(",");
                 }
                 while (c.moveToNext());
             }
@@ -1206,7 +1210,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     //=============================================================Doctor Products=======================================================================================
-    public long insertProducts(String id, String name, double stk_rate, String gift,
+    public long insertProducts(String id, String name, double stk_rate,double chem_rate,double dr_rate, String gift,
                                String SHOW_ON_TOP,String SHOW_YN,int SPL_ID,String GENERIC_NAME) {
 
         Long l = 0l;
@@ -1216,6 +1220,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("item_id", id);
             cv.put("item_name", name);
             cv.put("stk_rate", stk_rate);
+            cv.put("chem_rate", chem_rate);
+            cv.put("dr_rate", dr_rate);
             cv.put("gift_type", gift);
             cv.put("SHOW_ON_TOP", SHOW_ON_TOP);
             cv.put("SHOW_YN", SHOW_YN);
@@ -1250,11 +1256,14 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         //return sd.rawQuery("select item_id, item_name,'0' as stk_rate, '0' as sn from phdoctoritem where dr_id='"+itemidnotin+"'", null);
     }
 
-    public Cursor getAllProducts(String itemidnotin) {
+    public Cursor getAllProducts(String itemidnotin,String CallType) {
         try {
             sd = this.getWritableDatabase();
-            return sd.rawQuery(" Select  T.item_id, item_name,ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
-                    " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
+            return sd.rawQuery(" Select  T.item_id, item_name,case when '" + CallType +"' = 'Dr' then ifnull( PH_STK_ITEM_RATE.RATE ,T.dr_rate) " +
+                    "when '" + CallType +"' = 'C' then ifnull( PH_STK_ITEM_RATE.RATE ,T.chem_rate) else ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) end" +
+                    " as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from " +
+                    "(select item_id, item_name,stk_rate,chem_rate,dr_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
+                    " select phitem.item_id,phitem.item_name,phitem.stk_rate,phitem.chem_rate,phitem.dr_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
                     "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
                     "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and (PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' or PH_STK_ITEM_RATE.STK_ID ='0')", null);
             // phitem.SHOW_YN = '1' and

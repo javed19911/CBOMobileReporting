@@ -418,7 +418,7 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
         main_item_list.clear();
         display_item_list.clear();
        // String ItemIdNotIn = "0";
-        Cursor c = cbohelp.getAllProducts(ID);
+        Cursor c = cbohelp.getAllProducts(ID,"Stk");
         if (c.moveToFirst()) {
             do {
                 main_item_list.add(new GiftModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), c.getString(c.getColumnIndex("stk_rate")),

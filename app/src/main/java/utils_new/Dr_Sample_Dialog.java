@@ -337,7 +337,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
             String ItemIdNotIn = "0";
             who = params[1];
 
-            Cursor c = cbohelp.getAllProducts(params[0]);
+            Cursor c = cbohelp.getAllProducts(params[0],"Dr");
             if (c.moveToFirst()) {
                 do {
                     main_item_list.add(new PobModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), c.getString(c.getColumnIndex("stk_rate")), c.getString(c.getColumnIndex("sn")),

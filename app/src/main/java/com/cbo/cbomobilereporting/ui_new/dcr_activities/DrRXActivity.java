@@ -389,7 +389,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
 
             list.clear();
 
-            Cursor c = cbohelp.getAllProducts("0");
+            Cursor c = cbohelp.getAllProducts("0","Dr");
             if (c.moveToFirst()) {
                 do {
 

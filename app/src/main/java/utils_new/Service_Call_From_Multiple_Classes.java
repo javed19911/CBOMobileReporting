@@ -753,7 +753,8 @@ public class Service_Call_From_Multiple_Classes {
                 for (int a = 0; a < jsonArray11.length(); a++) {
                     JSONObject jasonObj1 = jsonArray11.getJSONObject(a);
                     cbo_helper.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"),
-                            Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),
+                            Double.parseDouble(jasonObj1.getString("STK_RATE")),Double.parseDouble(jasonObj1.getString("CHEM_RATE")),
+                            Double.parseDouble(jasonObj1.getString("DR_RATE")),jasonObj1.getString("GIFT_TYPE"),
                             jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"),
                             jasonObj1.getInt("SPL_ID"),jasonObj1.getString("GENERIC_NAME"));
                     Log.e("%%%%%%%%%%%%%%%", "item insert");

@@ -519,7 +519,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             display_item_list.clear();
             String ItemIdNotIn = "0";
             who = params[1];
-            Cursor c = cbohelp.getAllProducts(ItemIdNotIn);
+            Cursor c = cbohelp.getAllProducts(ItemIdNotIn,"C");
             if (c.moveToFirst()) {
                 do {
                     if (callFromRcpa.equals("intent_fromRcpaCAll")) {
