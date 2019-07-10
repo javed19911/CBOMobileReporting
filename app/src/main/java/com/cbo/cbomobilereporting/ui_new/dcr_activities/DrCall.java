@@ -222,11 +222,14 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
             dr_remarkLayout.setVisibility(View.VISIBLE);
         }
 
-        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SAMPLE_POB_INPUT_MANDATORY").contains("U")) {
+        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SAMPLE_POB_INPUT_MANDATORY").contains("U") &&
+                MyCustumApplication.getInstance().getDCR().IsRouteDiverted()) {
             tab_unplaned.setVisibility(View.VISIBLE);
         }else {
             tab_unplaned.setVisibility(View.GONE);
-            tab_call.setText("Call");
+            if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SAMPLE_POB_INPUT_MANDATORY").contains("U")) {
+                tab_call.setText("Call");
+            }
             Tab.setWeightSum(3);
         }
 
@@ -825,7 +828,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                                 c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
                                 c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN")),
                                 c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
-                                c.getString(c.getColumnIndex("APP_PENDING_YN"))));
+                                c.getString(c.getColumnIndex("APP_PENDING_YN")),c.getString(c.getColumnIndex("DRLAST_PRODUCT"))));
                     } while (c.moveToNext());
 
                 }
@@ -1008,7 +1011,8 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         }
     }
 
-    private void Doc_Detail(String doc_class, String doc_potential, String doc_last_visited,String area, String CRM_COUNT,String DRCAPM_GROUP) {
+    private void Doc_Detail(String doc_class, String doc_potential, String doc_last_visited,String area,
+                            String CRM_COUNT,String DRCAPM_GROUP,String lastProduct) {
         doc_detail.removeAllViews();
 
         //tbrow0.setBackgroundColor(0xff125688);
@@ -1150,6 +1154,32 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
             TextView tv12 = new TextView(context);
             tv12.setText(DRCAPM_GROUP);
+            tv12.setPadding(5, 5, 5, 0);
+            tv12.setTextSize(11);
+            tv12.setTextColor(Color.BLACK);
+            tv12.setGravity(Gravity.RIGHT);
+            tv12.setTypeface(null, Typeface.NORMAL);
+            tv12.setLayoutParams(params);
+            tbrow02.addView(tv12);
+
+            doc_detail.addView(tbrow02);
+        }
+
+
+        if (!lastProduct.equals("")) {
+
+            TableRow tbrow02 = new TableRow(context);
+            TextView tv02 = new TextView(context);
+            tv02.setText("Last Product");
+            tv02.setTextSize(11);
+            tv02.setPadding(5, 5, 5, 0);
+            tv02.setTextColor(Color.BLACK);
+            tv02.setTypeface(null, Typeface.BOLD);
+            tv02.setLayoutParams(params);
+            tbrow02.addView(tv02);
+
+            TextView tv12 = new TextView(context);
+            tv12.setText(lastProduct);
             tv12.setPadding(5, 5, 5, 0);
             tv12.setTextSize(11);
             tv12.setTextColor(Color.BLACK);
@@ -1473,7 +1503,9 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
                         last_pob_layout(sample_name, sample_qty, sample_pob);
 
-                        Doc_Detail(array_sort.get(position).getCLASS(), array_sort.get(position).getPOTENCY_AMT(), array_sort.get(position).getLastVisited(), AREA, array_sort.get(position).getCRM_COUNT(), array_sort.get(position).getDRCAPM_GROUP());
+                        Doc_Detail(array_sort.get(position).getCLASS(), array_sort.get(position).getPOTENCY_AMT(),
+                                array_sort.get(position).getLastVisited(), AREA, array_sort.get(position).getCRM_COUNT(),
+                                array_sort.get(position).getDRCAPM_GROUP(),array_sort.get(position).getDRLAST_PRODUCT());
                 }
 
             }

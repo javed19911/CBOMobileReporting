@@ -181,7 +181,7 @@ public class Service_Call_From_Multiple_Classes {
                             c.getString("ITEM_NAME"), c.getString("ITEM_POB"), c.getString("ITEM_SALE"),c.getString("AREA"),c.getString("DR_LAT_LONG")
                             , c.getString("FREQ"),c.getString("NO_VISITED") , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("COLORYN")
                             ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"),c.getString("RXGENYN")
-                            , c.getString("APP_PENDING_YN"));
+                            , c.getString("APP_PENDING_YN"), c.getString("DRLAST_PRODUCT"));
 
                 }
 
@@ -948,6 +948,7 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("ORD_DISC_EDITCOLS", c.getString("ORD_DISC_EDITCOLS"));
                 editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
                 editor.putString("SALE_ORDER_REMARK_TITLE", c.getString("SALE_ORDER_REMARK_TITLE"));
+                editor.putString("INDEPENDENT_WORKING", c.getString("INDEPENDENT_WORKING"));
 
 
                 editor.commit();

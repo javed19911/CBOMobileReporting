@@ -154,7 +154,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 								  c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
 								  c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN")),
 								  c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
-								  c.getString(c.getColumnIndex("APP_PENDING_YN"))));
+								  c.getString(c.getColumnIndex("APP_PENDING_YN")),c.getString(c.getColumnIndex("DRLAST_PRODUCT"))));
 
 					  }while(c.moveToNext());
 					 
@@ -591,7 +591,8 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		}
 	}
 
-	private void Doc_Detail(String doc_class, String doc_potential, String doc_last_visited,String area, String CRM_COUNT,String DRCAPM_GROUP) {
+	private void Doc_Detail(String doc_class, String doc_potential, String doc_last_visited,String area, String CRM_COUNT,
+							String DRCAPM_GROUP,String lastProduct) {
 		doc_detail.removeAllViews();
 
 		//tbrow0.setBackgroundColor(0xff125688);
@@ -733,6 +734,32 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 			TextView tv12 = new TextView(context);
 			tv12.setText(DRCAPM_GROUP);
+			tv12.setPadding(5, 5, 5, 0);
+			tv12.setTextSize(11);
+			tv12.setTextColor(Color.BLACK);
+			tv12.setGravity(Gravity.RIGHT);
+			tv12.setTypeface(null, Typeface.NORMAL);
+			tv12.setLayoutParams(params);
+			tbrow02.addView(tv12);
+
+			doc_detail.addView(tbrow02);
+		}
+
+
+		if (!lastProduct.equals("")) {
+
+			TableRow tbrow02 = new TableRow(context);
+			TextView tv02 = new TextView(context);
+			tv02.setText("Last Product");
+			tv02.setTextSize(11);
+			tv02.setPadding(5, 5, 5, 0);
+			tv02.setTextColor(Color.BLACK);
+			tv02.setTypeface(null, Typeface.BOLD);
+			tv02.setLayoutParams(params);
+			tbrow02.addView(tv02);
+
+			TextView tv12 = new TextView(context);
+			tv12.setText(lastProduct);
 			tv12.setPadding(5, 5, 5, 0);
 			tv12.setTextSize(11);
 			tv12.setTextColor(Color.BLACK);
@@ -1196,7 +1223,9 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
             remark.setText(rc_doctor_list.get("remark").get(0));
             last_pob_layout(sample_name, sample_qty, sample_pob);
 
-            Doc_Detail(getdc.get(position).getCLASS(), getdc.get(position).getPOTENCY_AMT(), getdc.get(position).getLastVisited(), getdc.get(position).getAREA(), array_sort.get(position).getCRM_COUNT(), array_sort.get(position).getDRCAPM_GROUP());
+            Doc_Detail(getdc.get(position).getCLASS(), getdc.get(position).getPOTENCY_AMT(), getdc.get(position).getLastVisited(),
+					getdc.get(position).getAREA(), array_sort.get(position).getCRM_COUNT(),
+					array_sort.get(position).getDRCAPM_GROUP(),array_sort.get(position).getDRLAST_PRODUCT());
         }
     }
 

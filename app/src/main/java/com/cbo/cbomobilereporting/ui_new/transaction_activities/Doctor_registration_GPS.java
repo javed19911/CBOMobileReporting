@@ -683,7 +683,7 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
                                     c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
                                     c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN"))
                                     , c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
-                                    c.getString(c.getColumnIndex("APP_PENDING_YN"))));
+                                    c.getString(c.getColumnIndex("APP_PENDING_YN")),c.getString(c.getColumnIndex("DRLAST_PRODUCT"))));
                         } while (c.moveToNext());
 
                     }

@@ -76,6 +76,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
     String sample_name_previous="",sample_pob_previous="",sample_sample_previous="";
     ImageView speciality_filter;
     EditText search;
+    String Title = "Chemist Sample";
 
     Dialog dialog;
     public ProgressDialog progress1;
@@ -108,8 +109,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
 
 
 
-        TextView hader_text =(TextView) view.findViewById(R.id.hadder_text_1);
-        hader_text.setText("Chemist Sample");
+
        // hader_text.setText( Msg.getString("header"));
 
 
@@ -127,11 +127,11 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
                 rcpaDate = Msg.getString("dateMMDDYY");
             }else{
 
-                if (callFromRcpa.contains("Select")){
-                    hader_text.setText(callFromRcpa );
-                }else if (!callFromRcpa.equals("Chem")){
-                    hader_text.setText(callFromRcpa + " Sample");
-                }
+//                if (callFromRcpa.contains("Select")){
+//                    hader_text.setText(callFromRcpa );
+//                }else if (!callFromRcpa.equals("Chem")){
+//                    hader_text.setText(callFromRcpa + " Sample");
+//                }
                 sample_name = Msg.getString("sample_name");
                 sample_pob = Msg.getString("sample_pob");
                 sample_sample = Msg.getString("sample_sample");
@@ -142,10 +142,14 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             }
 
 
+            Title = Msg.getString("title");
         } else {
             callFromRcpa = "intent not found";
 
         }
+
+        TextView hader_text =(TextView) view.findViewById(R.id.hadder_text_1);
+        hader_text.setText(Title);
 
 
 

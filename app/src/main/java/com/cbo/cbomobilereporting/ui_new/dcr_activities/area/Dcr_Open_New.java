@@ -224,7 +224,7 @@ public class Dcr_Open_New extends AppCompatActivity {
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"BackDateReason","");
             }
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N");
-
+            MyCustumApplication.getInstance().getDCR().setDivertRoute(false);
 
             //Start of call to service
 
@@ -457,7 +457,8 @@ public class Dcr_Open_New extends AppCompatActivity {
                         break ;
                     default:
 
-                        ROUTEDIVERTYN.setChecked(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y"));
+                        //ROUTEDIVERTYN.setChecked(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y"));
+                        ROUTEDIVERTYN.setChecked(MyCustumApplication.getInstance().getDCR().IsRouteDiverted());
                         if (work_type_code.contains("_")){
                             if (work_type_code.contains("_W")) {
                                 lay1.setVisibility(View.GONE);
@@ -479,8 +480,8 @@ public class Dcr_Open_New extends AppCompatActivity {
 
                 }
 
-                ROUTEDIVERTYN.setChecked(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y"));
-
+                //ROUTEDIVERTYN.setChecked(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y"));
+                ROUTEDIVERTYN.setChecked(MyCustumApplication.getInstance().getDCR().IsRouteDiverted());
             }
 
             @Override
@@ -650,7 +651,7 @@ public class Dcr_Open_New extends AppCompatActivity {
 
 
         setUITitles();
-        getWorkwith();
+        //getWorkwith();
 
 //        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y")){
 //            ROUTEDIVERTYN.setEnabled(false);
@@ -1031,7 +1032,10 @@ public class Dcr_Open_New extends AppCompatActivity {
 
     public void setReultForNonWork() {
         if ((Custom_Variables_And_Method.DCR_ID .equals("0")) || (Custom_Variables_And_Method.DCR_ID != null)) {
-            startActivity(new Intent(getApplicationContext(), NonWorking_DCR.class));
+            //startActivity(new Intent(getApplicationContext(), NonWorking_DCR.class));
+            Intent intent = new Intent(getApplicationContext(), NonWorking_DCR.class);
+            intent.putExtra("Back_allowed","N");
+            startActivity(intent);
         } else {
             customVariablesAndMethod.msgBox(context,"Data Insertion Fail.....");
         }
@@ -1042,7 +1046,8 @@ public class Dcr_Open_New extends AppCompatActivity {
     public void submitDCR() {
 
         mLatLong=customVariablesAndMethod.get_best_latlong(context);
-        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked",ROUTEDIVERTYN.isChecked() ? "Y":"N") ;
+        MyCustumApplication.getInstance().getDCR().setDivertRoute(ROUTEDIVERTYN.isChecked());
+        //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked",ROUTEDIVERTYN.isChecked() ? "Y":"N") ;
         String code = work_type_code;
         if (work_type_code.contains("NR")){
             code ="W";
@@ -1260,7 +1265,10 @@ public class Dcr_Open_New extends AppCompatActivity {
             request.put("iPaId", "" + Custom_Variables_And_Method.PA_ID);
             request.put("sDCR_DATE", "" + real_date);
             request.put("sRouteYN", MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP());
-            request.put("sWWYN", MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP());
+            request.put("sWWYN", MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")?
+                                    MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP():
+                                    MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("INDEPENDENT_WORKING","N")
+                                            .equalsIgnoreCase("Y")? "I" : "N");
 
             ArrayList<Integer> tables = new ArrayList<>();
             tables.add(0); //route
@@ -1338,6 +1346,7 @@ public class Dcr_Open_New extends AppCompatActivity {
 
 
             setWorkwith(work_with_name);
+            getWorkwith();
             setArea(area_name);
 
             TP_work_with_name= work_with_name;
@@ -1400,9 +1409,13 @@ public class Dcr_Open_New extends AppCompatActivity {
 
     private String getWorkwith(){
         if (wwith.getText().toString().isEmpty()
-                && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")){
-            setWorkwith(MyCustumApplication.getInstance().getUser().getName());
+                && (MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")
+                    || MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("INDEPENDENT_WORKING","N").equalsIgnoreCase("Y"))){
+            work_with_name = MyCustumApplication.getInstance().getUser().getName();
+            setWorkwith(work_with_name);
             work_with_id = MyCustumApplication.getInstance().getUser().getID();
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name",work_with_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id",work_with_id);
         }
       return   wwith.getText().toString().replace("\u2022 ","").replace("\n",",");
     }
@@ -1583,6 +1596,7 @@ public class Dcr_Open_New extends AppCompatActivity {
                             break;
                         case "l":
                             Intent intent = new Intent(getApplicationContext(), FinalSubmitDcr_new.class);
+                            intent.putExtra("Back_allowed","N");
                             startActivity(intent);
                             break;
                         case "n":

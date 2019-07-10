@@ -29,6 +29,8 @@ public class SpinnerModel extends DropDownModel{
 	private  String CRM_COUNT="";
 	private  String DRCAPM_GROUP="";
 	private  String APP_PENDING_YN="0";
+	private  String DRLAST_PRODUCT="";
+
 	/*********** Set Methods ******************/
 	public SpinnerModel(String name,String id){
 		super(name,id);
@@ -55,7 +57,7 @@ public class SpinnerModel extends DropDownModel{
 	public SpinnerModel(String name,String id,String last_visited,String CLASS,String POTENCY_AMT,String ITEM_NAME
 			,String ITEM_POB,String ITEM_SALE,String AREA,String PANE_TYPE, String DR_LAT_LONG,String FREQ, String NO_VISITED
 			,String DR_LAT_LONG2, String DR_LAT_LONG3,String COLORYN,String CALLYN,String CRM_COUNT,String DRCAPM_GROUP
-			,String APP_PENDING_YN){
+			,String APP_PENDING_YN,String DRLAST_PRODUCT){
 		/*this.name=name;
 		this.id=id;*/
 		super(name,id);
@@ -77,6 +79,7 @@ public class SpinnerModel extends DropDownModel{
 		this.CRM_COUNT = CRM_COUNT;
 		this.DRCAPM_GROUP = DRCAPM_GROUP;
 		this.APP_PENDING_YN = APP_PENDING_YN;
+		this.DRLAST_PRODUCT = DRLAST_PRODUCT;
 	}
 
 	public SpinnerModel(String name){
@@ -120,6 +123,7 @@ public class SpinnerModel extends DropDownModel{
 	{
 		return PANE_TYPE;
 	}
+
 
 
 	
@@ -242,5 +246,13 @@ public class SpinnerModel extends DropDownModel{
 
 	public void setAPP_PENDING_YN(String APP_PENDING_YN) {
 		this.APP_PENDING_YN = APP_PENDING_YN;
+	}
+
+	public String getDRLAST_PRODUCT() {
+		return DRLAST_PRODUCT;
+	}
+
+	public void setDRLAST_PRODUCT(String DRLAST_PRODUCT) {
+		this.DRLAST_PRODUCT = DRLAST_PRODUCT;
 	}
 }

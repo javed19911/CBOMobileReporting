@@ -434,6 +434,7 @@ public class Doctor_Sample extends AppCompatActivity {
 
                     Bundle b=new Bundle();
                     b.putString("intent_fromRcpaCAll","dr");
+                    b.putString("title",gift.getText().toString());
                     b.putString("gift_name", gift_name);
                     b.putString("gift_qty",gift_qty);
                     new Dr_Gift_Dialog(context,mHandler,b,GIFT_DILOG).Show();

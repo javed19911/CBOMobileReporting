@@ -1,5 +1,6 @@
 package com.cbo.cbomobilereporting.databaseHelper.Sync;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -219,6 +220,7 @@ public class SyncAllDataFirebase {
                         cboProgressDialog.setDescription("Please Wait..\nDownloading completed !!!!");
                         DBRef.removeEventListener(this);
                         cboProgressDialog.dismiss();
+                        MyCustumApplication.getInstance().Logout((Activity) context);
                     }
 
                     @Override

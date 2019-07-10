@@ -29,8 +29,10 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.ChemistCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer.CustomerCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
@@ -154,16 +156,24 @@ public class DcrmenuInGrid extends Fragment {
                 String nameOnClick = getKeyList.get(position);
                 nameOnClickGlobal = nameOnClick;
                 if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                         ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                         ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
                     //takePictureButton.setEnabled(false);
                     ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.ACCESS_FINE_LOCATION
+                            Manifest.permission.READ_PHONE_STATE
                     }, 22);
                     // LoginMain.this.checkAndRequestPermission();
+                }else if (Controls.getInstance().IsGPSRequired() &&
+                        (ContextCompat.checkSelfPermission(context,
+                                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(context,
+                                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )){
+                    ActivityCompat.requestPermissions((Activity) context, new String[] {
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    }, 22);
+
                 }else {
                     String url = new CBO_DB_Helper(getActivity()).getMenuUrl("DCR", nameOnClick);
                     if (url != null && !url.equals("")) {
@@ -173,7 +183,24 @@ public class DcrmenuInGrid extends Fragment {
                         startActivity(i);*/
                         MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                     } else if (customVariablesAndMethod.IsGPS_GRPS_ON(context)){
-                        OnGridItemClick(nameOnClick,false);
+
+                        String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
+                        switch (work_type_Selected){
+                            case "l":
+                                Intent intent = new Intent(context, FinalSubmitDcr_new.class);
+                                intent.putExtra("Back_allowed","N");
+                                startActivity(intent);
+                                break;
+                            case "n":
+                                Intent intent1 = new Intent(context, NonWorking_DCR.class);
+                                intent1.putExtra("Back_allowed","N");
+                                startActivity(intent1);
+
+                                break;
+                            default:
+                                OnGridItemClick(nameOnClick,false);
+                        }
+
                     }
                 }
             }

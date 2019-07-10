@@ -24,7 +24,7 @@ public class mDCR {
     private String WorkWithIndividualId;
     private String WorkWithIndividual; //work_with_individual_name
 
-    private String DivertRoute; //ROUTEDIVERTYN
+    private Boolean DivertRoute; //ROUTEDIVERTYN_Checked
     private String DivertRemark; //sDivert_Remark
     private String RouteTitle; //ROUTE_TITLE
     private String ShowRouteAsPerTP; //DCR_TP_AREA_AUTOYN
@@ -102,7 +102,12 @@ public class mDCR {
         return WorkWithIdArr;
     }
 
-    public String getDivertRoute() {
+    public Boolean IsRouteDiverted() {
+        if (DivertRoute == null) {
+            DivertRoute = MyCustumApplication.getInstance()
+                    .getDataFrom_FMCG_PREFRENCE("ROUTEDIVERTYN_Checked", "N")
+                    .equalsIgnoreCase("Y");
+        }
         return DivertRoute;
     }
 
@@ -238,14 +243,15 @@ public class mDCR {
         return this;
     }
 
-    public mDCR setDivertRoute(String divertRoute) {
+    public mDCR setDivertRoute(Boolean divertRoute) {
         DivertRoute = divertRoute;
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("ROUTEDIVERTYN_Checked",divertRoute?"Y":"N");
         return this;
     }
 
     public mDCR setRouteTitle(String routeTitle) {
         RouteTitle = routeTitle;
-        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("ROUTE_TITLE",ShowWorkWithAsPerTP);
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("ROUTE_TITLE",RouteTitle);
         return this;
     }
 
@@ -266,7 +272,7 @@ public class mDCR {
 
     public mDCR setAreaTitle(String areaTitle) {
         AreaTitle = areaTitle;
-        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("AREA_TITLE",ShowWorkWithAsPerTP);
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("AREA_TITLE",AreaTitle);
         return this;
     }
 

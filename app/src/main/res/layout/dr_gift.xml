@@ -40,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
+                android:id="@+id/noGiftTxt"
                 android:text="No Gift"/>
             <CheckBox
                 android:layout_width="wrap_content"

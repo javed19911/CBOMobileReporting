@@ -62,6 +62,8 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
     Context context;
     LinearLayout noGiftLayout;
     CheckBox noGift;
+    TextView noGiftTxt;
+    String Title = "Gift";
 
     Dialog dialog;
     public ProgressDialog progress1;
@@ -91,14 +93,13 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         window.setGravity(Gravity.CENTER);
 
 
-        TextView hader_text = (TextView) view.findViewById(R.id.hadder_text_1);
-        hader_text.setText("Dr. Gift");
-        // hader_text.setText( Msg.getString("header"));
+
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 
         noGiftLayout = view.findViewById(R.id.noGiftLayout);
         noGift = view.findViewById(R.id.noGift);
+        noGiftTxt = view.findViewById(R.id.noGiftTxt);
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE (context,"DRGIFTMANDATORY").contains ("D")){
 
             noGiftLayout.setVisibility(View.VISIBLE);
@@ -117,7 +118,15 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         if (Msg != null) {
             gift_name = Msg.getString("gift_name");
             gift_qty = Msg.getString("gift_qty");
+            Title = Msg.getString("title");
         }
+
+
+        TextView hader_text = (TextView) view.findViewById(R.id.hadder_text_1);
+        hader_text.setText(Title);
+        noGiftTxt.setText("No "+ Title);
+        // hader_text.setText( Msg.getString("header"));
+
 
         adapter=new MyAdapter2((Activity) context,getModel());
 
@@ -128,7 +137,7 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 if (checked){
                     AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
-                            "Are you sure want to give NO  gift to the Doctor " ,
+                            "Are you sure want to give No " + Title +" to the Doctor " ,
                             new AppAlert.OnClickListener() {
                                 @Override
                                 public void onPositiveClicked(View item, String result) {

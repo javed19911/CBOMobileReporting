@@ -143,6 +143,7 @@ public class AppAlert {
 
 
         final AlertDialog dialog = builder1.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setView(dialogLayout);
         Alert_Positive.setOnClickListener(new View.OnClickListener() {

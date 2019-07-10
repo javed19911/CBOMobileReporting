@@ -23,8 +23,9 @@ public class mUser {
 
     private String IMEI;
     private String OS;
+    private String BRAND;
     private String battery;
-    private String AppVersion = "20190628";
+    private String AppVersion = "20190710";
     private String time;
     private Location location;
     private Boolean LoggedInAsSupport;
@@ -77,6 +78,9 @@ public class mUser {
 
     public String getOS() {
         return OS;
+    }
+    public String getBRAND() {
+        return BRAND;
     }
 
     public String getBattery() {
@@ -173,6 +177,10 @@ public class mUser {
 
     public mUser setOS(String OS) {
         this.OS = OS;
+        return this;
+    }
+    public mUser setBRAND(String BRAND) {
+        this.BRAND = BRAND;
         return this;
     }
 

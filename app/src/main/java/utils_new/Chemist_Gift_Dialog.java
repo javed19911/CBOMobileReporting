@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -50,6 +51,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
     StringBuilder sb1,sb2;
     String gift_name="",gift_qty="";
     String gift_name_previous="",gift_qty_previous="";
+    String Title = "Gift";
 
 
 
@@ -109,9 +111,14 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
             gift_name = Msg.getString("gift_name");
             gift_qty = Msg.getString("gift_qty");
 
+            Title = Msg.getString("title");
+
             gift_name_previous = Msg.getString("gift_name_previous");
             gift_qty_previous = Msg.getString("gift_qty_previous");
         }
+
+        TextView hader_text = (TextView) view.findViewById(R.id.hadder_text_1);
+        hader_text.setText(Title);
 
         getModelLocal();
 

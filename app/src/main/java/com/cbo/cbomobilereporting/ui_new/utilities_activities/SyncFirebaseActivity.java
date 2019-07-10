@@ -1,5 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.utilities_activities;
 
+import android.app.Activity;
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,11 +24,12 @@ import utils_new.AppAlert;
 
 public class SyncFirebaseActivity extends AppCompatActivity {
 
-    Button upload,download,request;
+    Button upload,download,requestBtn;
     ImageView close;
     TextView msg;
     Context context;
     SyncAllDataFirebase syncAllDataFirebase;
+    Boolean LogOutOnBackPressed = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,7 @@ public class SyncFirebaseActivity extends AppCompatActivity {
 
 
         upload = findViewById(R.id.upload);
-        request = findViewById(R.id.request);
+        requestBtn = findViewById(R.id.request);
         download = findViewById(R.id.download);
         close = findViewById(R.id.close);
         msg = findViewById(R.id.msg);
@@ -43,17 +45,18 @@ public class SyncFirebaseActivity extends AppCompatActivity {
         context = this;
         syncAllDataFirebase =  new SyncAllDataFirebase(context);
 
+
         if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
             upload.setVisibility(View.GONE);
         }else{
-            request.setVisibility(View.GONE);
+            requestBtn.setVisibility(View.GONE);
             download.setVisibility(View.GONE);
         }
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -65,7 +68,7 @@ public class SyncFirebaseActivity extends AppCompatActivity {
             }
         });
 
-        request.setOnClickListener(new View.OnClickListener() {
+        requestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -89,7 +92,7 @@ public class SyncFirebaseActivity extends AppCompatActivity {
                                     public void onComplete(Bundle message) {
 
                                        // parser_login(message);
-
+                                        requestBtn.setVisibility(View.GONE);
                                         enableDownloadButton(30);
                                     }
 
@@ -118,10 +121,28 @@ public class SyncFirebaseActivity extends AppCompatActivity {
             }
         });
 
+        if (getIntent() != null){
+            LogOutOnBackPressed = getIntent().getBooleanExtra("LogOut",false);
+            if (LogOutOnBackPressed){
+                requestBtn.performClick();
+            }
+        }
+
     }
 
+    @Override
+    public void onBackPressed() {
+        if (download.isEnabled() || download.getVisibility() == View.GONE) {
+            if (LogOutOnBackPressed) {
+                MyCustumApplication.getInstance().Logout((Activity) context);
+            } else {
+                super.onBackPressed();
+            }
+        }
 
-    private void enableDownloadButton( int sec){
+    }
+
+    private void enableDownloadButton(int sec){
         int secs[] ={sec};
         download.setText("Please Wait (" + sec + ")");
         Timer buttonTimer = new Timer();
@@ -136,7 +157,9 @@ public class SyncFirebaseActivity extends AppCompatActivity {
                         if (0 == secs[0]) {
                             download.setEnabled(true);
                             msg.setVisibility(View.GONE);
+                            requestBtn.setVisibility(View.VISIBLE);
                             download.setText("Download APP Data");
+                            download.performClick();
                         }else{
                             enableDownloadButton(secs[0] - 1);
                         }

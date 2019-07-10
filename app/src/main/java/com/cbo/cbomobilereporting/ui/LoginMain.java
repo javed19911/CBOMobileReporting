@@ -1,6 +1,7 @@
 package com.cbo.cbomobilereporting.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -10,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -27,11 +30,14 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
+import com.cbo.cbomobilereporting.ui_new.utilities_activities.SyncFirebaseActivity;
 import com.google.android.gms.location.LocationSettingsStates;
+import com.uenics.javed.CBOLibrary.CBOException;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -128,16 +134,12 @@ public class LoginMain extends CustomActivity {
         if (!checkDrawOverlayPermission()) {
             //allow permission
         }else if(ContextCompat.checkSelfPermission(LoginMain.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(LoginMain.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(LoginMain.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(LoginMain.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(LoginMain.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                ContextCompat.checkSelfPermission(LoginMain.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
             //takePictureButton.setEnabled(false);
             ActivityCompat.requestPermissions(LoginMain.this, new String[] { Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.READ_PHONE_STATE
             }, MY_PERMISSIONS_REQUEST_DEVICE_ID);
             // LoginMain.this.checkAndRequestPermission();
         }else {
@@ -424,16 +426,20 @@ public class LoginMain extends CustomActivity {
                    @Override
                    public void onSuccess(Bundle bundle) {
 
-                        customMethod.notification_check();
-                        if (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("11")) {
-                            startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
 
-                        } else {
-                        startActivity(new Intent(getApplicationContext(), ViewPager_2016.class));
+                       if (Controls.getInstance().IsGPSRequired() &&
+                               (ContextCompat.checkSelfPermission(context,
+                                       Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                                       ContextCompat.checkSelfPermission(context,
+                                               Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )){
+                           ActivityCompat.requestPermissions((Activity) context, new String[] {
+                                   Manifest.permission.ACCESS_COARSE_LOCATION,
+                                   Manifest.permission.ACCESS_FINE_LOCATION
+                           }, MY_PERMISSIONS_REQUEST_LOCATION);
 
-                        }
-
-                        finish();
+                       }else {
+                           onLoginSucess(false);
+                       }
                    }
 
                    @Override
@@ -449,6 +455,36 @@ public class LoginMain extends CustomActivity {
                 CboServices.getAlert(this, "Missing field error", getResources().getString(R.string.service_unavilable) + e.toString());
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void onLoginSucess(Boolean SkipSync){
+        if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport() && !SkipSync){
+            AppAlert.getInstance().setNagativeTxt("Skip").DecisionAlert(context, "Sync User DCR?", "Do you want to Download User DCR Data for support?",
+                    new AppAlert.OnClickListener() {
+                        @Override
+                        public void onPositiveClicked(View item, String result) {
+                            Intent intent = new Intent(context, SyncFirebaseActivity.class);
+                            intent.putExtra("LogOut",true);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onNegativeClicked(View item, String result) {
+                            onLoginSucess(true);
+                        }
+                    });
+        }else {
+            customMethod.notification_check();
+            if (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("11")) {
+                startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
+
+            } else {
+                startActivity(new Intent(getApplicationContext(), ViewPager_2016.class));
+
+            }
+
+            finish();
         }
     }
 
@@ -496,12 +532,7 @@ public class LoginMain extends CustomActivity {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
 
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-
-                    //mycon.msgBox("Permission Granted For Location");
-
-                    //startService(new Intent(this, MyLoctionService.class));
-                    //startLoctionService();
-
+                    onLoginSucess(false);
 
                 } else {
                     customVariablesAndMethod.msgBox(context,"For Acessing Service you Need to Allow Permission");
@@ -509,6 +540,7 @@ public class LoginMain extends CustomActivity {
 
                 }
             }
+            break;
             case MY_PERMISSIONS_REQUEST_DEVICE_ID: {
 
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
