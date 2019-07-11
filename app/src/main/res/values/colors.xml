@@ -5,6 +5,8 @@
     <color name="White_new">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
 
+
+    <color name="semiTransparentWhite">#40FFFFFF</color>
     <color name="colorPrimary">#066199</color>
     <color name="colorPrimaryDark">#104c6c</color>
     <color name="colorPrimaryLight">#7aa4</color>
