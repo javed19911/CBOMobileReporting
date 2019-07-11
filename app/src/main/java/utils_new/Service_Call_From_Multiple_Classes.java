@@ -958,7 +958,7 @@ public class Service_Call_From_Multiple_Classes {
 
             cbo_helper.deleteMenu();
 
-            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","N");
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","Y");
             for (int i = 0; i < menus.length(); i++) {
                 JSONObject object = menus.getJSONObject(i);
                 String menu = object.getString("MAIN_MENU");
@@ -968,7 +968,7 @@ public class Service_Call_From_Multiple_Classes {
                 String main_menu_srno = object.getString("MAIN_MENU_SRNO");
                 cbo_helper.insertMenu(menu, menu_code, menu_name, menu_url, main_menu_srno);
             }
-            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","Y");
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","N");
             //return true;
         }catch (JSONException e) {
             throw e;
