@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -184,12 +185,15 @@ public class DCR_Summary_new extends CustomActivity {
                     new Service_Call_From_Multiple_Classes().resetDCRNow(context);
 
                     Intent i = new Intent(context, LoginMain.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     stopLoctionService();
                     startActivity(i);
-                    finish();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        finishAffinity ();
+                    }else{
+                        finish();
+                    }
 
 
                     /*cboDbHelper.deleteLogin();

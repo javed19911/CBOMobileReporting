@@ -636,7 +636,8 @@ public class Service_Call_From_Multiple_Classes {
             Intent i = new Intent(context, LoginMain.class);
             ((CustomActivity) context).stopLoctionService();
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
             ((CustomActivity) context).finish();
 
@@ -956,6 +957,8 @@ public class Service_Call_From_Multiple_Classes {
             }
 
             cbo_helper.deleteMenu();
+
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","N");
             for (int i = 0; i < menus.length(); i++) {
                 JSONObject object = menus.getJSONObject(i);
                 String menu = object.getString("MAIN_MENU");
@@ -965,6 +968,7 @@ public class Service_Call_From_Multiple_Classes {
                 String main_menu_srno = object.getString("MAIN_MENU_SRNO");
                 cbo_helper.insertMenu(menu, menu_code, menu_name, menu_url, main_menu_srno);
             }
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","Y");
             //return true;
         }catch (JSONException e) {
             throw e;

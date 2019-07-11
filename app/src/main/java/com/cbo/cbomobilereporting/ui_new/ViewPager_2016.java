@@ -164,15 +164,16 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
             } else {
                 new GetProfilePicture().execute();
             }
-        }
-        if  ( times==0 && !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"COMPANY_PIC","").isEmpty() && !COMPANY_PIC.exists()){
+        }else if  ( times==0 && !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"COMPANY_PIC","").isEmpty() && !COMPANY_PIC.exists()){
             if (!networkUtil.internetConneted(ViewPager_2016.this)) {
                 customVariablesAndMethod.getAlert(this,"Turn ON your Internet","Company Logo download Pending...");
                 initiate();
             } else {
                 new GetProfilePicture().execute();
             }
-        }else if(cbo_db_helper.getmenu_count(CBO_DB_Helper.MenuControl)<=0){
+        }else if(cbo_db_helper.getmenu_count(CBO_DB_Helper.MenuControl)<=0 ||
+                cbo_db_helper.getMenu("UTILITY","U_UPDOWN").size() == 0 ||
+                MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("MENU_SYNC_FAILED","N").equalsIgnoreCase("Y")){
             //fmcg and menu not available
             //get fmcg and menu
 

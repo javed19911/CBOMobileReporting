@@ -131,6 +131,7 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui.LoginMain"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
@@ -202,6 +203,7 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui_new.ViewPager_2016"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui.PrescribeNew"
@@ -261,6 +263,7 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui.LoginFake"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateVisible" />

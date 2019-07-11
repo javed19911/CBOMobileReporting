@@ -37,6 +37,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
@@ -265,11 +266,12 @@ public class Leave_Request extends AppCompatActivity {
         pa_name = pa_name + Custom_Variables_And_Method.PA_NAME;
         cbohelp = new CBO_DB_Helper(context);
         if (!pa_name.equals(Custom_Variables_And_Method.PA_NAME)) {
-            Intent i = new Intent(context, LoginFake.class);
+            /*Intent i = new Intent(context, LoginFake.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().Logout((Activity) context);
         } else {
 
             empName.setText("" + pa_name);
