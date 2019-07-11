@@ -19,6 +19,7 @@ import com.cbo.cbomobilereporting.ui.LoginFake;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FingerprintHandler extends FingerprintManager.AuthenticationCallback {
 
+    CancellationSignal cancellationSignal;
 
     private Context context;
 
@@ -30,11 +31,17 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
 
     public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
-        CancellationSignal cancellationSignal = new CancellationSignal();
+        cancellationSignal = new CancellationSignal();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+    }
+
+    public void stopAuth(){
+        if(cancellationSignal != null && !cancellationSignal.isCanceled()){
+            cancellationSignal.cancel();
+        }
     }
 
 

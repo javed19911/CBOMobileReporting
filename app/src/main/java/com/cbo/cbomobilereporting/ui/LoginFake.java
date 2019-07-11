@@ -117,6 +117,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "CBOFingerPrint";
     private Cipher cipher;
+    FingerprintHandler helper;
 
 
     @Override
@@ -281,6 +282,8 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
     }
 
+
+
     @TargetApi(Build.VERSION_CODES.M)
     private void initFingerprintManager(){
 
@@ -321,8 +324,9 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                         if (cipherInit()) {
                             FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                            FingerprintHandler helper = new FingerprintHandler(this);
+                            helper = new FingerprintHandler(this);
                             helper.startAuth(fingerprintManager, cryptoObject);
+
                         }
                     }
                 }
@@ -433,6 +437,10 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     public void LoginFake(Boolean SkipValidation){
 
         //initFingerprintManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && helper!= null) {
+            helper.stopAuth();
+        }
 
         String PIN_ALLOWED_MSG =  customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"PIN_ALLOWED_MSG","");
         longClick=false;
@@ -679,7 +687,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             dialog.setView(dialogLayout);
-            Alert_Positive.setOnClickListener(new View.OnClickListener() {
+            Alert_Positive.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     pin.setText("");
@@ -688,7 +696,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                 }
             });
-            Alert_Nagative.setOnClickListener(new View.OnClickListener() {
+            Alert_Nagative.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (IscallsFound() && !MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
