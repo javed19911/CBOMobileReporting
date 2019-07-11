@@ -122,7 +122,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.enter_pin_2016);
+        setContentView(R.layout.enter_pin_2019);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         context = LoginFake.this;
 
@@ -504,22 +504,28 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             int mode=new MyCustomMethod(LoginFake.this).getLocationMode(LoginFake.this);
 
             if(ContextCompat.checkSelfPermission(LoginFake.this,Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(LoginFake.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(LoginFake.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(LoginFake.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(LoginFake.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                    ContextCompat.checkSelfPermission(LoginFake.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
                 //takePictureButton.setEnabled(false);
                 ActivityCompat.requestPermissions(LoginFake.this, new String[] { Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_PHONE_STATE,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.READ_PHONE_STATE
                 }, REQUEST_PERMISSION);
                 //Toast.makeText(this, "Please allow the permission", Toast.LENGTH_LONG).show();
 
             }else {
 
-                if (gpsYN.equals("Y") && (!myCustomMethod.checkGpsEnable() || mode != 3)) {
+                if (gpsYN.equals("Y") &&
+                        (ContextCompat.checkSelfPermission(LoginFake.this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(LoginFake.this,
+                                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )){
+                    ActivityCompat.requestPermissions(LoginFake.this, new String[] {
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    }, REQUEST_PERMISSION);
+
+                }else if (gpsYN.equals("Y") && (!myCustomMethod.checkGpsEnable() || mode != 3)) {
                     initFingerprintManager();
                     customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
                     if (mode !=0){
@@ -921,6 +927,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 // && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 //capture_Image();
+                LoginFake(false);
                 customVariablesAndMethod.msgBox(context,"Permission granted");
             }
         }else if (requestCode ==  REQUEST_FINGERPRINT_PERMISSION) {

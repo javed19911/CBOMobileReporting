@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_slant">
+
+
+            <RelativeLayout
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" >
+
+                <!--
+                                <ImageView
+                                    android:id="@+id/_background_company_pic"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="300dp"
+                                    android:src="@drawable/cbo"
+                                    android:scaleType="fitXY"
+                                    android:layout_marginBottom="?attr/actionBarSize"
+                                    android:alpha="0.1"/>-->
+
+                <TextView
+                    android:id="@+id/company_name_drawer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/caviardreams"
+                    android:text="Welcome Back To Cbo MobileReporting"
+                    android:gravity="top|center"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="25sp"
+                    android:textSize="18dp"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_below="@+id/company_name_drawer"
+                    android:text="Enter Pin To Login"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Cbo Infotech Pvt Ltd"
+                    android:gravity="center"
+                    android:layout_marginTop="15sp"
+                    android:textSize="22dp"
+                    android:textColor="@color/white"/>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/container2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/background"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="-100dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    >
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/user_pic"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="30dp"
+                        android:src="@drawable/ic_usericon"
+                        app:civ_border_color="@color/semiTransparentWhite"
+                        app:civ_border_width="10dp" />
+
+
+
+
+                </RelativeLayout>
+
+
+
+                <!-- <LinearLayout
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_marginStart="12dp"
+                     android:layout_marginEnd="12dp"
+                     android:layout_marginBottom="24dp"
+                     android:layout_gravity="bottom">
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:fontFamily="sans-serif-light"
+                         android:text="Bebe Rexha"
+                         android:textSize="30sp"
+                         android:textColor="@android:color/black"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:fontFamily="sans-serif-light"
+                         android:text="musician, singer, songwriter"
+                         android:textSize="14sp"/>
+                 </LinearLayout>-->
+            </LinearLayout>
+            <LinearLayout
+                android:layout_below="@+id/container2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_gravity="center"
+                >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="16.5dp"
+                    android:textColor="@color/navigationBarColor"
+                    android:layout_marginBottom="18dp"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="gone"
+                    android:text="Please enter your PIN below"/>
+
+
+                <RelativeLayout
+                    android:id="@+id/container3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/custom_button__empty"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="38dp"
+                        android:layout_weight="11"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/enter_pin" />
+                    <View
+                        android:layout_width="0.8dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="fill_parent"
+                        android:background="@color/logo_green"/>
+
+                    <utils.font_package.Edit_text_Regular
+                        android:id="@+id/pin_again22"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="2"
+                        android:textCursorDrawable="@drawable/cursor_for_et"
+                        android:imeOptions="actionGo"
+                        android:background="@drawable/edit_box_background_2016"
+                        android:hint="Enter pin"
+                        android:inputType="textPassword"
+                        android:paddingLeft="7dp"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/reset_pin_enter_pin"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot/Reset Pin ?"
+                    android:gravity="center|right"
+                    android:textColor="#00B9F5"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/version_code"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="Version : 000"
+                        android:textColor="@color/colorAccent"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="14sp" />
+
+
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_layout_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/input_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter Pin" />
+
+                    </com.google.android.material.textfield.TextInputEditText>
+
+                    <utils.font_package.Button_Bold
+                        android:id="@+id/submit_login22_enter_pin"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/cutom_buton_round_filled"
+                        android:gravity="left"
+                        android:text="Login"
+
+                        android:drawableRight="@drawable/ic_rightarrow_icon"
+                        android:drawablePadding="20dp"
+                        android:textAllCaps="false"
+                        android:padding="10dp"
+                        android:textColor="#fff"
+                        android:textSize="22sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--<include layout="@layout/pin_login_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container2"/>-->
+
+            <!--      <android.support.v7.widget.Toolbar
+                      android:id="@+id/toolbar"
+                      android:layout_width="match_parent"
+                      android:layout_height="?android:attr/actionBarSize"
+                      android:layout_marginTop="24dp"
+                      app:theme="@style/TransparentBar">
+
+
+                  </android.support.v7.widget.Toolbar>-->
+
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>
+
+
+
+    <!--<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_bg"
+        android:orientation="vertical"
+        >
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="170dp"
+                    android:padding="15dp"
+                    android:gravity="center"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/center_logo"
+                        android:layout_width="200dp"
+                        android:layout_height="170dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logo1234"
+
+                        />
+
+                    <WebView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/center_logo1"
+                        android:visibility="gone"
+                        >
+
+                    </WebView>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_gravity="center"
+                    >
+                    <utils.font_package.Text_view_Regular
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="@color/navigationBarColor"
+                        android:layout_marginBottom="18dp"
+                        android:text="Please enter your PIN below"/>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/custom_round_white_view_bg"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="38dp"
+                            android:layout_weight="11"
+                            android:padding="4dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/enter_pin" />
+                        <View
+                            android:layout_width="0.8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_height="fill_parent"
+                            android:background="@color/logo_green"/>
+
+                        <utils.font_package.Edit_text_Regular
+                            android:id="@+id/pin_again22"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="2"
+                            android:textCursorDrawable="@drawable/cursor_for_et"
+                            android:imeOptions="actionGo"
+                            android:background="@drawable/edit_box_background_2016"
+                            android:hint="Enter pin"
+                            android:inputType="textPassword"
+                            android:paddingLeft="7dp"
+                            android:textColor="#000"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/reset_pin_enter_pin"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="3dp"
+                        android:layout_height="wrap_content"
+                        android:text="Forgot/Reset Pin ?"
+                        android:gravity="center|right"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
+                        <utils.font_package.Text_view_Regular
+                            android:id="@+id/version_code"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:text="Version : 000"
+                            android:textColor="@color/logo_green"
+                            android:textSize="14sp" />
+
+                        <utils.font_package.Button_Bold
+                            android:id="@+id/submit_login22_enter_pin"
+                            android:layout_width="fill_parent"
+                            android:layout_height="50dp"
+                            android:background="@drawable/button_text_view_selector"
+                            android:gravity="center"
+                            android:text="Login"
+                            android:textAllCaps="false"
+                            android:textColor="#fff"
+                            android:textSize="22sp" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
+    </RelativeLayout>-->

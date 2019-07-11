@@ -484,6 +484,10 @@
         <activity
             android:name=".ui_new.dcr_activities.lead.LeadActivity"
             android:theme="@style/AppThemeNoBar" />
+        <activity
+            android:name=".ui_new.Pdfviewer"
+            android:theme="@style/AppThemeNoBar"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

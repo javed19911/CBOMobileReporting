@@ -143,6 +143,7 @@ public class MyCustumApplication extends MultiDexApplication {
         }
 
         user.setIMEI(DEVICE_ID +"'!'"+ BRAND +""+ DEVICE_MODEL);
+        user.setBRAND(BRAND);
         user.setOS(BRAND +" - "+ DEVICE_MODEL+ " : "+Build.VERSION.SDK_INT );
 
 

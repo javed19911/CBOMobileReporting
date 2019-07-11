@@ -350,7 +350,9 @@ public class DCR_Root_new extends AppCompatActivity {
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_name","");
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"sDivert_Remark","");
-            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N");
+            //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N");
+            MyCustumApplication.getInstance().getDCR().setDivertRoute(false);
+
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0");
             if (!customVariablesAndMethod.IsBackDate(context) ) {
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"IsBackDate","1"); //not back date entry
@@ -588,8 +590,8 @@ public class DCR_Root_new extends AppCompatActivity {
 
 
                 }
-
-                ROUTEDIVERTYN.setChecked(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y"));
+                ROUTEDIVERTYN.setChecked(MyCustumApplication.getInstance().getDCR().IsRouteDiverted());
+                //ROUTEDIVERTYN.setChecked(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y"));
                 DIVERTWWYN.setChecked(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0").equals("1"));
 
                 if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_ADDAREANA").equalsIgnoreCase("Y")){
@@ -782,7 +784,7 @@ public class DCR_Root_new extends AppCompatActivity {
 
         // set ui
         setUITitles();
-        getWorkwith();
+        //getWorkwith();
 
 //        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N").equals("Y")){
 //            ROUTEDIVERTYN.setEnabled(false);
@@ -1251,7 +1253,9 @@ public class DCR_Root_new extends AppCompatActivity {
 
     public void setReultForNonWork() {
         if ((Custom_Variables_And_Method.DCR_ID .equals("0") ) || (Custom_Variables_And_Method.DCR_ID != null)) {
-            startActivity(new Intent(getApplicationContext(), NonWorking_DCR.class));
+            Intent intent = new Intent(context, NonWorking_DCR.class);
+            intent.putExtra("Back_allowed","N");
+            startActivity(intent);
         } else {
             customVariablesAndMethod.msgBox(context,"Data Insertion Fail.....");
         }
@@ -1259,7 +1263,8 @@ public class DCR_Root_new extends AppCompatActivity {
 
     public void submitDCR() {
         work_name = getWorkwith();
-        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked",ROUTEDIVERTYN.isChecked() ? "Y":"N") ;
+        MyCustumApplication.getInstance().getDCR().setDivertRoute(ROUTEDIVERTYN.isChecked());
+        //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked",ROUTEDIVERTYN.isChecked() ? "Y":"N") ;
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked",DIVERTWWYN.isChecked() ? "1":"0") ;
 
         mLatLong=customVariablesAndMethod.get_best_latlong(context);
@@ -1460,7 +1465,8 @@ public class DCR_Root_new extends AppCompatActivity {
     public void getDCRAsPerTP(){
 
         if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y") ||
-                MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y") ) {
+                MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y") ||
+                MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("INDEPENDENT_WORKING","N").equalsIgnoreCase("Y")) {
             //Start of call to service
 
             HashMap<String, String> request = new HashMap<>();
@@ -1468,7 +1474,10 @@ public class DCR_Root_new extends AppCompatActivity {
             request.put("iPaId", "" + Custom_Variables_And_Method.PA_ID);
             request.put("sDCR_DATE", "" + real_date);
             request.put("sRouteYN", MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP());
-            request.put("sWWYN", MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP());
+            request.put("sWWYN", MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")?
+                                    MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP():
+                                    MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("INDEPENDENT_WORKING","N")
+                                            .equalsIgnoreCase("Y")? "I" : "N");
 
             ArrayList<Integer> tables = new ArrayList<>();
             tables.add(0); //route
@@ -1571,6 +1580,7 @@ public class DCR_Root_new extends AppCompatActivity {
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"TP_root_id",TP_root_id);
 
             setWorkwith(work_with_name);
+            getWorkwith();
             setRoute(root_name);
             setArea(area_name);
 
@@ -1630,7 +1640,8 @@ public class DCR_Root_new extends AppCompatActivity {
 
     private String getWorkwith(){
         if (wwith.getText().toString().isEmpty()
-                && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")){
+                && (MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")
+                    || MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("INDEPENDENT_WORKING","N").equalsIgnoreCase("Y"))){
             work_with_name = MyCustumApplication.getInstance().getUser().getName();
             setWorkwith(work_with_name);
             work_with_id = MyCustumApplication.getInstance().getUser().getID();
@@ -1835,7 +1846,9 @@ public class DCR_Root_new extends AppCompatActivity {
                             break;
                         case "l":
                             Intent intent = new Intent(getApplicationContext(), FinalSubmitDcr_new.class);
+                            intent.putExtra("Back_allowed","N");
                             startActivity(intent);
+
                             break;
                         case "n":
                             setReultForNonWork();

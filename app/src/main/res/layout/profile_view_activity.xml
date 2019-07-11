@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/background" >
+
+
+        <ImageView
+            android:id="@+id/_background_company_pic"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/cbo"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:alpha="0.1"/>
+
+        <TextView
+            android:id="@+id/company_name_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-light"
+            android:text="Bebe Rexha"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="@color/white"/>
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/background"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="-100dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_pic"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/ic_usericon"
+                app:civ_border_color="@color/semiTransparentWhite"
+                app:civ_border_width="10dp" />
+
+
+            <ImageView
+                android:id="@+id/edit_user_icon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="left
+"
+                android:layout_marginStart="-28dp"
+                android:layout_toEndOf="@+id/user_pic"
+                android:layout_below="@+id/user_pic"
+
+
+                android:layout_marginLeft="-28dp"
+                android:layout_marginTop="-35dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/circle_background"
+                android:padding="8dp"
+                android:src="@drawable/ic_cameraicon"
+                android:layout_toRightOf="@+id/user_pic" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@+id/edit_user_icon"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="55dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="bottom">
+
+                <TextView
+                    android:id="@+id/emp_name_drawer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Bebe Rexha"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/emp_desig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="musician, singer, songwriter"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/emp_hq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="musician, singer, songwriter"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+
+
+        <!-- <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="vertical"
+             android:layout_marginStart="12dp"
+             android:layout_marginEnd="12dp"
+             android:layout_marginBottom="24dp"
+             android:layout_gravity="bottom">
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:fontFamily="sans-serif-light"
+                 android:text="Bebe Rexha"
+                 android:textSize="30sp"
+                 android:textColor="@android:color/black"/>
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:fontFamily="sans-serif-light"
+                 android:text="musician, singer, songwriter"
+                 android:textSize="14sp"/>
+         </LinearLayout>-->
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginTop="24dp"
+        app:theme="@style/TransparentBar">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_vertical"
+            android:text="About"
+            android:textColor="#fff"
+            android:textSize="24sp" />
+    </android.support.v7.widget.Toolbar>
+
+</RelativeLayout>
+
+<!--<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:background="#fff"
+    >
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight = "0.8"
+            android:background="">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:id="@+id/_background_company_pic"
+                android:src="@drawable/cbo"/>
+
+
+
+            <View
+                android:id="@+id/transptert_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:background="@drawable/slant_card_view"
+                android:alpha="0.75"
+                />
+
+            <ImageView
+                android:id="@+id/back_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_back_button_white"
+                android:padding="2dp"
+                android:layout_margin="10dp"
+                />
+
+            <TextView
+                android:id="@+id/company_name_drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="28dp"
+                android:textColor="#fff"
+                android:gravity = "center"
+                android:text="CBO Infotec Pvt Ltd"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/roboto_thin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="#42CFDD"
+                android:visibility="gone"
+                android:id="@+id/dividerline"
+                android:layout_below="@+id/transptert_header"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="#28F028"
+                android:visibility="gone"
+                android:id="@+id/divideline"
+                android:layout_below="@+id/dividerline"
+                />
+
+
+
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"
+            android:orientation="vertical"
+          >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity = "center"
+                android:layout_weight = "1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:visibility="visible"
+                android:elevation="10dp"
+                >
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <EditText
+                        android:id="@+id/emp_name_drawer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name"
+                        android:drawableRight="@drawable/ic_employeeicon"
+                        android:textColorHint="#002D80"
+                        android:backgroundTint="#000"
+                        android:textColor="#000"
+                        android:fontFamily="@font/roboto_thin"
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_desghin"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/input_layout_name"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <EditText
+                        android:id="@+id/emp_desig"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name"
+                        android:backgroundTint="#000"
+                        android:drawableRight="@drawable/ic_desghinationicon"
+                        android:textColorHint="#002D80"
+                        android:textColor="#000"
+                        android:fontFamily="@font/roboto_thin"
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_password"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/input_layout_desghin"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <EditText
+                        android:id="@+id/emp_hq"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name"
+
+                        android:backgroundTint="#000"
+                        android:drawableRight="@drawable/ic_headqtricon"
+                        android:textColorHint="#002D80"
+                        android:textColor="#000"
+                        android:fontFamily="@font/roboto_thin"
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_pharmacy_one"/>
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_pharamcy_three"/>
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_pharmacy_five"/>
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_pharmacy_five"/>
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_pharamcy_three"/>
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_pharmacy_one"/>
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_pharamcy_three"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_widget_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_pic"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/ic_usericon"
+            app:civ_border_color="#fff"
+            app:civ_border_width="3dp"/>
+
+        <ImageView
+            android:id="@+id/edit_user_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/user_pic"
+            android:layout_marginStart="-28dp"
+            android:layout_marginLeft="-28dp"
+            android:layout_marginTop="-35dp"
+            android:layout_marginRight="10dp"
+            android:layout_toEndOf="@+id/user_pic"
+            android:layout_toRightOf="@+id/user_pic"
+            android:background="@drawable/circle_background"
+            android:padding="8dp"
+            android:src="@drawable/ic_cameraicon" />
+
+
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>-->

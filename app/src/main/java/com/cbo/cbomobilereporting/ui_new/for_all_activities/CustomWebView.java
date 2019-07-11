@@ -31,6 +31,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.Response;
@@ -271,9 +272,9 @@ public class CustomWebView extends AppCompatActivity {
             Custom_Variables_And_Method.DCR_DATE_TO_SUBMIT=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_DATE");
             if(!url.contains("emulated/0") && !url.isEmpty()){
                 if ( url.contains("?")) {
-                    url = url + "&LAT_LONG=" + Custom_Variables_And_Method.GLOBAL_LATLON ;
+                    url = url + "&LAT_LONG=" + Custom_Variables_And_Method.GLOBAL_LATLON + "&BRAND="+ MyCustumApplication.getInstance().getUser().getBRAND();
                 }else{
-                    url = url + "?LAT_LONG=" + Custom_Variables_And_Method.GLOBAL_LATLON ;
+                    url = url + "?LAT_LONG=" + Custom_Variables_And_Method.GLOBAL_LATLON + "&BRAND="+ MyCustumApplication.getInstance().getUser().getBRAND();
                 }
             }
 
@@ -322,6 +323,8 @@ public class CustomWebView extends AppCompatActivity {
 
         settings.setJavaScriptEnabled(true);
         settings.setAllowFileAccess(true);
+        /*settings.setSupportMultipleWindows(true);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);*/
         settings.setDomStorageEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLoadWithOverviewMode(true);
@@ -367,6 +370,7 @@ public class CustomWebView extends AppCompatActivity {
         public MyWebChromeClient() {
 
         }
+
 
         private String getTitleFromUrl(String url) {
             String title = url;

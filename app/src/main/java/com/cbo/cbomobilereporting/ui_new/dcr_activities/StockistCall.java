@@ -364,6 +364,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         Bundle b = new Bundle();
                         b.putString("intent_fromRcpaCAll", "Chem");
                         b.putString("ID",stk_id);
+                        b.putString("title",products.getText().toString());
                         b.putString("sample_name", sample_name);
                         b.putString("sample_pob", sample_pob);
                         b.putString("sample_sample", sample_sample);
@@ -404,6 +405,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         b.putString("intent_fromRcpaCAll", "dr");
                         b.putString("gift_name", gift_name);
                         b.putString("gift_qty", gift_qty);
+                        b.putString("title",gift.getText().toString());
 
                         b.putString("gift_name_previous", gift_name_previous);
                         b.putString("gift_qty_previous", gift_qty_previous);

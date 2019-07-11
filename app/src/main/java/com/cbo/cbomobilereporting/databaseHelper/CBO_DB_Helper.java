@@ -36,7 +36,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 45;
+    private static final int DATABASE_VERSION = 46;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -194,7 +194,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_TABLE_NonListed_call = "CREATE TABLE " + NonListed_call + "(id Integer PRIMARY KEY AUTOINCREMENT,sDocType text,sDrName text,sAdd1 text,sMobileNo text,sRemark text,iSplId text,iSpl text,iQflId text,iQfl text,iSrno text,loc text,time text,CLASS text,POTENCY_AMT text,AREA text)";
         String MASTER_DOCTOR = "CREATE TABLE phdoctor ( id integer primary key,dr_id integer,dr_name text,dr_code text,area text,spl_id integer,LAST_VISIT_DATE text" +
                 ",CLASS text,PANE_TYPE text,POTENCY_AMT text,ITEM_NAME text,ITEM_POB text,ITEM_SALE text,DR_AREA text,DR_LAT_LONG text,FREQ text,NO_VISITED text" +
-                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text,RXGENYN text,APP_PENDING_YN text)";
+                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text,RXGENYN text,APP_PENDING_YN text,DRLAST_PRODUCT text)";
         String DOCTOR_IN_LOCAL = "CREATE TABLE phdcrdr_more ( id integer primary key,dr_id text,dr_name text,ww1 text,ww2 text,ww3 text,loc text,time text)";
 
         String CREATE_TABLE_LAT_LON_TEN = "CREATE TABLE " + latLong10Minute + "(id Integer PRIMARY KEY AUTOINCREMENT,lat text,lon text,time text,km text,updated text ,LOC_EXTRA text)";
@@ -527,6 +527,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN chem_rate double DEFAULT '0'");
                 db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN dr_rate double DEFAULT '0'");
                 db.execSQL("UPDATE " + DOCTOR_PRODUCTS_TABLE + " SET dr_rate= stk_rate,chem_rate= stk_rate");
+            case 45:
+                db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN DRLAST_PRODUCT text DEFAULT ''");
 
         }
     }
@@ -1403,7 +1405,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             , String CLASS, String PANE_TYPE, String POTENCY_AMT,String ITEM_NAME
             , String ITEM_POB, String ITEM_SALE, String DR_AREA, String DR_LAT_LONG, String FREQ, String NO_VISITED
             ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN,int MAX_REG,
-                                String RXGENYN,String APP_PENDING_YN) {
+                                String RXGENYN,String APP_PENDING_YN,String DRLAST_PRODUCT) {
 
         long l = 0l;
         Cursor c = null;
@@ -1440,6 +1442,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
             cv.put("RXGENYN", RXGENYN);
             cv.put("APP_PENDING_YN", APP_PENDING_YN);
+            cv.put("DRLAST_PRODUCT", DRLAST_PRODUCT);
             c = sd.rawQuery("Select * from phdoctor where dr_id='"+dr_id+"'",null);
             if (c.moveToFirst()) {
                 l=sd.update("phdoctor",  cv,"dr_id='"+dr_id+"'",null);
@@ -1474,7 +1477,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
                     "phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ," +
                     " phdoctor.NO_VISITED,phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN," +
-                    "phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP,phdoctor.SHOWYN,phdoctor.APP_PENDING_YN," +
+                    "phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP,phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,phdoctor.DRLAST_PRODUCT," +
                     "cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
                     " CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  from phdoctor " +
                     "LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID where SHOWYN = '1' " +
@@ -1492,7 +1495,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE" +
                     ",phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ, phdoctor.NO_VISITED," +
                     "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
-                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
+                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,phdoctor.DRLAST_PRODUCT,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
                     " CASE WHEN IFNull(phdcrdr_rc.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
                     "from phdoctor LEFT OUTER JOIN phdcrdr_rc  ON phdoctor.DR_ID=phdcrdr_rc.DR_ID " +
                     "where SHOWYN = '1' order by PANE_TYPE1 DESC", null);
@@ -1517,7 +1520,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
                     "phdoctor.DR_AREA,phdoctor.PANE_TYPE,phdoctor.DR_LAT_LONG,phdoctor.FREQ,phdoctor.NO_VISITED," +
                     "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
-                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN, CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
+                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,phdoctor.DRLAST_PRODUCT, CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
                     "from phdoctor LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID" +
                     " where SHOWYN = '1' " + extraQuery  , null);
         } finally {
