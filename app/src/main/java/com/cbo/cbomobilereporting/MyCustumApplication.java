@@ -181,13 +181,16 @@ public class MyCustumApplication extends MultiDexApplication {
 
     public void Logout(Activity context){
         stopLoctionService(false);
-        Intent intent = new Intent(getApplicationContext(), LoginFake.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        Intent intent = new Intent(context, LoginFake.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("EXIT", true);
         startActivity(intent);
-        context.finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            context.finishAffinity ();
+        }else{
+            context.finish();
+        }
     }
 
     public void clearApplicationData() {

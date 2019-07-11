@@ -320,12 +320,12 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
     private void semd_mail(){
         if (toppls.getText().toString().equals("")) {
-            customVariablesAndMethod.msgBox(context,"Please Add Atleast one Recepient ");
+            customVariablesAndMethod.msgBox(context,"Please Add Atleast one Recipient ");
 
         } else if (subject.getText().toString().equals("")) {
             customVariablesAndMethod.msgBox(context,"Enter Subject Please.... ");
         } else if (message.getText().toString().equals("")) {
-            customVariablesAndMethod.msgBox(context,"Enter Your Massege Please.... ");
+            customVariablesAndMethod.msgBox(context,"Enter Your Message Please.... ");
         } else {
 
 

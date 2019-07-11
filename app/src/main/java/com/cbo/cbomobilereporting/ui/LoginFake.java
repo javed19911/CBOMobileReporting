@@ -213,7 +213,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         }
 
 
-        String network_status = NetworkUtil.getConnectivityStatusString(LoginFake.this);
+        String network_status = NetworkUtil.getConnectivityStatusString(context);
         if (!network_status.equals("Not connected to Internet")) {
 
             //check for notification
@@ -304,7 +304,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             // Checks whether fingerprint permission is set on manifest
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
                 //textView.setText("Fingerprint authentication permission not enabled");
-                ActivityCompat.requestPermissions(LoginFake.this,
+                ActivityCompat.requestPermissions((Activity) context,
                         new String[] { Manifest.permission.USE_FINGERPRINT},
                         REQUEST_FINGERPRINT_PERMISSION);
             }else{
@@ -473,7 +473,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 return;
             }
 
-            String network_status = NetworkUtil.getConnectivityStatusString(LoginFake.this);
+            String network_status = NetworkUtil.getConnectivityStatusString(context);
             if (!network_status.equals("Not connected to Internet")) {
 
                 //check for notification
@@ -501,13 +501,13 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             Integer dbVersion1 = Integer.parseInt(cbohelp.getNewVersion());
             String gpsYN = checkForGPSUsers();
 
-            int mode=new MyCustomMethod(LoginFake.this).getLocationMode(LoginFake.this);
+            int mode=new MyCustomMethod(context).getLocationMode(context);
 
-            if(ContextCompat.checkSelfPermission(LoginFake.this,Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(LoginFake.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(LoginFake.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+            if(ContextCompat.checkSelfPermission(context,Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
                 //takePictureButton.setEnabled(false);
-                ActivityCompat.requestPermissions(LoginFake.this, new String[] { Manifest.permission.CAMERA,
+                ActivityCompat.requestPermissions((Activity) context, new String[] { Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_PHONE_STATE
                 }, REQUEST_PERMISSION);
@@ -516,11 +516,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             }else {
 
                 if (gpsYN.equals("Y") &&
-                        (ContextCompat.checkSelfPermission(LoginFake.this,
+                        (ContextCompat.checkSelfPermission(context,
                                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                                ContextCompat.checkSelfPermission(LoginFake.this,
+                                ContextCompat.checkSelfPermission(context,
                                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )){
-                    ActivityCompat.requestPermissions(LoginFake.this, new String[] {
+                    ActivityCompat.requestPermissions((Activity) context, new String[] {
                             Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION
                     }, REQUEST_PERMISSION);
@@ -543,7 +543,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                         customVariablesAndMethod.msgBox(context,"Please contact your Administrator");
                     } else if (dbVersion > appVersion) {
 
-                        startActivity(new Intent(getApplicationContext(), Load_New.class));
+                        startActivity(new Intent(context, Load_New.class));
                         finish();
                     } else {
 
@@ -577,7 +577,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                             }
                             //}
                         } else {
-                            startActivity(new Intent(getApplicationContext(), Load_New.class));
+                            startActivity(new Intent(context, Load_New.class));
                             finish();
 
                         }
@@ -663,7 +663,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             final Button Alert_Nagative = (Button) dialogLayout.findViewById(R.id.negative);
 
             Alert_Nagative.setVisibility(View.VISIBLE);
-            if (IscallsFound()){
+            if (IscallsFound() && !MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
                 Alert_Nagative.setText("Forgot pin ?");
             }else {
                 Alert_Nagative.setText("Logout!");
@@ -691,7 +691,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             Alert_Nagative.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (IscallsFound()){
+                    if (IscallsFound() && !MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
                         Intent i = new Intent(getApplicationContext(), FogetPin.class);
                         startActivity(i);
                     }else {
@@ -829,7 +829,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
     //////////////  Code for gps Setting ////////
     public String checkForGPSUsers() {
-        SharedPreferences pref = LoginFake.this.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, MODE_PRIVATE);
         GPS_NEEDED = pref.getString("gps_needed", null);
         if (GPS_NEEDED == null) {
             GPS_NEEDED = "N";
@@ -888,7 +888,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
 
     public void showSettings() {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(LoginFake.this);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setTitle("CBO");
         builder1.setIcon(R.drawable.setting);
         builder1.setMessage("Please Switch-on your GPS");

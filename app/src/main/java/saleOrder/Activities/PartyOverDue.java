@@ -1,6 +1,8 @@
 package saleOrder.Activities;
 
 import android.app.Activity;
+
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
@@ -38,6 +40,7 @@ public class PartyOverDue extends CustomActivity implements iPartyOverDue {
     OverDueAdapter overDueAdapter;
     Button cancel,ok;
     TextView partyTxt;
+    CardView card_view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,13 +74,15 @@ public class PartyOverDue extends CustomActivity implements iPartyOverDue {
 
         party = ((mParty) getIntent().getSerializableExtra("party"));
 
+        card_view = findViewById(R.id.card_view);
+        card_view.setVisibility(View.GONE);
         ok = findViewById(R.id.save);
         cancel = findViewById(R.id.cancel);
         partyTxt = findViewById(R.id.party);
 
         itemlist = (RecyclerView) findViewById(R.id.itemList);
         overDueAdapter = new OverDueAdapter(context, viewModel.getOverDues(context));
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
         itemlist.setLayoutManager(mLayoutManager1);
         itemlist.setItemAnimator(new DefaultItemAnimator());
         itemlist.setAdapter(overDueAdapter);
@@ -121,6 +126,7 @@ public class PartyOverDue extends CustomActivity implements iPartyOverDue {
 
     @Override
     public void onOverDueListChanged(ArrayList<mOverDue> overDues) {
+        card_view.setVisibility(View.VISIBLE);
         overDueAdapter.update(overDues);
     }
 }

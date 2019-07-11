@@ -51,7 +51,6 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.Db.ChemistCallDB;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mChemistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
 import com.uenics.javed.CBOLibrary.CBOServices;
@@ -1263,14 +1262,15 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                         }
                     }
 
-                    Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                    /*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putExtra("EXIT", true);
                     startActivity(intent);
 
-                    finish();
+                    finish();*/
+                    MyCustumApplication.getInstance().Logout((Activity) context);
                     break;
                 case 99:
                     if ((null != msg.getData())) {

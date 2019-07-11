@@ -1,5 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +37,6 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.cbo.cbomobilereporting.ui.GridViewActivity;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui.PrescribeNew;
 import com.cbo.cbomobilereporting.ui.VideoPlay;
 import com.flurry.android.FlurryAgent;
@@ -530,13 +530,14 @@ public class Doctor_Sample extends AppCompatActivity {
         later.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                /*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra("EXIT", true);
                 startActivity(intent);
-                finish();
+                finish();*/
+                MyCustumApplication.getInstance().Logout((Activity) context);
             }
         });
 
@@ -598,13 +599,14 @@ public class Doctor_Sample extends AppCompatActivity {
                     if(!call.equals("Y")) {
                         new Service_Call_From_Multiple_Classes().SendFCMOnCall(context, mHandler, MESSAGE_INTERNET_SEND_FCM,"D",dr_id,"");                    }else {
                         customVariablesAndMethod.msgBox(context, "Sample Saved Sucessfully....");
-                        Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                        /*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         intent.putExtra("EXIT", true);
                         startActivity(intent);
-                        finish();
+                        finish();*/
+                        MyCustumApplication.getInstance().Logout((Activity) context);
                     }
 
                 }
@@ -947,13 +949,14 @@ public class Doctor_Sample extends AppCompatActivity {
 
             if (call.equals("Y")) {
                 if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "SAMPLE_POB_MANDATORY").equals("Y") || !sample_name.equals("")) {
-                    Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                   /* Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putExtra("EXIT", true);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+                    MyCustumApplication.getInstance().Logout((Activity) context);
                 }else {
                     customVariablesAndMethod.msgBox(context,"Plese enter POB quantity");
                 }
@@ -1119,13 +1122,14 @@ public class Doctor_Sample extends AppCompatActivity {
                     break;
                 case MESSAGE_INTERNET_SEND_FCM:
                     customVariablesAndMethod.msgBox(context,"Sample Saved Sucessfully....");
-                    Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                    /*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putExtra("EXIT", true);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+                    MyCustumApplication.getInstance().Logout((Activity) context);
                     break;
                 case 99:
                     if ((null != msg.getData())) {
@@ -1143,13 +1147,14 @@ public class Doctor_Sample extends AppCompatActivity {
     public void onBackPressed() {
         if (call.equals("Y")) {
             if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "SAMPLE_POB_MANDATORY").equals("Y") || sample_added) {
-                Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+               /* Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra("EXIT", true);
                 startActivity(intent);
-                finish();
+                finish();*/
+                MyCustumApplication.getInstance().Logout((Activity) context);
             }else {
                 customVariablesAndMethod.msgBox(context,"Plese enter POB quantity");
             }

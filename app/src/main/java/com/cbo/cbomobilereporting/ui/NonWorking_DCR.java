@@ -58,6 +58,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
@@ -1461,14 +1462,16 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
 
                 Custom_Variables_And_Method.CHEMIST_NOT_VISITED = "";
                 Custom_Variables_And_Method.STOCKIST_NOT_VISITED = "";
-                Intent i = new Intent(NonWorking_DCR.this, LoginFake.class);
+                /*Intent i = new Intent(NonWorking_DCR.this, LoginFake.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                startActivity(i);*/
 
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Final_submit", "Y");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "work_type_Selected", "w");
 
-                finish();
+//                finish();
+
+                MyCustumApplication.getInstance().Logout((Activity) context);
 
             } catch (JSONException e) {
                 Log.d("MYAPP", "objects are: " + e.toString());

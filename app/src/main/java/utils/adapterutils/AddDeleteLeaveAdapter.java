@@ -1,5 +1,6 @@
 package utils.adapterutils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,10 +14,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.Leave_Request;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -214,9 +215,10 @@ public class AddDeleteLeaveAdapter extends BaseAdapter {
 
                         customVariablesAndMethod.msgBox(context, "Leave Successfully Deleted..");
 
-                        Intent intent = new Intent(context, LoginFake.class);
+                        /*Intent intent = new Intent(context, LoginFake.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        context.startActivity(intent);
+                        context.startActivity(intent);*/
+                        MyCustumApplication.getInstance().Logout((Activity) context);
 
                     } else {
                         customVariablesAndMethod.msgBox(context,"Server Not responding" + "\n" + "Please try after Some time");

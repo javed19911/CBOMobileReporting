@@ -53,7 +53,6 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.Db.StockistCallDB;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
@@ -1136,12 +1135,8 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                         }
                     }
 
-                    Intent intent = new Intent(getApplicationContext(), LoginFake.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    intent.putExtra("EXIT", true);
-                    startActivity(intent);
+
+                    MyCustumApplication.getInstance().Logout((Activity) context);
 
                     finish();
                     break;

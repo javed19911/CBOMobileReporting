@@ -1,6 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +28,6 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -74,7 +73,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String mRemark,back_allowed="Y";
     String DCR_REMARK_NA;
 
-    Service_Call_From_Multiple_Classes servive;
+    Service_Call_From_Multiple_Classes service;
     MyCustomMethod customMethod;
     private Location currentBestLocation;
 
@@ -162,7 +161,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
 
         cbohelp = new CBO_DB_Helper(context);
-        servive = new Service_Call_From_Multiple_Classes();
+        service = new Service_Call_From_Multiple_Classes();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         DCR_REMARK_NA = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_REMARK_NA");
@@ -789,9 +788,10 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     //MyCustumApplication.getInstance().updateUser();
 
                                     new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
-                                    Intent i = new Intent(getApplicationContext(), LoginFake.class);
+                                    /*Intent i = new Intent(getApplicationContext(), LoginFake.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(i);
+                                    startActivity(i);*/
 
                                     if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ASKUPDATEYN","N").equals("Y")) {
                                         new GetVersionCode(FinalSubmitDcr_new.this).execute();
@@ -799,7 +799,8 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
                                     stopLoctionService();
                                     customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
-                                    finish();
+                                    MyCustumApplication.getInstance().Logout((Activity) context);
+                                    /*finish();*/
                                 } else {
                                     AppAlert.getInstance().getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));
 
@@ -836,7 +837,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         if ( c.getString("STATUS").equals("Y")) {
             String table1 = result.getString("Tables1");
             JSONArray jsonArray2 = new JSONArray(table1);
-            servive.parseFMCG(context,jsonArray1,jsonArray2);
+            service.parseFMCG(context,jsonArray1,jsonArray2);
 
         }
 
