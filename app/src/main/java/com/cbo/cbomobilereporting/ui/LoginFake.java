@@ -31,6 +31,7 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.util.Base64;
@@ -117,6 +118,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "CBOFingerPrint";
     private Cipher cipher;
+
     FingerprintHandler helper;
 
 
@@ -136,7 +138,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         login = (Button) findViewById(R.id.submit_login22_enter_pin);
         version = (TextView) findViewById(R.id.version_code);
         reset_pin = (TextView) findViewById(R.id.reset_pin_enter_pin);
-        version.setText("Version :" + MyCustumApplication.getInstance().getUser().getAppVersion());
+        version.setText("Version :" + Custom_Variables_And_Method.VERSION);
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"MethodCallFinal", "N");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "N");
 
@@ -276,15 +278,16 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         });
 
 
-        initFingerprintManager();
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            initFingerprintManager();
+        }
 
 
     }
 
 
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initFingerprintManager(){
 
         MyPin = cbohelp.getPin();
@@ -335,7 +338,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     }
 
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     protected void generateKey() {
         try {
             keyStore = KeyStore.getInstance("AndroidKeyStore");
@@ -372,7 +375,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     }
 
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean cipherInit() {
         try {
             cipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7);
@@ -434,12 +437,15 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     //19.2494793,73.1319805
     //19.2369817,73.12641
 
+
     public void LoginFake(Boolean SkipValidation){
 
         //initFingerprintManager();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && helper!= null) {
-            helper.stopAuth();
+        if (helper!= null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                helper.stopAuth();
+            }
         }
 
         String PIN_ALLOWED_MSG =  customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"PIN_ALLOWED_MSG","");
@@ -464,7 +470,10 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         } else if (pin.getText().toString().equals(cbohelp.getPin())) {
 
             if(!PIN_ALLOWED_MSG.equals("")){
-                initFingerprintManager();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    initFingerprintManager();
+                }
+
                 if (!SkipValidation){
                     new GetFmcg().execute();
                 }else{
@@ -534,7 +543,9 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                     }, REQUEST_PERMISSION);
 
                 }else if (gpsYN.equals("Y") && (!myCustomMethod.checkGpsEnable() || mode != 3)) {
-                    initFingerprintManager();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        initFingerprintManager();
+                    }
                     customVariablesAndMethod.msgBox(context,"Please Swicth ON your GPS");
                     if (mode !=0){
                         customVariablesAndMethod.RequestGPSFromSetting(context);
@@ -544,10 +555,14 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                 } else if ((dor != null) && (dos != null)) {
                     if (dor.equals("Y")) {
-                        initFingerprintManager();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            initFingerprintManager();
+                        }
                         customVariablesAndMethod.msgBox(context,"Please contact your Administrator");
                     } else if (dos.equals("Y")) {
-                        initFingerprintManager();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            initFingerprintManager();
+                        }
                         customVariablesAndMethod.msgBox(context,"Please contact your Administrator");
                     } else if (dbVersion > appVersion) {
 
@@ -565,7 +580,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                     } else {*/
 
                             startLoctionService();
-                            String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
+                            /*String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                             switch (work_type_Selected){
                                 case "l":
                                     Intent intent = new Intent(context, FinalSubmitDcr_new.class);
@@ -578,11 +593,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                     startActivity(intent1);
 
                                     break;
-                                default:
+                                default:*/
                                     Custom_Variables_And_Method.GPS_STATE_CHANGED_TIME=customVariablesAndMethod.get_currentTimeStamp();
                                     startActivity(new Intent(context, ViewPager_2016.class));
                                     finish();
-                            }
+                            //}
                             //}
                         } else {
                             startActivity(new Intent(context, Load_New.class));
@@ -605,7 +620,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                     } else {*/
 
                             startLoctionService();
-                            String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
+                          /*  String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                             switch (work_type_Selected){
                                 case "l":
                                     Intent intent = new Intent(context, FinalSubmitDcr_new.class);
@@ -618,10 +633,10 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                     startActivity(intent1);
 
                                     break;
-                                default:
+                                default:*/
                                     startActivity(new Intent(context, ViewPager_2016.class));
                                     finish();
-                            }
+                            //}
                             //}
                         } else {
                             startActivity(new Intent(getApplicationContext(), Load_New.class));
@@ -636,7 +651,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                     startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
                                     finish();
                                 } else {*/
-                        String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
+                       /* String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                         switch (work_type_Selected){
                             case "l":
                                 Intent intent = new Intent(context, FinalSubmitDcr_new.class);
@@ -649,10 +664,10 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                 startActivity(intent1);
 
                                 break;
-                            default:
+                            default:*/
                                 startActivity(new Intent(context, ViewPager_2016.class));
                                 finish();
-                        }
+                        //}
                         //}
                     } else {
                         startActivity(new Intent(getApplicationContext(), Load_New.class));
@@ -770,7 +785,9 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     @Override
     protected void onStart() {
         super.onStart();
-        initFingerprintManager();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            initFingerprintManager();
+        }
     }
 
     @Override
@@ -867,7 +884,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 //                        finish();
 //                    } else {
 
-                        String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
+                        /*String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
                         switch (work_type_Selected){
                             case "l":
                                 Intent intent = new Intent(context, FinalSubmitDcr_new.class);
@@ -880,10 +897,10 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                 startActivity(intent1);
 
                                 break;
-                            default:
+                            default:*/
                                 startActivity(new Intent(context, ViewPager_2016.class));
                                 finish();
-                        }
+                        //}
 //                    }
 //                }
             } else {
@@ -940,7 +957,9 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             }
         }else if (requestCode ==  REQUEST_FINGERPRINT_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                initFingerprintManager();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    initFingerprintManager();
+                }
             }
 
         }

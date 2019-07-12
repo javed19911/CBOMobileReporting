@@ -1034,7 +1034,7 @@ public class Dcr_Open_New extends AppCompatActivity {
         if ((Custom_Variables_And_Method.DCR_ID .equals("0")) || (Custom_Variables_And_Method.DCR_ID != null)) {
             //startActivity(new Intent(getApplicationContext(), NonWorking_DCR.class));
             Intent intent = new Intent(getApplicationContext(), NonWorking_DCR.class);
-            intent.putExtra("Back_allowed","N");
+            //intent.putExtra("Back_allowed","N");
             startActivity(intent);
         } else {
             customVariablesAndMethod.msgBox(context,"Data Insertion Fail.....");
@@ -1596,7 +1596,7 @@ public class Dcr_Open_New extends AppCompatActivity {
                             break;
                         case "l":
                             Intent intent = new Intent(getApplicationContext(), FinalSubmitDcr_new.class);
-                            intent.putExtra("Back_allowed","N");
+                            //intent.putExtra("Back_allowed","N");
                             startActivity(intent);
                             break;
                         case "n":

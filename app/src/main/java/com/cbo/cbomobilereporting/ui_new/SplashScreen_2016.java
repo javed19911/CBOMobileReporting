@@ -80,6 +80,9 @@ public class SplashScreen_2016 extends CustomActivity  {
                           //}
                           Intent intent=new Intent(SplashScreen_2016.this, LoginFake.class);
                           intent.putExtra("picture", byteArray);
+                          intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                          intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                          intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                           startActivity(intent);
 
                       }catch (Exception e){
@@ -89,6 +92,9 @@ public class SplashScreen_2016 extends CustomActivity  {
                   {
                       try {
                           Intent intent=new Intent(SplashScreen_2016.this, LoginMain.class);
+                          intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                          intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                          intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                           intent.putExtra("picture", byteArray);
                           startActivity(intent);
 

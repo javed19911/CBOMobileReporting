@@ -185,6 +185,9 @@ public class DcrmenuInGrid extends Fragment {
                     } else if (customVariablesAndMethod.IsGPS_GRPS_ON(context)){
 
                         String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
+                        if (nameOnClick.equalsIgnoreCase("D_DP")){
+                            work_type_Selected = "X";
+                        }
                         switch (work_type_Selected){
                             case "l":
                                 Intent intent = new Intent(context, FinalSubmitDcr_new.class);
@@ -1420,7 +1423,8 @@ public class DcrmenuInGrid extends Fragment {
         // new concept of working type is if any validation for final submit is to be skiped for a menu then
         //workingcode = NR
         //
-        if ((drInLocal.size() <= 0  && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls()) &&
+        if ((drInLocal.size() <= 0  && (!MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() ||
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("CSC"))) &&
                 (cboDbHelper.getmenu_count("chemisttemp") == 0 && (cboDbHelper.getmenu_count("phdcrstk") == 0))
                 && (cboDbHelper.getCountphdairy_dcr("D") == 0 && (cboDbHelper.getCountphdairy_dcr("P") == 0))) {
             if (listener != null) {
