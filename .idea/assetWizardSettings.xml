@@ -67,8 +67,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_sync_downloadicon" />
-                            <entry key="sourceFile" value="/Volumes/NO NAME/app/CboMobilereport_UPDATE_FILE/june/27/drawable/sync_downloadicon.svg" />
+                            <entry key="outputName" value="ic_lockedicon" />
+                            <entry key="sourceFile" value="C:\Users\TEMP.CBOERP34\Desktop\SS for Mobile reporting\Xiomi\lockedicon.svg" />
                           </map>
                         </option>
                       </PersistentState>

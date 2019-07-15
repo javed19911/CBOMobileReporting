@@ -38,6 +38,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -139,6 +141,12 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"MethodCallFinal", "N");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "N");
 
+
+
+
+        Animation animutils= AnimationUtils.loadAnimation(context,R.anim.bottom_up);
+        login.startAnimation(animutils);
+        login.setVisibility(View.VISIBLE);
         Custom_Variables_And_Method.PA_ID = Integer.parseInt(cbohelp.getPaid());
         Custom_Variables_And_Method.PA_NAME = cbohelp.getPaName();
         Custom_Variables_And_Method.HEAD_QTR = cbohelp.getHeadQtr();

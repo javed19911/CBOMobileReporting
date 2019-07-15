@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.cbo.cbomobilereporting.R;
@@ -64,14 +65,16 @@ public class ProfileActvity extends CustomActivity implements  up_down_ftp.Adapt
         setContentView(R.layout.profile_view_activity);
 
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
+        hader_text.setText("Doctor Call");
         setSupportActionBar(toolbar);
 
+
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("");
-            getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
         }
 
         cbo_db_helper = new CBO_DB_Helper(ProfileActvity.this);
@@ -114,12 +117,13 @@ public class ProfileActvity extends CustomActivity implements  up_down_ftp.Adapt
                 addProfilePicture();
             }
         });
-       /* back_icon.setOnClickListener(new View.OnClickListener() {
+ back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                  finish();
             }
-        });*/
+        });
+
      //   disableEditText(emplyoyee_name,emp_desig,emp_hq);
 
         if (getSupportActionBar() != null){
@@ -179,6 +183,7 @@ public class ProfileActvity extends CustomActivity implements  up_down_ftp.Adapt
         emp_desig.setCursorVisible(true);
         emp_desig.setKeyListener(null);
         emp_desig.setBackgroundColor(Color.TRANSPARENT);
+
 
         //for headqtr
 

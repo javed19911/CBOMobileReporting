@@ -148,7 +148,7 @@
          </LinearLayout>-->
     </LinearLayout>
 
-    <android.support.v7.widget.Toolbar
+    <Tool
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
@@ -163,7 +163,7 @@
             android:text="About"
             android:textColor="#fff"
             android:textSize="24sp" />
-    </android.support.v7.widget.Toolbar>
+    </Tool>
 
 </RelativeLayout>
 
