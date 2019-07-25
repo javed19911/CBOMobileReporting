@@ -1,8 +1,10 @@
 package com.cbo.cbomobilereporting.ui;
 
+import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -45,6 +47,7 @@ public class MailTo_PPL extends Activity{
     CBO_DB_Helper myCboDbHelper;
     ServiceHandler myServiceHandler;
 	Context context;
+	List<String> to_Ids_pre = new ArrayList<>();
 	
 	public void getData(){
 
@@ -66,6 +69,7 @@ public class MailTo_PPL extends Activity{
 		data1=new ArrayList<String>();
 		sb=new StringBuilder();
 		sb2=new StringBuilder();
+		to_Ids_pre =  Arrays.asList( getIntent().getStringExtra("selected_ID").split(","));
 		context=this;
         myCboDbHelper = new CBO_DB_Helper(MailTo_PPL.this);
         myServiceHandler = new ServiceHandler(context);
@@ -139,7 +143,9 @@ public class MailTo_PPL extends Activity{
 					list.clear();
 					for (int i = 0; i < jsonArray.length(); i++) {
 						JSONObject object = jsonArray.getJSONObject(i);
-						list.add(new MailModel(object.getString("PA_NAME"), object.getString("PA_ID")));
+						MailModel mailModel = new MailModel(object.getString("PA_NAME"), object.getString("PA_ID"));
+						mailModel.setSelected(to_Ids_pre.contains(mailModel.getId()));
+						list.add(mailModel);
 					}
 
 				}

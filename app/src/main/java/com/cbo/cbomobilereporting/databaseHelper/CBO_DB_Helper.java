@@ -36,7 +36,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 46;
+    private static final int DATABASE_VERSION = 47;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -217,7 +217,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         String CREATE_TABLE_dob_doa = "CREATE TABLE " + dob_doa + "(id Integer PRIMARY KEY AUTOINCREMENT,PA_NAME text,DOB text,DOA text,MOBILE text,TYPE text)";
         String CREATE_TABLE_Expenses_head = "CREATE TABLE " + Expenses_head + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_NAME text,FIELD_ID text,MANDATORY text,DA_ACTION text,EXP_TYPE text,ATTACHYN text,MAX_AMT float,TAMST_VALIDATEYN text)";
-        String CREATE_TABLE_Tenivia_traker = "CREATE TABLE " + Tenivia_traker + "(id Integer PRIMARY KEY AUTOINCREMENT,DR_ID text,DR_NAME text,QTY text,AMOUNT text,QTY_CAPTION text,ITEM_ID text,AMOUN_CAPTION text,TIME text,REMARK text)";
+        String CREATE_TABLE_Tenivia_traker = "CREATE TABLE " + Tenivia_traker + "(id Integer PRIMARY KEY AUTOINCREMENT,DR_ID text,DR_NAME text,QTY text,AMOUNT text,QTY_CAPTION text,ITEM_ID text,AMOUN_CAPTION text,TIME text,REMARK text,updated text)";
         String CREATE_TABLE_Doctor_Call_Remark = "CREATE TABLE " + Doctor_Call_Remark + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_ID text,FIELD_NAME text,type text)";
 
         String CREATE_TABLE_Lat_Long_Reg = "CREATE TABLE " + Lat_Long_Reg + "(id Integer PRIMARY KEY ,DCS_ID text,LAT_LONG text,DCS_TYPE text,DCS_ADD text,DCS_INDES text,UPDATED text)";
@@ -529,6 +529,9 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("UPDATE " + DOCTOR_PRODUCTS_TABLE + " SET dr_rate= stk_rate,chem_rate= stk_rate");
             case 45:
                 db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN DRLAST_PRODUCT text DEFAULT ''");
+            case 46:
+                db.execSQL("ALTER TABLE "+Tenivia_traker+" ADD COLUMN updated text DEFAULT '0'");
+
 
         }
     }
@@ -1300,13 +1303,17 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     }
 
-    public Cursor getAllGifts(String ItemIdNotIn) {
+    public Cursor getAllGifts(String includeItems  ,boolean ShowZeroStock) {
         try {
             sd = this.getWritableDatabase();
+            String StockQuery = "";
+            if (!ShowZeroStock){
+                StockQuery = " and (VSTOCK.BALANCE > 0 " + "OR phitem.item_name in('"+includeItems.replace(",","','")+"'))";
+            }
             //return sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='GIFT' ", null);
             return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE,phitem.SPL_ID from phitem"
                     + " left join VSTOCK on VSTOCK.ITEM_ID = phitem.item_id"
-                    + " where gift_type='GIFT' ", null);
+                    + " where gift_type='GIFT' "+ StockQuery, null);
         } finally {
            // sd.close();
         }
@@ -6339,6 +6346,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
             cv.put("TIME", TIME);
             cv.put("REMARK", REMARK);
+            cv.put("updated", "0");
             sd.insert(Tenivia_traker, null, cv);
             if (!DR_ID.equalsIgnoreCase("-1")) {
                 delete_tenivia_traker("-1");
@@ -6362,12 +6370,50 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
             cv.put("TIME", TIME);
             cv.put("REMARK", REMARK);
+            cv.put("updated", "0");
+
             sd.update(Tenivia_traker, cv, "DR_ID ='" + DR_ID + "'", null);
         }finally {
             sd.close();
         }
     }
 
+    public ArrayList<HashMap<String, String>> get_tenivia_traker(String DR_ID) {
+        return get_tenivia_traker(DR_ID,null);
+    }
+    public ArrayList<HashMap<String, String>> get_tenivia_traker(String DR_ID,String updated) {
+        ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        sd = this.getWritableDatabase();
+        String query ="Select * from " + Tenivia_traker ;
+        if (DR_ID!= null){
+            query ="Select * from " + Tenivia_traker + " where DR_ID='" + DR_ID + "'";
+        }
+        if (updated!= null){
+            query = query +" and DR_ID='" + DR_ID + "'";
+        }
+        Cursor c = sd.rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    HashMap<String,String>datanum=new HashMap<String,String>();
+                    datanum.put("DR_ID",c.getString(c.getColumnIndex("DR_ID")));
+                    datanum.put("DR_NAME",c.getString(c.getColumnIndex("DR_NAME")));
+                    datanum.put("QTY",c.getString(c.getColumnIndex("QTY")));
+                    datanum.put("AMOUNT",c.getString(c.getColumnIndex("AMOUNT")));
+                    datanum.put("QTY_CAPTION",c.getString(c.getColumnIndex("QTY_CAPTION")));
+                    datanum.put("ITEM_ID",c.getString(c.getColumnIndex("ITEM_ID")));
+                    datanum.put("AMOUN_CAPTION",c.getString(c.getColumnIndex("AMOUN_CAPTION")));
+                    datanum.put("TIME",c.getString(c.getColumnIndex("TIME")));
+                    datanum.put("REMARK",c.getString(c.getColumnIndex("REMARK")));
+                    data.add(datanum);
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+        return data;
+    }
     public void delete_tenivia_traker(String DR_ID) {
         try {
             sd = this.getWritableDatabase();

@@ -67,6 +67,7 @@
         android:layout_width="match_parent"
         android:layout_below="@+id/search"
         android:id="@+id/titleheader"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
         <utils.font_package.Text_view_Bold_10
@@ -110,6 +111,16 @@
             android:textSize="13sp"
             android:layout_height="wrap_content"
             android:text="Rx."
+            />
+
+        <utils.font_package.Text_view_Bold_10
+            android:id="@+id/text_prescribe_Qty"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="60dp"
+            android:textSize="13sp"
+            android:layout_height="wrap_content"
+            android:text="Rx. Qty."
             />
 
 

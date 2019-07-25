@@ -65,19 +65,27 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //this.visible_status = visible_status;
 
     }
-    private String TeniviaMenuName(){
+    private ArrayList<String> TeniviaMenuName(){
+
+        ArrayList<String> menuList = new ArrayList<>();
+
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"RXQTYYN").equals("Y")){
+            menuList.add( cboDbHelper.getMenu("DCR", "D_DRCALL").get("D_DRCALL") + "(Rx)");
+        }
+
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Tenivia_NOT_REQUIRED").equals("N")) {
-            return cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX");
+            menuList.add( cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX"));
         }
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Rx_NOT_REQUIRED").equals("N")) {
-            return cboDbHelper.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN");
+            menuList.add( cboDbHelper.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN"));
         }
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Rx_NA_NOT_REQUIRED").equals("N")) {
-            return cboDbHelper.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA");
+            menuList.add( cboDbHelper.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA"));
         }
-        return "";
+
+        return menuList;
     }
 
     @Override
@@ -219,7 +227,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             if (!childText.get("gift_name").get(childPosition).equals("")) {
                 String[] gift_name= childText.get("gift_name").get(childPosition).split(",");
                 String[] gift_qty= childText.get("gift_qty").get(childPosition).split(",");
-                if (!_listDataHeader.get(groupPosition).equals(TeniviaMenuName())) {
+                if (!TeniviaMenuName().contains( _listDataHeader.get(groupPosition))) {
                     init_gift(gift_layout, gift_name, gift_qty, "Gift", " Qty. ");
                 }else{
                     init_gift(gift_layout, gift_name, gift_qty, "", "");

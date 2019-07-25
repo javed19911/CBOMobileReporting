@@ -27,6 +27,7 @@ public class DcrRootAdapter extends ArrayAdapter<RootModel>{
 	public String name="";
 	public String id;
 	private Boolean allowMultipleRoute = false;
+	public RootModel rootModel=null;
 	
 	public DcrRootAdapter(Context context,List<RootModel> list2,Boolean allowMultipleRoute){
 		super(context, R.layout.dcr_root_row,list2);
@@ -59,8 +60,11 @@ public class DcrRootAdapter extends ArrayAdapter<RootModel>{
 		 holder.tvname.setText(model.getRootName());
 		 holder.tvId.setText(model.getRootId());
 		 holder.rdbtn = (RadioButton)v.findViewById(R.id.rootselector);
-		if (!allowMultipleRoute) {
-			holder.rdbtn.setChecked(position == selectedPosition);
+		if (!allowMultipleRoute ) {
+			//holder.rdbtn.setChecked(position == selectedPosition);
+			if (rootModel != null) {
+				holder.rdbtn.setChecked(rootModel.rootId.equalsIgnoreCase(model.getRootId()));
+			}
 		}else{
 			holder.rdbtn.setChecked(model.isSelected);
 		}
@@ -86,7 +90,8 @@ public class DcrRootAdapter extends ArrayAdapter<RootModel>{
 				 int position = (int) view.getTag();
             	 //holder.rdbtn.setEnabled(false);
                 // selectedPosition = (Integer)view.getTag();
-            	 selectedPosition=position;
+            	 //selectedPosition=position;
+            	 rootModel = list.get(position);
             	 notifyDataSetChanged();
             	 name=list.get(position).getRootName();
             	 id=list.get(position).getRootId();

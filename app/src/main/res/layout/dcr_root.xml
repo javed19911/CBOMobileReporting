@@ -14,6 +14,19 @@
         android:padding="5dp"
         android:background="@drawable/custom_round_white_view_bg" >
 
+        <utils.font_package.Edit_text_Regular
+            android:id="@+id/myfilter"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="17sp"
+            android:textColor="@color/navigationBarColor"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/custom_round_dark_view_bg"
+            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:hint="search"
+
+            />
 
         <utils.font_package.Button_Bold
             android:id="@+id/dcr_root_save"
@@ -28,10 +41,10 @@
 
         <ListView
             android:id="@+id/dcr_root_list"
+            android:layout_below="@+id/myfilter"
             android:layout_above="@+id/dcr_root_save"
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_alignParentTop="true"
             >
         </ListView>
 

@@ -50,12 +50,12 @@ public class FingerprintHandler {
 
             @Override
             public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
-                update("Fingerprint Authentication failed.", false);
+                update("Fingerprint Authentication failed.", true);
             }
 
             @Override
             public void onAuthenticationFailed() {
-                update("Fingerprint Authentication succeeded.", true);
+                update("Fingerprint Authentication succeeded.", false);
             }
         }, null);
     }

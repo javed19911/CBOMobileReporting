@@ -3,6 +3,7 @@ package com.cbo.cbomobilereporting.ui;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -45,6 +46,7 @@ public class Mail_CC extends Activity {
     List<MailModel> list = new ArrayList<MailModel>();
     CBO_DB_Helper myCboDbHelper;
     ServiceHandler myServiceHandler;
+    List<String> cc_Ids_pre = new ArrayList<>();
 
     public void getData() {
         adapter=new MailAdapter(this,list);
@@ -67,6 +69,7 @@ public class Mail_CC extends Activity {
         data1 = new ArrayList<String>();
         sb = new StringBuilder();
         sb2 = new StringBuilder();
+        cc_Ids_pre =  Arrays.asList( getIntent().getStringExtra("selected_ID").split(","));
         context=this;
         myCboDbHelper = new CBO_DB_Helper(Mail_CC.this);
         myServiceHandler = new ServiceHandler(context);
@@ -138,7 +141,9 @@ public class Mail_CC extends Activity {
                     list.clear();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
-                        list.add(new MailModel(object.getString("PA_NAME"), object.getString("PA_ID")));
+                        MailModel mailModel = new MailModel(object.getString("PA_NAME"), object.getString("PA_ID"));
+                        mailModel.setSelected(cc_Ids_pre.contains(mailModel.getId()));
+                        list.add(mailModel);
                     }
 
                 }

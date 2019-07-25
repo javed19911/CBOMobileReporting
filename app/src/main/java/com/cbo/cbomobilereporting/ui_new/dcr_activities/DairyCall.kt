@@ -1562,7 +1562,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                     }
                 } else if (file1.exists() && Custom_Variables_And_Method.internetConneted(context)) {
                     val currentBestLocation = customVariablesAndMethod.getObject(context, "currentBestLocation", Location::class.java)
-                    SendAttachment(context as Activity).execute(Custom_Variables_And_Method.COMPANY_CODE + ": Out of Range Error report", context.resources.getString(R.string.app_name) + "\n Company Code :" + Custom_Variables_And_Method.COMPANY_CODE + "\n DCR ID :" + Custom_Variables_And_Method.DCR_ID + "\n PA ID : " + Custom_Variables_And_Method.PA_ID + "\n App version : " + Custom_Variables_And_Method.VERSION + "\n massege : " + alertdFragment.Alertmassege +
+                    SendAttachment(context as Activity).execute(Custom_Variables_And_Method.COMPANY_CODE + ": Out of Range Error report", context.resources.getString(R.string.app_name) + "\n Company Code :" + Custom_Variables_And_Method.COMPANY_CODE + "\n DCR ID :" + Custom_Variables_And_Method.DCR_ID + "\n PA ID : " + Custom_Variables_And_Method.PA_ID + "\n App version : " + Custom_Variables_And_Method.VERSION + "\n Message : " + alertdFragment.Alertmassege +
                             "\nLocation-timestamp : " + currentBestLocation!!.time + "\nLocation-Lat : " + currentBestLocation.latitude +
                             "\nLocation-long : " + currentBestLocation.longitude + "\n time : " + customVariablesAndMethod.currentTime(context) + "\nlatlong : " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "shareLatLong", Custom_Variables_And_Method.GLOBAL_LATLON), alertdFragment.compressImage(file1))
 

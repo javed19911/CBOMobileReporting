@@ -19,6 +19,7 @@ import com.cbo.cbomobilereporting.ui.LoginMain;
 import interfaces.SampleInterface;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import utils.Font_helper;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
 
@@ -56,6 +57,25 @@ public class SplashScreen_2016 extends CustomActivity  {
             image.setImageBitmap(bmp);
         }
 
+        /*alert("From outside");
+        Thread thread1=new Thread(){
+            @Override
+            public void run() {
+                try{
+
+
+                    sleep(50);
+
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }  finally {
+
+                    alert("From Inside");
+                }
+
+            }
+        };*/
 
 
         Thread thread=new Thread(){
@@ -80,9 +100,6 @@ public class SplashScreen_2016 extends CustomActivity  {
                           //}
                           Intent intent=new Intent(SplashScreen_2016.this, LoginFake.class);
                           intent.putExtra("picture", byteArray);
-                          intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                          intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                          intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                           startActivity(intent);
 
                       }catch (Exception e){
@@ -92,9 +109,6 @@ public class SplashScreen_2016 extends CustomActivity  {
                   {
                       try {
                           Intent intent=new Intent(SplashScreen_2016.this, LoginMain.class);
-                          intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                          intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                          intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                           intent.putExtra("picture", byteArray);
                           startActivity(intent);
 
@@ -113,6 +127,9 @@ public class SplashScreen_2016 extends CustomActivity  {
         }
     }
 
+    private void alert(String from){
+        AppAlert.getInstance().getAlert(context,"test", from);
+    }
 
     public boolean CheckIfResigned(){
        /* if(!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"doryn","").equals("") ||

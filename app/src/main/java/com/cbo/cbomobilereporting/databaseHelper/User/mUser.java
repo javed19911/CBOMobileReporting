@@ -25,7 +25,7 @@ public class mUser {
     private String OS;
     private String BRAND;
     private String battery;
-    private String AppVersion = "20190713";
+    private String AppVersion = "20190724";
     private String time;
     private Location location;
     private Boolean LoggedInAsSupport;

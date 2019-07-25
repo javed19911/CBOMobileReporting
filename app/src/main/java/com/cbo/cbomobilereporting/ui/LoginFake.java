@@ -35,6 +35,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -290,51 +291,63 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initFingerprintManager(){
 
-        MyPin = cbohelp.getPin();
-        // Initializing both Android Keyguard Manager and Fingerprint Manager
-        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+        try{
+            MyPin = cbohelp.getPin();
+            // Initializing both Android Keyguard Manager and Fingerprint Manager
+            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
 
-        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-        // Check whether the device has a Fingerprint sensor.
-        if(!fingerprintManager.isHardwareDetected()){
-            /**
-             * An error message will be displayed if the device does not contain the fingerprint hardware.
-             * However if you plan to implement a default authentication method,
-             * you can redirect the user to a default authentication activity from here.
-             * Example:
-             * Intent intent = new Intent(this, DefaultAuthenticationActivity.class);
-             * startActivity(intent);
-             */
-            //textView.setText("Your Device does not have a Fingerprint Sensor");
-        }else {
-            // Checks whether fingerprint permission is set on manifest
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                //textView.setText("Fingerprint authentication permission not enabled");
-                ActivityCompat.requestPermissions((Activity) context,
-                        new String[] { Manifest.permission.USE_FINGERPRINT},
-                        REQUEST_FINGERPRINT_PERMISSION);
-            }else{
-                // Check whether at least one fingerprint is registered
-                if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    //textView.setText("Register at least one fingerprint in Settings");
+            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+
+            if (fingerprintManager == null){
+                return;
+            }
+            // Check whether the device has a Fingerprint sensor.
+            if(!fingerprintManager.isHardwareDetected()){
+                /**
+                 * An error message will be displayed if the device does not contain the fingerprint hardware.
+                 * However if you plan to implement a default authentication method,
+                 * you can redirect the user to a default authentication activity from here.
+                 * Example:
+                 * Intent intent = new Intent(this, DefaultAuthenticationActivity.class);
+                 * startActivity(intent);
+                 */
+                //textView.setText("Your Device does not have a Fingerprint Sensor");
+            }else {
+                // Checks whether fingerprint permission is set on manifest
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                    //textView.setText("Fingerprint authentication permission not enabled");
+                    ActivityCompat.requestPermissions((Activity) context,
+                            new String[] { Manifest.permission.USE_FINGERPRINT},
+                            REQUEST_FINGERPRINT_PERMISSION);
                 }else{
-                    // Checks whether lock screen security is enabled or not
-                    if (!keyguardManager.isKeyguardSecure()) {
-                        // textView.setText("Lock screen security not enabled in Settings");
+                    // Check whether at least one fingerprint is registered
+                    if (!fingerprintManager.hasEnrolledFingerprints()) {
+                        //textView.setText("Register at least one fingerprint in Settings");
                     }else{
-                        generateKey();
+                        // Checks whether lock screen security is enabled or not
+                        assert keyguardManager != null;
+                        if (!keyguardManager.isKeyguardSecure()) {
+                            // textView.setText("Lock screen security not enabled in Settings");
+                        }else{
+                            generateKey();
 
 
-                        if (cipherInit()) {
-                            FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                            helper = new FingerprintHandler(this);
-                            helper.startAuth(fingerprintManager, cryptoObject);
+                            if (cipherInit()) {
+                                FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                                helper = new FingerprintHandler(this);
+                                helper.startAuth(fingerprintManager, cryptoObject);
 
+                            }
                         }
                     }
                 }
             }
+
+        }catch (Exception e){
+            helper = null;
+            Log.d("FingerPrint error",e.getLocalizedMessage());
         }
+
     }
 
 

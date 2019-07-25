@@ -46,6 +46,7 @@ import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallBuilder;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.WorkWith.WorkWithActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.WorkWith.WorkWithBuilder;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.LeadActivity;
@@ -635,6 +636,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
             customVariablesAndMethod.msgBox(context, "Please Select " + getCallBuilder().getTitle() + " First..");
         } else {
             SamplePOBBuilder samplePOBBuilder = new SamplePOBBuilder()
+                    .setCallType(CallType.CHEMIST)
                     .setType(SamplePOBBuilder.ItemType.LEAD)
                     .setTitle("Select Leads...")
                     .setItems(leads);
@@ -652,6 +654,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
             customVariablesAndMethod.msgBox(context, "Please Select " + getCallBuilder().getTitle() + " First..");
         } else {
             SamplePOBBuilder samplePOBBuilder = new SamplePOBBuilder()
+                    .setCallType(CallType.CHEMIST)
                     .setType(SamplePOBBuilder.ItemType.POB)
                     .setTitle("Select Products...")
                     .setItems(pob);

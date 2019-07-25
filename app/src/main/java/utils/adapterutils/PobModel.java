@@ -13,6 +13,7 @@ public class PobModel implements Serializable{
     private String dr_item = "1";
     private String pob = "";
     private boolean selected_Rx = false;
+    private String Rx_Qty = "";
     private boolean highlight=false;
     private int Stock = 0;
     private int Balance = 0;
@@ -70,6 +71,14 @@ public class PobModel implements Serializable{
 
     public boolean isSelected_Rx() {
         return selected_Rx;
+    }
+
+    public String getRx_Qty() {
+        return Rx_Qty;
+    }
+
+    public void setRx_Qty(String rx_Qty) {
+        Rx_Qty = rx_Qty;
     }
 
     public String getScore() {

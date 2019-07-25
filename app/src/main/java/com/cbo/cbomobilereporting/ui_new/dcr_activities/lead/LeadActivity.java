@@ -53,7 +53,7 @@ public class LeadActivity extends AppCompatActivity implements iLead{
         ImageView clearQry = findViewById(R.id.clearQry);
         itemlist_filter = (RecyclerView) findViewById(R.id.itemList);
         leadAdaptor = new aLead(this, viewModel.getItems(),viewModel.getBuilder());
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         itemlist_filter.setLayoutManager(mLayoutManager1);
         itemlist_filter.setItemAnimator(new DefaultItemAnimator());
         itemlist_filter.setAdapter(leadAdaptor);

@@ -103,8 +103,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String ROOT_NEEDED;
     public static String CHEMIST_ID;
     public static String COMPANY_NAME;
-    public static String checkVersion = "20190713";
-    public static String VERSION = "20190713";
+    public static String checkVersion = "20190724";
+    public static String VERSION = "20190724";
     public static String RPT_DATE;
     public static String EMP_ID;
     public static String DCR_DATE;
@@ -217,19 +217,19 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         context.registerReceiver(br, batrylevelFilter);
     }
 
-    public void getAlert(Context context, String title, String massege) {
-        getAlert(context,title,massege,null,null,false);
+    public void getAlert(Context context, String title, String message) {
+        getAlert(context,title,message,null,null,false);
     }
-    public void getAlert(Context context, String title, String massege,Boolean resultVisible) {
-        getAlert(context,title,massege,null,null,resultVisible);
+    public void getAlert(Context context, String title, String message,Boolean resultVisible) {
+        getAlert(context,title,message,null,null,resultVisible);
     }
-    public void getAlert(Context context, String title, String massege, String url) {
-        getAlert(context,title,massege,null,url,false);
+    public void getAlert(Context context, String title, String message, String url) {
+        getAlert(context,title,message,null,url,false);
     }
     public void getAlert(Context context, String title,String[] table_list) {
         getAlert(context,title,null,table_list,null,false);
     }
-    public void getAlert(final Context context, final String title, final String massege, String[] table_list, final String url, Boolean reportVisible) {
+    public void getAlert(final Context context, final String title, final String message, String[] table_list, final String url, Boolean reportVisible) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
@@ -249,7 +249,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
            }
 
         if (table_list==null ) {
-            Alert_message.setText(massege);
+            Alert_message.setText(message);
             Alert_message_list.setVisibility(View.GONE);
         }else{
             Alert_message.setVisibility(View.GONE);
@@ -321,7 +321,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
                 /*Location currentBestLocation=getObject(context,"currentBestLocation",Location.class);
                 List toEmailList = Arrays.asList("mobilereporting@cboinfotech.com".split("\\s*,\\s*"));
                 *//*new SendMailTask().execute("mobilereporting@cboinfotech.com",
-                        "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n massege : "+massege+"\n Error Alert :"+title+"\n"+
+                        "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n message : "+massege+"\n Error Alert :"+title+"\n"+
                 "\nLocation-timestamp : "+currentBestLocation.getTime()+"\nLocation-Lat : "+currentBestLocation.getLatitude()+
                         "\nLocation-long : "+currentBestLocation.getLongitude()+"\n time : " +currentTime(context)+"\nlatlong : "+ getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON));
 *//*

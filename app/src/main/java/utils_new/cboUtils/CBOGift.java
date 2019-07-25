@@ -1,9 +1,12 @@
 package utils_new.cboUtils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,10 +16,19 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.LeadActivity;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.SamplePOBBuilder;
 import com.cbo.utils.MultiSelectView;
 
-public class CBOGift extends MultiSelectView<mSPO,CBOGift.MyViewHolder> {
+import utils.adapterutils.PobModel;
 
+public class CBOGift extends MultiSelectView<PobModel,CBOGift.MyViewHolder> {
+
+    public static final int GIFT_DIALOG= 10001;
+    Fragment fragment;
+    Activity activity;
+    CallType callType = CallType.NONE;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, headQtr,character,amt;
 
@@ -41,19 +53,45 @@ public class CBOGift extends MultiSelectView<mSPO,CBOGift.MyViewHolder> {
 
     public CBOGift(Context context) {
         super(context);
+        initialize();
     }
 
     public CBOGift(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initialize();
     }
 
     public CBOGift(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initialize();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CBOGift(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initialize();
+    }
+
+    private void initialize(){
+        setDivertReqd(false);
+        setTitle("Gift");
+    }
+
+    public void setActivity(Fragment fragment,CallType callType){
+        this.fragment = fragment;
+        setCallType(callType);
+    }
+    public void setActivity(Activity activity,CallType callType){
+        this.activity = activity;
+        setCallType(callType);
+    }
+
+    public CallType getCallType() {
+        return callType;
+    }
+
+    public void setCallType(CallType callType) {
+        this.callType = callType;
     }
 
     @Override
@@ -84,6 +122,20 @@ public class CBOGift extends MultiSelectView<mSPO,CBOGift.MyViewHolder> {
 
     @Override
     public void onClickListener() {
+        if (activity != null || fragment != null) {
+            SamplePOBBuilder samplePOBBuilder = new SamplePOBBuilder()
+                    .setCallType(getCallType())
+                    .setType(SamplePOBBuilder.ItemType.GIFT)
+                    .setTitle("Select "+ getTitle()+"...")
+                    .setItems(getDataList());
+            Intent intent = new Intent(getContext(), LeadActivity.class);
+            intent.putExtra("builder", samplePOBBuilder);
+            if (activity != null) {
+                (activity).startActivityForResult(intent, GIFT_DIALOG);
+            }else{
+                (fragment).startActivityForResult(intent, GIFT_DIALOG);
+            }
+        }
 
     }
 

@@ -395,7 +395,7 @@ ADDED from AndroidManifest.xml:211:9
 		ADDED from AndroidManifest.xml:213:13
 	android:name
 		ADDED from AndroidManifest.xml:212:13
-activity#com.cbo.cbomobilereporting.ui.Inbox_Msg
+activity#com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Msg
 ADDED from AndroidManifest.xml:214:9
 	android:configChanges
 		ADDED from AndroidManifest.xml:216:13

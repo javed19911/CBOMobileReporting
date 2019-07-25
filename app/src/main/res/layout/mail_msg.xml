@@ -151,6 +151,23 @@
 
             <LinearLayout
                 android:layout_weight="1"
+                android:id="@+id/replyAll"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:src="@drawable/mail_replay"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Reply All"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
                 android:id="@+id/forward"
                 android:orientation="vertical">
 

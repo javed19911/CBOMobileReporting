@@ -247,7 +247,11 @@ public class LayoutZoomer extends AppCompatActivity {
                         if (!spoIdFromList.equals("0")) {
                             Intent spoHeadquarterWise = new Intent(context, SpoHeadquarterWise.class);
                             spoHeadquarterWise.putExtra("spoId", spoIdFromList);
-
+                            _mSPO.setType(mSPO.eSPO.HEADQUATER);
+                            _mSPO.setConsigneeId(spoIdFromList);
+                            //_mSPO.setHqId("0");
+                            _mSPO.setStkId("0");
+                            spoHeadquarterWise.putExtra("mSPO", _mSPO);
                             context.startActivity(spoHeadquarterWise);
                         }
                         finish();

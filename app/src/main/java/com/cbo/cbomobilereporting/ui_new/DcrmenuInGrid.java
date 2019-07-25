@@ -42,6 +42,7 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrPrescription;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrRXActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.TabbedActivity.TabbedCallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Expense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
@@ -1793,6 +1794,8 @@ public class DcrmenuInGrid extends Fragment {
 
             } else {
                 if (!DCR_ID.equals("0")) {
+
+                    //Intent i = new Intent(getActivity(), TabbedCallActivity.class);
                     Intent i = new Intent(getActivity(), Doctor_Sample.class);
                     startActivity(i);
                 } else {

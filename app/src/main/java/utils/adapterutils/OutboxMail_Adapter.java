@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui.Inbox_Msg;
+import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Msg;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
