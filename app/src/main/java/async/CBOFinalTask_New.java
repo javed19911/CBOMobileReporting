@@ -3,6 +3,7 @@ package async;
 import android.content.Context;
 import android.util.Log;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import java.util.ArrayList;
@@ -713,6 +714,56 @@ public class CBOFinalTask_New {
             cbohelp.close();
         }
         return map_phdairy_dcr;
+    }
+
+    public Map<String,String> get_dcr_RxCalls(String updated)
+    {
+        StringBuilder aDCRDRRX_DOC_DATE = new StringBuilder();
+        StringBuilder aDCRDRRX_DR_ID = new StringBuilder();
+        StringBuilder aDCRDRRX_ITEM_ID = new StringBuilder();
+        StringBuilder aDCRDRRX_QTY = new StringBuilder();
+        StringBuilder aDCRDRRX_AMOUNT = new StringBuilder();
+
+        Map<String,String> map_dcr_RxCalls = new HashMap<String,String>();
+
+        cbohelp=new CBO_DB_Helper(mContext);
+        ArrayList<HashMap<String,String>>  dcr_RxCalls=cbohelp.get_tenivia_traker(null,updated);
+        if(dcr_RxCalls.size()>0) {
+            String saperator ="";
+            for (int i = 0; i < dcr_RxCalls.size(); i++) {
+                try {
+
+                    if (i==0) {
+                        saperator ="";
+
+                    } else {
+                        saperator = "^";
+                    }
+
+                    //loc +"@"+locExtra+ "!^" + address
+                    aDCRDRRX_DOC_DATE.append(saperator).append(MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DCR_DATE",customVariablesAndMethod.currentTime(mContext)));
+                    aDCRDRRX_DR_ID.append(saperator).append(dcr_RxCalls.get(i).get("DR_ID"));
+                    aDCRDRRX_ITEM_ID.append(saperator).append(dcr_RxCalls.get(i).get("ITEM_ID"));
+                    aDCRDRRX_QTY.append(saperator).append(dcr_RxCalls.get(i).get("QTY"));
+                    aDCRDRRX_AMOUNT.append(saperator).append(dcr_RxCalls.get(i).get("AMOUNT"));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            map_dcr_RxCalls.put("aDCRDRRX_DOC_DATE",""+aDCRDRRX_DOC_DATE);
+            map_dcr_RxCalls.put("aDCRDRRX_DR_ID",""+aDCRDRRX_DR_ID);
+            map_dcr_RxCalls.put("aDCRDRRX_ITEM_ID",""+aDCRDRRX_ITEM_ID);
+            map_dcr_RxCalls.put("aDCRDRRX_QTY",""+aDCRDRRX_QTY);
+            map_dcr_RxCalls.put("aDCRDRRX_AMOUNT",""+aDCRDRRX_AMOUNT);
+
+
+
+            cbohelp.close();
+        }
+
+        return map_dcr_RxCalls;
     }
 
 

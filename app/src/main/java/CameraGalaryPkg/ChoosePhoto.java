@@ -211,8 +211,8 @@ public class ChoosePhoto {
                 return;
             } else {
                 intent.setDataAndType(sourceImage, "image/*");
-                intent.putExtra("aspectX", ASPECT_X);
-                intent.putExtra("aspectY", ASPECT_Y);
+               /* intent.putExtra("aspectX", ASPECT_X);
+                intent.putExtra("aspectY", ASPECT_Y);*/
                 intent.putExtra("outputY", OUT_PUT_Y);
                 intent.putExtra("outputX", OUT_PUT_X);
                 intent.putExtra("scale", SCALE);

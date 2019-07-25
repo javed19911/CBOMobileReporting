@@ -136,6 +136,8 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
     Button tab_call,tab_summary,tab_unplaned;
     HashMap<String, HashMap<String, ArrayList<String>>> summary_list=new HashMap<>();
     HashMap<String, ArrayList<String>> doctor_list_summary=new HashMap<>();
+    HashMap<String, ArrayList<String>> tenivia_traker=new HashMap<>();
+
     HashMap<String, ArrayList<String>> doctor_list=new HashMap<>();
     ExpandableListAdapter listAdapter;
     TableLayout stk,doc_detail;
@@ -456,10 +458,16 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         final ArrayList<String> header_title = new ArrayList<>();
         try {
             doctor_list_summary = cbohelp.getCallDetail("tempdr", "", "1");
+            tenivia_traker=cbohelp.getCallDetail("tenivia_traker","","1");
             //expense_list=new CBO_DB_Helper(context).getCallDetail("tempdr");
 
             summary_list = new LinkedHashMap<>();
             summary_list.put(cbohelp.getMenu("DCR", "D_DRCALL").get("D_DRCALL"), doctor_list_summary);
+
+            if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"RXQTYYN").equals("Y")){
+                summary_list.put(cbohelp.getMenu("DCR", "D_DRCALL").get("D_DRCALL") + "(Rx)",tenivia_traker);
+            }
+
 
 
             //final List<Integer> visible_status=new ArrayList<>();
@@ -1678,7 +1686,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                         }
                     }else if (file1.exists() && Custom_Variables_And_Method.internetConneted(context)){
                             Location currentBestLocation=customVariablesAndMethod.getObject(context,"currentBestLocation",Location.class);
-                            new SendAttachment((Activity) context).execute(Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n massege : "+alertdFragment.Alertmassege+
+                            new SendAttachment((Activity) context).execute(Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n Message : "+alertdFragment.Alertmassege+
                                     "\nLocation-timestamp : "+currentBestLocation.getTime()+"\nLocation-Lat : "+currentBestLocation.getLatitude()+
                                     "\nLocation-long : "+currentBestLocation.getLongitude()+"\n time : " +customVariablesAndMethod.currentTime(context)+"\nlatlong : "+ customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON),alertdFragment.compressImage(file1));
 

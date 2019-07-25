@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.Response;
@@ -193,38 +194,66 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
             }
             dialog.show();
 
-        }else{
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-            builder1.setTitle("CBO");
-            builder1.setIcon(R.drawable.alert1);
-            builder1.setMessage(" No Data In List.." + "\n" + "Please Download Data.....");
-            builder1.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog1, int which) {
-                    NetworkUtil networkUtil = new NetworkUtil(context);
-                    if (!networkUtil.internetConneted(context)) {
-                        customVariablesAndMethod.Connect_to_Internet_Msg(context);
-                    } else {
+        }else if(MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y")){
+            AppAlert.getInstance()
+                    .setPositiveTxt("Check Stock?")
+                    .setNagativeTxt("Cancel")
+                    .DecisionAlert(context, "Out of Stock!!!",
+                            "No Item found with stock\nDo you want to Check for Stock?",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    //new upload_download(context,Dr_Gift_Dialog.this);
+                                    new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                                        @Override
+                                        public void onSuccess(Bundle bundle) {
+                                            onDownloadComplete();
 
-                        //new upload_download(context,Chemist_Gift_Dialog.this);
-                        new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
-                            @Override
-                            public void onSuccess(Bundle bundle) {
-                                onDownloadComplete();
+                                        }
 
-                            }
+                                        @Override
+                                        public void onError(String message, String description) {
+                                            AppAlert.getInstance().getAlert(context,message,description);
+                                        }
+                                    });
+                                }
 
-                            @Override
-                            public void onError(String message, String description) {
-                                AppAlert.getInstance().getAlert(context,message,description);
-                            }
-                        });
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
 
-                    }
+                                }
+                            });
+        } else {
 
-                }
-            });
-            builder1.show();
+            AppAlert.getInstance()
+                    .setPositiveTxt("Ok")
+                    .setNagativeTxt("Cancel")
+                    .DecisionAlert(context, "Out of Stock!!!",
+                            " No Data In List.." + "\n" + "Please Download Data.....",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    //new upload_download(context,Dr_Gift_Dialog.this);
+                                    new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                                        @Override
+                                        public void onSuccess(Bundle bundle) {
+                                            onDownloadComplete();
+
+                                        }
+
+                                        @Override
+                                        public void onError(String message, String description) {
+                                            AppAlert.getInstance().getAlert(context,message,description);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+
+                                }
+                            });
+
         }
 
 
@@ -241,7 +270,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
         String ItemIdNotIn="0";
         //cbohelp.giftDelete();
 
-        Cursor c1=cbohelp.getAllGifts(ItemIdNotIn);
+        Cursor c1=cbohelp.getAllGifts(gift_name_previous, !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y"));
         if(c1.moveToFirst()){
             do{
 

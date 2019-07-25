@@ -950,6 +950,8 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
                 editor.putString("SALE_ORDER_REMARK_TITLE", c.getString("SALE_ORDER_REMARK_TITLE"));
                 editor.putString("INDEPENDENT_WORKING", c.getString("INDEPENDENT_WORKING"));
+                editor.putString("RXQTYYN", c.getString("RXQTYYN"));
+                editor.putString("GIFTSHOW_STOCKONLYYN", c.getString("GIFTSHOW_STOCKONLYYN"));
 
 
                 editor.commit();

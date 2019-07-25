@@ -624,8 +624,8 @@ public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.
                 //set crop properties
                 cropIntent.putExtra("crop", "true");
                 //indicate aspect of desired crop
-                cropIntent.putExtra("aspectX", 1);
-                cropIntent.putExtra("aspectY", 1);
+              /*  cropIntent.putExtra("aspectX", 1);
+                cropIntent.putExtra("aspectY", 1);*/
                 cropIntent.putExtra("scale", true);
                 //indicate output X and Y
                 cropIntent.putExtra("outputX", 700);
@@ -678,8 +678,8 @@ public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.
             // set crop properties
             cropIntent.putExtra("crop", "true");
             // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
+           /* cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);*/
             // indicate output X and Y
             cropIntent.putExtra("outputX", 700);
             cropIntent.putExtra("outputY", 700);

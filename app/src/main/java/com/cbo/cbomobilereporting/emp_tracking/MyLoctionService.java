@@ -102,6 +102,10 @@ public class MyLoctionService extends Service implements
     }
 
     private void startForgroungService(Intent intent){
+        if (intent == null) {
+            Log.i(LOG_TAG, "null : "+ intent);
+            return;
+        }
         if (intent.getAction() == null) {
             Log.i(LOG_TAG, "null : "+ intent);
             return;

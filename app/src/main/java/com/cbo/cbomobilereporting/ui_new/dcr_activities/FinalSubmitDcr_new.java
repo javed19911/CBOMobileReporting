@@ -88,6 +88,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     Map<String, String> dcr_CommitDr_Reminder = new HashMap<>();
     Map<String, String> Lat_Long_Reg = new HashMap<>();
     Map<String, String> dcr_Dairy = new HashMap<>();
+    Map<String, String> dcr_RxCalls= new HashMap<>();
 
     String sb_DCRLATCOMMIT_KM, sb_DCRLATCOMMIT_LOC_LAT, sb_sDCRLATCOMMIT_IN_TIME, sDCRLATCOMMIT_ID, sDCRLATCOMMIT_LOC;
     String sDCRITEM_DR_ID, sDCRITEM_ITEMIDIN, sDCRITEM_ITEM_ID_ARR, sDCRITEM_QTY_ARR, sDCRITEM_ITEM_ID_GIFT_ARR, sDCRITEM_QTY_GIFT_ARR, sDCRITEM_POB_QTY, sDCRITEM_POB_VALUE, sDCRITEM_VISUAL_ARR,sDCRITEM_NOC_ARR;
@@ -105,6 +106,8 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String sDAIRY_ID, sSTRDAIRY_CPID,sDCRDAIRY_LOC,sDCRDAIRY_IN_TIME,sDCRDAIRY_BATTERY_PERCENT,sDCRDAIRY_REMARK,sDCRDAIRY_KM,sDCRDAIRY_SRNO,sDAIRY_REF_LAT_LONG;
     String sDCRDAIRYITEM_DAIRY_ID,sDCRDAIRYITEM_ITEM_ID_ARR,sDCRDAIRYITEM_QTY_ARR,sDCRDAIRYITEM_ITEM_ID_GIFT_ARR,sDCRDAIRYITEM_QTY_GIFT_ARR;
     String sDCRDAIRYITEM_POB_QTY,sDAIRY_FILE,sDCRDAIRY_INTERSETEDYN;
+
+    String aDCRDRRX_DOC_DATE,aDCRDRRX_DR_ID,aDCRDRRX_ITEM_ID,aDCRDRRX_QTY,aDCRDRRX_AMOUNT;
 
     public AppPrefrences appPrefrences;
 
@@ -270,6 +273,25 @@ public class FinalSubmitDcr_new extends CustomActivity {
                 case GPS_TIMMER:
                     //finalSubmit();
                     finalSubmitNew();
+                    /*Thread thread=new Thread(){
+                        @Override
+                        public void run() {
+                            try{
+
+
+                                sleep(10);
+
+                            }
+                            catch (InterruptedException e){
+                                e.printStackTrace();
+                            }  finally {
+
+                                finalSubmitNew();
+                            }
+
+                        }
+                    };
+                    thread.start();*/
                     break;
                 case 99:
                     if ((null != msg.getData())) {
@@ -286,6 +308,14 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
     private void finalSubmitNew(){
+
+
+        ///disable submitbtn to be clicked twice
+        submit.setEnabled(false);
+
+
+
+
 
         String fmcg_Live_Km = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"live_km");
 
@@ -580,6 +610,30 @@ public class FinalSubmitDcr_new extends CustomActivity {
             sDCRDAIRY_INTERSETEDYN = dcr_Dairy.get("sDCRDAIRY_INTERSETEDYN");
             sDAIRY_REF_LAT_LONG = dcr_Dairy.get("sDAIRY_REF_LAT_LONG");
         }
+
+
+
+        dcr_RxCalls = cboFinalTask_new.get_dcr_RxCalls(null);
+
+
+        if ((dcr_RxCalls.isEmpty()) || (dcr_RxCalls.size() == 0)) {
+
+            aDCRDRRX_DOC_DATE= "";
+            aDCRDRRX_DR_ID ="";
+            aDCRDRRX_ITEM_ID = "";
+            aDCRDRRX_QTY= "";
+            aDCRDRRX_AMOUNT= "";
+
+        } else {
+
+            aDCRDRRX_DOC_DATE= dcr_RxCalls.get("aDCRDRRX_DOC_DATE");
+            aDCRDRRX_DR_ID =dcr_RxCalls.get("aDCRDRRX_DR_ID");
+            aDCRDRRX_ITEM_ID = dcr_RxCalls.get("aDCRDRRX_ITEM_ID");
+            aDCRDRRX_QTY= dcr_RxCalls.get("aDCRDRRX_QTY");
+            aDCRDRRX_AMOUNT= dcr_RxCalls.get("aDCRDRRX_AMOUNT");
+        }
+
+
         //customMethod.getDataFromFromAllTables();
         //sFinalKm = mycon.getDataFrom_FMCG_PREFRENCE("final_km");
         // ArrayList<String> array=customMethod.kmWithWayPoint();
@@ -750,6 +804,14 @@ public class FinalSubmitDcr_new extends CustomActivity {
         request.put("sCHEM_STATUS", sCHEM_STATUS);
         request.put("sCOMPETITOR_REMARK", sCOMPETITOR_REMARK);
 
+        request.put("aDCRDRRX_DOC_DATE", aDCRDRRX_DOC_DATE);
+        request.put("aDCRDRRX_DR_ID", aDCRDRRX_DR_ID);
+        request.put("aDCRDRRX_ITEM_ID", aDCRDRRX_ITEM_ID);
+        request.put("aDCRDRRX_QTY", aDCRDRRX_QTY);
+        request.put("aDCRDRRX_AMOUNT", aDCRDRRX_AMOUNT);
+
+
+
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(-1);
 
@@ -767,13 +829,15 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DCRCommitFinal_New_19", request)
+                .execute(new ResponseBuilder("DCRCommitFinal_New_21", request)
                         .setTables(tables)
                         .setDescription("Please Wait..\n" +
                                 "Final Submit in process......")
                         .setResponse(new CBOServices.APIResponse() {
                             @Override
                             public void onComplete(Bundle message) throws JSONException {
+
+                                submit.setEnabled(true);
 
                                 String table0 = message.getString("Tables0");
                                 JSONArray jsonArray1 = new JSONArray(table0);
@@ -802,6 +866,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     MyCustumApplication.getInstance().Logout((Activity) context);
                                     /*finish();*/
                                 } else {
+
                                     AppAlert.getInstance().getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));
 
                                 }
@@ -816,7 +881,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                             @Override
                             public void onError(String s, String s1) {
                                 AppAlert.getInstance().getAlert(context,s, s1);
-
+                                submit.setEnabled(true);
                             }
 
 

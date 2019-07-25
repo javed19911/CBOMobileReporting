@@ -30,16 +30,18 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 	Ipob listener;
 	private final Activity context;
 	private Boolean showNOC,clicked= true;
+	private Boolean showRxQty = false;
 	CBO_DB_Helper cbo_db_helper;
     Custom_Variables_And_Method customVariablesAndMethod;
     String DCRGIFT_QTY_VALIDATE ="";
 	
-	public PobAdapter(Activity context, List<PobModel> list,Boolean showNOC,Ipob listener){
+	public PobAdapter(Activity context, List<PobModel> list,Boolean showNOC,Boolean showRxQty,Ipob listener){
 		super(context, R.layout.dr_pob_row, list);
 		this.context = context;
 		this.listener = listener;
         this.list = list;
 		this.showNOC=showNOC;
+		this.showRxQty = showRxQty;
 		cbo_db_helper = new CBO_DB_Helper(context);
         customVariablesAndMethod= Custom_Variables_And_Method.getInstance();
 		DCRGIFT_QTY_VALIDATE = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCRGIFT_QTY_VALIDATE","");
@@ -57,6 +59,7 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 		protected EditText scores;    
 		protected EditText pob_val;
 		protected EditText noc;
+		protected EditText RxQty;
     }
 	 @Override   
 	    public View getView(int position, View convertView, ViewGroup parent)
@@ -73,8 +76,11 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 	    		viewHolder.scores=(EditText) view.findViewById(R.id.qty_pob); 
 	    		viewHolder.pob_val=(EditText)view.findViewById(R.id.pob_pob);
 				viewHolder.noc=(EditText)view.findViewById(R.id.noc_pob);
+				viewHolder.RxQty= view.findViewById(R.id.rx_qty);
 
+				//&& MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("RXQTYYN","N").equalsIgnoreCase("Y")
 				viewHolder.noc.setFilters(new InputFilter[]{ new InputFilterMinMax("0", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"POBMAXQTY","10000"))});
+				viewHolder.RxQty.setFilters(new InputFilter[]{ new InputFilterMinMax("0", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"POBMAXQTY","10000"))});
 				viewHolder.scores.setFilters(new InputFilter[]{ new InputFilterMinMax("0",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"SAMPLEMAXQTY","10000"))});
 				viewHolder.pob_val.setFilters(new InputFilter[]{ new InputFilterMinMax("0", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"POBMAXQTY","10000"))});
 
@@ -184,6 +190,8 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 					}
 				});
 
+
+
 	    		viewHolder.checkbox = (CheckBox) view.findViewById(R.id.check_pob);
 
 				viewHolder.checkbox.setChecked(false);
@@ -222,12 +230,47 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 				if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_RX_ENTRY_YN","N").equals("N")){
 					viewHolder.checkbox_prescribe.setVisibility(View.GONE);
 				}
+
+				if (showRxQty){
+					viewHolder.RxQty.setVisibility(View.VISIBLE);
+				}
+
 				viewHolder.checkbox_prescribe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 						PobModel element = (PobModel) viewHolder.checkbox_prescribe.getTag();
 						element.setSelected_Rx(buttonView.isChecked());
+
+					}
+				});
+
+
+				viewHolder.RxQty.addTextChangedListener(new TextWatcher() {
+
+					@Override
+					public void onTextChanged(CharSequence s, int start, int before, int count) {
+						// TODO Auto-generated method stub
+						PobModel element=(PobModel)viewHolder.checkbox_prescribe.getTag();
+						element.setRx_Qty(s.toString());
+						if(s.toString().equals("") && !element.isSelected_Rx() ) {
+							viewHolder.checkbox_prescribe.setChecked(false);
+						}else {
+							viewHolder.checkbox_prescribe.setChecked(true);
+						}
+
+					}
+
+					@Override
+					public void beforeTextChanged(CharSequence s, int start, int count,
+												  int after) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+						// TODO Auto-generated method stub
 
 					}
 				});
@@ -252,6 +295,7 @@ public class PobAdapter extends ArrayAdapter<PobModel> {
 				holder.noc.setText(list.get(position).getNOC());
 	    		holder.checkbox.setChecked(list.get(position).isSelected());
 			    holder.checkbox_prescribe.setChecked(list.get(position).isSelected_Rx());
+				holder.RxQty.setText(list.get(position).getRx_Qty());
 
 			clicked = true;
 

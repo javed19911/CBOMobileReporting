@@ -16,49 +16,55 @@ import com.cbo.cbomobilereporting.ui.LoginFake;
 /**
  * Created by whit3hawks on 11/16/16.
  */
-@RequiresApi(api = Build.VERSION_CODES.M)
-public class FingerprintHandler extends FingerprintManager.AuthenticationCallback {
 
+public class FingerprintHandler {
+
+    CancellationSignal cancellationSignal;
 
     private Context context;
 
 
     // Constructor
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public FingerprintHandler(Context mContext) {
         context = mContext;
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
-        CancellationSignal cancellationSignal = new CancellationSignal();
+        cancellationSignal = new CancellationSignal();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+        manager.authenticate(cryptoObject, cancellationSignal, 0, new FingerprintManager.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, CharSequence errString) {
+                update("Fingerprint Authentication error\n" + errString, false);
+            }
+
+            @Override
+            public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
+                update("Fingerprint Authentication help\n" + helpString, false);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+                update("Fingerprint Authentication failed.", true);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                update("Fingerprint Authentication succeeded.", false);
+            }
+        }, null);
     }
 
-
-    @Override
-    public void onAuthenticationError(int errMsgId, CharSequence errString) {
-        this.update("Fingerprint Authentication error\n" + errString, false);
-    }
-
-
-    @Override
-    public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-        this.update("Fingerprint Authentication help\n" + helpString, false);
-    }
-
-
-    @Override
-    public void onAuthenticationFailed() {
-        this.update("Fingerprint Authentication failed.", false);
-    }
-
-
-    @Override
-    public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
-        this.update("Fingerprint Authentication succeeded.", true);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void stopAuth(){
+        if(cancellationSignal != null && !cancellationSignal.isCanceled()){
+            cancellationSignal.cancel();
+        }
     }
 
 
