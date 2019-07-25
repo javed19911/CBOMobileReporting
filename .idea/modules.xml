@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CBOLibrary/CBOLibrary.iml" filepath="$PROJECT_DIR$/CBOLibrary/CBOLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/CBOMobileReporting.iml" filepath="$PROJECT_DIR$/CBOMobileReporting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Latest.iml" filepath="$PROJECT_DIR$/Latest.iml" />
       <module fileurl="file://$PROJECT_DIR$/ShortcutBadger/ShortcutBadger.iml" filepath="$PROJECT_DIR$/ShortcutBadger/ShortcutBadger.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cbo_utils/cbo_utils.iml" filepath="$PROJECT_DIR$/cbo_utils/cbo_utils.iml" />

@@ -49,6 +49,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -84,7 +85,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
     TextView tof, ccf, subf;
     EditText toppls, ccppl, subject, message;
     Button toadd, tocc, send, back;
-    LinearLayout lay1, lay2, lay3, lay4;
+    LinearLayout lay1, lay2, lay3, lay4,deletelayout;
     Custom_Variables_And_Method customVariablesAndMethod;
     Context context;
     String company_name = "", myppl_list = "", name = "", name2 = "";
@@ -101,6 +102,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
     CheckBox add_attachment;
     RadioGroup attach_option;
     ImageView attach_img;
+    ImageView deletebtn;
     TextView filenameTxt;
     ArrayList<Map<String, String>> data = null;
     String Msg_Id,mail_type="";
@@ -115,16 +117,27 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
         setContentView(R.layout.create_mail1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_hadder);
         TextView textView = (TextView) findViewById(R.id.hadder_text_1);
-
         add_attachment = (CheckBox) findViewById(R.id.add_attachment);
         attach_option = (RadioGroup) findViewById(R.id.attach_option);
         attach_img= (ImageView) findViewById(R.id.attach_img);
-        filenameTxt = findViewById(R.id.filename);
+        filenameTxt = (TextView) findViewById(R.id.filename);
+        deletelayout=(LinearLayout)findViewById(R.id.deletelayout);
+
+        deletebtn=(ImageView) findViewById(R.id.deletebtn);
+
+        deletebtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filenameTxt.setText("");
+                filename="";
+                deletelayout.setVisibility(View.GONE);
+          //      Toast.makeText(context, "Attachment Deleted Sucessfully", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         textView.setText("Compose Mail");
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
@@ -166,7 +179,9 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
+        deletelayout.setVisibility(View.GONE);
         filenameTxt.setVisibility(View.GONE);
+        deletebtn.setVisibility(View.GONE);
         if (bundle!=null){
             save_as_draft=false;
             Msg_Id=intent.getStringExtra("mail_id");
@@ -180,7 +195,9 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
             if (!data.get(0).get("FILE_NAME").equals("")) {
                 //attach_img.setImageResource(R.drawable.attach);
+                deletelayout.setVisibility(View.GONE);
                 filenameTxt.setVisibility(View.VISIBLE);
+                deletebtn.setVisibility(View.VISIBLE);
                 final String[] aT1 = {data.get(0).get("FILE_NAME")};
                 filename=aT1[0].substring( aT1[0].lastIndexOf("/")+1);
                 if(data.get(0).get("category").equals("d")) {
@@ -219,9 +236,11 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                 filenameTxt.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         attach_img.performClick();
                     }
                 });
+
             }
 
             switch (mail_type){
@@ -746,8 +765,9 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                     options);
             filename_type="i";//image
             attach_img.setImageBitmap(bitmap);*/
-
+            deletelayout.setVisibility(View.VISIBLE);
             filenameTxt.setVisibility(View.VISIBLE);
+            deletebtn.setVisibility(View.VISIBLE);
             filenameTxt.setText(filename);
         } catch (NullPointerException e) {
             e.printStackTrace();

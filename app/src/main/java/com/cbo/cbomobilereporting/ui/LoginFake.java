@@ -40,6 +40,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -126,7 +128,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.enter_pin_2016);
+        setContentView(R.layout.enter_pin_2019);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         context = LoginFake.this;
 
@@ -142,7 +144,13 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         version.setText("Version :" + Custom_Variables_And_Method.VERSION);
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"MethodCallFinal", "N");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "N");
+        pin.setSelected(false);
 
+
+
+        Animation animutils= AnimationUtils.loadAnimation(context,R.anim.bottom_up);
+        login.startAnimation(animutils);
+        login.setVisibility(View.VISIBLE);
         Custom_Variables_And_Method.PA_ID = Integer.parseInt(cbohelp.getPaid());
         Custom_Variables_And_Method.PA_NAME = cbohelp.getPaName();
         Custom_Variables_And_Method.HEAD_QTR = cbohelp.getHeadQtr();

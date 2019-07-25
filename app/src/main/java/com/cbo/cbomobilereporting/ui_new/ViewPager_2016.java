@@ -433,6 +433,12 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                 // mycon.msgBox("Clicked On Contact Us");
                 startActivity(new Intent(getApplicationContext(), Contact_Us.class));
                 break;
+
+            }
+            case (R.id.nav_help_us): {
+                // mycon.msgBox("Clicked On Contact Us");
+                startActivity(new Intent(getApplicationContext(), Pdfviewer.class));
+                break;
             }
             default:
 

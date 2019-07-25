@@ -66,6 +66,7 @@ import com.google.android.gms.tasks.Task;
 import utils.networkUtil.NetworkUtil;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * Created by pc24 on 06/01/2017.
@@ -884,7 +885,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public Location latLongFromInternet(Context context) {
         final String[] latLong = {""};
 
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         Location location1=null;
         try {
             location1 = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -1020,7 +1021,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
 
     static private Boolean checkGpsEnableOldMethod(Context context) {
 
-        final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager manager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         Boolean gps;
         try {
             gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -1166,6 +1167,15 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
                 , new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+/*
+                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+                        }else{
+                            showGPSDisabledAlertToUser();
+                        }*/
                         context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 });

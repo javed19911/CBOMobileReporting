@@ -221,16 +221,36 @@
                     </RadioGroup>
 
                 </LinearLayout>
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/deletelayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:id="@+id/filename"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textSize="15dp"/>
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/button_corner_light">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:id="@+id/filename"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textSize="15dp"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/deletebtn"
+                        android:padding="15dp"
+                        android:visibility="visible"
+                        android:src="@drawable/ic_close_icon_black"/>
+
+                </LinearLayout>
+
 
                 <ImageView
                     android:layout_width="wrap_content"

@@ -21,6 +21,14 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="TransparentBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+
+
+
     <style name="Appdilogtheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
