@@ -87,13 +87,13 @@ public class VM_DCR_Report extends ViewModel {
                             @Override
                             public void onComplete(Bundle message) throws JSONException {
 
-                                mDCR_reports = new ArrayList<> ();
+                              mDCR_reports = new ArrayList<> ();
 
-                                String table0 = message.getString("Tables0");
-                                JSONArray row = new JSONArray(table0);
+                                    String table0 = message.getString("Tables0");
+                                    JSONArray row = new JSONArray(table0);
 
 
-                                for (int i = 0; i < row.length(); i++) {
+                                    for (int i = 0; i < row.length(); i++) {
                                     Map<String,String> datanum=new HashMap<String,String> ();
                                     JSONObject c = row.getJSONObject(i);
                                     mDCR_Report rptModel=new mDCR_Report ();

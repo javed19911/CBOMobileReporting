@@ -266,7 +266,7 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateVisible" />
+          />
         <activity
             android:name=".ui_new.mail_activities.CreateMail1"
             android:configChanges="orientation|screenSize" />

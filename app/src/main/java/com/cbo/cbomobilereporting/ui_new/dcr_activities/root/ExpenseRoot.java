@@ -22,8 +22,16 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.aDA;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mDA;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.ExpenseNew.ExpenseAdapterNew;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.ExpenseNew.ExpenseAdapterTa;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.ExpenseNew.Mexpenses;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.ExpenseNew.MexpensesTA;
+import com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport.DcrNewAdapter;
+import com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport.mDCR_Report;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
+import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import android.Manifest;
 import android.app.Activity;
@@ -54,6 +62,7 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -93,6 +102,7 @@ import org.json.JSONObject;
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import locationpkg.Const;
 import services.CboServices;
+import services.MyAPIService;
 import services.ServiceHandler;
 import utils.adapterutils.SpinAdapter_new;
 import utils_new.AppAlert;
@@ -116,17 +126,32 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
     String filename="";
     TableLayout DA_layout;
     private ArrayList<mDA> DA_Types = new ArrayList<>();
+    private  LinearLayout ta_expenses_layout;
 
     public ProgressDialog progress1;
+
+
+
     private  static final int MESSAGE_INTERNET=1,MESSAGE_INTERNET_SAVE_EXPENSE=2,MESSAGE_INTERNET_DCR_COMMITEXP=3,MESSAGE_INTERNET_DCR_DELETEEXP=4;
 
 
     Spinner exphead;
     EditText daAmt,da_root, distAmt, exhAmt, rem, rem_final;
-    Button save, save_exp,add_exp;
-    ListView mylist;
+    Button save, save_exp,add_exp,add_ta_exp;
+    ListView mylist,talist;
+    RecyclerView rmylist, rtalist;
+
+    RecyclerView mylist2,talist2;
     TextView datype,distAmt1, distanse, textRemark,attach_txt,routeStausTxt;
-    Expenses_Adapter sm;
+   Expenses_Adapter sm;
+   // chnge here
+    ExpenseAdapterNew expenseAdapterNew;
+    ExpenseAdapterTa expenseAdapterTa;
+
+    private ArrayList<Mexpenses> expenslist = new ArrayList<>();
+    private ArrayList<MexpensesTA> ta_expenslist = new ArrayList<>();
+
+
     LinearLayout mainlayout,actual_fare_layout,actual_DA_layout,manual_DA_layout;
     SpinAdapter adapter,adapter1;
     Context context;
@@ -153,6 +178,8 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
     AlertDialog myalertDialog = null;
 
 
+
+
     public ArrayList<String> getmydata() {
         ArrayList<String> raw = new ArrayList<String>();
         StringBuilder chm = new StringBuilder();
@@ -176,7 +203,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
     public void onCreate(Bundle b) {
         super.onCreate(b);
-        setContentView(R.layout.expense_root);
+        setContentView(R.layout.view_expense_root);
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
@@ -214,14 +241,22 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
         distAmt = (EditText) findViewById(R.id.ex_dis_root);
         distAmt1 = (TextView) findViewById(R.id.ex_dis_root1);
         save_exp = (Button) findViewById(R.id.save_back1_root);
-        mylist = (ListView) findViewById(R.id.list_exp_root);
+        rmylist = (RecyclerView) findViewById(R.id.list_exp_root);
+        rtalist=(RecyclerView) findViewById(R.id.list_ta_exp_root);
+
+       // ViewCompat.setNestedScrollingEnabled(mylist, true);
+       // ViewCompat.setNestedScrollingEnabled(talist, true);
+
+
         attachnew = (ImageView) findViewById(R.id.attachnew);
         attach_txt = findViewById(R.id.attach_txt);
         routeStausTxt = findViewById(R.id.ROUTE_CLASS);
 
         add_exp = (Button) findViewById(R.id.add_exp);
-        DA_layout = (TableLayout) findViewById(R.id.DA_layout);
+        add_ta_exp=(Button)findViewById(R.id.add_ta_exp);
 
+        DA_layout = (TableLayout) findViewById(R.id.DA_layout);
+        ta_expenses_layout=(LinearLayout)findViewById(R.id.ta_expenses_layout);
         cbohelp = new CBO_DB_Helper(context);
 
         dcr_id = Custom_Variables_And_Method.DCR_ID;
@@ -278,6 +313,14 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
             public void onClick(View view) {
                 //capture_Image();
                 Add_expense("0","","","","","");
+
+            }
+        });
+        add_ta_exp.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //capture_Image();
+                Add_TA_expense("0","","","","","");
 
             }
         });
@@ -426,7 +469,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",datype_val);
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val","" + DA_Types.get(position).getDAAmount());
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val","" + DA_Types.get(position).getTAAmount());
-                init_DA_type(DA_layout);
+             init_DA_type(DA_layout);
                 myalertDialog.dismiss();
             }
         });
@@ -568,6 +611,16 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
             tbrow2.addView(tv22);
             stk.addView(tbrow2);
             Dis_val = Float.parseFloat(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "distance_val","0"));
+
+
+
+
+            //Ta code comes   here
+
+
+
+
+
         }
 
         TableRow tbrow4 = new TableRow(context);
@@ -870,6 +923,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
                     }else{
                         filename= finalExt;
+
                         other_expense_commit();
                     }
                     /*if(!path.equals("")){
@@ -885,7 +939,396 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
             }
         });
     }
+    public void Add_TA_expense(final String who, final String hed, final String amt, final String rem, final String path, final String hed_id){
+        filename="";
+        AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseRoot.this);
 
+        builder.setPositiveButton("ADD", null)
+                .setCancelable(false)
+                .setNegativeButton("Cancel", null);
+        final AlertDialog dialog = builder.create();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.add_exp, null);
+        exphead = (Spinner) dialogLayout.findViewById(R.id.exp_head_root);
+        exhAmt = (EditText)  dialogLayout.findViewById(R.id.ex_head_root);
+        TextView head = (TextView)  dialogLayout.findViewById(R.id.head);
+        textRemark = (TextView) dialogLayout.findViewById(R.id.text_remark);
+        final TextView ex_head_root_txt = (TextView) dialogLayout.findViewById(R.id.ex_head_root_txt);
+        rem_final = (EditText) dialogLayout.findViewById(R.id.exp_remark_root);
+        final CheckBox add_attachment = (CheckBox) dialogLayout.findViewById(R.id.add_attachment);
+        final RadioGroup attach_option = (RadioGroup) dialogLayout.findViewById(R.id.attach_option);
+        attach_img= (ImageView) dialogLayout.findViewById(R.id.attach_img);
+        attach_img.setVisibility(View.GONE);
+        final String[] ext = {path};
+        attach_option.setVisibility(View.GONE);
+        final String[] DA_ACTION = {"0"};
+
+        final mExpHead[] expHead = {null};
+        final Boolean[] keyPressed = {true};
+
+        add_attachment.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!exp_id.equals("")) {
+                    if (add_attachment.isChecked()) {
+                        attach_option.setVisibility(View.VISIBLE);
+                    } else {
+                        attach_option.setVisibility(View.GONE);
+                    }
+                }else{
+                    customVariablesAndMethod.msgBox(context,"Please select the Expense head");
+                    add_attachment.setChecked(false);
+                }
+            }
+        });
+
+
+
+        attach_option.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int id=attach_option.getCheckedRadioButtonId();
+                if (id == R.id.attach) {
+                    if (ContextCompat.checkSelfPermission(ExpenseRoot.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        //takePictureButton.setEnabled(false);
+                        ActivityCompat.requestPermissions(ExpenseRoot.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, ExpenseRoot.this.GALLERY_ACTIVITY_CODE);
+                        Toast.makeText(ExpenseRoot.this, "Please allow the permission", Toast.LENGTH_LONG).show();
+
+                    }else {
+                        open_galary();
+
+                    }
+
+                }else if (id == R.id.cam){
+
+                    if (ContextCompat.checkSelfPermission(ExpenseRoot.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(ExpenseRoot.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        //takePictureButton.setEnabled(false);
+                        ActivityCompat.requestPermissions(ExpenseRoot.this, new String[] { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }, ExpenseRoot.this.REQUEST_CAMERA);
+                        Toast.makeText(ExpenseRoot.this, "Please allow the permission", Toast.LENGTH_LONG).show();
+
+                    }else {
+
+                        capture_Image();
+                    }
+
+                }
+
+            }
+
+        });
+
+        exphead.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                exp_id = ((TextView) arg1.findViewById(R.id.spin_id)).getText().toString();
+                exp_hed= ((TextView) arg1.findViewById(R.id.spin_name)).getText().toString();
+                DA_ACTION[0] = ((SpinnerModel)adapter.data.get(arg2)).getPANE_TYPE();
+                filename="";
+
+                attach_img.setImageDrawable(null);
+                add_attachment.setChecked(false);
+
+                expHead[0] = cbohelp.getEXP_Head(exp_id);
+                exhAmt.setText("");
+                Boolean allreadyAdded = false;
+                if (who.equals("0")){
+                    if (cbohelp.get_ExpenseTypeAdded(expHead[0].getEXP_TYPE_STR()).size() >0
+                            && expHead[0].getEXP_TYPE() != eExpanse.None) {
+                        allreadyAdded = true;
+
+                    }
+                }
+                if (!allreadyAdded) {
+                    if (exp_id.equals("3119")) {
+                        exhAmt.setHint("K.M.");
+                        textRemark.setText("K.M. Remark.");
+                        ex_head_root_txt.setText("K.M.");
+                    } else {
+                        exhAmt.setHint("Amt.");
+                        textRemark.setText("Exp Remark.");
+                        ex_head_root_txt.setText("Amount");
+
+                    }
+                }else{
+                    AppAlert.getInstance().Alert(context, "Alert!!!",
+                            expHead[0].getEXP_TYPE().name() +" allready submitted in another Head",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    exphead.setSelection(0);
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+
+
+        exhAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // if (expHead[0] != null) {
+                Double amt = s.toString().trim().isEmpty() ? 0D : Double.parseDouble(s.toString());
+                Double maxAmt = expHead[0].getMAX_AMT();
+                if (maxAmt == 0) {
+                    maxAmt = amt;
+                }
+                if (keyPressed[0]) {
+                    keyPressed[0] = false;
+                    if (amt > maxAmt) {
+                        Double finalMaxAmt = maxAmt;
+                        AppAlert.getInstance().Alert(context, "Alert!!!",
+                                "You are not allowed to enter more then " + maxAmt,
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        exhAmt.setText("" + finalMaxAmt);
+                                    }
+                                });
+
+                    }
+                    keyPressed[0] = true;
+                }
+                // }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        dialog.setView(dialogLayout);
+        dialog.setTitle("Add Other Expences");
+
+        if(who.equals("0")) {
+            adapter = new SpinAdapter(getApplicationContext(), R.layout.spin_row, cbohelp.get_ExpenseHeadNotAdded());
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+            exphead.setAdapter(adapter);
+            head.setVisibility(View.GONE);
+        }else{
+            head.setVisibility(View.VISIBLE);
+            exphead.setVisibility(View.GONE);
+            head.setText(hed);
+            exp_id=hed_id;
+            expHead[0] = cbohelp.getEXP_Head(exp_id);
+            exp_hed=hed;
+            exhAmt.setText(amt);
+            rem_final.setText(rem);
+            ext[0] = path.substring(path.lastIndexOf("/")+1 );
+            File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + ext[0]);
+            if(file2.exists() && !ext[0].equals("")){
+                previewCapturedImage(file2.getPath());
+            }
+        }
+        dialog.show();
+
+        final String finalExt = ext[0];
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                my_Amt = exhAmt.getText().toString();
+                my_rem = rem_final.getText().toString();
+
+
+                //mycon.msgBox(dist_id3);
+                if (exp_id.equals("")) {
+                    customVariablesAndMethod.msgBox(context,"First Select the Expense Head...");
+                } else if (my_Amt.trim().isEmpty()) {
+                    customVariablesAndMethod.msgBox(context,"Please Enter the Expense Amt....");
+                } else if (Double.valueOf(my_Amt)==0) {
+                    customVariablesAndMethod.msgBox(context,"Expense Amt. can't be zero...");
+                } else if (my_rem.trim().isEmpty()) {
+                    customVariablesAndMethod.msgBox(context,"Please Enter the Remark....");
+                } else if (DA_ACTION[0].equals("1") && actual_DA_layout.getVisibility() == View.VISIBLE
+                        && !da_root.getText().toString().equals("0") && !da_root.getText().toString().isEmpty()) {
+                    AppAlert.getInstance().Alert(context, "Already Applied for DA...",
+                            "Please make DA amount Rs 0.", new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+                }else if (expHead[0].getATTACHYN() != 0
+                        && filename.equalsIgnoreCase("")
+                        && path.equalsIgnoreCase("")) {
+                    customVariablesAndMethod.msgBox(context,"Please add an attachment....");
+                }else {
+
+
+                    if (!filename.equals("")){
+                        progress1.setMessage("Please Wait..\nuploading Image");
+                        progress1.setCancelable(false);
+                        progress1.show();
+                        File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + filename);
+                        new up_down_ftp().uploadFile(file2,ExpenseRoot.this);
+
+                    }else{
+                        filename= finalExt;
+
+                        Ta_expense_commit();
+                    }
+                    /*if(!path.equals("")){
+                        filename= finalExt;
+                    }*/
+                    dialog.dismiss();
+
+                    /*if (filename.equals("")) {
+                        other_expense_commit();
+                    }*/
+
+                }
+            }
+        });
+    }
+
+    private void  Ta_expense_commit() {
+        //Start of call to service
+/*
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder",cbohelp.getCompanyCode());
+        request.put("iDcrId", dcr_id);
+        request.put("iExpHeadId", exp_id);
+        request.put("iAmount", my_Amt);
+        request.put("sRemark", my_rem);
+        request.put("sFileName", filename);
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+
+        progress1.setMessage("Please Wait..");
+        progress1.setCancelable(false);
+        progress1.show();*/
+
+       // new CboServices(ExpenseRoot.this,mHandler).customMethodForAllServices(request,"DCREXPCOMMITMOBILE_2",MESSAGE_INTERNET_SAVE_EXPENSE,tables);
+
+        HashMap<String,String> request=new HashMap<>();
+        request.put("sCompanyFolder",cbohelp.getCompanyCode());
+        request.put("iDcrId", dcr_id);
+        request.put("iExpHeadId", exp_id);
+        request.put("iAmount", my_Amt);
+        request.put("sRemark", my_rem);
+        request.put("sFileName", filename);
+
+        ArrayList<Integer> tables=new ArrayList<>();
+        tables.add(0);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCREXPCOMMITMOBILE_2", request)
+                        .setTables(tables)
+                        .setDescription("Please Wait..")
+                        .setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) throws JSONException {
+
+
+                                parser5(message);
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) throws JSONException {
+
+                            }
+
+                            @Override
+                            public void onError(String s, String s1) {
+                                AppAlert.getInstance().getAlert(context,s, s1);
+
+                            }
+
+
+                        })
+                );
+
+    }
+
+    private void parser5(Bundle message) {
+        if (message != null) {
+
+            try {
+
+                String table0 = message.getString("Tables0");
+                JSONArray jsonArray1 = new JSONArray(table0);
+
+                JSONObject object = jsonArray1.getJSONObject(0);
+                value = object.getString("DCRID");
+                id= object.getString("ID");
+
+                cbohelp.insert_Expense(exp_id,exp_hed,my_Amt,my_rem,filename,id,customVariablesAndMethod.currentTime(context));
+
+
+
+
+
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "da_val",da_root.getText().toString().isEmpty()? "0" : da_root.getText().toString());
+                if (!exp_id.equals("-1")){
+                    data=cbohelp.get_Expense();
+
+
+                    sm = new Expenses_Adapter(ExpenseRoot.this, data);
+                    da_root.setEnabled(cbohelp.get_DA_ACTION_exp_head().size()==0);
+//#p Chnhe here
+                  /*  sm = new Expenses_Adapter(context, data);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager (context);
+                    rmylist.setLayoutManager(mLayoutManager);
+                    rmylist.setItemAnimator(new DefaultItemAnimator ());
+                    rmylist.setAdapter(sm);
+                    */
+                    MexpensesTA rptModel=new MexpensesTA ();
+                    rptModel.setTa_exp_head(exp_hed);
+                    rptModel.setTa_exp_head_id(exp_id);
+                    rptModel.setTa_amt(my_Amt);
+                    rptModel.setTa_remark(my_rem);
+                    rptModel.setTa_filename(filename);
+                    ta_expenslist.add(rptModel);
+
+
+
+                    expenseAdapterTa = new ExpenseAdapterTa(context, ta_expenslist);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager (context);
+                    rtalist.setLayoutManager(mLayoutManager);
+                    rtalist.setItemAnimator(new DefaultItemAnimator ());
+                    rtalist.setAdapter(expenseAdapterTa);
+                    init_DA_type(DA_layout);
+
+                    customVariablesAndMethod.msgBox(context, " Exp. Added Sucessfully");
+                    exp_id="";
+                    exp_hed="";
+                    my_Amt="";
+                    my_rem ="";
+                    filename="";
+                    id="";
+                }else{
+                    expense_commit();
+                }
+
+            } catch (JSONException e) {
+                Log.d("MYAPP", "objects are: " + e.toString());
+                CboServices.getAlert(this, "Missing field error", getResources().getString(R.string.service_unavilable) + e.toString());
+                e.printStackTrace();
+            }
+
+        }
+        //Log.d("MYAPP", "objects are1: " + result);
+        progress1.dismiss();
+    }
 
     private void other_expense_commit(){
         //Start of call to service
@@ -1287,12 +1730,30 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
                 cbohelp.delete_Expense_withID(exp_id);
                 data=cbohelp.get_Expense();
-                sm = new Expenses_Adapter(context, data);
                 da_root.setEnabled(cbohelp.get_DA_ACTION_exp_head().size()==0);
 
-                mylist.setAdapter(sm);
+                Mexpenses rptModel=new Mexpenses ();
 
-                init_DA_type(DA_layout);
+
+
+                rptModel.setExp_head(exp_hed);
+
+                rptModel.setExp_head_id(exp_id);
+                rptModel.setDA_amt(my_Amt);
+                rptModel.setTa_amt(my_Amt);
+                rptModel.setRemark(my_rem);
+                rptModel.setFilename(filename);
+                expenslist.add(rptModel);
+                expenseAdapterNew = new ExpenseAdapterNew(context, expenslist);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager (context);
+                rmylist.setLayoutManager(mLayoutManager);
+                rmylist.setItemAnimator(new DefaultItemAnimator ());
+                rmylist.setAdapter(expenseAdapterNew);
+
+
+                //mylist.setAdapter(sm);
+
+             init_DA_type(DA_layout);
 
                 customVariablesAndMethod.msgBox(context," Exp. Deleted Sucessfully");
 
@@ -1358,13 +1819,49 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 value = object.getString("DCRID");
                 id= object.getString("ID");
 
+/*                sd = this.getWritableDatabase();
+                sd.delete(Expenses, "exp_head_id='" + exp_head_id + "'", null);
+                ContentValues cv = new ContentValues();
+                cv.put("exp_head_id", exp_head_id);
+                cv.put("exp_head", exp_head);
+                cv.put("amount", amount);
+                cv.put("remark", remark);
+                cv.put("FILE_NAME", FILE_NAME);
+                cv.put("exp_ID", ID);
+                cv.put("time", time);*/
+
                 cbohelp.insert_Expense(exp_id,exp_hed,my_Amt,my_rem,filename,id,customVariablesAndMethod.currentTime(context));
+
+                expenslist=new ArrayList<Mexpenses>();
+
+               /* String table0 = result.getString("Tables0");
+                JSONArray row = new JSONArray(table0);*/
+
+
+                Mexpenses rptModel=new Mexpenses ();
+
+
+
+                rptModel.setExp_head(exp_hed);
+                rptModel.setExp_head_id(exp_id);
+                rptModel.setDA_amt(my_Amt);
+                rptModel.setTa_amt(my_Amt);
+                rptModel.setRemark(my_rem);
+                rptModel.setFilename(filename);
+                expenslist.add(rptModel);
+
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "da_val",da_root.getText().toString().isEmpty()? "0" : da_root.getText().toString());
                 if (!exp_id.equals("-1")){
                     data=cbohelp.get_Expense();
-                    sm = new Expenses_Adapter(ExpenseRoot.this, data);
+                    //sm = new Expenses_Adapter(ExpenseRoot.this, data);
                     da_root.setEnabled(cbohelp.get_DA_ACTION_exp_head().size()==0);
-                    mylist.setAdapter(sm);
+//#p Chnhe here
+                    expenseAdapterNew = new ExpenseAdapterNew(context, expenslist);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager (context);
+                    rmylist.setLayoutManager(mLayoutManager);
+                    rmylist.setItemAnimator(new DefaultItemAnimator ());
+                    rmylist.setAdapter(expenseAdapterNew);
+             // mylist.setAdapter(sm);
                     init_DA_type(DA_layout);
 
                     customVariablesAndMethod.msgBox(context, " Exp. Added Sucessfully");
@@ -1399,6 +1896,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
                 cbohelp.delete_EXP_Head();
 
+
                 String table0 = result.getString("Tables0");
                 JSONArray jsonArray1 = new JSONArray(table0);
                 for (int i = 0; i < jsonArray1.length(); i++) {
@@ -1410,6 +1908,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                             jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
                             jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
                             jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
+
+
+
 
                 }
                 if (newlist.size() > 0) {
@@ -1424,8 +1925,13 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 }
 
                 data = new ArrayList<Map<String, String>>();
+                Mexpenses rptModel=new Mexpenses ();
                 data.clear();
-                /*String table1 = result.getString("Tables1");
+                expenslist.clear();
+
+
+
+                String table1 = result.getString("Tables1");
                 JSONArray jsonArray2 = new JSONArray(table1);
                 for (int i = 0; i < jsonArray2.length(); i++) {
                     JSONObject object = jsonArray2.getJSONObject(i);
@@ -1438,7 +1944,24 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                     datanum.put("ID", object.getString("ID"));
                     data.add(datanum);
 
-                }*/
+
+
+
+
+                    rptModel.setExp_head(object.getString("EXP_HEAD"));
+
+                    rptModel.setExp_head_id( object.getString("EXP_HEAD_ID"));
+                    rptModel.setDA_amt(object.getString("AMOUNT"));
+                    rptModel.setTa_amt(object.getString("AMOUNT"));
+                    rptModel.setRemark( object.getString("REMARK"));
+                    rptModel.setFilename(object.getString("FILE_NAME"));
+                    expenslist.add(rptModel);
+
+
+
+
+
+                }
 
 
 
@@ -1533,9 +2056,45 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
 
                 data=cbohelp.get_Expense();
-                sm = new Expenses_Adapter(ExpenseRoot.this, data);
-                mylist.setAdapter(sm);
-                init_DA_type(DA_layout);
+
+             /*   sd = this.getWritableDatabase();
+                sd.delete(Expenses, "exp_head_id='" + exp_head_id + "'", null);
+                ContentValues cv = new ContentValues();
+                cv.put("exp_head_id", exp_head_id);
+                cv.put("exp_head", exp_head);
+                cv.put("amount", amount);
+                cv.put("remark", remark);
+                cv.put("FILE_NAME", FILE_NAME);
+                cv.put("exp_ID", ID);
+                cv.put("time", time);
+*/
+
+
+
+
+
+
+                expenseAdapterNew = new ExpenseAdapterNew(context, expenslist);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager (context);
+                rmylist.setLayoutManager(mLayoutManager);
+                rmylist.setItemAnimator(new DefaultItemAnimator ());
+
+                if(expenslist.size()>0){
+                    rmylist.setAdapter(expenseAdapterNew);
+                    //rtalist.setAdapter(expenseAdapterNew);
+                }
+
+               // sm = new Expenses_Adapter(ExpenseRoot.this, data);
+
+
+              //  mylist.setAdapter(sm);
+             //   talist.setAdapter(sm);
+
+
+
+
+
+             init_DA_type(DA_layout);
 
 
                 routeStausTxt.setText(ROUTE_CLASS);
@@ -1557,6 +2116,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 if (rootdata.size() > 0) {
                     datype.setText(rootdata.get(0));
                     distanse.setText(rootdata.get(1));
+                    ta_expenses_layout.setVisibility(View.VISIBLE);
+                    //distance chngelksdl;sdf;s
+
 
 
                     if(rootdata.get(2).equalsIgnoreCase("y")){

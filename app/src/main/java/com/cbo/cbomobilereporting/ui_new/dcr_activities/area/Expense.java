@@ -62,6 +62,7 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.ExpenseNew.Mexpenses;
 import com.flurry.android.FlurryAgent;
 
 
@@ -1183,6 +1184,13 @@ public class Expense extends AppCompatActivity implements Expenses_Adapter.Expen
 				id= object.getString("ID");
 
 				cbohelp.insert_Expense(exp_id,exp_hed,my_Amt,my_rem,filename,id,customVariablesAndMethod.currentTime(context));
+
+
+
+
+
+
+
 
 				data=cbohelp.get_Expense();
 				sm = new Expenses_Adapter(Expense.this, data);

@@ -141,7 +141,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         login = (Button) findViewById(R.id.submit_login22_enter_pin);
         version = (TextView) findViewById(R.id.version_code);
         reset_pin = (TextView) findViewById(R.id.reset_pin_enter_pin);
-        version.setText("Version :" + Custom_Variables_And_Method.VERSION);
+        version.setText("Version :" + Custom_Variables_And_Method.VERSION+"/"+Custom_Variables_And_Method.DCR_ID);
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"MethodCallFinal", "N");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "N");
         pin.setSelected(false);

@@ -842,7 +842,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                 String table0 = message.getString("Tables0");
                                 JSONArray jsonArray1 = new JSONArray(table0);
                                 JSONObject c = jsonArray1.getJSONObject(0);
-                                if ( c.getString("STATUS").equals("Y")) {
+                                if ( c.getString("STATUS").equals("Y")) {/*
                                     customMethod.stopAlarm10Sec();
                                     customMethod.stopAlarm10Minute();
                                     customMethod.stopDOB_DOA_Remainder();
@@ -852,10 +852,10 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     //MyCustumApplication.getInstance().updateUser();
 
                                     new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
-                                    /*Intent i = new Intent(getApplicationContext(), LoginFake.class);
+                                    *//*Intent i = new Intent(getApplicationContext(), LoginFake.class);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(i);*/
+                                    startActivity(i);*//*
 
                                     if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ASKUPDATEYN","N").equals("Y")) {
                                         new GetVersionCode(FinalSubmitDcr_new.this).execute();
@@ -864,7 +864,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     stopLoctionService();
                                     customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
                                     MyCustumApplication.getInstance().Logout((Activity) context);
-                                    /*finish();*/
+                                    *//*finish();*/
                                 } else {
 
                                     AppAlert.getInstance().getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));

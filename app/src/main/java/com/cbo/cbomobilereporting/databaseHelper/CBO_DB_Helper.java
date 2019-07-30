@@ -5783,6 +5783,31 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }
         return data;
     }
+/*    public  ArrayList<mExpense> get_N_Expense() {
+        ArrayList<> data = new ArrayList<Map<String, String>>();
+        sd = this.getWritableDatabase();
+        String query = "Select * from " + Expenses ;
+        Cursor c = sd.rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    Map<String, String> datanum = new HashMap<String, String>();
+                    datanum.put("exp_head_id",c.getString(c.getColumnIndex("exp_head_id")));
+                    datanum.put("exp_head", c.getString(c.getColumnIndex("exp_head")));
+                    datanum.put("amount", c.getString(c.getColumnIndex("amount")).trim().isEmpty() ? "0": c.getString(c.getColumnIndex("amount")));
+                    datanum.put("remark",c.getString(c.getColumnIndex("remark")));
+                    datanum.put("FILE_NAME",c.getString(c.getColumnIndex("FILE_NAME")));
+                    datanum.put("ID",c.getString(c.getColumnIndex("exp_ID")));
+                    data.add(datanum);
+
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+        return data;
+    }*/
 
 
 

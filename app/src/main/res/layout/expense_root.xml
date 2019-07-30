@@ -1,439 +1,520 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/textColorPrimary">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/textColorPrimary"
+    android:orientation="vertical">
 
-    <include layout="@layout/hadder_2016"/>
 
-    <RelativeLayout
+
+
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation = "vertical"
+   >
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_above="@+id/foot"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:background="@drawable/custom_square_transparent_bg">
+       >
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_marginLeft="8dp"
+           android:layout_marginTop="8dp"
+           android:layout_marginRight="8dp"
+           android:orientation="vertical"
+           android:padding="5dp"
+           android:background="@drawable/list_border">
 
 
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical">
 
 
+                   <TextView
+                       android:id="@+id/ROUTE_CLASS"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:background="#800000"
+                       android:gravity="center"
+                       android:text=""
+                       android:textColor="#fFF"
+                       android:textSize="16sp"
+                       android:textStyle="bold"
+                       android:visibility="gone" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:visibility="gone"
-                        android:textSize="16sp"
-                        android:textColor="#fFF"
-                        android:gravity="center"
-                        android:background="#800000"
-                        android:id="@+id/ROUTE_CLASS"
-                        android:textStyle="bold"/>
+                   <LinearLayout
+                       android:id="@+id/actual_fare_layout"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/actual_fare_layout"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="2"
-                                android:gravity="center_vertical"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:id="@+id/ex_dis_root1"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_weight="1"
-                                    android:layout_gravity="center_vertical"
-                                    android:textColor="@android:color/black"
-                                    android:textStyle="bold"
-                                    android:textSize="16sp"
-                                    android:text="Enter Actual Fare Amt."/>
-                                <TextView
-                                    android:id="@+id/attach_txt"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="5dp"
-                                    android:gravity="left"
-                                    android:text="* Attach Picture...."
-                                    android:textColor="@color/red"
-                                    android:textSize="10sp"
-                                    android:textStyle="italic" />
-                            </LinearLayout>
-                            <!--<EditText-->
-                            <!--android:id="@+id/ex_dis_root"-->
-                            <!--android:layout_weight="1"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginLeft="10dp"-->
-                            <!--android:layout_marginRight="10dp"-->
-                            <!--android:hint="Amt."-->
-                            <!--android:inputType="number" />-->
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:orientation="horizontal">
 
+                           <LinearLayout
+                               android:layout_width="0dp"
+                               android:layout_height="match_parent"
+                               android:layout_weight="2"
+                               android:gravity="center_vertical"
+                               android:orientation="vertical">
 
+                               <TextView
+                                   android:id="@+id/ex_dis_root1"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_gravity="center_vertical"
+                                   android:layout_marginLeft="10dp"
+                                   android:layout_marginRight="10dp"
+                                   android:layout_weight="1"
+                                   android:text="Enter Actual Fare Amt."
+                                   android:textColor="@android:color/black"
+                                   android:textSize="16sp"
+                                   android:textStyle="bold" />
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:background="@drawable/custom_square_transparent_bg"
-
-                                android:layout_height="wrap_content">
-                                <EditText
-                                    android:id="@+id/ex_dis_root"
-                                    android:layout_weight="1"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Amt."
-                                    android:inputType="number" />
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_marginBottom="4dp"
-                                    android:layout_marginTop="4dp"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/colorPrimaryDark"/>
-                                <ImageView
-                                    android:id="@+id/attachnew"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:padding="2.5dp"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:src="@android:drawable/ic_menu_camera" />
-                            </LinearLayout>
+                               <TextView
+                                   android:id="@+id/attach_txt"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_marginLeft="10dp"
+                                   android:layout_marginRight="5dp"
+                                   android:gravity="left"
+                                   android:text="* Attach Picture...."
+                                   android:textColor="@color/red"
+                                   android:textSize="10sp"
+                                   android:textStyle="italic" />
+                           </LinearLayout>
+                           <!--<EditText-->
+                           <!--android:id="@+id/ex_dis_root"-->
+                           <!--android:layout_weight="1"-->
+                           <!--android:layout_width="0dp"-->
+                           <!--android:layout_height="wrap_content"-->
+                           <!--android:layout_marginLeft="10dp"-->
+                           <!--android:layout_marginRight="10dp"-->
+                           <!--android:hint="Amt."-->
+                           <!--android:inputType="number" />-->
 
 
+                           <LinearLayout
+                               android:layout_width="0dp"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:background="@drawable/custom_square_transparent_bg"
+
+                               android:gravity="center_vertical">
+
+                               <EditText
+                                   android:id="@+id/ex_dis_root"
+                                   android:layout_width="0dp"
+                                   android:layout_height="wrap_content"
+                                   android:layout_weight="1"
+                                   android:hint="Amt."
+                                   android:inputType="number" />
+
+                               <View
+                                   android:layout_width="1dp"
+                                   android:layout_height="match_parent"
+                                   android:layout_marginTop="4dp"
+                                   android:layout_marginBottom="4dp"
+                                   android:background="@color/colorPrimaryDark" />
+
+                               <ImageView
+                                   android:id="@+id/attachnew"
+                                   android:layout_width="30dp"
+                                   android:layout_height="30dp"
+                                   android:layout_marginLeft="4dp"
+                                   android:layout_marginRight="4dp"
+                                   android:padding="2.5dp"
+                                   android:src="@android:drawable/ic_menu_camera" />
+                           </LinearLayout>
 
 
-                        </LinearLayout>
+                       </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/colorPrimary"/>
+                       <View
+                           android:layout_width="match_parent"
+                           android:layout_height="2dp"
+                           android:layout_marginTop="10dp"
+                           android:background="@color/colorPrimary" />
 
-                    </LinearLayout>
+                   </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/actual_DA_layout"
-                        android:layout_marginTop="5dp"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="2"
-                                android:gravity="center_vertical"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_weight="1"
-                                    android:layout_gravity="center_vertical"
-                                    android:textColor="@android:color/black"
-                                    android:textStyle="bold"
-                                    android:textSize="16sp"
-                                    android:text="Enter DA Amt."/>
+                   <LinearLayout
+                       android:id="@+id/actual_DA_layout"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="5dp"
+                       android:orientation="vertical">
 
-                            </LinearLayout>
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:orientation="horizontal">
 
+                           <LinearLayout
+                               android:layout_width="0dp"
+                               android:layout_height="match_parent"
+                               android:layout_weight="2"
+                               android:gravity="center_vertical"
+                               android:orientation="vertical">
 
+                               <TextView
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_gravity="center_vertical"
+                                   android:layout_marginLeft="10dp"
+                                   android:layout_marginRight="10dp"
+                                   android:layout_weight="1"
+                                   android:text="Enter DA Amt."
+                                   android:textColor="@android:color/black"
+                                   android:textSize="16sp"
+                                   android:textStyle="bold" />
 
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical"
-                                android:background="@drawable/custom_square_transparent_bg"
-                                android:layout_height="wrap_content">
-
-                                <EditText
-                                    android:id="@+id/da_root"
-                                    android:layout_weight="1"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:hint="DA Amt."
-                                    android:inputType="number" />
-                            </LinearLayout>
+                           </LinearLayout>
 
 
+                           <LinearLayout
+                               android:layout_width="0dp"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:background="@drawable/custom_square_transparent_bg"
+                               android:gravity="center_vertical">
+
+                               <EditText
+                                   android:id="@+id/da_root"
+                                   android:layout_width="0dp"
+                                   android:layout_height="wrap_content"
+                                   android:layout_weight="1"
+                                   android:hint="DA Amt."
+                                   android:inputType="number" />
+                           </LinearLayout>
 
 
-                        </LinearLayout>
+                       </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/colorPrimary"/>
+                       <View
+                           android:layout_width="match_parent"
+                           android:layout_height="2dp"
+                           android:layout_marginTop="10dp"
+                           android:background="@color/colorPrimary" />
 
-                    </LinearLayout>
+                   </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/manual_DA_layout"
-                        android:layout_marginTop="5dp"
-                        android:visibility="gone"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:text="DA Type"/>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/drop_bg"
-                            android:orientation="horizontal">
+                   <LinearLayout
+                       android:id="@+id/manual_DA_layout"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="5dp"
+                       android:orientation="vertical"
+                       android:visibility="gone">
 
-                            <Button
-                                android:id="@+id/btn_DaType"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="3dp"
-                                android:layout_weight="1"
-                                android:background="@android:color/transparent"
-                                android:minHeight="40dp"
-                                android:prompt="@string/spinner_title4"
-                                android:text="---Select---"
-                                android:textAllCaps="false"
-                                android:textColor="@color/navigationBarColor"
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="10dp"
+                           android:layout_marginRight="10dp"
+                           android:text="DA Type"
+                           android:textColor="@android:color/black"
+                           android:textSize="16sp"
+                           android:textStyle="bold" />
 
-                                />
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:layout_marginLeft="10dp"
+                           android:background="@drawable/drop_bg"
+                           android:orientation="horizontal">
 
-                            <View
-                                android:layout_width="1.5dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginBottom="3.5dp"
-                                android:layout_marginTop="3.5dp"
-                                android:background="@color/colorPrimaryDark" />
-
-                            <ImageView
-                                android:id="@+id/DaType_img"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="1dp"
-                                android:layout_weight="7"
-                                android:padding="6.5dp"
-                                android:src="@drawable/drop_icon" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/colorPrimary"/>
-
-                    </LinearLayout>
-
-                    <HorizontalScrollView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/horizontalScrollView">
-
-                        <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="12dp"
-                                android:text="D.A. Type"
-                                android:visibility="gone"
-                                android:textColor="#000"
-                                />
-
-                            <TextView
-                                android:id="@+id/da_type_root"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dip"
-                                android:textColor="#000"
+                           <Button
+                               android:id="@+id/btn_DaType"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_marginLeft="3dp"
+                               android:layout_weight="1"
+                               android:background="@android:color/transparent"
+                               android:minHeight="40dp"
+                               android:prompt="@string/spinner_title4"
+                               android:text="---Select---"
+                               android:textAllCaps="false"
+                               android:textColor="@color/navigationBarColor"
 
                                />
 
-                            <EditText
-                                android:id="@+id/ex_da_root"
-                                android:layout_width="80dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10dp"
-                                android:ems="10"
-                                android:visibility="gone"
-                                android:hint="Amt."
-                                android:textColor="#fff"
-                                android:inputType="number"
-                                android:clickable="false"
-                                android:cursorVisible="false"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"/>
+                           <View
+                               android:layout_width="1.5dp"
+                               android:layout_height="match_parent"
+                               android:layout_marginTop="3.5dp"
+                               android:layout_marginBottom="3.5dp"
+                               android:background="@color/colorPrimaryDark" />
+
+                           <ImageView
+                               android:id="@+id/DaType_img"
+                               android:layout_width="match_parent"
+                               android:layout_height="match_parent"
+                               android:layout_margin="1dp"
+                               android:layout_weight="7"
+                               android:padding="6.5dp"
+                               android:src="@drawable/drop_icon" />
+                       </LinearLayout>
+
+                       <View
+                           android:layout_width="match_parent"
+                           android:layout_height="2dp"
+                           android:layout_marginTop="10dp"
+                           android:background="@color/colorPrimary" />
+
+                   </LinearLayout>
+
+                   <!--DA_LAYOUT-->
+                   <LinearLayout
+                       android:layout_width="fill_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="12dp"
+                           android:text="D.A. Type"
+                           android:textColor="#000"
+                           android:visibility="gone" />
+
+                       <TextView
+                           android:id="@+id/da_type_root"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="8dip"
+                           android:textColor="#000"
+
+                           />
+
+                       <EditText
+                           android:id="@+id/ex_da_root"
+                           android:layout_width="80dp"
+                           android:layout_height="wrap_content"
+                           android:layout_marginRight="10dp"
+                           android:clickable="false"
+                           android:cursorVisible="false"
+                           android:ems="10"
+                           android:focusable="false"
+                           android:focusableInTouchMode="false"
+                           android:hint="Amt."
+                           android:inputType="number"
+                           android:textColor="#fff"
+                           android:visibility="gone" />
+
+
+                   </LinearLayout>
+                   <!--ROOT_DISTANCE_LAYOUT-->
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:orientation="vertical"
+
+                       >
+
+
+                       <LinearLayout
+                           android:id="@+id/layout1_root"
+                           android:layout_width="fill_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_marginTop="10dp"
+                           android:orientation="horizontal">
+
+                           <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_marginLeft="12dp"
+                               android:text="Distance"
+                               android:textColor="#000"
+                               android:visibility="gone" />
+
+                           <TextView
+                               android:id="@+id/da_distance_root"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_marginLeft="8dip"
+                               android:layout_marginRight="8dip"
+                               android:text="Distance"
+                               android:textColor="#000"
+
+                               />
+                       </LinearLayout>
+
+<LinearLayout
+    android:id="@+id/ta_expenses_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
 
-                        </LinearLayout>
-                    </HorizontalScrollView>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-                            <HorizontalScrollView
-                                android:layout_width="wrap_content"
-                                android:layout_height="fill_parent"
-                                android:layout_marginBottom="10dp"
-                                 android:id="@+id/horizontalScrollView34">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/nav_header_background"
+        android:visibility="visible">
 
+        <Button
+            android:id="@+id/add_ta_exp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#0B89ED"
+            android:text="+"
+            android:textColor="#fff"
+            android:textSize="12pt"
+            android:textStyle="bold" />
 
-
-                                    <LinearLayout
-                                        android:id="@+id/layout1_root"
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="10dp"
-                                        android:orientation="horizontal" >
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="12dp"
-                                            android:text="Distance"
-                                            android:visibility="gone"
-                                            android:textColor="#000"
-                                             />
-
-                                        <TextView
-                                            android:id="@+id/da_distance_root"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="8dip"
-                                            android:layout_marginRight="8dip"
-                                            android:textColor="#000"
-                                            android:text="Distance"
-
-                                           />
-
-                                    </LinearLayout>
-                            </HorizontalScrollView>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <View
-                                android:layout_width="fill_parent"
-                                android:layout_height="2dp"
-                                android:background="@color/colorPrimary"/>
-
-                        </LinearLayout>
-
-                </LinearLayout>
-            </ScrollView>
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:elevation="3dp"
-                android:id="@+id/DA_layout">
-
-            </TableLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-                <Button
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:textColor="#fff"
-                    android:textStyle="bold"
-                    android:textSize="12pt"
-                    android:id="@+id/add_exp"
-                    android:text="+"
-                    android:background="@drawable/button_text_view_selector"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:text="Other Expenses"/>
-            </LinearLayout>
-
-            <ListView
-                    android:layout_weight="2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/list_exp_root"
-                android:divider="#0000"
-                    android:layout_marginBottom="5dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:id="@+id/foot"
-            android:layout_alignParentBottom="true"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="10dp"
+            android:text="TA Expenses"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_bold"
+            />
+    </LinearLayout>
 
-            <Button
-                android:text="Submit"
-                android:gravity="center"
-                android:textColor="#fff"
-                android:layout_margin="5dp"
-                android:textAllCaps="false"
-                android:layout_width="fill_parent"
-                android:layout_height="35dp"
-                android:id="@+id/save_back1_root"
-                android:background="@drawable/button_text_view_selector"
-                android:layout_gravity="center"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_ta_exp_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight = "1"
+        android:scrollbars="vertical"
+        android:divider="#0000"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
 
-        </LinearLayout>
-    </RelativeLayout>
 </LinearLayout>
+                       <!--<ListView
+                           android:id="@+id/list_ta_exp_root"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_marginBottom="5dp"
+                           android:layout_weight="2"
+                           android:divider="#0000" />-->
+
+
+                   </LinearLayout>
+
+
+
+               </LinearLayout>
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical">
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal"
+                       android:background="@drawable/nav_header_background"
+                       >
+
+                       <Button
+                           android:id="@+id/add_exp"
+                           android:layout_width="40dp"
+                           android:layout_height="40dp"
+                           android:background="#0B89ED"
+                           android:text="+"
+                           android:textColor="#fff"
+                           android:textSize="12pt"
+                           android:textStyle="bold" />
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="10dp"
+                           android:text="Other Expenses"
+                           android:gravity="center"
+                           android:textColor="@color/white"
+                           android:fontFamily="@font/roboto_bold"
+                           />
+                   </LinearLayout>
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/list_exp_root"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_weight = "1"
+                       android:scrollbars="vertical"
+                       android:divider="#0000"
+                       >
+                   </androidx.recyclerview.widget.RecyclerView>
+
+
+               </LinearLayout>
+
+
+
+
+
+
+
+       </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight = "1"
+        android:stretchColumns="*"
+        android:shrinkColumns="*"
+        android:padding="5dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/list_border"
+        android:id="@+id/DA_layout">
+    </TableLayout>
+
+
+   </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
