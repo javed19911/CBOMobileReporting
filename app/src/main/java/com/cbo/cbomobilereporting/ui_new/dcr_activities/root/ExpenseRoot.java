@@ -9,21 +9,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.aDA;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mDA;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
-import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
-import com.uenics.javed.CBOLibrary.Response;
 
 import android.Manifest;
 import android.app.Activity;
@@ -33,7 +27,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -46,7 +39,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
-import android.os.Vibrator;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -54,8 +46,6 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,7 +56,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -91,18 +80,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
-import locationpkg.Const;
 import services.CboServices;
 import services.ServiceHandler;
-import utils.adapterutils.SpinAdapter_new;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GalleryUtil;
 import utils.adapterutils.Expenses_Adapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
-import utils_new.Report_Registration;
-import utils_new.Service_Call_From_Multiple_Classes;
 import utils_new.interfaces.RecycleViewOnItemClickListener;
 import utils_new.up_down_ftp;
 
@@ -111,6 +96,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
     private final int GALLERY_ACTIVITY_CODE=200;
     private final int RESULT_CROP = 400;
     private final int REQUEST_CAMERA=201;
+    private static final int OTHER_EXPENSE = 10;
     String picturePath="";
     private File output=null;
     String filename="";
@@ -325,7 +311,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                         && distAmt.getText().toString().equals("")
                         && !ACTUALFAREYN_MANDATORY.equalsIgnoreCase("N")) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Actual Fare....");
-                }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"EXP_ATCH_YN","N").equals("Y") &&  actual_fare_layout.getVisibility()==View.VISIBLE && attach_txt.getText().toString().equals("* Attach Picture....")) {
+                }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"EXP_ATCH_YN","N").equals("Y")
+                        &&  actual_fare_layout.getVisibility()==View.VISIBLE
+                        && attach_txt.getText().toString().equals("* Attach Picture....")) {
                     customVariablesAndMethod.msgBox(context,"Please Attach supporting File for Actual Fare....");
                 }else if(cbohelp.get_DA_ACTION_exp_head().size()>0  && actual_DA_layout.getVisibility() == View.VISIBLE
                         && !da_root.getText().toString().isEmpty() && !da_root.getText().toString().equals("0")){
@@ -628,6 +616,9 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
 
     }
 
+
+
+
     public void Add_expense(final String who, final String hed, final String amt, final String rem, final String path, final String hed_id){
         filename="";
         AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseRoot.this);
@@ -725,7 +716,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                 Boolean allreadyAdded = false;
                 if (who.equals("0")){
                     if (cbohelp.get_ExpenseTypeAdded(expHead[0].getEXP_TYPE_STR()).size() >0
-                            && expHead[0].getEXP_TYPE() != eExpanse.None) {
+                            && expHead[0].getEXP_TYPE() != eExpense.None) {
                         allreadyAdded = true;
 
                     }
@@ -1191,38 +1182,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
         }
     }
 
-   /* private void performCrop(String picUri) {
-        try {
-            //Start Crop Activity
 
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            File f = new File(picUri);
-            Uri contentUri = Uri.fromFile(f);
-
-            cropIntent.setDataAndType(contentUri, "image*//*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 280);
-            cropIntent.putExtra("outputY", 280);
-
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, RESULT_CROP);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            // display an error message
-            String errorMessage = "your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }*/
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -1407,7 +1367,7 @@ public class ExpenseRoot extends AppCompatActivity implements Expenses_Adapter.E
                             jsonObject1.getString("DA_ACTION")));
 
                     cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
-                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
+                            jsonObject1.getString("MANDATORYYN_NEW"), jsonObject1.getString("DA_ACTION"),
                             jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
                             jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
 

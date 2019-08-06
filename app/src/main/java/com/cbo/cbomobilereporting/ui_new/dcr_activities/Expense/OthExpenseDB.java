@@ -29,7 +29,7 @@ public class OthExpenseDB extends DBHelper {
     public String getTableQuery() {
         return "CREATE TABLE " + getTable() + "(id Integer PRIMARY KEY AUTOINCREMENT," +
                 "exp_head_id text,exp_head text,amount text,remark text," +
-                "FILE_NAME text,exp_ID text,time text)";
+                "FILE_NAME text,exp_ID text,time text,km text)";
     }
 
     @Override
@@ -39,7 +39,7 @@ public class OthExpenseDB extends DBHelper {
 
     @Override
     public int getTableVersion() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -48,9 +48,13 @@ public class OthExpenseDB extends DBHelper {
     }
 
     @Override
-    public void onTableUpdate(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onTableUpdate(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch(newVersion) {
+            case 2:
+                db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN km text DEFAULT '0'");
+            default:
+        }
     }
-
     public void insert(mOthExpense othExpense) {
         //try {
 
@@ -63,6 +67,7 @@ public class OthExpenseDB extends DBHelper {
             cv.put("FILE_NAME", othExpense.getAttachment());
             cv.put("exp_ID", othExpense.getId());
             cv.put("time", othExpense.getTime());
+            cv.put("km", othExpense.getKm());
             getDatabase().insert(getTable(), null, cv);
         //}finally {
             //sd.close();
@@ -71,7 +76,7 @@ public class OthExpenseDB extends DBHelper {
     }
 
 
-    public ArrayList<mOthExpense> get() {
+    public ArrayList<mOthExpense> get(eExpense For_DA_TA) {
         ArrayList<mOthExpense> data = new ArrayList<mOthExpense>();
         String query = "Select * from " + getTable() ;
 
@@ -85,9 +90,10 @@ public class OthExpenseDB extends DBHelper {
                     othExpense.setId(c.getInt(c.getColumnIndex("exp_ID")))
                             .setAttachment(c.getString(c.getColumnIndex("FILE_NAME")))
                             .setRemark(c.getString(c.getColumnIndex("remark")))
-                            .setAmount(c.getDouble(c.getColumnIndex("amount")));
+                            .setAmount(c.getDouble(c.getColumnIndex("amount")))
+                            .setKm(c.getDouble(c.getColumnIndex("km")));
                     mExpHead expHead = expHeadDB.get(c.getInt(c.getColumnIndex("exp_head_id")));
-                    if (expHead != null) {
+                    if (expHead != null && (For_DA_TA == expHead.getSHOW_IN_TA_DA())) {
                         othExpense.setExpHead(expHead);
                         data.add(othExpense);
                     }
@@ -100,6 +106,7 @@ public class OthExpenseDB extends DBHelper {
         return data;
     }
 
+
     public ArrayList<mExpHead> get_DA_ACTION_exp_head() {
         ArrayList<mExpHead> expHeads = new ArrayList<mExpHead>();
 
@@ -110,7 +117,7 @@ public class OthExpenseDB extends DBHelper {
                 do {
                     mExpHead expHead=new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
                             c.getString(c.getColumnIndex("FIELD_NAME")))
-                            .setEXP_TYPE(eExpanse.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setEXP_TYPE(eExpense.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
                             .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
                             .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
                             .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))

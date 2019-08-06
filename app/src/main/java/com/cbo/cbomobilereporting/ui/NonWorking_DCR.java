@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.core.view.ViewCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
@@ -66,7 +65,7 @@ import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.aDA;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mDA;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
 
@@ -1076,7 +1075,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 Boolean allreadyAdded = false;
                 if (who.equals("0")){
                     if (cbohelp.get_ExpenseTypeAdded(expHead[0].getEXP_TYPE_STR()).size() >0
-                            && expHead[0].getEXP_TYPE() != eExpanse.None) {
+                            && expHead[0].getEXP_TYPE() != eExpense.None) {
                         allreadyAdded = true;
 
                     }
@@ -1565,7 +1564,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     newlist.add(new SpinnerModel(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"), jsonObject1.getString("DA_ACTION")));
 
                     cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
-                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
+                            jsonObject1.getString("MANDATORYYN_NEW"), jsonObject1.getString("DA_ACTION"),
                             jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
                             jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
                 }
@@ -1876,7 +1875,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     newlist.add(new SpinnerModel(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID")));
 
                     cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
-                            jsonObject1.getString("MANDATORY"), jsonObject1.getString("DA_ACTION"),
+                            jsonObject1.getString("MANDATORYYN_NEW"), jsonObject1.getString("DA_ACTION"),
                             jsonObject1.getString("EXP_TYPE"), jsonObject1.getString("ATTACHYN"),
                             jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
 

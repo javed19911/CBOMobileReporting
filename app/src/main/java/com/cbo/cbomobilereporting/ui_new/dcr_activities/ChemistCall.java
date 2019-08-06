@@ -51,6 +51,7 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.Db.ChemistCallDB;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mChemistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
 import com.uenics.javed.CBOLibrary.CBOServices;
@@ -165,7 +166,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
         return mytime;
     }*/
 
-    public ArrayList<String> getmydata() {
+  /*  public ArrayList<String> getmydata() {
         ArrayList<String> raw = new ArrayList<String>();
         StringBuilder chm = new StringBuilder();
         StringBuilder stk = new StringBuilder();
@@ -184,7 +185,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
         raw.add(exp.toString());
         return raw;
     }
-
+*/
 
 
     public ArrayList<SpinnerModel> getChemistListLocal(int id) {
@@ -909,7 +910,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                     Log.e("chemist details", dcrid + "," + chm_id + "," + PobAmt + "," + AllItemId + "," + AllItemQty + "," + address + "," + AllGiftId + "," + AllGiftQty);
                     if (val != -1) {
 
-                        chm_ok = getmydata().get(0);
+                        /*chm_ok = getmydata().get(0);
                         stk_ok = getmydata().get(1);
                         exp_ok = getmydata().get(2);
 
@@ -918,7 +919,10 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                             cbohelp.insertfinalTest(chm_id, stk_ok, exp_ok);
                         } else {
                             cbohelp.updatefinalTest(chm_id, stk_ok, exp_ok);
-                        }
+                        }*/
+
+                        cbohelp.markAsCalled(CallType.CHEMIST,true);
+
                         if (Hide_status.equals("N")) {
                             customVariablesAndMethod.msgBox(context,"Chemist Added Successfully");
                         } else {

@@ -53,6 +53,7 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.Db.StockistCallDB;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
@@ -107,7 +108,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
 
     String name = "",resultList="";
     String chname = "", stk_id = "", stkst_name = "";
-    String chm_ok = "", stk_ok = "", exp_ok = "";
+    //String chm_ok = "", stk_ok = "", exp_ok = "";
     String name2 = "", name3 = "", name4 = "";
     String network_status;
     SpinnerModel[] TitleName;
@@ -148,7 +149,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
     String ref_latLong = "";
     Service_Call_From_Multiple_Classes service ;
 
-    public ArrayList<String> getmydata() {
+   /* public ArrayList<String> getmydata() {
         ArrayList<String> raw = new ArrayList<String>();
         StringBuilder chm = new StringBuilder();
         StringBuilder stk = new StringBuilder();
@@ -166,7 +167,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
         raw.add(stk.toString());
         raw.add(exp.toString());
         return raw;
-    }
+    }*/
 
 
 
@@ -990,7 +991,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                     Log.e("stockist submitted", "" + val);
                     if (val != -1) {
 
-                        chm_ok = getmydata().get(0);
+                        /*chm_ok = getmydata().get(0);
                         stk_ok = getmydata().get(1);
                         exp_ok = getmydata().get(2);
 
@@ -999,7 +1000,10 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                             cbohelp.insertfinalTest(chm_ok, stk_id, exp_ok);
                         } else {
                             cbohelp.updatefinalTest(chm_ok, stk_id, exp_ok);
-                        }
+                        }*/
+
+                        cbohelp.markAsCalled(CallType.STOKIST,true);
+
                         customVariablesAndMethod.msgBox(context,"Stockist Added Successfully");
                         pob.setText("");
                         Custom_Variables_And_Method.STOCKIST_NOT_VISITED = "Y";

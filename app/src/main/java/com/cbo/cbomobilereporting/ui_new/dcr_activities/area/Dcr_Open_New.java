@@ -1033,9 +1033,13 @@ public class Dcr_Open_New extends AppCompatActivity {
     public void setReultForNonWork() {
         if ((Custom_Variables_And_Method.DCR_ID .equals("0")) || (Custom_Variables_And_Method.DCR_ID != null)) {
             //startActivity(new Intent(getApplicationContext(), NonWorking_DCR.class));
-            Intent intent = new Intent(getApplicationContext(), NonWorking_DCR.class);
+           /* Intent intent = new Intent(getApplicationContext(), NonWorking_DCR.class);
             //intent.putExtra("Back_allowed","N");
-            startActivity(intent);
+            startActivity(intent);*/
+            Intent intent1 = new Intent(context, com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense.class);
+            intent1.putExtra("Back_allowed","N");
+            intent1.putExtra("FinalSubmit","Y");
+            startActivity(intent1);
         } else {
             customVariablesAndMethod.msgBox(context,"Data Insertion Fail.....");
         }

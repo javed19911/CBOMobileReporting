@@ -17,7 +17,8 @@ public class ExpHeadDB extends DBHelper {
     @Override
     public String getTableQuery() {
         return "CREATE TABLE " + getTable() + "(MainId Integer PRIMARY KEY AUTOINCREMENT,FIELD_NAME text,FIELD_ID text," +
-                "MANDATORY text,DA_ACTION text,EXP_TYPE text,ATTACHYN text,MAX_AMT float,TAMST_VALIDATEYN text)";
+                "MANDATORY text,DA_ACTION text,EXP_TYPE text,ATTACHYN text,MAX_AMT float,TAMST_VALIDATEYN text," +
+                "SHOW_IN_TA_DA text,KMYN text,HEADTYPE_GROUP text)";
     }
 
     @Override
@@ -27,7 +28,7 @@ public class ExpHeadDB extends DBHelper {
 
     @Override
     public int getTableVersion() {
-        return 1;
+        return 4;
     }
 
     @Override
@@ -36,7 +37,16 @@ public class ExpHeadDB extends DBHelper {
     }
 
     @Override
-    public void onTableUpdate(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onTableUpdate(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch(newVersion) {
+            case 2:
+                db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN SHOW_IN_TA_DA text DEFAULT '0'");
+            case 3:
+                db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN KMYN text DEFAULT '0'");
+            case 4:
+                db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN HEADTYPE_GROUP text DEFAULT '0'");
+                default:
+        }
     }
 
     public void insert(mExpHead expHead){
@@ -50,20 +60,24 @@ public class ExpHeadDB extends DBHelper {
         contentValues.put("ATTACHYN", expHead.getATTACHYN());
         contentValues.put("MAX_AMT", expHead.getMAX_AMT());
         contentValues.put("TAMST_VALIDATEYN", expHead.getMasterValidate());
+        contentValues.put("SHOW_IN_TA_DA", expHead.getSHOW_IN_TA_DA().name());
+        contentValues.put("KMYN", expHead.getKMYN());
+        contentValues.put("HEADTYPE_GROUP", expHead.getHEADTYPE_GROUP());
+
         getDatabase().insert(getTable(), null, contentValues);
 
 
     }
 
     public ArrayList<mExpHead> get() {
-        return get(eExpanse.None);
+        return get(eExpense.None);
     }
 
-    public ArrayList<mExpHead> get(eExpanse type) {
+    public ArrayList<mExpHead> get(eExpense type) {
         ArrayList<mExpHead> expHeads = new ArrayList<mExpHead>();
 
         String query ="Select * from " + getTable() + " where (EXP_TYPE='"+type.name()+"' )";
-        if (type == eExpanse.None){
+        if (type == eExpense.None){
             query =  "Select * from " + getTable();
         }
         Cursor c = getDatabase().rawQuery(query, null);
@@ -72,7 +86,8 @@ public class ExpHeadDB extends DBHelper {
                 do {
                     mExpHead expHead=new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
                             c.getString(c.getColumnIndex("FIELD_NAME")))
-                            .setEXP_TYPE(eExpanse.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setEXP_TYPE(eExpense.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setSHOW_IN_TA_DA(eExpense.valueOf(c.getString(c.getColumnIndex("SHOW_IN_TA_DA"))))
                             .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
                             .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
                             .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))
@@ -90,6 +105,46 @@ public class ExpHeadDB extends DBHelper {
         return expHeads;
     }
 
+    public ArrayList<mExpHead> get_NotAdded(eExpense SHOW_IN_TA_DA) {
+        ArrayList<mExpHead> expHeads = new ArrayList<mExpHead>();
+
+
+        String query ="Select * from " + getTable() + " LEFT JOIN "+"Expenses"+" ON exp_head_id = FIELD_ID where exp_head_id IS NULL "+
+                "AND HEADTYPE_GROUP NOT IN (Select a.HEADTYPE_GROUP from " + getTable() + " as a LEFT JOIN "+"Expenses"+" as b ON b.exp_head_id = a.FIELD_ID where b.exp_head_id IS NOT NULL AND a.HEADTYPE_GROUP != 0)";
+
+        String WhereClause = "";
+
+        WhereClause += " AND  SHOW_IN_TA_DA = '"+SHOW_IN_TA_DA.name()+"'";
+
+
+        Cursor c = getDatabase().rawQuery(query+ WhereClause, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    mExpHead expHead=new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
+                            c.getString(c.getColumnIndex("FIELD_NAME")))
+                            .setEXP_TYPE(eExpense.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setSHOW_IN_TA_DA(eExpense.valueOf(c.getString(c.getColumnIndex("SHOW_IN_TA_DA"))))
+                            .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
+                            .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
+                            .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))
+                            .setMAX_AMT(c.getDouble(c.getColumnIndex("MAX_AMT")))
+                            .setKMYN(c.getString(c.getColumnIndex("KMYN")))
+                            .setHEADTYPE_GROUP(c.getString(c.getColumnIndex("HEADTYPE_GROUP")))
+                            .setMasterValidate(c.getInt(c.getColumnIndex("TAMST_VALIDATEYN")));
+
+                    //if (SHOW_IN_TA_DA != eExpense.TA || SHOW_IN_TA_DA == expHead.getSHOW_IN_TA_DA()) {
+                        expHeads.add(expHead);
+                    //}
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+        }
+        return expHeads;
+    }
+
+
     public mExpHead get(int Id) {
         mExpHead expHead = null;
 
@@ -101,11 +156,14 @@ public class ExpHeadDB extends DBHelper {
                 do {
                     expHead = new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
                             c.getString(c.getColumnIndex("FIELD_NAME")))
-                            .setEXP_TYPE(eExpanse.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setEXP_TYPE(eExpense.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setSHOW_IN_TA_DA(eExpense.valueOf(c.getString(c.getColumnIndex("SHOW_IN_TA_DA"))))
                             .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
                             .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
                             .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))
                             .setMAX_AMT(c.getDouble(c.getColumnIndex("MAX_AMT")))
+                            .setKMYN(c.getString(c.getColumnIndex("KMYN")))
+                            .setHEADTYPE_GROUP(c.getString(c.getColumnIndex("HEADTYPE_GROUP")))
                             .setMasterValidate(c.getInt(c.getColumnIndex("TAMST_VALIDATEYN")));
 
 

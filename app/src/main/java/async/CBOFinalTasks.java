@@ -3,6 +3,7 @@ package async;
 import android.content.Context;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.OthExpenseDB;
 
 import utils_new.Custom_Variables_And_Method;
 
@@ -50,6 +51,7 @@ public class CBOFinalTasks {
         cbohelp.delete_Rx_Table();
 
         cbohelp.delete_Expense();
+        new OthExpenseDB(mContext).delete();
         cbohelp.delete_Nonlisted_calls();
         cbohelp.deleteDcrAppraisal();
         cbohelp.delete_EXP_Head();

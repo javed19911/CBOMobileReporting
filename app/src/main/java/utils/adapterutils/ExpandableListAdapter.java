@@ -22,6 +22,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
@@ -40,7 +41,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     Custom_Variables_And_Method customVariablesAndMethod;
     CBO_DB_Helper cboDbHelper;
     Boolean clicked=false;
-    Float net_value=0f;
+    Double net_value=0D;
     ExpandableListView listView;
     ImageView attach_img;
     //private List<Integer> visible_status;
@@ -782,8 +783,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         tbrow1.addView(tv11);
         stk.addView(tbrow1);
 
-        Float Dis_val =0f;
-        if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "ACTUALFAREYN","").equalsIgnoreCase("Y")) {
+        Double Dis_val =0D;
+        if (!(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "ACTUALFAREYN","").equalsIgnoreCase("Y")
+                || MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("TA_TYPE_MANUALYN","0").equalsIgnoreCase("1")) ){
             TableRow tbrow2 = new TableRow(_context);
             //tbrow2.setBackgroundColor(0xff125688);
             TextView tv21 = new TextView(_context);
@@ -801,7 +803,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             tv22.setTypeface(null, Typeface.BOLD);
             tbrow2.addView(tv22);
             stk.addView(tbrow2);
-            Dis_val = Float.parseFloat(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "distance_val","0"));
+            Dis_val = Double.parseDouble(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "distance_val","0"));
         }
 
         TableRow tbrow4 = new TableRow(_context);
@@ -816,14 +818,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView tv41 = new TextView(_context);
 
 
-        Float other = 0f;
+        Double other = 0D;
         int length=getChildrenCount(groupPosition);
 
         if (listView.isGroupExpanded(groupPosition)){
             length=getChildrenCount(groupPosition)-1;
         }
         for (int i = 0; i <length;i++){
-            other+=Float.parseFloat(getChild(groupPosition, i).get("time").get(i));
+            other+=Double.parseDouble(getChild(groupPosition, i).get("time").get(i));
         }
 
         tv41.setText(_context.getResources().getString(R.string.rs)+" "+other);
@@ -834,7 +836,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         tbrow4.addView(tv41);
         stk.addView(tbrow4);
 
-        net_value = Float.parseFloat(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "da_val","0"))
+        net_value = Double.parseDouble(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "da_val","0"))
                 + Dis_val
                 + other;
 

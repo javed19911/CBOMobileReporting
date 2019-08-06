@@ -8,28 +8,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpense;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mOthExpense;
 
-import java.sql.Array;
-import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import utils.MyConnection;
 import utils.adapterutils.SpinnerModel;
 import utils.model.DropDownModel;
 import utils_new.Custom_Variables_And_Method;
@@ -1683,12 +1675,57 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return l;
     }
 
+    public void markAsCalled(CallType callType,boolean isCalled){
+        Cursor c = null;
+        boolean isInsert = true;
+        String chemist = "",stockist = "",exp="";
+        String id = "";
+        try {
+            sd = this.getWritableDatabase();
+            c= sd.rawQuery("Select * from finaldcrcheck" ,null);
+            if (c.moveToFirst()){
+                isInsert = false;
+                do {
+                    chemist = c.getString(c.getColumnIndex("chemist"));
+                    stockist = c.getString(c.getColumnIndex("stockist"));
+                    exp = c.getString(c.getColumnIndex("exp"));
+                } while (c.moveToNext());
+            }
+                switch (callType){
+                    case CHEMIST:
+                        chemist = isCalled ? "Called" :"";
+                        break;
+                    case STOKIST:
+                        stockist = isCalled ? "Called" :"";
+                        break;
+                    case EXPENSE:
+                        exp = isCalled ? "Called" :"";
+                        break;
+                        default:
+                }
+
+
+            ContentValues cv = new ContentValues();
+            cv.put("chemist", chemist);
+            cv.put("stockist", stockist);
+            cv.put("exp", exp);
+            if (isInsert) {
+                sd.insert("finaldcrcheck", null, cv);
+            }else{
+                sd.update("finaldcrcheck",cv,null,null);
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+    }
+
     public void updatefinalTest(String chemist, String stockist, String exp) {
         try {
             ContentValues cv = new ContentValues();
             cv.put("chemist", chemist);
-            cv.put("chemist", chemist);
-            cv.put("chemist", chemist);
+            cv.put("stockist", stockist);
+            cv.put("exp", exp);
 
             sd = this.getWritableDatabase();
             sd.update("finaldcrcheck", cv, null, null);
@@ -6203,7 +6240,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     expHead = new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
                             c.getString(c.getColumnIndex("FIELD_NAME")))
                             .setEXP_TYPE_STR(c.getString(c.getColumnIndex("EXP_TYPE")))
-                            .setEXP_TYPE(eExpanse.getExp(c.getInt(c.getColumnIndex("EXP_TYPE"))))
+                            .setEXP_TYPE(eExpense.getExp(c.getInt(c.getColumnIndex("EXP_TYPE"))))
                             .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
                             .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
                             .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))
@@ -6211,7 +6248,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                             .setMasterValidate(c.getInt(c.getColumnIndex("TAMST_VALIDATEYN")));
 
                   /*  if (expHead.getMasterValidate() == 1){
-                        if (expHead.getEXP_TYPE() == eExpanse.TA) {
+                        if (expHead.getEXP_TYPE() == eExpense.TA) {
                             expHead.setMAX_AMT(Double.parseDouble(MyCustumApplication.getInstance()
                                     .getDataFrom_FMCG_PREFRENCE("distance_val", "" + expHead.getMasterValidate())));
                         }else{

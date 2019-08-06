@@ -442,7 +442,7 @@ public class ServiceHandler {
                                        String sDIVERTWWYN,String sWorking_Type) {
        //Start of call to service
 
-               HashMap<String,String> request=new HashMap<>();
+        HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", sCompanyFolder);
         request.put("iPA_ID", iPA_ID);
         request.put("sDCR_DATE", sDCR_DATE);

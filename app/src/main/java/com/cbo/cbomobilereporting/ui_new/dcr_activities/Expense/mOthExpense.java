@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class mOthExpense implements Serializable {
     private int Id= 0;
     private mExpHead expHead = new mExpHead(0,"");
+    private Double km = 0D;
     private Double amount = 0D;
     private String Remark ="";
     private String Attachment = "";
@@ -20,6 +21,8 @@ public class mOthExpense implements Serializable {
     public mExpHead getExpHead() {
         return expHead;
     }
+
+    public Double getKm(){ return km;}
 
     public Double getAmount() {
         return amount;
@@ -46,6 +49,11 @@ public class mOthExpense implements Serializable {
 
     public mOthExpense setExpHead(mExpHead expHead) {
         this.expHead = expHead;
+        return this;
+    }
+
+    public mOthExpense setKm(Double km) {
+        this.km = km;
         return this;
     }
 

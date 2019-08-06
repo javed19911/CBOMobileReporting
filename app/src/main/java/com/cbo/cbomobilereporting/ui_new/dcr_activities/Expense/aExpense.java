@@ -8,61 +8,87 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.cbo.cbomobilereporting.R;
 
 import java.util.ArrayList;
 
-public class aExpense extends BaseAdapter {
+import saleOrder.Adaptor.ClientAdapter;
+
+public class aExpense extends RecyclerView.Adapter<aExpense.MyViewHolder>  {
 
     Context context;
     LayoutInflater layoutInflater;
     ArrayList<mOthExpense> othExpenses = new ArrayList<>();
+    eExpense exp_type = eExpense.None;
 
     private Expense_interface expense_interface;
 
     public interface Expense_interface {
-        public void Edit_Expense(mOthExpense othExpense);
-        public void delete_Expense(mOthExpense othExpense);
+        public void Edit_Expense(mOthExpense othExpense,eExpense exp_type);
+        public void delete_Expense(mOthExpense othExpense,eExpense exp_type);
     }
-    public aExpense(Context context,ArrayList<mOthExpense> othExpenses){
+
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView exp_hed,exp_amt,exp_remak;
+        ImageView edit_exp,delete_exp,attachment;
+
+        public MyViewHolder(View view) {
+            super(view);
+            exp_hed=(TextView) view.findViewById(R.id.tv_exp_id);
+            exp_amt=(TextView) view.findViewById(R.id.tv_amt_id);
+            exp_remak=(TextView) view.findViewById(R.id.tv_rem_id);
+            edit_exp=(ImageView) view.findViewById(R.id.edit_exp);
+            delete_exp=(ImageView) view.findViewById(R.id.delete_exp);
+            attachment=(ImageView) view.findViewById(R.id.attach);
+
+
+
+            edit_exp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    expense_interface.Edit_Expense(othExpenses.get(getAdapterPosition()),exp_type);
+                }
+            });
+
+            delete_exp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    expense_interface.delete_Expense(othExpenses.get(getAdapterPosition()),exp_type);
+                }
+            });
+        }
+    }
+
+
+    public aExpense(Context context,ArrayList<mOthExpense> othExpenses,eExpense exp_type){
         this.context = context;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.othExpenses = othExpenses;
+        this.exp_type = exp_type;
         expense_interface= (Expense_interface) context ;
 
     }
 
+
+    @NonNull
     @Override
-    public int getCount() {
-        return othExpenses.size();
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.exp_row, parent, false);
+
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-
-        final ViewHolder holder;
-        if (convertView == null){
-            holder = new ViewHolder();
-            convertView = layoutInflater.inflate(R.layout.exp_row,null);
-
-            holder.exp_hed=(TextView) convertView.findViewById(R.id.tv_exp_id);
-            holder.exp_amt=(TextView) convertView.findViewById(R.id.tv_amt_id);
-            holder.exp_remak=(TextView) convertView.findViewById(R.id.tv_rem_id);
-            holder.edit_exp=(ImageView) convertView.findViewById(R.id.edit_exp);
-            holder.delete_exp=(ImageView) convertView.findViewById(R.id.delete_exp);
-            holder.attachment=(ImageView) convertView.findViewById(R.id.attach);
-
-            convertView.setTag(holder);
-
-        }else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-
-
-        holder.exp_hed.setText(othExpenses.get(position).getExpHead().getName());
-        holder.exp_amt.setText(""+othExpenses.get(position).getAmount());
-        holder.exp_remak.setText(othExpenses.get(position).getRemark());
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        mOthExpense item = othExpenses.get(position);
+        holder.exp_hed.setText(item.getExpHead().getName());
+        holder.exp_amt.setText(""+item.getAmount());
+        holder.exp_remak.setText(item.getRemark());
         holder.edit_exp.setVisibility(View.VISIBLE);
         holder.delete_exp.setVisibility(View.VISIBLE);
 
@@ -71,39 +97,17 @@ public class aExpense extends BaseAdapter {
         }else{
             holder.attachment.setVisibility(View.GONE);
         }
-
-        holder.edit_exp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expense_interface.Edit_Expense(othExpenses.get(position));
-            }
-        });
-
-        holder.delete_exp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expense_interface.delete_Expense(othExpenses.get(position));
-            }
-        });
-
-        return convertView;
     }
-
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return othExpenses.get(position).getId();
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public int getItemCount() {
+       return othExpenses.size();
     }
 
-    public class ViewHolder{
 
-        TextView exp_hed,exp_amt,exp_remak;
-        ImageView edit_exp,delete_exp,attachment;
-
-    }
 }

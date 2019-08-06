@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.ExpHeadDB;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.OthExpenseDB;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,9 @@ public class SyncAllDataFirebase {
     SyncDB syncDB;
     CboProgressDialog cboProgressDialog ;
 
+    OthExpenseDB othExpenseDB;
+    ExpHeadDB expHeadDB;
+
     ArrayList<String> privateKeys = new ArrayList<>();
 
     public SyncAllDataFirebase(Context context) {
@@ -49,6 +54,8 @@ public class SyncAllDataFirebase {
         privateKeys.add("IMEI");
         db_helper = new CBO_DB_Helper(context);
         syncDB = new SyncDB();
+        othExpenseDB = new OthExpenseDB(context);
+        expHeadDB = new ExpHeadDB(context);
 
 
 
@@ -91,6 +98,7 @@ public class SyncAllDataFirebase {
             syncDB.delete(null);
             syncDB.insert(getAllPreferences(), "Preferences");
             syncDB.insert(getAllTableData(), "DB_OLD");
+            syncDB.insert(getAllTableData(expHeadDB.getDatabase()), "DB_NEW");
     }
 
     public Map<String, ?> getAllPreferences(){
@@ -104,8 +112,13 @@ public class SyncAllDataFirebase {
     }
 
     public Map<String, ?> getAllTableData(){
+        return getAllTableData(db_helper.getWritableDatabase());
+    }
+
+
+    public Map<String, ?> getAllTableData(SQLiteDatabase db ){
         String qry = "SELECT name FROM sqlite_master WHERE type='table' and name not in ('android_metadata', 'cbo_login')";
-        SQLiteDatabase db = db_helper.getWritableDatabase();
+        //SQLiteDatabase db = new ExpHeadDB(context).getDatabase();
         //Map<String, Map<String, ?>> Database = new HashMap<>();
         Map<String, Map<String, ?>> Table = new HashMap<>();
         //Database.put("DB_OLD", Table);
@@ -156,7 +169,6 @@ public class SyncAllDataFirebase {
         return Table;
     }
 
-
     public void download(){
         Log.d("map values", "Download started......");
         cboProgressDialog = new CboProgressDialog(context, "Please Wait..\nDownloading data for Support ");
@@ -182,37 +194,10 @@ public class SyncAllDataFirebase {
                                     }
                                     break;
                                 case "DB_OLD":
-
-                                    SQLiteDatabase db = null;
-                                    try {
-                                         db = db_helper.getWritableDatabase();
-                                        for (DataSnapshot table : postSnapshot.getChildren()) {
-
-                                            String qry = "DELETE FROM " + table.getKey();
-                                            db.execSQL(qry);
-
-                                            Log.d("map values", " Table Start : " + table.getKey());
-                                            cboProgressDialog.setDescription("Please Wait..\nDownloading data for Support \nDownloading User Data...\n" + table.getKey());
-
-
-                                            for (DataSnapshot row : table.getChildren()) {
-                                                ContentValues cv = new ContentValues();
-                                                Log.d("map values", " -------------------------------------------------------------------");
-                                                for (DataSnapshot column : row.getChildren()) {
-                                                    Log.d("map values", column.getKey() + ": " + column.getValue());
-                                                    cv.put(column.getKey(), column.getValue().toString());
-                                                }
-                                                Log.d("map values", " -------------------------------------------------------------------");
-                                                db.insert(table.getKey(), null, cv);
-                                            }
-
-                                            Log.d("map values", " Table Ends : " + table.getKey());
-                                        }
-                                    }finally {
-                                        assert db != null;
-                                        db.close();
-                                    }
+                                    downloaddataToDB(db_helper.getWritableDatabase(),postSnapshot);
                                     break;
+                                case "DB_NEW":
+                                    downloaddataToDB(othExpenseDB.getDatabase(),postSnapshot);
                             }
 
 
@@ -238,5 +223,50 @@ public class SyncAllDataFirebase {
                 Log.d("map values", "Login error......\n"+description);
             }
         });
+    }
+
+
+    private void downloaddataToDB(SQLiteDatabase db,DataSnapshot postSnapshot){
+        try {
+            //db = db_helper.getWritableDatabase();
+            for (DataSnapshot table : postSnapshot.getChildren()) {
+
+               if( checkForTableExists(db,table.getKey())){
+                    String qry = "DELETE FROM " + table.getKey();
+                    db.execSQL(qry);
+
+                    Log.d("map values", " Table Start : " + table.getKey());
+                    cboProgressDialog.setDescription("Please Wait..\nDownloading data for Support \nDownloading User Data...\n" + table.getKey());
+
+
+                    for (DataSnapshot row : table.getChildren()) {
+                        ContentValues cv = new ContentValues();
+                        Log.d("map values", " -------------------------------------------------------------------");
+                        //if (db.execSQL("TABLE IF EXISTS  location");)
+                        for (DataSnapshot column : row.getChildren()) {
+                            Log.d("map values", column.getKey() + ": " + column.getValue());
+                            cv.put(column.getKey(), column.getValue().toString());
+                        }
+                        Log.d("map values", " -------------------------------------------------------------------");
+                        db.insert(table.getKey(), null, cv);
+                    }
+
+                    Log.d("map values", " Table Ends : " + table.getKey());
+                }
+            }
+        }finally {
+            assert db != null;
+            db.close();
+        }
+    }
+
+    private boolean checkForTableExists(SQLiteDatabase db, String table){
+        String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+table+"'";
+        Cursor mCursor = db.rawQuery(sql, null);
+        if (mCursor.getCount() > 0) {
+            return true;
+        }
+        mCursor.close();
+        return false;
     }
 }

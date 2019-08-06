@@ -35,6 +35,7 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.mDayPlan;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
 import com.uenics.javed.CBOLibrary.CBOServices;
@@ -1253,8 +1254,11 @@ public class DCR_Root_new extends AppCompatActivity {
 
     public void setReultForNonWork() {
         if ((Custom_Variables_And_Method.DCR_ID .equals("0") ) || (Custom_Variables_And_Method.DCR_ID != null)) {
-            Intent intent = new Intent(context, NonWorking_DCR.class);
+
+            //Intent intent = new Intent(context, NonWorking_DCR.class);
+            Intent intent = new Intent(context, Expense.class);
             //intent.putExtra("Back_allowed","N");
+            intent.putExtra("FinalSubmit","Y");
             startActivity(intent);
         } else {
             customVariablesAndMethod.msgBox(context,"Data Insertion Fail.....");

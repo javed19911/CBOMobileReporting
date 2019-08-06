@@ -952,7 +952,7 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("INDEPENDENT_WORKING", c.getString("INDEPENDENT_WORKING"));
                 editor.putString("RXQTYYN", c.getString("RXQTYYN"));
                 editor.putString("GIFTSHOW_STOCKONLYYN", c.getString("GIFTSHOW_STOCKONLYYN"));
-
+                editor.putString("DCRCALL_ANYTIMEYN", c.getString("DCRCALL_ANYTIMEYN"));
 
                 editor.commit();
 

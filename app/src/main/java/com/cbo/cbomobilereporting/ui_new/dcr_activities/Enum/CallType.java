@@ -7,7 +7,8 @@ public enum CallType {
     STOKIST("S"),
     DOCTOR_REMAINDER("RcDr"),
     DAIRY("D"),
-    POUlTRY("P");
+    POUlTRY("P"),
+    EXPENSE("E");
 
     private String value ="";
     CallType(String value) {

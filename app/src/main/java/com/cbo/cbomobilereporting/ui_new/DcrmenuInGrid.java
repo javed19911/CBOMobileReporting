@@ -196,8 +196,10 @@ public class DcrmenuInGrid extends Fragment {
                                 startActivity(intent);
                                 break;
                             case "n":
-                                Intent intent1 = new Intent(context, NonWorking_DCR.class);
+                                //startActivity(new Intent(getActivity(), com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense.class));
+                                Intent intent1 = new Intent(context, com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense.class);
                                 intent1.putExtra("Back_allowed","N");
+                                intent1.putExtra("FinalSubmit","Y");
                                 startActivity(intent1);
 
                                 break;
@@ -607,10 +609,10 @@ public class DcrmenuInGrid extends Fragment {
         request.put("sPaId", "" + Custom_Variables_And_Method.PA_ID);
         request.put("sMobileVersion", "" + Custom_Variables_And_Method.VERSION);
         request.put("iDCR_ID", "" + Custom_Variables_And_Method.DCR_ID);
-
+        request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DCR_DAYPLAN_LOAD_1", request)
+                .execute(new ResponseBuilder("DCR_DAYPLAN_LOAD_2", request)
                         .setDescription("Please Wait....\nChecking your DCR Status..").setResponse(new CBOServices.APIResponse() {
                             @Override
                             public void onComplete(Bundle message) throws JSONException {
@@ -1048,9 +1050,12 @@ public class DcrmenuInGrid extends Fragment {
                         Custom_Variables_And_Method.ROOT_NEEDED =  customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed","Y");
                         //if (Custom_Variables_And_Method.ROOT_NEEDED != null) {
                             if (Custom_Variables_And_Method.ROOT_NEEDED.equals("Y")) {
-                                startActivity(new Intent(getActivity(), ExpenseRoot.class));
+                                //startActivity(new Intent(getActivity(), ExpenseRoot.class));
+                                startActivity(new Intent(getActivity(), com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense.class));
                             } else {
-                                startActivity(new Intent(getActivity(), Expense.class));
+                                //startActivity(new Intent(getActivity(), Expense.class));
+                                startActivity(new Intent(getActivity(), com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense.class));
+
                             }
 
                         //startActivity(new Intent(getActivity(), Expense.class));

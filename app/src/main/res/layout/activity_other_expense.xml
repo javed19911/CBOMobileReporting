@@ -32,6 +32,7 @@
                     android:textSize="17dp"
                     android:layout_marginLeft="10dp"
                     android:textStyle="bold"
+                    android:id="@+id/ExpTitle"
                     android:text="Add Other Expenses"/>
 
                 <LinearLayout
@@ -84,6 +85,51 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/kmLayout"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:ems="10"
+                            android:text="Km"
+                            android:textColor="@android:color/black" />
+                        <EditText
+                            android:id="@+id/km"
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:selectAllOnFocus="true"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:hint="Km"
+                            android:inputType="number" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:ems="10"
+                            android:text="Rate"
+                            android:textColor="@android:color/black" />
+                        <EditText
+                            android:id="@+id/rate"
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:enabled="false"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:hint="Rate"
+                            android:inputType="number" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/amtLayout"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="0dp"
@@ -99,6 +145,7 @@
                             android:id="@+id/ex_head_root"
                             android:layout_width="0dp"
                             android:layout_weight="2"
+                            android:selectAllOnFocus="true"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
                             android:hint="Amt."
@@ -127,6 +174,7 @@
                         android:id="@+id/exp_remark_root"
                         android:layout_weight="2"
                         android:layout_width="0dp"
+                        android:selectAllOnFocus="true"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"

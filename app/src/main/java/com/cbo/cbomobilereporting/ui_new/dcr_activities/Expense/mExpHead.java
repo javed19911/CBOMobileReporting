@@ -8,10 +8,14 @@ public class mExpHead  implements Serializable {
     private int MANDATORY = 0;
     private int DA_ACTION = 0;
     private String EXP_TYPE_STR = "0";
-    private eExpanse EXP_TYPE = eExpanse.None;
+    private eExpense EXP_TYPE = eExpense.None;
     private int ATTACHYN = 0;
     private Double MAX_AMT = 0D;
     private int MasterValidate =0;
+    private Double RATE = 0D;
+    private eExpense SHOW_IN_TA_DA = eExpense.None;
+    private String KMYN ="0";
+    private String HEADTYPE_GROUP = "0";
 
     public mExpHead(int id, String name) {
         Id = id;
@@ -40,7 +44,7 @@ public class mExpHead  implements Serializable {
         return EXP_TYPE_STR;
     }
 
-    public eExpanse getEXP_TYPE() {
+    public eExpense getEXP_TYPE() {
         return EXP_TYPE;
     }
 
@@ -54,6 +58,22 @@ public class mExpHead  implements Serializable {
 
     public int getMasterValidate() {
         return MasterValidate;
+    }
+
+    public Double getRATE() {
+        return RATE;
+    }
+
+    public eExpense getSHOW_IN_TA_DA() {
+        return SHOW_IN_TA_DA;
+    }
+
+    public String getKMYN() {
+        return KMYN;
+    }
+
+    public String getHEADTYPE_GROUP() {
+        return HEADTYPE_GROUP;
     }
 
     /// setter
@@ -70,7 +90,7 @@ public class mExpHead  implements Serializable {
         return this;
     }
 
-    public mExpHead setEXP_TYPE(eExpanse EXP_TYPE) {
+    public mExpHead setEXP_TYPE(eExpense EXP_TYPE) {
         this.EXP_TYPE = EXP_TYPE;
         return this;
     }
@@ -92,6 +112,26 @@ public class mExpHead  implements Serializable {
 
     public mExpHead setMasterValidate(int masterValidate) {
         MasterValidate = masterValidate;
+        return this;
+    }
+
+    public mExpHead setRATE(Double RATE) {
+        this.RATE = RATE;
+        return this;
+    }
+
+    public mExpHead setSHOW_IN_TA_DA(eExpense SHOW_IN_TA_DA) {
+        this.SHOW_IN_TA_DA = SHOW_IN_TA_DA;
+        return this;
+    }
+
+    public mExpHead setKMYN(String KMYN) {
+        this.KMYN = KMYN;
+        return this;
+    }
+
+    public mExpHead setHEADTYPE_GROUP(String HEADTYPE_GROUP) {
+        this.HEADTYPE_GROUP = HEADTYPE_GROUP;
         return this;
     }
 }

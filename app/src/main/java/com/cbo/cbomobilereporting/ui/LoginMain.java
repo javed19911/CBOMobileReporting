@@ -34,6 +34,7 @@ import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.OthExpenseDB;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.SyncFirebaseActivity;
 import com.google.android.gms.location.LocationSettingsStates;
@@ -201,6 +202,7 @@ public class LoginMain extends CustomActivity {
 
 
                     cbohelp.delete_Expense();
+                    new OthExpenseDB(context).delete();
                     cbohelp.delete_Nonlisted_calls();
                     cbohelp.deleteDcrAppraisal();
                     cbohelp.delete_tenivia_traker();

@@ -3,8 +3,11 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -19,18 +22,22 @@ import java.util.HashMap;
 import saleOrder.ViewModel.CBOViewModel;
 import services.MyAPIService;
 import utils.adapterutils.Expenses_Adapter;
+import utils.adapterutils.SpinnerModel;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
 public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
     private mExpense expense;
+    private eExpense expense_type = eExpense.None;
     private mOthExpense othExpense = new mOthExpense();
     private String newAttachment = "";
     private OthExpenseDB othExpenseDB = null;
+    private ExpHeadDB expHeadDB = null;
     private CBO_DB_Helper cbohelp = null;
     @Override
     public void onUpdateView(Activity context, IOtherExpense view) {
         othExpenseDB = new OthExpenseDB(context);
+        expHeadDB = new ExpHeadDB(context);
         cbohelp = new CBO_DB_Helper(context);
         if (view != null){
             view.getReferencesById();
@@ -48,17 +55,31 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
         return expense;
     }
 
+    public eExpense getExpense_type() {
+        return expense_type;
+    }
+
+    public void setExpense_type(eExpense expense_type) {
+        this.expense_type = expense_type;
+        if (view != null) {
+            view.setTitle();
+        }
+    }
+
     public void setOthExpense(mOthExpense othExpense){
         this.othExpense = othExpense;
+        ArrayList<mExpHead> expHeads = new ArrayList<>();
         if (view != null) {
-            if (othExpense.getId() == 0){
-                ArrayList<mExpHead> expHeads = new ArrayList<>();
-                expHeads.add(othExpense.getExpHead());
-                view.loadExpenseHead(expHeads);
-            }else{
-                view.loadExpenseHead(expense.getExpHeads());
-            }
+            if (othExpense.getId() != 0){
 
+                expHeads.add(othExpense.getExpHead());
+
+            }else{
+                expHeads = expHeadDB.get_NotAdded(getExpense_type());
+                expHeads.add(0,new mExpHead(0,"---Select Exp. Head---"));
+            }
+            expense.setExpHeads(expHeads);
+            view.loadExpenseHead(expense.getExpHeads());
 
 
         }
@@ -77,26 +98,48 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
         this.newAttachment = newAttachment;
     }
 
-    public void setExpenseHead(mExpHead expenseHead){
+    public void setExpenseHead(Context context,mExpHead expenseHead){
         getOthExpense().setExpHead(expenseHead);
         if (view != null) {
 
-            if (expenseHead.getId() == 3119) {
-                view.setAmtHint("K.M.");
-                view.setRemarkCaption("K.M. Remark.");
-                view.setAmountCaption("K.M.");
-            } else {
-                view.setAmtHint("Amt.");
-                view.setRemarkCaption("Exp Remark.");
-                view.setAmountCaption("Amount");
+            Boolean allreadyAdded = false;
+           /* if (cbohelp.get_ExpenseTypeAdded(expenseHead.getEXP_TYPE_STR()).size() >0
+                    && expenseHead.getEXP_TYPE() != eExpense.None) {
+                allreadyAdded = true;
 
+            }*/
+            view.KmLayoutRequired(getOthExpense().getExpHead().getKMYN().equalsIgnoreCase("1"));
+            if (!allreadyAdded) {
+                if (expenseHead.getId() == 3119) {
+                    view.setAmtHint("K.M.");
+                    view.setRemarkCaption("K.M. Remark.");
+                    view.setAmountCaption("K.M.");
+                } else {
+                    view.setAmtHint("Amt.");
+                    view.setRemarkCaption("Exp Remark.");
+                    view.setAmountCaption("Amount");
+
+                }
+                view.setKm(getOthExpense().getKm());
+                view.setAmount(getOthExpense().getAmount());
+                view.setRemark(getOthExpense().getRemark());
+                view.setRate(expenseHead.getRATE());
+                view.setAttachment(getOthExpense().getAttachment());
+            }else{
+                AppAlert.getInstance().Alert(context, "Alert!!!",
+                        expenseHead.getEXP_TYPE().name() +" allready submitted in another Head",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
             }
-
         }
     }
 
 
-    public void other_expense_commit(Context context){
+    public void other_expense_commit(Activity context){
         //Start of call to service
 
         HashMap<String,String> request=new HashMap<>();
@@ -106,20 +149,37 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
         request.put("iAmount", ""+ getOthExpense().getAmount());
         request.put("sRemark", getOthExpense().getRemark());
         request.put("sFileName", getOthExpense().getAttachment());
+        request.put("TA_KM",""+ getOthExpense().getKm());
+        request.put("TA_DA",""+ getExpense_type().ordinal());
+        request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
 
-        new MyAPIService(context).execute(new ResponseBuilder("DCREXPCOMMITMOBILE_2",request)
+        new MyAPIService(context).execute(new ResponseBuilder("DCREXPCOMMITMOBILE_3",request)
                 .setTables(tables)
                 .setDescription("Please wait.....\n" +
                         "Processing your expense request....")
                 .setResponse(new CBOServices.APIResponse() {
                     @Override
                     public void onComplete(Bundle bundle) throws Exception {
-                        Custom_Variables_And_Method.getInstance().msgBox(context, " Exp. Added Sucessfully");
-                        if (view!= null){
-                            view.onSendResponse(getOthExpense());
+                        String table0 = bundle.getString("Tables0");
+                        JSONArray jsonArray1 = new JSONArray(table0);
+                        JSONObject object = jsonArray1.getJSONObject(0);
+                        if (object.getString("INVALIDMSG").isEmpty()) {
+
+                            Custom_Variables_And_Method.getInstance().msgBox(context, (getExpense_type() == eExpense.None ? "Exp." : getExpense_type().name()) + "  Added Sucessfully");
+                            if (view != null) {
+                                view.onSendResponse(getOthExpense());
+                            }
+                        }else{
+                            AppAlert.getInstance().Alert(context, "Alert!!", object.getString("INVALIDMSG"),
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            context.onBackPressed();
+                                        }
+                                    });
                         }
                     }
 
@@ -142,6 +202,7 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
 
     private void parser2(Bundle result) throws JSONException {
 
+
                 String table0 = result.getString("Tables0");
                 JSONArray jsonArray1 = new JSONArray(table0);
 
@@ -149,17 +210,18 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
                 /*String value = object.getString("DCRID");
                 String id= object.getString("ID");*/
 
-                othExpenseDB.insert(getOthExpense().setId(object.getInt("ID"))
-                .setTime(Custom_Variables_And_Method.getInstance().currentTime(MyCustumApplication.getInstance())));
+                if (object.getString("INVALIDMSG").isEmpty()) {
+                    othExpenseDB.insert(getOthExpense().setId(object.getInt("ID"))
+                            .setTime(Custom_Variables_And_Method.getInstance().currentTime(MyCustumApplication.getInstance())));
 
-                cbohelp.insert_Expense(""+getOthExpense().getExpHead().getId(),
-                        getOthExpense().getExpHead().getName(),""+getOthExpense().getAmount(),
-                        getOthExpense().getRemark(),getOthExpense().getAttachment(),
-                        ""+getOthExpense().getId(),getOthExpense().getTime());
+                    cbohelp.insert_Expense("" + getOthExpense().getExpHead().getId(),
+                            getOthExpense().getExpHead().getName(), "" + getOthExpense().getAmount(),
+                            getOthExpense().getRemark(), getOthExpense().getAttachment(),
+                            "" + getOthExpense().getId(), getOthExpense().getTime());
 
-                MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("da_val",""+getExpense().getDA_Amt());
+                    MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("da_val", "" + getExpense().getDA_Amt());
 
-
+                }
 
                     //customVariablesAndMethod.msgBox(context, " Exp. Added Sucessfully");
 

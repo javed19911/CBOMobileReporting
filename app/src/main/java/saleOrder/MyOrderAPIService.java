@@ -2,6 +2,8 @@ package saleOrder;
 
 import android.content.Context;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.SendMail;
 
@@ -29,13 +31,15 @@ public class MyOrderAPIService extends CBOServices {
        /* if (!to1.trim().isEmpty()) {
             toEmailList.add(to1);
         }*/
+        mUser user = MyCustumApplication.getInstance().getUser();
+
         configureErrorMail(new SendMail.MailBuilder("mobilereporting@cboinfotech.com", "mreporting")
                 .setSendTo(toEmailList)
-                .setSubject(Custom_Variables_And_Method.COMPANY_CODE)
-                .setBody("Company Code :" +Custom_Variables_And_Method.COMPANY_CODE+
-                        "\n  DCR ID :"+Custom_Variables_And_Method.DCR_ID+
-                        "\n PA ID : "+Custom_Variables_And_Method.PA_ID+
-                        "\n App version : "+Custom_Variables_And_Method.VERSION)
+                .setSubject(user.getCompanyCode())
+                .setBody("Company Code :" +user.getCompanyCode()+
+                        "\n  DCR ID :"+user.getDCRId()+
+                        "\n PA ID : "+user.getID()+
+                        "\n App version : "+user.getAppVersion())
                 .setShowProgess(false));
     }
 

@@ -376,6 +376,7 @@ class LocationTest : AppCompatActivity() {
                 LocArr.clear()
                 startLocationUpdates()
                 NoOfTry = 1
+                //LocationTestSize =10
 
             }
         }

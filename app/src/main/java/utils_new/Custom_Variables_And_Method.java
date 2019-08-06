@@ -648,6 +648,10 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
             toDayDate = "Y";
         }
 
+        if (getDataFrom_FMCG_PREFRENCE(context,"DCRCALL_ANYTIMEYN").equalsIgnoreCase("Y")){
+            return true;
+        }
+
         if ((dcrDateReal.equals(dcrPlanedDate)) && (!toDayDate.equals(dcrPlanedDate))) {
             return false;
         } else {
@@ -708,7 +712,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
 
         String todayDate = timeStampFormat.format(date);
 
-        return todayDate.toString();
+        return todayDate;
     }
 
 
@@ -1067,8 +1071,9 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         int No_Location = 2;
         if(!CheckForceFully) {
             //boolean IsLastLocationMadeTwoHoursEarlier = IsLocationOlderThan(context, "LastCallLocation", 2 * 60 * 60 * 1000);
-            //boolean IsLastValidatedLocationFiveMinitesOlder = IsLocationOlderThan(context, "currentBestLocation_Validated", 5 * 60 * 1000);
-            if (30 > DistanceBetween(getObject(context,"LastCallLocation",Location.class),getObject(context,"currentBestLocation_Validated",Location.class))) {
+            boolean IsLastValidatedLocationFiveMinitesOlder = IsLocationOlderThan(context, "currentBestLocation_Validated", 0.5 * 60 * 1000);
+            double km = DistanceBetween(getObject(context,"LastCallLocation",Location.class),getObject(context,"currentBestLocation_Validated",Location.class));
+            if (30 > km && !(IsLastValidatedLocationFiveMinitesOlder && km == 0)) {
                 return true;
             }
             No_Location = 2;
@@ -1084,7 +1089,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         putObject(context,"LastCallLocation", getObject(context,"currentBestLocation_Validated",Location.class));
         setDataInTo_FMCG_PREFRENCE(context,"LastCallTime", get_currentTimeStamp());
     }
-    public Boolean IsLocationOlderThan(Context context,String LocationKey,int allowed_time){
+
+    public Boolean IsLocationOlderThan(Context context,String LocationKey,double allowed_time){
         Long time_difference= 0L;
         if (getObject(context,LocationKey,Location.class)!=null) {
             //Long location_time = getObject(context, LocationKey, Location.class).getTime();
