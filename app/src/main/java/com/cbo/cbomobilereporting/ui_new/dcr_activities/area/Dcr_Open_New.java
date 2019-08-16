@@ -896,6 +896,7 @@ public class Dcr_Open_New extends AppCompatActivity {
             request.put("sINDP_WW", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_individual_id",""));
             request.put("sDivert_Remark",divert_remark.getText().toString());
             request.put("sLate_Remark", late_remark.getText().toString());
+            request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
             ArrayList<Integer> tables=new ArrayList<>();
             tables.add(0);
@@ -905,7 +906,7 @@ public class Dcr_Open_New extends AppCompatActivity {
             progress1.setCancelable(false);
             progress1.show();
 
-            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_7",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_9",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
             //End of call to service
             work_type_Selected="w";
@@ -956,6 +957,7 @@ public class Dcr_Open_New extends AppCompatActivity {
         request.put("sINDP_WW", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_individual_id",""));
         request.put("sDivert_Remark",divert_remark.getText().toString());
         request.put("sLate_Remark", late_remark.getText().toString());
+        request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -965,7 +967,7 @@ public class Dcr_Open_New extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_7",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_9",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="l";
@@ -1014,6 +1016,7 @@ public class Dcr_Open_New extends AppCompatActivity {
         request.put("sINDP_WW", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_individual_id",""));
         request.put("sDivert_Remark",divert_remark.getText().toString());
         request.put("sLate_Remark", late_remark.getText().toString());
+        request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -1023,7 +1026,7 @@ public class Dcr_Open_New extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_7",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_9",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="n";

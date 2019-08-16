@@ -316,6 +316,8 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
     }
 
 
+
+
     @Override
     public void setRemarkCaption(String caption) {
         textRemark.setText(caption);

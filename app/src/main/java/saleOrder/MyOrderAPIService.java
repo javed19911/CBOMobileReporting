@@ -5,6 +5,7 @@ import android.content.Context;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 import com.uenics.javed.CBOLibrary.SendMail;
 
 import java.util.ArrayList;
@@ -43,6 +44,15 @@ public class MyOrderAPIService extends CBOServices {
                 .setShowProgess(false));
     }
 
+    @Override
+    public void execute(ResponseBuilder responseBuilder) {
+        responseBuilder.getRequest().put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
+        responseBuilder.getRequest().put("LOCATION_LAT_LONG", MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("shareLatLong",""));
+        responseBuilder.getRequest().put("APP_VERSION", MyCustumApplication.getInstance().getUser().getAppVersion());
+        responseBuilder.getRequest().put("IMEI", MyCustumApplication.getInstance().getUser().getIMEI());
+        responseBuilder.getRequest().put("OS", MyCustumApplication.getInstance().getUser().getOS());
+        super.execute(responseBuilder);
+    }
 
 
 }

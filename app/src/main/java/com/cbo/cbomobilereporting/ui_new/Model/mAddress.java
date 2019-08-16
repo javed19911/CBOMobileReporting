@@ -1,10 +1,12 @@
 package com.cbo.cbomobilereporting.ui_new.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by cboios on 02/03/19.
  */
 
-public class mAddress {
+public class mAddress implements Serializable {
     private String LANE1 ="";
     private String LANE2="";
     private String CITY="";

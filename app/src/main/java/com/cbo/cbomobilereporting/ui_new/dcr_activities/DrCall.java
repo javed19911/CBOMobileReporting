@@ -78,6 +78,9 @@ import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -758,16 +761,25 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                                     .setResponse(new CBOServices.APIResponse() {
                                         @Override
                                         public void onComplete(Bundle bundle) throws Exception {
-                                            mdrCall = (mDrCall) new mDrCall().setId(Dr_id);
-                                            drCallDB.delete(mdrCall);
+
+                                            String table0 = bundle.getString("Tables0");
+                                            JSONArray jsonArray1 = new JSONArray(table0);
+                                            JSONObject object = jsonArray1.getJSONObject(0);
+
+                                            if (object.getString("DCRID").equalsIgnoreCase("1")) {
+                                                mdrCall = (mDrCall) new mDrCall().setId(Dr_id);
+                                                drCallDB.delete(mdrCall);
 
 
-                                            cbohelp.delete_tenivia_traker(Dr_id);
-                                            // customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-                                            cbohelp.delete_Doctor_from_local_all(Dr_id);
-                                            customVariablesAndMethod.msgBox(context, Dr_name + " sucessfully Deleted.");
+                                                cbohelp.delete_tenivia_traker(Dr_id);
+                                                // customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                                                cbohelp.delete_Doctor_from_local_all(Dr_id);
+                                                customVariablesAndMethod.msgBox(context, Dr_name + " sucessfully Deleted.");
 
-                                            finish();
+                                                finish();
+                                            }else{
+                                                AppAlert.getInstance().getAlert(context,"Alert",object.getString("DCRID"));
+                                            }
                                         }
 
                                         @Override

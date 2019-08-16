@@ -90,9 +90,7 @@ public class DcrMenu_Grid_Adapter extends BaseAdapter {
         }
         else if (arrayLevel.equals("D_DRSAM")) {
             imgView.setImageResource(R.drawable.doctor_sameple_white);
-        } else if (arrayLevel.equals("D_DRSAM")) {
-            imgView.setImageResource(R.drawable.chemist_call_white);
-        } else if (arrayLevel.equals("D_CHEMCALL") || arrayLevel.equals("D_CUST_CALL")) {
+        }  else if (arrayLevel.equals("D_CHEMCALL") || arrayLevel.equals("D_CUST_CALL")) {
             imgView.setImageResource(R.drawable.chemist_call_white);
         }else if (arrayLevel.equals("D_FAR")) {
             imgView.setImageResource(R.drawable.farmer_meeting_white);

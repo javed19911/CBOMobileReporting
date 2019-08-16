@@ -133,7 +133,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
     }
 
     public Double getAmount(){
-        return ManualAount > 0 ? ManualAount : DefaultAmount;
+        return ManualAount > 0 || IsAddBtnReqd()? ManualAount : DefaultAmount;
     }
 
     @Override
@@ -183,6 +183,13 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
         ManualAount = total;
         setDetail(AddToCartView.toCurrency(String.format("%.2f", getAmount())));
         setTitle();
+        return this;
+    }
+
+    @Override
+    public MultiSelectDetailView setAddBtnReqd(Boolean required) {
+        super.setAddBtnReqd(required);
+        updateDataList(getDataList());
         return this;
     }
 

@@ -103,8 +103,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String ROOT_NEEDED;
     public static String CHEMIST_ID;
     public static String COMPANY_NAME;
-    public static String checkVersion = "20190724";
-    public static String VERSION = "20190724";
+    public static String checkVersion = "20190816";
+    public static String VERSION = "20190816";
     public static String RPT_DATE;
     public static String EMP_ID;
     public static String DCR_DATE;
@@ -1071,7 +1071,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         int No_Location = 2;
         if(!CheckForceFully) {
             //boolean IsLastLocationMadeTwoHoursEarlier = IsLocationOlderThan(context, "LastCallLocation", 2 * 60 * 60 * 1000);
-            boolean IsLastValidatedLocationFiveMinitesOlder = IsLocationOlderThan(context, "currentBestLocation_Validated", 0.5 * 60 * 1000);
+            boolean IsLastValidatedLocationFiveMinitesOlder = IsLocationOlderThan(context, "currentBestLocation_Validated", 1 * 60 * 1000);
             double km = DistanceBetween(getObject(context,"LastCallLocation",Location.class),getObject(context,"currentBestLocation_Validated",Location.class));
             if (30 > km && !(IsLastValidatedLocationFiveMinitesOlder && km == 0)) {
                 return true;

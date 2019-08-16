@@ -11,6 +11,7 @@ public interface IOtherExpense {
     void KmLayoutRequired(Boolean required);
     void loadExpenseHead(ArrayList<mExpHead> expHeads);
     void addAttachment();
+    //void setExpenseHead(mExpHead expenseHead);
     void setRemarkCaption(String caption);
     void setAmountCaption(String caption);
     void setAmtHint(String hint);

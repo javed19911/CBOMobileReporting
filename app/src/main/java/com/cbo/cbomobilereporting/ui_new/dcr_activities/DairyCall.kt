@@ -37,6 +37,7 @@ import com.cbo.cbomobilereporting.MyCustumApplication
 import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall
 import com.uenics.javed.CBOLibrary.CBOServices
 import com.uenics.javed.CBOLibrary.ResponseBuilder
+import org.json.JSONArray
 import services.MyAPIService
 import utils.networkUtil.NetworkUtil
 import utils_new.*
@@ -731,12 +732,21 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                                 .setResponse(object : CBOServices.APIResponse {
                                     @Throws(Exception::class)
                                     override fun onComplete(bundle: Bundle) {
-                                        mdairyCall = mDairyCall(head).setId(Dr_id) as mDairyCall
-                                        dairyCallDB.delete(mdairyCall)
+                                        val table0 = bundle.getString("Tables0")
+                                        val jsonArray1 = JSONArray(table0)
+                                        val `object` = jsonArray1.getJSONObject(0)
 
-                                        cbohelp.delete_phdairy_dcr(Dr_id)
-                                        customVariablesAndMethod.msgBox(context, "$Dr_name sucessfully Deleted.")
-                                        finish()
+                                        if (`object`.getString("DCRID").equals("1", ignoreCase = true)) {
+
+                                            mdairyCall = mDairyCall(head).setId(Dr_id) as mDairyCall
+                                            dairyCallDB.delete(mdairyCall)
+
+                                            cbohelp.delete_phdairy_dcr(Dr_id)
+                                            customVariablesAndMethod.msgBox(context, "$Dr_name sucessfully Deleted.")
+                                            finish()
+                                        } else {
+                                            AppAlert.getInstance().getAlert(context, "Alert", `object`.getString("DCRID"))
+                                        }
                                     }
 
                                     @Throws(Exception::class)

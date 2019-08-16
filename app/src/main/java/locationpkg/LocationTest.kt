@@ -110,11 +110,14 @@ class LocationTest : AppCompatActivity() {
     /**
      * handle new location
      */
+
+
     private val mLocationUpdated = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             try {
                 val location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE) as Location
                 LocArr.add(location);
+
                 if (LocArr.size >= LocationTestSize){
                     stopLocationUpdates()
 
@@ -122,7 +125,8 @@ class LocationTest : AppCompatActivity() {
 
                     //var IsLastLocationMadeTwoHoursEarlier = customVariableandMethod.IsLocationOlderThan(context, "LastCallLocation", 2 * 60 * 60 * 1000);
                     var time_difference = customVariableandMethod.GetLocationTimeDifference(customVariableandMethod.getObject(context, "LastCallLocation", Location::class.java))
-                    if(time_difference > 2 * 60 * 60 * 1000){
+                    //if(time_difference > 2 * 60 * 60 * 1000){
+                    if(time_difference != 0L && km != 0.0){
                         var estimated_time_taken=km/1.0;             //1km per min allowed
                         var real_time_taken = (time_difference)/60000
                         if (real_time_taken > estimated_time_taken){
@@ -131,11 +135,14 @@ class LocationTest : AppCompatActivity() {
                             if (NoOfTry == 0){
                                 ShowAlert("Please Switch Off your Gps...")
                             }else{
-                                ShowAlert("Please Restart your Mobile...")
+                                // check if the location is not bunk locations
+                                if (IsBunkLoctions()) {
+                                    ShowAlert("Please Restart your Mobile...")
+                                }
                             }
                         }
 
-                    }else {
+                   } else {
                         SetLocation(location);
                     }
 
@@ -143,7 +150,7 @@ class LocationTest : AppCompatActivity() {
                 }
                 var msg : String = "Please Wait";
                 for (i in 0 .. LocArr.size -1 ){
-                    msg = msg + " ..."
+                    msg = msg + (if(NoOfTry != 1) " ..." else " .")
                 }
                 mPositionContainer!!.text= msg  // "Lat: " + location.getLatitude() + " Lon: " + location.getLongitude() + " Size : " + LocArr.size
             } catch (e: Exception) {
@@ -151,6 +158,43 @@ class LocationTest : AppCompatActivity() {
             }
 
         }
+    }
+
+    fun IsBunkLoctions()  : Boolean {
+        var count = 0
+        var centroid = getCentroid();
+        if  (centroid!= null){
+            for ( loc: Location in LocArr){
+                var km = loc.distanceTo(centroid)
+                if (km <= 200 && km > 0){
+                    count ++
+                }
+            }
+            if (count > (LocArr.size/2)){
+                SetLocation(centroid);
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    fun getCentroid() : Location?{
+        var centroid : Location? = null
+        var centroidX : Double = 0.0
+        var centroidY : Double = 0.0
+        for ( loc: Location in LocArr){
+             centroidX += loc.latitude
+            centroidY += loc.longitude
+
+        }
+        if(LocArr.size>0){
+            centroid = LocArr.get(0)
+            centroid.latitude = centroidX/LocArr.size
+            centroid.longitude = centroidY/LocArr.size
+        }
+
+        return centroid;
     }
 
     fun isMockLocationOn( location : Location,  context : Context) : Boolean {
@@ -376,7 +420,7 @@ class LocationTest : AppCompatActivity() {
                 LocArr.clear()
                 startLocationUpdates()
                 NoOfTry = 1
-                //LocationTestSize =10
+                LocationTestSize =10
 
             }
         }

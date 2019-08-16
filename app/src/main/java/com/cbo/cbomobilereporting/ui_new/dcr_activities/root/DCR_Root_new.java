@@ -658,7 +658,7 @@ public class DCR_Root_new extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 work_name = getWorkwith();
                 Boolean allowMultipleRoute = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_MULTIPLE_ROUTEYN","N").equalsIgnoreCase("Y");
-                if (Custom_Variables_And_Method.pub_desig_id.equals("1") && checkforCalls() && !allowMultipleRoute) {
+                if ( checkforCalls() && !allowMultipleRoute) {
                     customVariablesAndMethod.getAlert(context,"Call Found","Can not change Route !!! \nSome Calls found in your Day Summary.\n" +
                             "Else Reset your Day Plan from Utility");
                 }else if (work_name.equals("") &&  !work_type_code.contains("_W")
@@ -1101,19 +1101,9 @@ public class DCR_Root_new extends AppCompatActivity {
             request.put("sDivert_Remark",divert_remark.getText().toString());
             request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
             request.put("sSTAION_ADDAREA", getArea());
+            request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
 
-//            new Service_Call_From_Multiple_Classes().DCR_COMMIT_ROUTE(context, request, new Response() {
-//                @Override
-//                public void onSuccess(Bundle bundle) {
-//
-//                }
-//
-//                @Override
-//                public void onError(String s, String s1) {
-//
-//                }
-//            });
 
              ArrayList<Integer> tables=new ArrayList<>();
             tables.add(0);
@@ -1123,7 +1113,7 @@ public class DCR_Root_new extends AppCompatActivity {
             progress1.setCancelable(false);
             progress1.show();
 
-            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_10",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_11",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
             //End of call to service
             work_type_Selected="w";
 
@@ -1174,6 +1164,7 @@ public class DCR_Root_new extends AppCompatActivity {
         request.put("sDivert_Remark",divert_remark.getText().toString());
         request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
         request.put("sSTAION_ADDAREA", getArea());
+        request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -1183,7 +1174,7 @@ public class DCR_Root_new extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_10",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_11",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="l";
@@ -1236,6 +1227,7 @@ public class DCR_Root_new extends AppCompatActivity {
         request.put("sDivert_Remark",divert_remark.getText().toString());
         request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
         request.put("sSTAION_ADDAREA", getArea());
+        request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -1245,7 +1237,7 @@ public class DCR_Root_new extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_10",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_11",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="n";

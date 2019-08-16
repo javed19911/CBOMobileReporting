@@ -54,15 +54,11 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
     private final int GALLERY_ACTIVITY_CODE=200;
     private final int RESULT_CROP = 400;
     private final int REQUEST_CAMERA=201;
-    String picturePath="";
-    private File output=null;
-    String filename="";
     TableLayout DA_layout;
 
     EditText daAmt,da_root, distAmt;
-    Button save_exp,add_exp,add_TA;
+    Button save_exp;
     TextView datype,distAmt1, distanse, attach_txt,routeStausTxt;
-    aExpense aTA,aOTH;
     LinearLayout actual_fare_layout,actual_DA_layout,manual_DA_Type_layout,manual_Distance_layout;
     ImageView attachnew;
 

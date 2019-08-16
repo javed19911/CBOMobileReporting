@@ -77,6 +77,9 @@ import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
@@ -1157,12 +1160,21 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                                 .setResponse(new CBOServices.APIResponse() {
                                     @Override
                                     public void onComplete(Bundle bundle) throws Exception {
-                                        mchemistCall = (mChemistCall) new mChemistCall().setId(Dr_id);
-                                        chemistCallDB.delete(mchemistCall);
+                                        String table0 = bundle.getString("Tables0");
+                                        JSONArray jsonArray1 = new JSONArray(table0);
+                                        JSONObject object = jsonArray1.getJSONObject(0);
 
-                                        cbohelp.delete_Chemist_from_local_all(Dr_id);
-                                        customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-                                        finish();
+                                        if (object.getString("DCRID").equalsIgnoreCase("1")) {
+
+                                            mchemistCall = (mChemistCall) new mChemistCall().setId(Dr_id);
+                                            chemistCallDB.delete(mchemistCall);
+
+                                            cbohelp.delete_Chemist_from_local_all(Dr_id);
+                                            customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+                                            finish();
+                                        }else{
+                                            AppAlert.getInstance().getAlert(context,"Alert",object.getString("DCRID"));
+                                        }
                                     }
 
                                     @Override

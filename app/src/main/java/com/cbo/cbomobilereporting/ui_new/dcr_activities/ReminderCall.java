@@ -71,6 +71,9 @@ import utils.adapterutils.SpinnerModel;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -866,11 +869,20 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 								.setResponse(new CBOServices.APIResponse() {
 									@Override
 									public void onComplete(Bundle bundle) throws Exception {
-										mdrRCCall = (mDrRCCall) new mDrRCCall().setId(Dr_id);
-										drRcCallDB.delete(mdrRCCall);
-										cbohelp.delete_DoctorRemainder_from_local_all(Dr_id);
-										customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
-										finish();
+										String table0 = bundle.getString("Tables0");
+										JSONArray jsonArray1 = new JSONArray(table0);
+										JSONObject object = jsonArray1.getJSONObject(0);
+
+										if (object.getString("DCRID").equalsIgnoreCase("1")) {
+
+											mdrRCCall = (mDrRCCall) new mDrRCCall().setId(Dr_id);
+											drRcCallDB.delete(mdrRCCall);
+											cbohelp.delete_DoctorRemainder_from_local_all(Dr_id);
+											customVariablesAndMethod.msgBox(context,Dr_name+" sucessfully Deleted.");
+											finish();
+										}else{
+											AppAlert.getInstance().getAlert(context,"Alert",object.getString("DCRID"));
+										}
 									}
 
 									@Override

@@ -109,8 +109,8 @@ public class ExpHeadDB extends DBHelper {
         ArrayList<mExpHead> expHeads = new ArrayList<mExpHead>();
 
 
-        String query ="Select * from " + getTable() + " LEFT JOIN "+"Expenses"+" ON exp_head_id = FIELD_ID where exp_head_id IS NULL "+
-                "AND HEADTYPE_GROUP NOT IN (Select a.HEADTYPE_GROUP from " + getTable() + " as a LEFT JOIN "+"Expenses"+" as b ON b.exp_head_id = a.FIELD_ID where b.exp_head_id IS NOT NULL AND a.HEADTYPE_GROUP != 0)";
+        String query ="Select * from " + getTable() + " LEFT JOIN "+"Expenses"+" ON exp_head_id = FIELD_ID where exp_head_id IS NULL ";//+
+                //"AND HEADTYPE_GROUP NOT IN (Select a.HEADTYPE_GROUP from " + getTable() + " as a LEFT JOIN "+"Expenses"+" as b ON b.exp_head_id = a.FIELD_ID where b.exp_head_id IS NOT NULL AND a.HEADTYPE_GROUP != 0)";
 
         String WhereClause = "";
 

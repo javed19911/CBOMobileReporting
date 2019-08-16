@@ -103,11 +103,12 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
         if (view != null) {
 
             Boolean allreadyAdded = false;
-           /* if (cbohelp.get_ExpenseTypeAdded(expenseHead.getEXP_TYPE_STR()).size() >0
-                    && expenseHead.getEXP_TYPE() != eExpense.None) {
+            if (othExpenseDB.IsExpHeadGroupAdded(expenseHead.getHEADTYPE_GROUP()) &&
+                getExpense().getExpHeads().size() != 1) {
+                view.loadExpenseHead(getExpense().getExpHeads());
                 allreadyAdded = true;
 
-            }*/
+            }
             view.KmLayoutRequired(getOthExpense().getExpHead().getKMYN().equalsIgnoreCase("1"));
             if (!allreadyAdded) {
                 if (expenseHead.getId() == 3119) {
@@ -118,13 +119,8 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
                     view.setAmtHint("Amt.");
                     view.setRemarkCaption("Exp Remark.");
                     view.setAmountCaption("Amount");
-
                 }
-                view.setKm(getOthExpense().getKm());
-                view.setAmount(getOthExpense().getAmount());
-                view.setRemark(getOthExpense().getRemark());
-                view.setRate(expenseHead.getRATE());
-                view.setAttachment(getOthExpense().getAttachment());
+
             }else{
                 AppAlert.getInstance().Alert(context, "Alert!!!",
                         expenseHead.getEXP_TYPE().name() +" allready submitted in another Head",
@@ -135,6 +131,12 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
                             }
                         });
             }
+
+            view.setKm(getOthExpense().getKm());
+            view.setAmount(getOthExpense().getAmount());
+            view.setRemark(getOthExpense().getRemark());
+            view.setRate(expenseHead.getRATE());
+            view.setAttachment(getOthExpense().getAttachment());
         }
     }
 

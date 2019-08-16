@@ -809,6 +809,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         request.put("aDCRDRRX_ITEM_ID", aDCRDRRX_ITEM_ID);
         request.put("aDCRDRRX_QTY", aDCRDRRX_QTY);
         request.put("aDCRDRRX_AMOUNT", aDCRDRRX_AMOUNT);
+        request.put("ISSUPPORTLOGIN", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
 
 
 
@@ -829,7 +830,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DCRCommitFinal_New_21", request)
+                .execute(new ResponseBuilder("DCRCommitFinal_New_22", request)
                         .setTables(tables)
                         .setDescription("Please Wait..\n" +
                                 "Final Submit in process......")

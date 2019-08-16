@@ -41,6 +41,7 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.Doctor_Sample;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrPrescription;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrRXActivity;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Location.CentroidLocation;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.TabbedActivity.TabbedCallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
@@ -218,7 +219,12 @@ public class DcrmenuInGrid extends Fragment {
 
     private void OnGridItemClick(String nameOnClick,boolean SkipLocationVarification){
         switch (nameOnClick) {
-
+            case "D_LOC_TEST": {
+                Intent i = new Intent(getActivity(), CentroidLocation.class);
+                i.putExtra("title","Location Test");
+                startActivity(i);
+                break;
+            }
             case "D_DP": {
                 if(customVariablesAndMethod.checkIfCallLocationValid(context,true,SkipLocationVarification)) {
                     setLetLong(nameOnClick);
@@ -1940,10 +1946,13 @@ public class DcrmenuInGrid extends Fragment {
         keyValue = cboDbHelper.getMenu("DCR","");
         listOfAllTab = new ArrayList<String>();
         count = new ArrayList<Integer>();
+        getKeyList = new ArrayList<String>();
         for (String key : keyValue.keySet()) {
             getKeyList.add(key);
             count.add(get_count(key));
         }
+
+
         if(!getKeyList.contains("D_CHEMCALL") && !getKeyList.contains("D_RETCALL")){
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED","Y");
         }else{
@@ -2016,6 +2025,10 @@ public class DcrmenuInGrid extends Fragment {
         for (int i = 0; i < keyValue.size(); i++) {
             listOfAllTab.add(keyValue.get(getKeyList.get(i)));
         }
+
+       /* listOfAllTab.add(0,"Location Test");
+        getKeyList.add(0,"D_LOC_TEST");
+        count.add(0,-1);*/
     }
 
     private int get_count(String menu){

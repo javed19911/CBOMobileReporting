@@ -331,9 +331,37 @@ public class LoginMain extends CustomActivity {
                                     new AppAlert.OnClickListener() {
                                         @Override
                                         public void onPositiveClicked(View item, String result) {
-                                            MyCustumApplication.getInstance().getUser().setLoggedInAsSupport(true);
-                                            MyCustumApplication.getInstance().getUser().setIMEIasSupport(MOBILE_ID_ORIGINAL);
-                                            Login();
+                                            AppAlert.getInstance().inputAlert(context, "Password??",
+                                                    "Please Enter Password to login as Support..", "Password", new AppAlert.OnClickListener() {
+                                                        @Override
+                                                        public void onPositiveClicked(View item, String result) {
+                                                            try {
+                                                                if (result.equalsIgnoreCase(c.getString("SUPPORT_PWD"))) {
+                                                                    MyCustumApplication.getInstance().getUser().setLoggedInAsSupport(true);
+                                                                    MyCustumApplication.getInstance().getUser().setIMEIasSupport(MOBILE_ID_ORIGINAL);
+                                                                    Login();
+                                                                }else{
+                                                                    //((EditText)item).setError("Invalid Password");
+                                                                    AppAlert.getInstance().Alert(context, "Invalid Password!!!",
+                                                                            "Please enter correct password...",
+                                                                            new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    Login();
+                                                                                }
+                                                                            });
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onNegativeClicked(View item, String result) {
+
+                                                        }
+                                                    });
+
                                         }
 
                                         @Override

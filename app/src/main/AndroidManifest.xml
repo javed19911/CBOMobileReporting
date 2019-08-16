@@ -57,8 +57,10 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui_new.dcr_activities.TabbedActivity.TabbedCallActivity"
-            android:theme="@style/AppThemeNoBar"/>
+        <activity android:name=".ui_new.dcr_activities.Location.CentroidLocation"></activity>
+        <activity
+            android:name=".ui_new.dcr_activities.TabbedActivity.TabbedCallActivity"
+            android:theme="@style/AppThemeNoBar" />
         <activity android:name=".ui_new.utilities_activities.SyncFirebaseActivity" />
         <activity
             android:name="saleOrder.Activities.CartAttachment"

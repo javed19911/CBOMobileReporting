@@ -105,6 +105,10 @@ public class LatLngToAddress {
 
                     for (int i =0 ; i < jsonArray.length() ; i++){
                         JSONArray address_components = jsonArray.getJSONObject(i).getJSONArray("address_components");
+                        String formatted_address = jsonArray.getJSONObject(i).getString("formatted_address");
+                        if (address.getFORMATED_ADDRESS().length()< formatted_address.length()) {
+                            address.setFORMATED_ADDRESS(formatted_address);
+                        }
                         for (int j = 0; j < address_components.length(); j++) {
                             JSONObject component = address_components.getJSONObject(j);
                             JSONArray types = component.getJSONArray("types");
