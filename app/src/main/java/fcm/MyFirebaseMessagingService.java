@@ -12,6 +12,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
@@ -28,6 +30,7 @@ import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Mail;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -59,6 +62,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     Boolean flag_logo=false,flag_info=false,insert=true;
     CBO_DB_Helper cboDbHelper;
     Context context;
+
+
+    @Override
+    public void onNewToken(@NonNull String refreshedToken) {
+        super.onNewToken(refreshedToken);
+        customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
+        //Getting registration token
+        //String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        //Displaying token on logcat
+        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        sendRegistrationToServer(refreshedToken);
+    }
+
+
+    private void sendRegistrationToServer(String token) {
+        //You can implement this method to store the token on your server
+        //Not required for current project
+        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(this,"GCMToken",token);
+
+
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

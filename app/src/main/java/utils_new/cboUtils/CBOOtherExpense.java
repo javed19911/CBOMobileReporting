@@ -102,7 +102,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
                     title = "Other Expenses";
         }
         if ((!getOtherDetail().isEmpty() && getExp_type() != eExpense.TA)
-                || (!getOtherDetail().isEmpty() && ManualAount == 0 && DefaultAmount !=0)) {
+                || (!getOtherDetail().isEmpty() && ManualAount == 0 && DefaultAmount !=0 && !IsAddBtnReqd())) {
             subTitle =  " ( " + getOtherDetail() + " ) ";
         }
 
@@ -141,7 +141,13 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
         mOthExpense item = getDataList().get(position);
         holder.exp_hed.setText(item.getExpHead().getName());
         holder.exp_amt.setText(""+item.getAmount());
-        holder.exp_remak.setText(item.getRemark());
+        if (item.getKm() >0 && item.getAmount() > 0){
+            String kmDescription = item.getKm() + "Kms * " +  AddToCartView.toCurrency(String.format("%.2f",item.getAmount()/ item.getKm())) + "/km";
+            holder.exp_remak.setText(kmDescription + "\n"+item.getRemark());
+        }else{
+            holder.exp_remak.setText(item.getRemark());
+        }
+
         holder.edit_exp.setVisibility(View.VISIBLE);
         holder.delete_exp.setVisibility(View.VISIBLE);
 

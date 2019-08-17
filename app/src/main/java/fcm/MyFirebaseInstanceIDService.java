@@ -3,7 +3,6 @@ package fcm;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import utils_new.Custom_Variables_And_Method;
 
@@ -12,12 +11,13 @@ import utils_new.Custom_Variables_And_Method;
  */
 
 //Class extending FirebaseInstanceIdService
-public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class MyFirebaseInstanceIDService {
+       // extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
     Custom_Variables_And_Method customVariablesAndMethod;
 
-    @Override
+    //@Override
     public void onTokenRefresh() {
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
@@ -33,7 +33,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(String token) {
         //You can implement this method to store the token on your server
         //Not required for current project
-        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(this,"GCMToken",token);
+        //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(this,"GCMToken",token);
 
 
     }

@@ -23,6 +23,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator
 import com.cbo.cbomobilereporting.MyCustumApplication
+import com.uenics.javed.CBOLibrary.SendMail
 import utils_new.AppAlert
 import utils_new.Custom_Variables_And_Method
 import java.util.*
@@ -39,6 +40,7 @@ class LocationTest : AppCompatActivity() {
     private  val GPS_Setting_Enabled= 1
     private var NoOfTry  =0
     private var LocationTestSize =10
+    private var CENTROID_METER = 200;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,7 @@ class LocationTest : AppCompatActivity() {
 //        setSupportActionBar(toolbar)
         context = this;
         customVariableandMethod = Custom_Variables_And_Method.getInstance()
+        CENTROID_METER =  Integer.parseInt( customVariableandMethod.getDataFrom_FMCG_PREFRENCE(context,"CENTROID_METER","200"))
         // get text view
         mPositionContainer = findViewById(R.id.positionContainerTxt) as TextView
 
@@ -126,10 +129,10 @@ class LocationTest : AppCompatActivity() {
                     //var IsLastLocationMadeTwoHoursEarlier = customVariableandMethod.IsLocationOlderThan(context, "LastCallLocation", 2 * 60 * 60 * 1000);
                     var time_difference = customVariableandMethod.GetLocationTimeDifference(customVariableandMethod.getObject(context, "LastCallLocation", Location::class.java))
                     //if(time_difference > 2 * 60 * 60 * 1000){
-                    if(time_difference != 0L && km != 0.0){
+                    //if(time_difference != 0L && km != 0.0){
                         var estimated_time_taken=km/1.0;             //1km per min allowed
-                        var real_time_taken = (time_difference)/60000
-                        if (real_time_taken > estimated_time_taken){
+                        var real_time_taken: Double = (time_difference)/60000.0
+                        if (real_time_taken >= estimated_time_taken){
                             SetLocation(location);
                         }else{
                             if (NoOfTry == 0){
@@ -137,14 +140,36 @@ class LocationTest : AppCompatActivity() {
                             }else{
                                 // check if the location is not bunk locations
                                 if (IsBunkLoctions()) {
+
+                                    if  (CENTROID_METER != 0) {
+                                        var latlongStr = ""
+                                        for (loc: Location in LocArr) {
+                                            latlongStr = latlongStr + ("" + loc.latitude + ","+ loc.longitude) +"|"
+                                        }
+                                        val toEmailList = java.util.ArrayList<String>()
+                                        toEmailList.add("mobilereporting@cboinfotech.com")
+                                        val user = MyCustumApplication.getInstance().user
+
+                                        SendMail.MailBuilder("mobilereporting@cboinfotech.com", "mreporting")
+                                                .setSendTo(toEmailList)
+                                                .setSubject(user.getCompanyCode() + " : Centroid Failed....")
+                                                .setBody("Company Code :" + user.getCompanyCode() +
+                                                        "\n  DCR ID :" + user.getDCRId() +
+                                                        "\n PA ID : " + user.getID() +
+                                                        "\n App version : " + user.getAppVersion() +
+                                                        "\n LatLong : " + latlongStr +
+                                                        "\n LatLong Raw : " + LocArr.toString())
+                                                .setShowProgess(false).build().exceute(context)
+                                    }
+
                                     ShowAlert("Please Restart your Mobile...")
                                 }
                             }
                         }
 
-                   } else {
-                        SetLocation(location);
-                    }
+//                   } else {
+//                        SetLocation(location);
+//                    }
 
                     //GetValidLocation()
                 }
@@ -161,20 +186,22 @@ class LocationTest : AppCompatActivity() {
     }
 
     fun IsBunkLoctions()  : Boolean {
-        var count = 0
-        var centroid = getCentroid();
-        if  (centroid!= null){
-            for ( loc: Location in LocArr){
-                var km = loc.distanceTo(centroid)
-                if (km <= 200 && km > 0){
-                    count ++
+        if  (CENTROID_METER != 0) {
+            var count = 0
+            var centroid = getCentroid();
+            if (centroid != null) {
+                for (loc: Location in LocArr) {
+                    var km = loc.distanceTo(centroid)
+                    if (km <= CENTROID_METER && km > 0) {
+                        count++
+                    }
                 }
-            }
-            if (count > (LocArr.size/2)){
-                SetLocation(centroid);
-                return false;
-            }
+                if (count > (LocArr.size / 2)) {
+                    SetLocation(centroid);
+                    return false;
+                }
 
+            }
         }
         return true;
     }
