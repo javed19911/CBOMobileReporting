@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -48,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import services.CboServices;
 import services.MyAPIService;
@@ -489,6 +491,12 @@ public class LoginMain extends CustomActivity {
     }
 
     public void onLoginSucess(Boolean SkipSync){
+        //if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "COMPANY_PICYN", "").equalsIgnoreCase("Y")){
+            File COMPANY_PIC= new File( Environment.getExternalStorageDirectory()+"/cbo/profile/company.png" );
+            COMPANY_PIC.delete();
+        //}
+
+
         if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport() && !SkipSync){
             AppAlert.getInstance().setNagativeTxt("Skip").DecisionAlert(context, "Sync User DCR?", "Do you want to Download User DCR Data for support?",
                     new AppAlert.OnClickListener() {
@@ -506,6 +514,7 @@ public class LoginMain extends CustomActivity {
                     });
         }else {
             customMethod.notification_check();
+
             if (Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("11")) {
                 startActivity(new Intent(getApplicationContext(), PersonalInfo.class));
 

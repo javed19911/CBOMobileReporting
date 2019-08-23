@@ -496,6 +496,15 @@
         <activity
             android:name=".ui_new.dcr_activities.lead.LeadActivity"
             android:theme="@style/AppThemeNoBar" />
+
+        <activity
+            android:name=".ui_new.dcr_activities.Recipt.ReciptActivity"
+            android:theme="@style/AppThemeNoBar"/>
+
+        <activity
+            android:name=".ui_new.dcr_activities.Recipt.AddRecpiet"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme" />
     </application>
 
 </manifest>

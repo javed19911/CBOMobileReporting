@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Recipt.ReciptActivity;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Complaint;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.ComplaintView;
@@ -88,6 +89,7 @@ public class TransactionMenuInGrid extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
               String nameOnClick = getKeyList.get(position);
+                String menuname = listOfAllTab.get(position);
                 String url=new CBO_DB_Helper(getActivity()).getMenuUrl(MenuCode,nameOnClick);
                 if(url!=null && !url.equals("")) {
                     /*Intent i = new Intent(getActivity(), CustomWebView.class);
@@ -102,6 +104,9 @@ public class TransactionMenuInGrid extends Fragment {
                         case "T_LR": {
 
                             onClickLeaveReq();
+                            break;
+                        }case"T_RCPT_ENTRY":{
+                            onClickRecepitEntry(menuname);
                             break;
                         }
                         /*case "T_SS": {
@@ -221,6 +226,21 @@ public class TransactionMenuInGrid extends Fragment {
         startActivity(intent);
 
     }
+
+    private void onClickRecepitEntry(String title) {
+        if (!networkUtil.internetConneted(context)) {
+
+            customVariablesAndMethod.Connect_to_Internet_Msg(context);
+
+        } else {
+            Intent rcptactivity = new Intent(getActivity(), ReciptActivity.class);
+            rcptactivity.putExtra("title",title);
+            //  rcptactivity.putExtra("title",cboDbHelper.getMenu("TRANSACTION", "T_RCPT_ENTRY").get("T_RCPT_ENTRY")))
+
+            startActivity(rcptactivity);
+        }
+    }
+
 ////////////////////////
     public void addDataInList() {
 

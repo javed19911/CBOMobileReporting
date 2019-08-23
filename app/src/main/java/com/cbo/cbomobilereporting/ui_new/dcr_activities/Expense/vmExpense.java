@@ -58,7 +58,11 @@ public class vmExpense  extends CBOViewModel<IExpense> {
             view.setDA(""+expense.getDA_Amt());
             //view.setDAType(expense.getDA_TYPE_Display());
             view.setManualDA(getExpense().getSelectedDA());
-            view.setTADetail(getExpense().getKm() + "Kms * " + AddToCartView.toCurrency(String.format("%.2f", getExpense().getRate())) + "/km");
+            if (getExpense().getSelectedDA().getCode().equalsIgnoreCase("L")) {
+                view.setTADetail("Not Applicable");
+            }else {
+                view.setTADetail(getExpense().getKm() + "Kms * " + AddToCartView.toCurrency(String.format("%.2f", getExpense().getRate())) + "/km");
+            }
             //view.setDistance(expense.getFARE());
             //view.enableDA(othExpenseDB.get_DA_ACTION_exp_head().size() == 0);
             //view.ActualDAReqd(expense.getACTUALDA_FAREYN().equalsIgnoreCase("Y"));
@@ -127,6 +131,10 @@ public class vmExpense  extends CBOViewModel<IExpense> {
 
         if (view != null){
             view.setManualDA(da);
+            if (da.getCode().equalsIgnoreCase("L")) {
+                view.setTADetail("Not Applicable");
+            }
+
             view.ManualTAReqd(expense.getTA_TYPE_MANUALYN().equalsIgnoreCase("1"));
             view.ManualDistanceReqd(expense.getDISTANCE_TYPE_MANUALYN().equalsIgnoreCase("1"));
             view.updateDAView();

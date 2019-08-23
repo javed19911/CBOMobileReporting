@@ -156,7 +156,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
 
     private void CheckMenuPic(int times){
         USER_PIC= new File( Environment.getExternalStorageDirectory()+"/cbo/profile/"+Custom_Variables_And_Method.PA_ID+".jpg" );
-        COMPANY_PIC= new File( Environment.getExternalStorageDirectory()+"/cbo/profile/company.jpg" );
+        COMPANY_PIC= new File( Environment.getExternalStorageDirectory()+"/cbo/profile/company.png" );
         if  ( times==0 && !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"USER_PIC","").isEmpty() && !USER_PIC.exists()){
             if (!networkUtil.internetConneted(ViewPager_2016.this)) {
                 customVariablesAndMethod.getAlert(this,"Turn ON your Internet","Profile Pic download Pending...");
@@ -459,7 +459,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     }
 
     private void logout(){
-        AppAlert.getInstance().setPositiveTxt("Yes").setNagativeTxt("No").DecisionAlert(context, "Logout!!!", "Are you sure to Logout?", new AppAlert.OnClickListener() {
+        AppAlert.getInstance().setPositiveTxt("Yes").setNagativeTxt("No").DecisionAlert(context, "Exit!!!", "Are you sure to Exit?", new AppAlert.OnClickListener() {
             @Override
             public void onPositiveClicked(View item, String result) {
                 MyCustumApplication.getInstance().Logout(context);
@@ -634,7 +634,11 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                 Log.i("in save()", "after outputstream");
                 FileOutputStream fo = new FileOutputStream(filename);
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bmImg.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                if (filename.getAbsolutePath().contains(".png")) {
+                    bmImg.compress(Bitmap.CompressFormat.PNG, 90, bytes);
+                }else{
+                    bmImg.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                }
                 fo.write(bytes.toByteArray());
                 fo.close();
                 out.flush();

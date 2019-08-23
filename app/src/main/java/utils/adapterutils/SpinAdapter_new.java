@@ -28,7 +28,6 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
 	private Context activity;
     private ArrayList data;
     public Resources res;
-    SpinnerModel tempValues=null;
     LayoutInflater inflater;
     Custom_Variables_And_Method customVariablesAndMethod;
     int show;
@@ -72,7 +71,7 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
         View row = inflater.inflate(R.layout.spin_row, parent, false);
         
         /***** Get each Model object from Arraylist ********/
-        tempValues = null;
+        SpinnerModel tempValues = null;
         tempValues = (SpinnerModel) data.get(position);
         
         TextView label        = (TextView)row.findViewById(R.id.spin_name);
@@ -105,7 +104,7 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
                     distance.setBackgroundColor(0xffE2571F);
                 }else{
                     loc_icon.setVisibility(View.GONE);
-                    Double km1,km2=-1.0,km3=-1.0;
+                    Double km1=0D,km2=0D,km3=0D;
                     km1= DistanceCalculator.distance(Double.valueOf(tempValues.getLoc().split(",")[0]), Double.valueOf(tempValues.getLoc().split(",")[1])
                             ,  Double.valueOf(latLong.split(",")[0]), Double.valueOf(latLong.split(",")[1]), "K");
 
@@ -125,7 +124,7 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
 
                     String geo_fancing_km=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(activity,"GEO_FANCING_KM","0");
 
-                    Double km=getShortestDistance(km1,km2,km3);
+                    Double km=getShortestDistance(tempValues,km1,km2,km3);
 
                     if (km>Double.valueOf(geo_fancing_km)){
                         loc_icon.setVisibility(View.VISIBLE);
@@ -228,12 +227,12 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
         return row;
       }
 
-      private Double getShortestDistance(Double km1,Double km2,Double km3){
+      private Double getShortestDistance(SpinnerModel tempValues,Double km1,Double km2,Double km3){
 
-          if ((km2==-1.0 && km3==-1.0) || ( km3==-1.0 && km1<=km2 ) || ( km2==-1.0 && km1<=km3 ) || (km1<=km2 && km1<=km3) ) {
+          if (km1<=km2 && km1<=km3)  {
               tempValues.setREF_LAT_LONG( tempValues.getLoc());
               return km1;
-          }if ((km3==-1.0) || (km2<=km3 && km2!=-1.0)){
+          }if (km2<=km3){
               tempValues.setREF_LAT_LONG( tempValues.getLoc2());
               return km2;
           }

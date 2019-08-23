@@ -7,8 +7,8 @@ android {
         applicationId "com.cbo.cbomobilereporting"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 324
-        versionName "3.24"
+        versionCode 325
+        versionName "3.25"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        jackOptions {

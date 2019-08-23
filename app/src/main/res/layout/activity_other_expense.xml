@@ -105,7 +105,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
                             android:hint="Km"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -149,7 +149,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
                             android:hint="Amt."
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
                     </LinearLayout>
                 </LinearLayout>
 

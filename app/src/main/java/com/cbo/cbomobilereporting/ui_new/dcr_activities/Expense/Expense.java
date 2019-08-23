@@ -911,7 +911,7 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
     @Override
     public void delete_Expense(mOthExpense othExpense, eExpense exp_type) {
         AppAlert.getInstance().DecisionAlert(context, "Delete!!!",
-                "Are you sure, you want to delete?",
+                "Are you sure to delete\n"+ othExpense.getExpHead().getName() +"?",
                 new AppAlert.OnClickListener() {
                     @Override
                     public void onPositiveClicked(View item, String result) {

@@ -909,6 +909,7 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("MOBILEDATAYN", c.getString("MOBILEDATAYN"));
                 editor.putString("CALLWAITINGTIME", c.getString("CALLWAITINGTIME"));
                 editor.putString("COMPANY_PIC", c.getString("COMPANY_PIC"));
+                editor.putString("COMPANY_PICYN", c.getString("COMPANY_PICYN"));
                 editor.putString("RE_REG_KM", c.getString("RE_REG_KM"));
                 editor.putString("ERROR_EMAIL", c.getString("ERROR_EMAIL"));
                 editor.putString("DIVERT_REMARKYN", c.getString("DIVERT_REMARKYN"));

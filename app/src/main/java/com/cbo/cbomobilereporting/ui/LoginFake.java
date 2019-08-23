@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 
 import android.security.keystore.KeyGenParameterSpec;
@@ -66,6 +67,11 @@ import services.Sync_service;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -157,7 +163,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         live_km =customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"live_km");
 
         extras = getIntent().getExtras();
-
+        File COMPANY_PIC= new File( Environment.getExternalStorageDirectory()+"/cbo/profile/company.png" );
         if( null != extras && extras.getByteArray("picture") !=null  ) {
 
             byteArray=extras.getByteArray("picture");
@@ -174,6 +180,33 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             image.setImageBitmap(bmp);
         }else {
             customVariablesAndMethod.deleteFmcg_ByKey(context, "logo");
+            if  (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"COMPANY_PICYN","").equalsIgnoreCase("Y")
+                    && COMPANY_PIC.exists()) {
+
+                byte bytes[] = new byte[(int) COMPANY_PIC.length()];
+                BufferedInputStream bis = null;
+                DataInputStream dis = null;
+                try {
+                    bis = new BufferedInputStream(new FileInputStream(COMPANY_PIC));
+                    dis = new DataInputStream(bis);
+                    dis.readFully(bytes);
+
+                    //byteArray = bytes;
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    ImageView image = (ImageView) findViewById(R.id.center_logo);
+                    image.setImageBitmap(bmp);
+                } catch (FileNotFoundException e) {
+                    //byteArray = null;
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    //byteArray = null;
+                    e.printStackTrace();
+                }catch (Exception e){
+                    //byteArray = null;
+                    e.printStackTrace();
+                }
+
+            }
         }
 
         if (Custom_Variables_And_Method.DCR_ID.equals("")) {

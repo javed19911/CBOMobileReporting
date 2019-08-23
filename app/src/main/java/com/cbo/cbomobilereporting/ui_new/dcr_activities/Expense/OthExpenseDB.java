@@ -178,4 +178,6 @@ public class OthExpenseDB extends DBHelper {
         }
         return expHeads.size()>0 && !headtype_group.equalsIgnoreCase("0");
     }
+
+
 }

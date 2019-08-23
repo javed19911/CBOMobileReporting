@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 import saleOrder.ViewModel.CBOViewModel;
 import services.MyAPIService;
@@ -122,8 +123,18 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
                 }
 
             }else{
+                ArrayList<mExpHead> heads = expHeadDB.get(expenseHead.getHEADTYPE_GROUP());
+                StringBuilder sb = new StringBuilder();
+                for (mExpHead head : heads){
+                   // if (!expenseHead.getName().equalsIgnoreCase(head.getName())){
+                        sb.append(head.getName()).append("\n");
+                    //}
+                }
                 AppAlert.getInstance().Alert(context, "Alert!!!",
-                        expenseHead.getEXP_TYPE().name() +" allready submitted in another Head",
+                        "You can't select \n"+
+                                expenseHead.getName()+
+                                "\nbecause you can select any one head from the given heads\n"+
+                                sb.toString(),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

@@ -108,7 +108,7 @@ public class aCall extends RecyclerView.Adapter<aCall.MyViewHolder> {
                 holder.distance.setText("Registration pending...");
                 holder.distance.setBackgroundColor(0xffE2571F);
             }else{
-                Double km1,km2=-1.0,km3=-1.0;
+                Double km1=0D,km2=0D,km3=0D;
                 km1= DistanceCalculator.distance(Double.valueOf(item.getLoc().split(",")[0]), Double.valueOf(item.getLoc().split(",")[1])
                         ,  Double.valueOf(latLong.split(",")[0]), Double.valueOf(latLong.split(",")[1]), "K");
 
@@ -242,10 +242,10 @@ public class aCall extends RecyclerView.Adapter<aCall.MyViewHolder> {
 
     private Double getShortestDistance(SpinnerModel item ,Double km1,Double km2,Double km3){
 
-        if ((km2==-1.0 && km3==-1.0) || ( km3==-1.0 && km1<=km2 ) || ( km2==-1.0 && km1<=km3 ) || (km1<=km2 && km1<=km3) ) {
+        if (km1<=km2 && km1<=km3)  {
             item.setREF_LAT_LONG( item.getLoc());
             return km1;
-        }if ((km3==-1.0) || (km2<=km3 && km2!=-1.0)){
+        }if (km2<=km3){
             item.setREF_LAT_LONG( item.getLoc2());
             return km2;
         }

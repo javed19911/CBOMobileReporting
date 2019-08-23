@@ -110,6 +110,8 @@ public class Transaction_Grid_Adapter extends BaseAdapter {
             imgView.setImageResource(R.drawable.expense_statement);
         }else if (arrayLevel.equals("T_EDITDOC")) {
             imgView.setImageResource(R.drawable.doctor_edit_approval);
+        }else {
+            imgView.setImageResource(R.drawable.reset_day_plan_white);
         }
 
 

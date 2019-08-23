@@ -101,7 +101,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
                 default:
                     title = "Other Expenses";
         }
-        if ((!getOtherDetail().isEmpty() && getExp_type() != eExpense.TA)
+        if ((!getOtherDetail().isEmpty() && !getOtherDetail().contains("*"))
                 || (!getOtherDetail().isEmpty() && ManualAount == 0 && DefaultAmount !=0 && !IsAddBtnReqd())) {
             subTitle =  " ( " + getOtherDetail() + " ) ";
         }

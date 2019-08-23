@@ -52,8 +52,8 @@ public class CustomTextToSpeech extends BroadcastReceiver  {
             calSet.set(Calendar.HOUR_OF_DAY, hour);
             calSet.set(Calendar.MINUTE, miniute);
         }else {
-            calSet.set(Calendar.HOUR_OF_DAY, calNow.getTime().getHours());
-            calSet.set(Calendar.MINUTE, calNow.getTime().getMinutes() + 1);
+            calSet.set(Calendar.HOUR_OF_DAY, calNow.get(Calendar.HOUR_OF_DAY)); // calNow.getTime().getHours()
+            calSet.set(Calendar.MINUTE, calNow.get(Calendar.MINUTE) + 10); //calNow.getTime().getMinutes()
         }
 
         calSet.set(Calendar.SECOND, 0);
@@ -61,7 +61,7 @@ public class CustomTextToSpeech extends BroadcastReceiver  {
 
         if (calSet.compareTo(calNow) <= 0) {
             // Today Set time passed, count to tomorrow
-            calSet.add(Calendar.DATE, 10);
+            calSet.add(Calendar.DATE, 1);
         }
 
         setAlarm(calSet);

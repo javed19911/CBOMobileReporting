@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+
+        <include layout="@layout/custom_appbar"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:paddingRight="3dp"
+            android:paddingLeft="3dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_user"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="2dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+
+
+            <TextView
+                android:id="@+id/rcpt_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="3.8"
+                android:text="Date"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="13sp" />
+
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+
+            <TextView
+                android:id="@+id/rec_amt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Amt."
+                android:layout_weight="3.8"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+
+
+
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"/>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefressLayoutRecycler"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recieptlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:itemCount="10"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:padding="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/totalReciptAmt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="0.0"
+                android:textColor="@color/colorPrimaryDark"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_filterReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_add"
+        app:backgroundTint="?colorPrimaryDark"
+        app:borderWidth="0dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/recieptlist"
+        app:layout_anchorGravity="bottom|right|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+

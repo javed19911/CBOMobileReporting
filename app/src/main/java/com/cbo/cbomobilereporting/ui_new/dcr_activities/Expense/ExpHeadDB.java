@@ -144,6 +144,45 @@ public class ExpHeadDB extends DBHelper {
         return expHeads;
     }
 
+    public ArrayList<mExpHead> get(String HEADTYPE_GROUP) {
+        ArrayList<mExpHead> expHeads = new ArrayList<mExpHead>();
+
+
+        String query ="Select * from " + getTable() + " where ";//+
+        //"AND HEADTYPE_GROUP NOT IN (Select a.HEADTYPE_GROUP from " + getTable() + " as a LEFT JOIN "+"Expenses"+" as b ON b.exp_head_id = a.FIELD_ID where b.exp_head_id IS NOT NULL AND a.HEADTYPE_GROUP != 0)";
+
+        String WhereClause = "";
+
+        WhereClause += " HEADTYPE_GROUP = '"+HEADTYPE_GROUP+"'";
+
+
+        Cursor c = getDatabase().rawQuery(query+ WhereClause, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    mExpHead expHead=new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
+                            c.getString(c.getColumnIndex("FIELD_NAME")))
+                            .setEXP_TYPE(eExpense.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setSHOW_IN_TA_DA(eExpense.valueOf(c.getString(c.getColumnIndex("SHOW_IN_TA_DA"))))
+                            .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
+                            .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
+                            .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))
+                            .setMAX_AMT(c.getDouble(c.getColumnIndex("MAX_AMT")))
+                            .setKMYN(c.getString(c.getColumnIndex("KMYN")))
+                            .setHEADTYPE_GROUP(c.getString(c.getColumnIndex("HEADTYPE_GROUP")))
+                            .setMasterValidate(c.getInt(c.getColumnIndex("TAMST_VALIDATEYN")));
+
+                    //if (SHOW_IN_TA_DA != eExpense.TA || SHOW_IN_TA_DA == expHead.getSHOW_IN_TA_DA()) {
+                    expHeads.add(expHead);
+                    //}
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+        }
+        return expHeads;
+    }
+
 
     public mExpHead get(int Id) {
         mExpHead expHead = null;

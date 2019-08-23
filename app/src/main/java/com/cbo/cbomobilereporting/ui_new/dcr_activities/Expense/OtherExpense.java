@@ -44,7 +44,6 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
     TextView  textRemark,head,ex_head_root_txt,rate,title;
     ImageView attach_img;
     CheckBox add_attachment;
-    RadioGroup attach_option;
     LinearLayout KmLayout,amtLayout;
     aExpenseHead adapter;
     Boolean keyPressed = true;
@@ -91,7 +90,6 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
         ex_head_root_txt = findViewById(R.id.ex_head_root_txt);
         rem_final = findViewById(R.id.exp_remark_root);
         add_attachment = findViewById(R.id.add_attachment);
-        attach_option = findViewById(R.id.attach_option);
         attach_img= findViewById(R.id.attach_img);
         attach_img.setVisibility(View.GONE);
         KmLayout = findViewById(R.id.kmLayout);
@@ -99,7 +97,6 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
         Km = findViewById(R.id.km);
         rate = findViewById(R.id.rate);
         //final String[] ext = {path};
-        attach_option.setVisibility(View.GONE);
 
         Add = findViewById(R.id.save);
         Cancel = findViewById(R.id.cancel);
@@ -132,7 +129,8 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
                 if(add_attachment.isChecked()) {
                     addAttachment();
                 }else{
-                    viewModel.getExpense().setAttachment("");
+                    viewModel.getOthExpense().setAttachment("");
+                    viewModel.setNewAttachment("");
                     attach_img.setVisibility(View.GONE);
                 }
             }
@@ -165,6 +163,8 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().equalsIgnoreCase("."))
+                    s="0.0";
                 Double km_new = s.toString().trim().isEmpty() ? 0D: Double.parseDouble(s.toString());
                 Double rate_new = viewModel.getExpense().getRateFor(km_new).getRate();
                 rate.setText(""+ rate_new);
@@ -194,6 +194,8 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().equalsIgnoreCase("."))
+                    s="0.0";
                 Km.setEnabled(s.toString().isEmpty() || !Km.getText().toString().isEmpty());
                 Double amt = s.toString().trim().isEmpty() ? 0D: Double.parseDouble(s.toString());
                 Double maxAmt =  viewModel.getOthExpense().getExpHead().getMAX_AMT();

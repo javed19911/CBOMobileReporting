@@ -1,6 +1,9 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class mOthExpense implements Serializable {
     private int Id= 0;
@@ -36,6 +39,11 @@ public class mOthExpense implements Serializable {
         return Attachment;
     }
 
+    public List<String> getAttachmentArr() {
+        return this.getAttachment().isEmpty() ? new ArrayList() : new ArrayList(Arrays.asList(this.Attachment.split("\\|\\^")));
+    }
+
+
     public String getTime() {
         return time;
     }
@@ -69,6 +77,21 @@ public class mOthExpense implements Serializable {
 
     public mOthExpense setAttachment(String attachment) {
         Attachment = attachment;
+        return this;
+    }
+
+    public mOthExpense setAttachment(ArrayList<String> attachment) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+
+        for(String file : attachment) {
+            if (count != 0) {
+                sb.append("|^");
+            }
+            ++count;
+            sb.append(file);
+        }
+        this.Attachment = sb.toString();
         return this;
     }
 
