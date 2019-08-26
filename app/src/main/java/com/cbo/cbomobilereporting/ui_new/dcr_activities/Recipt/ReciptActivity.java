@@ -3,6 +3,7 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.Recipt;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -41,7 +43,10 @@ import services.MyAPIService;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
-public class ReciptActivity extends CustomActivity implements SwipeRefreshLayout.OnRefreshListener , IRecipt, aRecipt.Recipt_interface {
+public class ReciptActivity
+        extends CustomActivity
+        implements SwipeRefreshLayout.OnRefreshListener ,
+        IRecipt, aRecipt.Recipt_interface ,SearchView.OnQueryTextListener{
 
     private    Context mContext;
     private RecyclerView recieptrecyclerview;
@@ -54,6 +59,8 @@ public class ReciptActivity extends CustomActivity implements SwipeRefreshLayout
     public  static  final  int ADDRECIEPTRESULT=100;
     private FloatingActionButton fab_filterReport;
     private TextView totalReciptAmt;
+
+    private  Menu menu;
 
 
     @SuppressLint("RestrictedApi")
@@ -163,8 +170,50 @@ public class ReciptActivity extends CustomActivity implements SwipeRefreshLayout
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.recipt_menu, menu);
+        this.menu = menu;
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
+
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search
+            if (recieptadapter != null)
+                recieptadapter.filter(query);
+        }
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (recieptadapter != null) {
+            recieptadapter.filter(query);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (recieptadapter != null) {
+            recieptadapter.filter(newText);
+        }
+        return false;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

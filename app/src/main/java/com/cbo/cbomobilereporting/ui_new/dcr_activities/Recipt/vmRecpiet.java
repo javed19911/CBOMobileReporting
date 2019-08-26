@@ -20,6 +20,7 @@ import java.util.HashMap;
 import saleOrder.ViewModel.CBOViewModel;
 import services.MyAPIService;
 import utils_new.AppAlert;
+import utils_new.CustomDatePicker;
 
 public class vmRecpiet extends CBOViewModel<IRecipt> {
 
@@ -99,7 +100,7 @@ public class vmRecpiet extends CBOViewModel<IRecipt> {
                             }
 
                             @Override
-                            public void onResponse(Bundle response) throws JSONException {
+                            public void onResponse(Bundle response) throws Exception {
                                 parser2(response);
                             }
 
@@ -114,7 +115,7 @@ public class vmRecpiet extends CBOViewModel<IRecipt> {
 
 
     //added Party id as PAID in mReciept model
-    private void parser2(Bundle result) throws JSONException {
+    private void parser2(Bundle result) throws Exception {
         {
             String table0 = result.getString("Tables0");
             JSONArray row = new JSONArray(table0);
@@ -124,11 +125,11 @@ public class vmRecpiet extends CBOViewModel<IRecipt> {
                 JSONObject c = row.getJSONObject(i);
                 mRecipt recieptmodel=new mRecipt();
                 recieptmodel.setId(c.getInt("ID"));
-                recieptmodel.setParty_name(c.getString("PA_NAME"));
-                recieptmodel.setParty_id(c.getString("PA_ID"));
+                mParty party = new mParty(c.getString("PA_ID"),c.getString("PA_NAME"));
+                recieptmodel.setParty(party);
                 recieptmodel.setRemark(c.getString("REMARK"));
                 recieptmodel.setAmount(c.getDouble("AMOUNT"));
-                recieptmodel.setDoc_Date(c.getString("DOC_DATE"));
+                recieptmodel.setDoc_Date(CustomDatePicker.getDate( c.getString("DOC_DATE"),CustomDatePicker.ShowFormatOld));
                 recieptmodel.setReciept_no(c.getString("DOC_NO"));
 
                 reciptArrayList.add(recieptmodel);

@@ -21,6 +21,7 @@ public class CustomDatePicker implements DatePickerDialog.OnDateSetListener{
     public static String ShowFirstDayOfMonthFormat = "01-MMM-yyyy";
     public static String CommitFirstDayOfMonthFormat = "MM-01-yyyy";
     public static String ShowFormat = "dd-MMM-yyyy";
+    public static String ShowFormatOld = "dd/MM/yyyy";
     public static String CommitFormat = "MM/dd/yyyy";
     
 
@@ -38,7 +39,7 @@ public class CustomDatePicker implements DatePickerDialog.OnDateSetListener{
 
 
     public static String currentDate() {
-        return currentDate("MM/dd/yyyy");
+        return currentDate(CommitFormat);
     }
 
     public static String currentDate(String format) {
@@ -80,7 +81,7 @@ public class CustomDatePicker implements DatePickerDialog.OnDateSetListener{
         date += "/"+ year;
 
         try {
-            listener.onDateSet(getDate( date,"dd/MM/yyyy"));
+            listener.onDateSet(getDate( date,ShowFormatOld));
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }

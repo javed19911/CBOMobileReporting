@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.cboUtils.CBOImageView;
 import utils_new.up_down_ftp;
 
 public class OtherExpense extends CustomActivity implements IOtherExpense,up_down_ftp.AdapterCallback {
@@ -52,6 +53,7 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
 
     vmOtherExpenses viewModel;
     CboProgressDialog cboProgressDialog = null;
+    CBOImageView cboImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +98,7 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
         amtLayout = findViewById(R.id.amtLayout);
         Km = findViewById(R.id.km);
         rate = findViewById(R.id.rate);
+        cboImageView = findViewById(R.id.attachment);
         //final String[] ext = {path};
 
         Add = findViewById(R.id.save);
@@ -136,6 +139,29 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
             }
         });
 
+
+        cboImageView.setListener(new CBOImageView.iCBOImageView() {
+            @Override
+            public void OnAddClicked() {
+                cboImageView.addAttachment(context);
+            }
+
+            @Override
+            public void OnAdded() {
+                OnUpdated(cboImageView.getDataList());
+            }
+
+            @Override
+            public void OnDeleted(String file) {
+                OnUpdated(cboImageView.getDataList());
+            }
+
+            @Override
+            public void OnUpdated(ArrayList<String> files) {
+                viewModel.setAttachment(files);
+                setAttachment(files);
+            }
+        });
 
 
         rem_final.addTextChangedListener(new TextWatcher() {
@@ -266,8 +292,8 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
                     if (!viewModel.getNewAttachment().equals("")){
                         cboProgressDialog = new CboProgressDialog(context, "Please Wait..\nuploading Image");
                         cboProgressDialog.show();
-                        File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + viewModel.getNewAttachment());
-                        new up_down_ftp().uploadFile(file2, context);
+                        //File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + viewModel.getNewAttachment());
+                        new up_down_ftp().uploadFile(cboImageView.filesToUpload(), context);
 
                     }else{
                         viewModel.other_expense_commit(context);
@@ -361,12 +387,14 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
     }
 
     @Override
-    public void setAttachment(String path) {
-        if (!path.isEmpty()) {
+    public void setAttachment(ArrayList<String> files) {
+        /*if (!path.isEmpty()) {
             add_attachment.setChecked(true);
             File OutputFile = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + path);
             previewCapturedImage(OutputFile.getPath());
-        }
+        }*/
+
+       cboImageView.updateDataList(files);
     }
 
     @Override
@@ -420,6 +448,9 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
 
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
+                case CBOImageView.REQUEST_CAMERA :
+                    cboImageView.onActivityResult(requestCode,resultCode,data);
+                    break;
                 case REQUEST_CAMERA :
                     File OutputFile = (File) data.getSerializableExtra("Output");
                     viewModel.setNewAttachment(OutputFile.getName());

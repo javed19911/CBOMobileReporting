@@ -14,11 +14,13 @@ import utils.adapterutils.PobModel;
  */
 
 public class mCall implements Serializable {
+    private String Title = null;
     private String id = "0";
     private String name = "";
     private Boolean workwithreqd = false;
     private ArrayList<Dcr_Workwith_Model> workwiths = new ArrayList<>();
     private String remark="";
+    private Boolean remarkReqd = false;
     private Boolean itemReqd = true;
     private ArrayList<PobModel> POBs = new ArrayList<>();
     private Boolean giftReqd = true;
@@ -29,6 +31,10 @@ public class mCall implements Serializable {
     private ArrayList<String> attachments = new ArrayList<>();
 
     //getter
+
+    public String getTitle() {
+        return Title;
+    }
 
     public String getId() {
         return id;
@@ -48,6 +54,10 @@ public class mCall implements Serializable {
 
     public String getRemark() {
         return remark;
+    }
+
+    public Boolean IsRemarkReqd() {
+        return remarkReqd;
     }
 
 
@@ -75,6 +85,10 @@ public class mCall implements Serializable {
 
     //setter
 
+    public mCall(String title) {
+        Title = title;
+    }
+
     public mCall setId(String id) {
         this.id = id;
         return this;
@@ -97,6 +111,11 @@ public class mCall implements Serializable {
 
     public mCall setRemark(String remark) {
         this.remark = remark;
+        return this;
+    }
+
+    public mCall setRemarkReqd(Boolean RemarkReqd) {
+        this.remarkReqd = RemarkReqd;
         return this;
     }
 

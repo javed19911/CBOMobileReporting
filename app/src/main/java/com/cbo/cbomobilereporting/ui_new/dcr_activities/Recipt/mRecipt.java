@@ -1,6 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Recipt;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public  class mRecipt implements Serializable {
 
@@ -21,19 +22,20 @@ public  class mRecipt implements Serializable {
 
     private String A_Paid;//loginid
     private String reciept_no;//ID-edit,delete
-    private String party_name;//Pa_name
-    private String party_id;//PAID
+   /* private String party_name;//Pa_name
+    private String party_id;//PAID*/
+    private mParty party;
     private Double amount;//AMOUNT
     private String remark;//REMARK
-    private String Doc_Date;//DATE
+    private Date Doc_Date;//DATE
     private String reciepent_no;//DOC_NO-user
 
 
-    public String getDoc_Date() {
+    public Date getDoc_Date() {
         return Doc_Date;
     }
 
-    public mRecipt setDoc_Date(String doc_Date)
+    public mRecipt setDoc_Date(Date doc_Date)
     {
         Doc_Date = doc_Date;
         return    this;
@@ -70,26 +72,34 @@ public  class mRecipt implements Serializable {
 
     }
 
-    public String getParty_name() {
-        return party_name;
+    public mParty getParty() {
+        return party;
     }
 
-    public mRecipt setParty_name(String party_name) {
-
-        this.party_name = party_name;
-        return  this;
+    public void setParty(mParty party) {
+        this.party = party;
     }
 
+    /*public String getParty_name() {
+            return party_name;
+        }
 
-    public String getParty_id() {
-        return party_id;
-    }
+        public mRecipt setParty_name(String party_name) {
 
-    public mRecipt setParty_id(String party_id) {
-        this.party_id = party_id;
-        return  this;
-    }
+            this.party_name = party_name;
+            return  this;
+        }
 
+
+        public String getParty_id() {
+            return party_id;
+        }
+
+        public mRecipt setParty_id(String party_id) {
+            this.party_id = party_id;
+            return  this;
+        }
+    */
     public Double getAmount() {
         return amount;
     }

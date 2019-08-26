@@ -44,6 +44,7 @@
                         android:layout_height="10dp"
                         android:src="@drawable/ic_user"
                         android:layout_marginTop="5dp"
+                        android:visibility="gone"
                         android:layout_marginRight="2dp"/>
 
                     <TextView

@@ -183,9 +183,15 @@
 
                 </LinearLayout>
 
+                <utils_new.cboUtils.CBOImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/attachment"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="vertical" >
 
                     <CheckBox

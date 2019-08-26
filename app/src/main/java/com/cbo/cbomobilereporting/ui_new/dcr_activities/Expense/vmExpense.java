@@ -474,7 +474,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
                         JSONObject object = jsonArray1.getJSONObject(0);
                         String value2 = object.getString("INVALIDMSG");
                         if (object.getString("STATUS").equalsIgnoreCase("1")) {
-                            Custom_Variables_And_Method.getInstance().msgBox(context, " Exp. Deleted Sucessfully");
+                            Custom_Variables_And_Method.getInstance().msgBox(context, " Exp. Deleted Successfully");
                             UpdateExpense(othExpense);
                         }else{
                             AppAlert.getInstance().Alert(context, "Alert!!", value2,

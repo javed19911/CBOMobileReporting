@@ -226,7 +226,7 @@
                         android:selectAllOnFocus="true"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:hint="Add Recpiet Remark"/>
+                        android:hint="Add Remark"/>
 
 
                 </LinearLayout>

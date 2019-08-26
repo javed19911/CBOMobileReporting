@@ -35,6 +35,8 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.ChemistCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer.CustomerCall;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCRCall.CallActivity;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCRCall.mChemistRc;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DairyCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Doctor_Sample;
@@ -111,7 +113,7 @@ public class DcrmenuInGrid extends Fragment {
     Map<String, String> keyValue = new LinkedHashMap<String, String>();
     Context context;
     public ProgressDialog progress1;
-    String CheckType,nameOnClickGlobal;
+    String CheckType,menuCodeOnClickGlobal,menuNameOnClickGlobal;
     //Boolean FlagCancelled=true;
 
 
@@ -155,8 +157,10 @@ public class DcrmenuInGrid extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //  TextView tagText = (TextView) view.findViewById(R.id.text_src);
                 //String nameOnClick = tagText.getText().toString();
-                String nameOnClick = getKeyList.get(position);
-                nameOnClickGlobal = nameOnClick;
+                String menuCodeOnClick = getKeyList.get(position);
+                String menuNameOnClick = listOfAllTab.get(position);
+                menuCodeOnClickGlobal = menuCodeOnClick;
+                menuNameOnClickGlobal = menuNameOnClick;
                 if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
                         ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                         ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
@@ -177,7 +181,7 @@ public class DcrmenuInGrid extends Fragment {
                     }, 22);
 
                 }else {
-                    String url = new CBO_DB_Helper(getActivity()).getMenuUrl("DCR", nameOnClick);
+                    String url = new CBO_DB_Helper(getActivity()).getMenuUrl("DCR", menuCodeOnClick);
                     if (url != null && !url.equals("")) {
                        /* Intent i = new Intent(getActivity(), CustomWebView.class);
                         i.putExtra("A_TP", url);
@@ -187,7 +191,7 @@ public class DcrmenuInGrid extends Fragment {
                     } else if (customVariablesAndMethod.IsGPS_GRPS_ON(context)){
 
                         String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
-                        if (nameOnClick.equalsIgnoreCase("D_DP")){
+                        if (menuCodeOnClick.equalsIgnoreCase("D_DP")){
                             work_type_Selected = "X";
                         }
                         switch (work_type_Selected){
@@ -205,7 +209,7 @@ public class DcrmenuInGrid extends Fragment {
 
                                 break;
                             default:
-                                OnGridItemClick(nameOnClick,false);
+                                OnGridItemClick(menuCodeOnClick,menuNameOnClick,false);
                         }
 
                     }
@@ -217,8 +221,8 @@ public class DcrmenuInGrid extends Fragment {
     }
 
 
-    private void OnGridItemClick(String nameOnClick,boolean SkipLocationVarification){
-        switch (nameOnClick) {
+    private void OnGridItemClick(String menuCodeOnClick,String menuNameOnClickGlobal,boolean SkipLocationVarification){
+        switch (menuCodeOnClick) {
             case "D_LOC_TEST": {
                 Intent i = new Intent(getActivity(), CentroidLocation.class);
                 i.putExtra("title","Location Test");
@@ -227,7 +231,7 @@ public class DcrmenuInGrid extends Fragment {
             }
             case "D_DP": {
                 if(customVariablesAndMethod.checkIfCallLocationValid(context,true,SkipLocationVarification)) {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     MyCustumApplication.getInstance().startLoctionService(true);
                     onClickDayPlanning();
                     if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "ASKUPDATEYN", "N").equals("Y")) {
@@ -251,7 +255,7 @@ public class DcrmenuInGrid extends Fragment {
                     customVariablesAndMethod.getAlert(context,"Call Not Allowed","You have planed your DCR as\n \""
                             +working_type+"\" \n you can't any Doctor..");
                 }else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     onClickDrCall();
                 }
                 break;
@@ -285,12 +289,27 @@ public class DcrmenuInGrid extends Fragment {
                     customVariablesAndMethod.getAlert(context,"Call Not Allowed","You have planed your DCR as\n \""
                             +working_type+"\" \n you can't any Doctor..");
                 }else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     onClickReminder();
                 }
 
                 break;
             }
+
+//            case "D_CHEM_RCCALL": {
+//                if (DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
+//                    customVariablesAndMethod.msgBox(context, "Please open your DCR Days first....");
+//                } else if (!customVariablesAndMethod.checkIfCallLocationValid(context, false, SkipLocationVarification)) {
+//                    customVariablesAndMethod.msgBox(context, "Verifing Your Location");
+//                    LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
+//                            new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
+//                } else {
+//
+//                    onClickChemistReminder(menuNameOnClickGlobal);
+//
+//                }
+//                break;
+//            }
             case "D_DRSAM": {
                 if (DCR_ID.equals("0")  || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
                     customVariablesAndMethod.msgBox(context,"Please open your DCR Days first....");
@@ -317,7 +336,7 @@ public class DcrmenuInGrid extends Fragment {
                     LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                             new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                 }else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     onClickDairy("D");
                 }
                 break;
@@ -330,7 +349,7 @@ public class DcrmenuInGrid extends Fragment {
                     LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                             new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                 }else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     onClickDairy("P");
                 }
                 break;
@@ -344,7 +363,7 @@ public class DcrmenuInGrid extends Fragment {
                     LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                             new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                 }else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     onClickChemistCall();
                 }
                 break;
@@ -357,14 +376,14 @@ public class DcrmenuInGrid extends Fragment {
                     LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                             new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                 } else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     onClickChemistCall();
                 }
                 break;
             }
             case "D_CUST_CALL": {
                 if (IsCallAllowed(true)){
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     Intent i = new Intent(getActivity(), CustomerCall.class);
                     i.putExtra("title",cboDbHelper.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL"));
                     startActivity(i);
@@ -379,7 +398,7 @@ public class DcrmenuInGrid extends Fragment {
                     LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                             new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                 } else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     onClickStockist();
                 }
                 break;
@@ -451,7 +470,7 @@ public class DcrmenuInGrid extends Fragment {
                     LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
                             new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
                 } else {
-                    setLetLong(nameOnClick);
+                    setLetLong(menuCodeOnClick);
                     // }
                     if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "MISSED_CALL_OPTION", "N").equals("D") || checkForDoctorPOB()) {
                         onClickFinalSubmit();
@@ -527,9 +546,9 @@ public class DcrmenuInGrid extends Fragment {
         @Override
         public void onReceive(Context contex, Intent intent) {
             Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
-            OnGridItemClick(nameOnClickGlobal,true);
+            OnGridItemClick(menuCodeOnClickGlobal,menuNameOnClickGlobal,true);
             LocalBroadcastManager.getInstance(context).unregisterReceiver(mLocationUpdated);
-            nameOnClickGlobal = "";
+            menuCodeOnClickGlobal = "";
 
         }
     };
@@ -1278,7 +1297,7 @@ public class DcrmenuInGrid extends Fragment {
                                                                         AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                                                                             @Override
                                                                             public void onPositiveClicked(View item, String result) {
-                                                                                OnGridItemClick("D_EXP",true);
+                                                                                OnGridItemClick("D_EXP",null,true);
                                                                             }
 
                                                                             @Override
@@ -1296,7 +1315,7 @@ public class DcrmenuInGrid extends Fragment {
                                                                     @Override
                                                                     public void onPositiveClicked(View item, String result) {
 
-                                                                        OnGridItemClick(MyCustumApplication.getInstance().getTaniviaTrakerMenuCode(),true);
+                                                                        OnGridItemClick(MyCustumApplication.getInstance().getTaniviaTrakerMenuCode(),null,true);
                                                                     }
 
                                                                     @Override
@@ -1313,7 +1332,7 @@ public class DcrmenuInGrid extends Fragment {
                                                         AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                                                             @Override
                                                             public void onPositiveClicked(View item, String result) {
-                                                                OnGridItemClick("D_AP",true);
+                                                                OnGridItemClick("D_AP",null,true);
                                                             }
 
                                                             @Override
@@ -1330,7 +1349,7 @@ public class DcrmenuInGrid extends Fragment {
                                                 AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                                                     @Override
                                                     public void onPositiveClicked(View item, String result) {
-                                                        OnGridItemClick("D_FAR",true);
+                                                        OnGridItemClick("D_FAR",null,true);
                                                     }
 
                                                     @Override
@@ -1347,7 +1366,7 @@ public class DcrmenuInGrid extends Fragment {
                                         AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                                             @Override
                                             public void onPositiveClicked(View item, String result) {
-                                                OnGridItemClick("D_STK_CALL",true);
+                                                OnGridItemClick("D_STK_CALL",null,true);
                                             }
 
                                             @Override
@@ -1364,7 +1383,7 @@ public class DcrmenuInGrid extends Fragment {
                                 AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                                     @Override
                                     public void onPositiveClicked(View item, String result) {
-                                        OnGridItemClick("D_CHEMCALL",true);
+                                        OnGridItemClick("D_CHEMCALL",null,true);
                                     }
 
                                     @Override
@@ -1381,7 +1400,7 @@ public class DcrmenuInGrid extends Fragment {
                         AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
                             @Override
                             public void onPositiveClicked(View item, String result) {
-                                OnGridItemClick("D_CUST_CALL",true);
+                                OnGridItemClick("D_CUST_CALL",null,true);
                             }
 
                             @Override
@@ -1400,7 +1419,7 @@ public class DcrmenuInGrid extends Fragment {
                     @Override
                     public void onPositiveClicked(View item, String result) {
                         if (!s1.equalsIgnoreCase("Please make atleast One Call....")) {
-                            OnGridItemClick("D_DRCALL", true);
+                            OnGridItemClick("D_DRCALL",null, true);
                         }
                     }
 
@@ -1791,6 +1810,16 @@ public class DcrmenuInGrid extends Fragment {
         } /*else {
             customVariablesAndMethod.msgBox(context,"Please open your DCR Days first....");
         }*/
+
+    }
+
+    private void onClickChemistReminder(String title){
+        if (IsCallAllowed()){
+            Intent intent = new Intent(getActivity(), CallActivity.class);
+            intent.putExtra("mCall",new mChemistRc());
+            intent.putExtra("title",title);
+            startActivity(intent);
+        }
 
     }
 

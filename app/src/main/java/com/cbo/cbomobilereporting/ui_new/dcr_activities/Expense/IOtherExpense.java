@@ -20,6 +20,6 @@ public interface IOtherExpense {
     void setAmount(Double amount);
     void setKm(Double km);
     void setRate(Double rate);
-    void setAttachment(String path);
+    void setAttachment(ArrayList<String> path);
     void onSendResponse(mOthExpense othExpense);
 }

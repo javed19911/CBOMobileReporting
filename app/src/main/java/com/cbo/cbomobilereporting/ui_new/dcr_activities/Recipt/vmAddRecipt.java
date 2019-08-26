@@ -6,12 +6,8 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.Recipt;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.Toast;
-
-import androidx.lifecycle.ViewModel;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -19,36 +15,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
-import cbomobilereporting.cbo.com.dbhelper.Shareclass;
 import saleOrder.ViewModel.CBOViewModel;
 import services.MyAPIService;
 import utils.model.DropDownModel;
 import utils_new.AppAlert;
 import utils_new.CustomDatePicker;
-import utils_new.Custom_Variables_And_Method;
 
 public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
 
 
   ArrayList<DropDownModel> Partylist = new ArrayList<DropDownModel>();
 
-  mParty mParty = null;
   Context context;
-  String Partyid;
   IReciptEntry iReciptEntry;
-
-  String DOC_NO = "";
-  mRecipt recieptmodel = new mRecipt();
   mRecipt mRecipt = new mRecipt();
 
-
-  private String PARTY_ID;
   private String SelectedDtte;
   private String  ID;
 
@@ -71,8 +56,10 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
         if (view != null && mRecipt.getId() != 0) {
             view.setReceiptTitle("Edit Receipt");
             view.setRecieptNo(mRecipt.getReciept_no());
-            view.setPartyname(mRecipt.getParty_name());
-            view.setDate(mRecipt.getDoc_Date());
+            view.setPartyname(mRecipt.getParty().getName());
+
+            view.setDate(CustomDatePicker.formatDate(mRecipt.getDoc_Date(),CustomDatePicker.ShowFormat));
+
             view.setAmount(mRecipt.getAmount());
             view.setRemark(mRecipt.getRemark());
             view.setRecpientBy(MyCustumApplication.getInstance().getUser().getName());
@@ -110,23 +97,7 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
             //iReciptEntry.onDateChanged(todate);
     }
 
-  public String getDOC_NO() {
-    return DOC_NO;
-  }
 
-  public void setDOC_NO(String DOC_NO) {
-    this.DOC_NO = DOC_NO;
-
-
-  }
-
-  public String getPartyid() {
-    return Partyid;
-  }
-
-  public void setPartyid(String partyid) {
-    Partyid = partyid;
-  }
 
   public void setListener(Context context, IReciptEntry IReciptEntry) {
     this.context = context;
@@ -135,11 +106,11 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
 
   public mParty getParty() {
 
-    return mParty;
+    return getRecipt().getParty();
   }
 
   public void setParty(mParty mParty) {
-    this.mParty = mParty;
+    getRecipt().setParty(mParty);
   }
 
   public mRecipt getRecipt() {
@@ -147,7 +118,7 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
   }
 
 
-    public void GetPartySubmit(Context context) {
+    public void RecieptCommit(Context context) {
 
 
         //hashmap getting value chnqaged
@@ -155,11 +126,11 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
         request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
         request.put("iID",Integer.toString(getRecipt().getId()));
         request.put("iDOC_NO", getRecipt().getReciept_no()); // DDL//Always get
-        request.put("sDOC_DATE", getRecipt().getDoc_Date());
+        request.put("sDOC_DATE", CustomDatePicker.formatDate( getRecipt().getDoc_Date(),CustomDatePicker.CommitFormat));
         request.put("iAMOUNT", ""+getRecipt().getAmount());
         request.put("sREMARK", getRecipt().getRemark());
         request.put("iAPA_ID", MyCustumApplication.getInstance().getUser().getID());
-        request.put("iPaId", getRecipt().getParty_id()); // DDL
+        request.put("iPaId", getRecipt().getParty().getID()); // DDL
 
 
 
@@ -215,14 +186,14 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
                                             public void onComplete(Bundle bundle) {
                                                 if (iReciptEntry != null) {
                                                     iReciptEntry.onParylistUpdated(Partylist);
-                                                    iReciptEntry.setRecieptNo(DOC_NO);
-                                                    iReciptEntry.setDate(CustomDatePicker.currentDate( CustomDatePicker.CommitFormat));
+                                                    iReciptEntry.setRecieptNo(mRecipt.getReciept_no());
+                                                    view.setDate(CustomDatePicker.formatDate(mRecipt.getDoc_Date(),CustomDatePicker.ShowFormat));
                                                 }
 
                                             }
 
                                             @Override
-                                            public void onResponse(Bundle bundle) {
+                                            public void onResponse(Bundle bundle) throws Exception {
                                                 parser4(bundle);
                                             }
 
@@ -235,11 +206,10 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
 
 
 
-  private void parser4(Bundle response) {
+  private void parser4(Bundle response) throws Exception {
 
     String table0 = response.getString("Tables0");
     JSONArray jsonArray = null;
-    try {
       jsonArray = new JSONArray(table0);
       Partylist.clear();
       //  Partylist.add(new DropDownModel("--Select--", "0"));
@@ -255,14 +225,12 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
       for (int i = 0; i < row2.length(); i++) {
         JSONObject c = row2.getJSONObject(i);
 
-        DOC_NO = c.getString("DOC_NO");
+          getRecipt().setReciept_no(c.getString("DOC_NO"));
       }
+      getRecipt().setDoc_Date(CustomDatePicker.getDate( CustomDatePicker.currentDate(),CustomDatePicker.CommitFormat));
 
-      recieptmodel.setReciept_no(DOC_NO);
 
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
+
   }
 
   

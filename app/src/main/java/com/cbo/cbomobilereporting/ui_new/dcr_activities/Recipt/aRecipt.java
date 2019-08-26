@@ -26,6 +26,7 @@ public class aRecipt extends RecyclerView.Adapter<aRecipt.MyViewHolder>  {
   Context context;
   LayoutInflater layoutInflater;
   ArrayList<mRecipt> recieptlsit=new ArrayList<>();
+  ArrayList<mRecipt> recieptlsitfilter=new ArrayList<mRecipt>();
   private  Recipt_interface recipt_interface;
 
 
@@ -62,6 +63,7 @@ public class aRecipt extends RecyclerView.Adapter<aRecipt.MyViewHolder>  {
   public aRecipt(Context context, ArrayList<mRecipt> recieptlsit){
     this.context = context;
     this.recieptlsit = recieptlsit;
+    this.recieptlsitfilter  = (ArrayList<mRecipt>) recieptlsit.clone();
     layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     this.recipt_interface=(Recipt_interface)context;
 
@@ -81,26 +83,11 @@ public class aRecipt extends RecyclerView.Adapter<aRecipt.MyViewHolder>  {
   public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
 
-    mRecipt mrecipt = recieptlsit.get(position);
-    //holder.rcpt_no.setText(mrecipt.getReciept_no());//DOC_NO
+    mRecipt mrecipt = recieptlsitfilter.get(position);
     holder.rec_remak.setText(mrecipt.getRemark());
-    holder.rec_name.setText(mrecipt.getParty_name());
+    holder.rec_name.setText(mrecipt.getParty().getName());
     holder.rec_amt.setText(AddToCartView.toCurrency(String.format("%.2f",mrecipt.getAmount())));
-//    holder.rec_id.setText(mrecipt.getId());
-    holder.rcpt_date.setText(mrecipt.getDoc_Date());//DATE
-    holder.rcpt_date.setText(mrecipt.getDoc_Date());
-//    try {
-//      holder.rcpt_date.setText(CustomDatePicker.formatDate(CustomDatePicker.getDate(mrecipt.getDoc_Date()
-//              ,CustomDatePicker.CommitFormat),CustomDatePicker.ShowFormat));
-//    } catch (ParseException e) {
-//      e.printStackTrace();
-//    }
-
-//    if(mrecipt.getRemark()!=null && !mrecipt.getRemark().isEmpty()){
-//      holder.rec_remak.setVisibility(View.VISIBLE);
-//    }else{
-//      holder.rec_remak.setVisibility(View.GONE);
-//    }
+    holder.rcpt_date.setText(CustomDatePicker.formatDate( mrecipt.getDoc_Date(),CustomDatePicker.ShowFormat));//DATE
 
 
     holder.edit_rec.setOnClickListener(new View.OnClickListener() {
@@ -130,9 +117,25 @@ public class aRecipt extends RecyclerView.Adapter<aRecipt.MyViewHolder>  {
 
   @Override
   public int getItemCount() {
-    return recieptlsit.size();
+    return recieptlsitfilter.size();
   }
 
+
+  public void filter(String Query){
+    recieptlsitfilter.clear();
+    if (Query.trim().equals("")){
+      recieptlsitfilter = (ArrayList<mRecipt>) recieptlsit.clone();
+      notifyDataSetChanged();
+      return;
+    }
+
+    for (mRecipt item : recieptlsit){
+      if (item.getParty().getName().toLowerCase().contains(Query.toLowerCase())){
+        recieptlsitfilter.add(item);
+      }
+    }
+    notifyDataSetChanged();
+  }
 
 
   public interface Recipt_interface {

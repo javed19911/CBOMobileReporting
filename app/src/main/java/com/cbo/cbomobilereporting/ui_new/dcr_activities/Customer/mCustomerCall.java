@@ -19,6 +19,7 @@ public class mCustomerCall extends mCall {
 
 
     public mCustomerCall() {
+        super("Customer");
         //setItemReqd(true);
     }
 

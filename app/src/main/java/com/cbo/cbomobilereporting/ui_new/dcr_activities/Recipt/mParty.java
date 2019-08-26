@@ -8,11 +8,12 @@ import java.io.Serializable;
 public class mParty implements Serializable {
 
 private String ID;
-private String NAme;
+private String Name;
 
 
-
-    public mParty() {
+    public mParty(String ID, String name) {
+        this.ID = ID;
+        Name = name;
     }
 
     public String getID() {
@@ -24,18 +25,18 @@ private String NAme;
         return  this;
     }
 
-    public String getNAme() {
-        return NAme;
+    public String getName() {
+        return Name;
     }
 
-    public mParty setNAme(String NAme) {
-        this.NAme = NAme;
+    public mParty setName(String NAme) {
+        this.Name = NAme;
         return  this;
     }
 
     protected mParty(Parcel in) {
         this.ID = in.readString();
-        this.NAme = in.readString();
+        this.Name = in.readString();
     }
 
 

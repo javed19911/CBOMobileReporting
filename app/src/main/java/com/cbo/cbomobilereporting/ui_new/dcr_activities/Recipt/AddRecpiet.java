@@ -9,38 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.aExpenseHead;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpense;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpense;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mOthExpense;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.vmOtherExpenses;
-import com.uenics.javed.CBOLibrary.CBOServices;
-import com.uenics.javed.CBOLibrary.CboProgressDialog;
-import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import services.MyAPIService;
 import utils.model.DropDownModel;
-import utils_new.AppAlert;
-import utils_new.CustomDatePicker;
 import utils_new.CustomDialog.Spinner_Dialog;
-import utils_new.Custom_Variables_And_Method;
 
 public class  AddRecpiet extends CustomActivity implements IReciptEntry {
 
@@ -188,9 +166,9 @@ public class  AddRecpiet extends CustomActivity implements IReciptEntry {
                     @Override
                     public void ItemSelected(DropDownModel item) {
 
-                        vmAddRecipt.getRecipt().setParty_id(item.getId()).setParty_name(item.getName());
-                        partdropdwon.setText(item.getName());
-                        //  partdropdwon.setPadding(1, 0, 5, 0);
+                        mParty party = new mParty(item.getId(),item.getName());
+                        vmAddRecipt.getRecipt().setParty(party);
+                        partdropdwon.setText(party.getName());
 
 
                     }
@@ -199,19 +177,7 @@ public class  AddRecpiet extends CustomActivity implements IReciptEntry {
         });
 
 
-        /*selecteddateimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selecteddate.performClick();
-            }
-        });
 
-        imgpartdropdwon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                partdropdwon.performClick();
-            }
-        });*/
 
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,7 +193,7 @@ public class  AddRecpiet extends CustomActivity implements IReciptEntry {
 
                 if(validate()){
 
-                    vmAddRecipt.GetPartySubmit(context);
+                    vmAddRecipt.RecieptCommit(context);
 
 
                 }
@@ -280,18 +246,13 @@ public class  AddRecpiet extends CustomActivity implements IReciptEntry {
 
     @Override
     public void setDate(String date) {
-        try {
-            selecteddate.setText(CustomDatePicker.formatDate( CustomDatePicker.getDate(date,CustomDatePicker.CommitFormat), CustomDatePicker.ShowFormat));
-            if(vmAddRecipt.getRecipt().getId()==0){
-                selecteddate.setClickable(true);
-                selecteddateimg.setClickable(true);
-            }else{
-                selecteddate.setClickable(false);
-                selecteddateimg.setClickable(false);
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
+        selecteddate.setText(date);
+        if(vmAddRecipt.getRecipt().getId()==0){
+            selecteddate.setClickable(true);
+            selecteddateimg.setClickable(true);
+        }else{
+            selecteddate.setClickable(false);
+            selecteddateimg.setClickable(false);
         }
     }
     @Override

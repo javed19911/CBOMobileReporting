@@ -345,7 +345,27 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
             @Override
             public void onClick(View v) {
 
-                if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("")
+                if (viewModel.getExpense().getDA_TYPE_MANUALYN().equalsIgnoreCase("Y")
+                        && viewModel.getExpense().getSelectedDA().getCode().isEmpty()){
+                    AppAlert.getInstance().Alert(context, "DA Type!!!", "Please select DA Type ...",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onClickManualDaType();
+                                }
+                            });
+
+                } else if (viewModel.getExpense().getDISTANCE_TYPE_MANUALYN().equalsIgnoreCase("1")
+                    && viewModel.getExpense().getSelectedDistance().getId().isEmpty()){
+                    AppAlert.getInstance().Alert(context, "Fare!!!", "Please select Fare ...",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onClickManualDistance();
+                                }
+                            });
+
+                } else if ( actual_fare_layout.getVisibility()==View.VISIBLE && distAmt.getText().toString().equals("")
                         && !viewModel.getExpense().getACTUALFAREYN_MANDATORY().equalsIgnoreCase("N")) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Actual Fare....");
                 }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"EXP_ATCH_YN","N").equals("Y")
@@ -498,170 +518,6 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
 
 
 
-
-    private void init_DA_type(TableLayout stk) {
-
-        stk.removeAllViews();
-
-        Double other = 0D;
-        //datanum.put("amount", c.getString(c.getColumnIndex("amount")));
-        for (int i = 0; i <viewModel.getExpense().getOthExpenses().size();i++){
-            other+= viewModel.getExpense().getOthExpenses().get(i).getAmount();
-            if (viewModel.getExpense().getOthExpenses().get(i).getExpHead().getDA_ACTION() == 1){
-                viewModel.getExpense().setDA_Amt(0D);
-                setDA("");
-            }
-        }
-
-
-        TableRow tbrow0 = new TableRow(context);
-        //tbrow0.setBackgroundColor(0xff125688);
-        TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableLayout.LayoutParams.WRAP_CONTENT, 1f);
-        TextView tv0 = new TextView(context);
-        tv0.setText("DA. Type");
-        tv0.setPadding(5, 5, 5, 0);
-        tv0.setTextColor(Color.BLACK);
-        tv0.setTypeface(null, Typeface.NORMAL);
-        tv0.setLayoutParams(params);
-        tbrow0.addView(tv0);
-        TextView tv1 = new TextView(context);
-        tv1.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "DA_TYPE"));
-        tv1.setGravity(Gravity.RIGHT);
-        tv1.setPadding(5, 5, 5, 0);
-        tv1.setTextColor(Color.BLACK);
-        tv1.setTypeface(null, Typeface.NORMAL);
-        tbrow0.addView(tv1);
-        stk.addView(tbrow0);
-
-        TableRow tbrow1 = new TableRow(context);
-        //tbrow1.setBackgroundColor(0xff125688);
-        TextView tv10 = new TextView(context);
-        tv10.setText("DA. Value");
-        tv10.setPadding(5, 5, 5, 0);
-        tv10.setTextColor(Color.BLACK);
-        tv10.setTypeface(null, Typeface.NORMAL);
-        tv10.setLayoutParams(params);
-        tbrow1.addView(tv10);
-        TextView tv11 = new TextView(context);
-        tv11.setText(context.getResources().getString(R.string.rs) + " " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "da_val","0"));
-        tv11.setPadding(5, 5, 5, 0);
-        tv11.setTextColor(Color.BLACK);
-        tv11.setGravity(Gravity.RIGHT);
-        tv11.setTypeface(null, Typeface.NORMAL);
-        tbrow1.addView(tv11);
-        stk.addView(tbrow1);
-
-        Double Dis_val =0D;
-        if (!(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "ACTUALFAREYN","").equalsIgnoreCase("Y")
-            || viewModel.getExpense().getTA_TYPE_MANUALYN().equalsIgnoreCase("1"))) {
-            TableRow tbrow2 = new TableRow(context);
-            //tbrow2.setBackgroundColor(0xff125688);
-            TextView tv21 = new TextView(context);
-            tv21.setText("TA. Value");
-            tv21.setPadding(5, 5, 5, 0);
-            tv21.setTextColor(Color.BLACK);
-            tv21.setTypeface(null, Typeface.NORMAL);
-            tv21.setLayoutParams(params);
-            tbrow2.addView(tv21);
-            TextView tv22 = new TextView(context);
-            tv22.setText(context.getResources().getString(R.string.rs) + " " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "distance_val", "0"));
-            tv22.setGravity(Gravity.RIGHT);
-            tv22.setPadding(5, 5, 5, 0);
-            tv22.setTextColor(Color.BLACK);
-            tv22.setTypeface(null, Typeface.NORMAL);
-            tbrow2.addView(tv22);
-            stk.addView(tbrow2);
-            Dis_val = Double.parseDouble(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "distance_val","0"));
-        }else if (viewModel.getExpense().getTA_TYPE_MANUALYN().equalsIgnoreCase("1")){
-            Dis_val =0D;
-            for (int i = 0; i <viewModel.getExpense().getTA_Expenses().size();i++){
-                Dis_val+= viewModel.getExpense().getTA_Expenses().get(i).getAmount();
-            }
-
-            TableRow tbrow2 = new TableRow(context);
-            //tbrow2.setBackgroundColor(0xff125688);
-            TextView tv21 = new TextView(context);
-            tv21.setText("TA. Value");
-            tv21.setPadding(5, 5, 5, 0);
-            tv21.setTextColor(Color.BLACK);
-            tv21.setTypeface(null, Typeface.NORMAL);
-            tv21.setLayoutParams(params);
-            tbrow2.addView(tv21);
-            TextView tv22 = new TextView(context);
-            tv22.setText(context.getResources().getString(R.string.rs) + " " + Dis_val);
-            tv22.setGravity(Gravity.RIGHT);
-            tv22.setPadding(5, 5, 5, 0);
-            tv22.setTextColor(Color.BLACK);
-            tv22.setTypeface(null, Typeface.NORMAL);
-            tbrow2.addView(tv22);
-            stk.addView(tbrow2);
-
-
-
-            //Dis_val = Float.parseFloat(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "distance_val","0"));
-        }
-
-        TableRow tbrow4 = new TableRow(context);
-        //tbrow4.setBackgroundColor(0xff125688);
-        TextView tv40 = new TextView(context);
-        tv40.setText("Other Value");
-        tv40.setPadding(5, 5, 5, 0);
-        tv40.setTextColor(Color.BLACK);
-        tv40.setTypeface(null, Typeface.NORMAL);
-        tv40.setLayoutParams(params);
-        tbrow4.addView(tv40);
-        TextView tv41 = new TextView(context);
-
-
-
-        /*for (int i = 0; i <viewModel.getExpense().getTA_Expenses().size();i++){
-            other+= viewModel.getExpense().getTA_Expenses().get(i).getAmount();
-        }*/
-
-        tv41.setText(context.getResources().getString(R.string.rs)+" "+other);
-        tv41.setPadding(5, 5, 5, 0);
-        tv41.setTextColor(Color.BLACK);
-        tv41.setGravity(Gravity.RIGHT);
-        tv41.setTypeface(null, Typeface.NORMAL);
-        tbrow4.addView(tv41);
-        stk.addView(tbrow4);
-
-        Double net_value = Float.parseFloat(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "da_val","0"))
-                + Dis_val
-                + other;
-
-
-        TableRow tbrow5 = new TableRow(context);
-        tbrow5.setPadding(2,2,2,2);
-        tbrow5.setBackgroundColor(0xff125688);
-        stk.addView(tbrow5);
-
-        TableRow tbrow3 = new TableRow(context);
-        //tbrow3.setBackgroundColor(0xff125688);
-        TextView tv31 = new TextView(context);
-        tv31.setText("Total Expenses");
-        tv31.setPadding(5, 5, 5, 0);
-        tv31.setTextColor(Color.BLACK);
-        tv31.setTypeface(null, Typeface.BOLD);
-        tv31.setLayoutParams(params);
-        tbrow3.addView(tv31);
-        TextView tv32 = new TextView(context);
-
-        tv32.setText(context.getResources().getString(R.string.rs) + " " + net_value);
-
-        tv32.setGravity(Gravity.RIGHT);
-        tv32.setPadding(5, 5, 5, 0);
-        tv32.setTextColor(Color.BLACK);
-        tv32.setTypeface(null, Typeface.BOLD);
-        tbrow3.addView(tv32);
-        stk.addView(tbrow3);
-
-        TableRow tbrow6 = new TableRow(context);
-        tbrow6.setPadding(2,2,2,2);
-        tbrow6.setBackgroundColor(0xff125688);
-        stk.addView(tbrow6);
-
-    }
 
 
     @Override

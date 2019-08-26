@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
@@ -95,8 +96,26 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
         return newAttachment;
     }
 
+    public ArrayList<String> getNewAttachmentArr() {
+        return this.getNewAttachment().isEmpty() ? new ArrayList() : new ArrayList(Arrays.asList(this.newAttachment.split("\\|\\^")));
+    }
+
     public void setNewAttachment(String newAttachment) {
         this.newAttachment = newAttachment;
+    }
+
+    public void setAttachment(ArrayList<String> attachment) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+
+        for(String file : attachment) {
+            if (count != 0) {
+                sb.append("|^");
+            }
+            ++count;
+            sb.append(file);
+        }
+        this.newAttachment = sb.toString();
     }
 
     public void setExpenseHead(Context context,mExpHead expenseHead){
@@ -147,7 +166,7 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
             view.setAmount(getOthExpense().getAmount());
             view.setRemark(getOthExpense().getRemark());
             view.setRate(expenseHead.getRATE());
-            view.setAttachment(getOthExpense().getAttachment());
+            view.setAttachment(getOthExpense().getAttachmentArr());
         }
     }
 
@@ -161,7 +180,7 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
         request.put("iExpHeadId", ""+getOthExpense().getExpHead().getId());
         request.put("iAmount", ""+ getOthExpense().getAmount());
         request.put("sRemark", getOthExpense().getRemark());
-        request.put("sFileName", getOthExpense().getAttachment());
+        request.put("sFileName", getOthExpense().getAttachmentName());
         request.put("TA_KM",""+ getOthExpense().getKm());
         request.put("TA_DA",""+ getExpense_type().ordinal());
         request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
@@ -181,7 +200,7 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
                         JSONObject object = jsonArray1.getJSONObject(0);
                         if (object.getString("INVALIDMSG").isEmpty()) {
 
-                            Custom_Variables_And_Method.getInstance().msgBox(context, (getExpense_type() == eExpense.None ? "Exp." : getExpense_type().name()) + "  Added Sucessfully");
+                            Custom_Variables_And_Method.getInstance().msgBox(context, (getExpense_type() == eExpense.None ? "Exp." : getExpense_type().name()) + "  Added Successfully");
                             if (view != null) {
                                 view.onSendResponse(getOthExpense());
                             }
