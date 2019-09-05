@@ -32,10 +32,9 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.ChemistCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer.CustomerCall;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCRCall.CallActivity;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCRCall.DCRCallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCRCall.mChemistRc;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DairyCall;
@@ -45,11 +44,8 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrPrescription;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrRXActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Location.CentroidLocation;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.TabbedActivity.TabbedCallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Expense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.NonListedCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.ReminderCall;
@@ -296,20 +292,20 @@ public class DcrmenuInGrid extends Fragment {
                 break;
             }
 
-//            case "D_CHEM_RCCALL": {
-//                if (DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
-//                    customVariablesAndMethod.msgBox(context, "Please open your DCR Days first....");
-//                } else if (!customVariablesAndMethod.checkIfCallLocationValid(context, false, SkipLocationVarification)) {
-//                    customVariablesAndMethod.msgBox(context, "Verifing Your Location");
-//                    LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
-//                            new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
-//                } else {
-//
-//                    onClickChemistReminder(menuNameOnClickGlobal);
-//
-//                }
-//                break;
-//            }
+            case "D_CHEM_RCCALL": {
+                if (DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
+                    customVariablesAndMethod.msgBox(context, "Please open your DCR Days first....");
+                } else if (!customVariablesAndMethod.checkIfCallLocationValid(context, false, SkipLocationVarification)) {
+                    customVariablesAndMethod.msgBox(context, "Verifing Your Location");
+                    LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
+                            new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
+                } else {
+
+                    onClickChemistReminder(menuNameOnClickGlobal);
+
+                }
+                break;
+            }
             case "D_DRSAM": {
                 if (DCR_ID.equals("0")  || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"dcr_date_real").equals("")) {
                     customVariablesAndMethod.msgBox(context,"Please open your DCR Days first....");
@@ -754,7 +750,9 @@ public class DcrmenuInGrid extends Fragment {
                         .setRouteTitle(c.getString("ROUTE_TITLE"))
                         .setAreaTitle(c.getString("AREA_TITLE"))
                         .setAdditionalAreaApprovalReqd(c.getString("ADDAREA_APPYN"))
-                        .setAdditionalAreaValidationReqd(c.getString("ADDITIONALAREA_MENDETYN"));
+                        .setAdditionalAreaValidationReqd(c.getString("ADDITIONALAREA_MENDETYN"))
+                        .setAttachmentTilte(c.getString("SELFIE_TITLE"))
+                        .setAttachmentMandatory(c.getString("SELFIE_MANDATORYYN"));
             }
 
 
@@ -1815,7 +1813,7 @@ public class DcrmenuInGrid extends Fragment {
 
     private void onClickChemistReminder(String title){
         if (IsCallAllowed()){
-            Intent intent = new Intent(getActivity(), CallActivity.class);
+            Intent intent = new Intent(getActivity(), DCRCallActivity.class);
             intent.putExtra("mCall",new mChemistRc());
             intent.putExtra("title",title);
             startActivity(intent);
@@ -2081,6 +2079,10 @@ public class DcrmenuInGrid extends Fragment {
             case "D_RETCALL":
                 flag=true;
                 table="chemisttemp";
+                break;
+            case "D_CHEM_RCCALL":
+                flag=true;
+                table="phdcrchem_rc";
                 break;
             case "D_STK_CALL":
                 flag=true;

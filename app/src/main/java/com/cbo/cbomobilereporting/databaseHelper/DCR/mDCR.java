@@ -46,6 +46,10 @@ public class mDCR {
     private String AdditionalAreaApprovalReqd; //ADDAREA_APPYN
     private String AdditionalAreaValidationReqd ; //ADDITIONALAREA_MENDETYN
 
+    private String AttachmentTilte; //SELFIE_TITLE
+    private Boolean AttachmentMandatory ; //SELFIE_MANDATORYYN
+    private String Attachment;
+
 
     ///getter
     public String getId() {
@@ -188,6 +192,28 @@ public class mDCR {
         return AdditionalAreaValidationReqd;
     }
 
+    public String getAttachmentTilte() {
+        if (AttachmentTilte == null){
+            AttachmentTilte = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SELFIE_TITLE","");
+        }
+        return AttachmentTilte;
+    }
+
+    public Boolean getAttachmentMandatory() {
+        if (AttachmentMandatory == null){
+            AttachmentMandatory = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SELFIE_MANDATORYYN","").equalsIgnoreCase("y");
+        }
+        return AttachmentMandatory;
+    }
+
+    public String getAttachment() {
+        if (Attachment == null){
+            Attachment = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DAY_ATTACHMENT","");
+        }
+        return Attachment;
+    }
+
+
 
     ///setter
 
@@ -325,4 +351,22 @@ public class mDCR {
         MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("ADDITIONALAREA_MENDETYN",additionalAreaValidationReqd);
         return this;
     }
+
+    public mDCR setAttachmentTilte(String attachmentTilte) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("SHELFIE_TITLE",attachmentTilte);
+        AttachmentTilte = attachmentTilte;
+        return this;
+    }
+
+    public mDCR setAttachmentMandatory(String attachmentMandatory) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("SELFIE_MANDATORYYN",attachmentMandatory);
+        AttachmentMandatory = null;
+        return this;
+    }
+
+    public void setAttachment(String attachment) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("DAY_ATTACHMENT",attachment);
+        Attachment = attachment;
+    }
+
 }

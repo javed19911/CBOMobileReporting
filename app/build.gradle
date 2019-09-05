@@ -7,8 +7,8 @@ android {
         applicationId "com.cbo.cbomobilereporting"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 325
-        versionName "3.25"
+        versionCode 327
+        versionName "3.27"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        jackOptions {
@@ -65,7 +65,7 @@ dependencies {
     implementation files('libs/jxl.jar')
     implementation files('libs/gson-2.6.2.jar')
     //to check the version
-    implementation project(path: ':ShortcutBadger')
+    //implementation project(path: ':ShortcutBadger')
     implementation project(path: ':CBOLibrary')
     implementation project(path: ':cboorder')
     implementation project(path: ':dbhelper')

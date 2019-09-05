@@ -175,6 +175,14 @@ public class CallActivity extends CustomActivity implements iCall {
         });
     }
 
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        callAdaptor.update(viewModel.getItems());
+    }
+
     @Override
     public void setTile() {
         androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
@@ -182,7 +190,6 @@ public class CallActivity extends CustomActivity implements iCall {
 
         if (getSupportActionBar()!=null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
             toolbar.setNavigationOnClickListener(view -> onBackPressed());
         }
 

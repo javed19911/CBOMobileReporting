@@ -978,7 +978,7 @@ public class StockistCall extends AppCompatActivity implements ExpandableListAda
                 stockistCallDB.insert(mstockistCall);
                 locationDB.insert(mstockistCall);
 
-                finish();
+                //finish();
             }else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,Skip_Verification)) {
                 customVariablesAndMethod.msgBox(context,"Verifing Your Location");
                 IsRefreshedClicked = false;

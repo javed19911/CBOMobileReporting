@@ -16,13 +16,13 @@ public class mExpense implements Serializable {
     private String ROUTE_CLASS ="";
     private String ACTUALFAREYN_MANDATORY = "";
     private Double ACTUALFARE_MAXAMT = 0D;
-    private String DA_TYPE_MANUALYN = "";
-    private String TA_TYPE_MANUALYN = "";
-    private String MANUAL_TAYN_MANDATORY ="";
+    private String DA_TYPE_MANUALYN ;
+    private String TA_TYPE_MANUALYN ;
+    private String MANUAL_TAYN_MANDATORY ;
     private String MANUAL_TAYN_KM ="";
     private String MANUAL_TAYN_STATION ="";
     private String DISTANCE_TYPE_MANUALYN = "";
-    private String MANUAL_DAYN = "";
+    private String MANUAL_DAYN ;
     private mDA selected_da = new mDA();
     private mDistance selected_distance = new mDistance();
     private ArrayList<mExpHead> expHeads = new ArrayList();
@@ -90,14 +90,26 @@ public class mExpense implements Serializable {
     }
 
     public String getDA_TYPE_MANUALYN() {
+        if (DA_TYPE_MANUALYN == null){
+            DA_TYPE_MANUALYN = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DA_TYPE_MANUALYN","");
+        }
         return DA_TYPE_MANUALYN;
     }
 
     public String getTA_TYPE_MANUALYN() {
+        if (TA_TYPE_MANUALYN == null){
+            TA_TYPE_MANUALYN = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("TA_TYPE_MANUALYN","");
+        }
         return TA_TYPE_MANUALYN;
     }
 
-    public String getMANUAL_TAYN_MANDATORY(){ return MANUAL_TAYN_MANDATORY;}
+    public String getMANUAL_TAYN_MANDATORY(){
+
+        if (MANUAL_TAYN_MANDATORY == null){
+            MANUAL_TAYN_MANDATORY = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("MANUAL_TAYN_MANDATORY","");
+        }
+        return MANUAL_TAYN_MANDATORY;
+    }
 
     public String getMANUAL_TAYN_KM() {
         return MANUAL_TAYN_KM;
@@ -161,7 +173,12 @@ public class mExpense implements Serializable {
         return Station;
     }
 
-    public String getMANUAL_DAYN(){ return MANUAL_DAYN;}
+    public String getMANUAL_DAYN(){
+        if (MANUAL_DAYN == null){
+            MANUAL_DAYN = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("MANUAL_DAYN","");
+        }
+        return MANUAL_DAYN;
+    }
 
     public String getAttachment() {
         return Attachment;
@@ -214,6 +231,7 @@ public class mExpense implements Serializable {
 
     public mExpense setDA_TYPE_MANUALYN(String DA_TYPE_MANUALYN) {
         this.DA_TYPE_MANUALYN = DA_TYPE_MANUALYN;
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("DA_TYPE_MANUALYN",DA_TYPE_MANUALYN);
         return this;
     }
 
@@ -225,6 +243,7 @@ public class mExpense implements Serializable {
 
     public mExpense setMANUAL_TAYN_MANDATORY(String MANUAL_TAYN_MANDATORY){
         this.MANUAL_TAYN_MANDATORY = MANUAL_TAYN_MANDATORY;
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MANUAL_TAYN_MANDATORY",MANUAL_TAYN_MANDATORY);
         return this;
     }
 
@@ -309,6 +328,7 @@ public class mExpense implements Serializable {
 
     public mExpense setMANUAL_DAYN(String MANUAL_DAYN) {
         this.MANUAL_DAYN = MANUAL_DAYN;
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MANUAL_DAYN",MANUAL_DAYN);
         return this;
     }
 

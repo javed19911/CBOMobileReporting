@@ -466,11 +466,6 @@ public class DOB_DOA extends AppCompatActivity {
         if(message.equals("1")){
             finish();
         }else{
-            Intent i = new Intent(DOB_DOA.this, ViewPager_2016.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.putExtra("Id", Custom_Variables_And_Method.CURRENTTAB);
-            startActivity(i);
             finish();
             super.onBackPressed();
         }

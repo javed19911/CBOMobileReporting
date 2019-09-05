@@ -208,11 +208,7 @@ public class Add_Delete_Leave extends AppCompatActivity {
 
         if (item != null) {
             if (!Custom_Variables_And_Method.pub_desig_id.equalsIgnoreCase("11")) {
-                Intent i = new Intent(Add_Delete_Leave.this, ViewPager_2016.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.putExtra("Id", Custom_Variables_And_Method.CURRENTTAB);
-                startActivity(i);
+
                 finish();
             }else{
                 finish();

@@ -119,6 +119,7 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
     }
 
     public void setExpenseHead(Context context,mExpHead expenseHead){
+        setNewAttachment("");
         getOthExpense().setExpHead(expenseHead);
         if (view != null) {
 

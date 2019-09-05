@@ -270,7 +270,8 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
         String ItemIdNotIn="0";
         //cbohelp.giftDelete();
 
-        Cursor c1=cbohelp.getAllGifts(gift_name_previous, !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y"));
+        Cursor c1=cbohelp.getAllGifts(gift_name_previous,
+                !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y"));
         if(c1.moveToFirst()){
             do{
 

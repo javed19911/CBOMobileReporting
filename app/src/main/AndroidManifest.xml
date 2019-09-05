@@ -506,7 +506,7 @@
             android:theme="@style/Appdilogtheme" />
 
         <activity
-            android:name=".ui_new.dcr_activities.DCRCall.CallActivity"
+            android:name=".ui_new.dcr_activities.DCRCall.DCRCallActivity"
             android:configChanges="orientation|screenSize" />
     </application>
 

@@ -786,7 +786,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 	@Override
 	public void Edit_Call(final String Dr_id, String Dr_name) {
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		/*LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
 		final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
 		final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
@@ -836,7 +836,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 			}
 		});
 		dialog.setCancelable(false);
-		dialog.show();
+		dialog.show();*/
 
 
 

@@ -14,6 +14,7 @@ import android.view.View;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
+import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
@@ -757,7 +758,7 @@ public class Service_Call_From_Multiple_Classes {
                             Double.parseDouble(jasonObj1.getString("STK_RATE")),Double.parseDouble(jasonObj1.getString("CHEM_RATE")),
                             Double.parseDouble(jasonObj1.getString("DR_RATE")),jasonObj1.getString("GIFT_TYPE"),
                             jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"),
-                            jasonObj1.getInt("SPL_ID"),jasonObj1.getString("GENERIC_NAME"));
+                            jasonObj1.getInt("SPL_ID"),jasonObj1.getString("GENERIC_NAME"),jasonObj1.getString("GIFT_CAMP"));
                     Log.e("%%%%%%%%%%%%%%%", "item insert");
 
                 }
@@ -956,7 +957,13 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("DCRCALL_ANYTIMEYN", c.getString("DCRCALL_ANYTIMEYN"));
                 editor.putString("CENTROID_METER", c.getString("CENTROID_METER"));
 
+
+
                 editor.commit();
+
+                Controls.getInstance().setGiftCampaignWiseReqd(c.getString("GIFTCAMP_WISEYN"));
+                Controls.getInstance().setGpsRequired(c.getString("GPRSYN"));
+                Controls.getInstance().setRouteWise(c.getString("ROUTE"));
 
             }
 

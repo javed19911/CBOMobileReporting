@@ -98,7 +98,7 @@ public class Doctor_Sample extends AppCompatActivity {
     ImageView remark_img;
     AlertDialog myalertDialog = null;
     private  static final int  PRODUCT_DILOG=5,GIFT_DILOG=6,MESSAGE_INTERNET_SEND_FCM=0;
-    String Dr_sale_url = "";
+    String Dr_sale_url = "",campaign ="";
 
 
     ///firebase DB
@@ -283,6 +283,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         dr_remark.setText("");
                     }*/
 
+                   campaign = doctor_list.get("dr_camp_group").get(0);
                     if (!doctor_list.get("remark").get(0).equals("")) {
                         String remark=doctor_list.get("remark").get(0);
                         if (remark.contains("\u20B9")) {
@@ -364,6 +365,7 @@ public class Doctor_Sample extends AppCompatActivity {
 
                     gift_name="";
                     gift_qty="";
+                    campaign ="";
 
                     stk.removeAllViews();
                     gift_layout.removeAllViews();
@@ -437,6 +439,7 @@ public class Doctor_Sample extends AppCompatActivity {
                     b.putString("title",gift.getText().toString());
                     b.putString("gift_name", gift_name);
                     b.putString("gift_qty",gift_qty);
+                    b.putString("campaign",campaign);
                     new Dr_Gift_Dialog(context,mHandler,b,GIFT_DILOG).Show();
                 }
             }

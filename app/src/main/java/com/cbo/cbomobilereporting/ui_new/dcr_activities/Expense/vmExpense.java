@@ -72,6 +72,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
             }
             view.ManualDAReqd(expense.getMANUAL_DAYN().equalsIgnoreCase("1"));
             view.ManualTAReqd(expense.getTA_TYPE_MANUALYN().equalsIgnoreCase("1"));
+            view.ManualTAMandetory(expense.getMANUAL_TAYN_MANDATORY().equalsIgnoreCase("1"));
             view.ManualDistanceReqd(expense.getDISTANCE_TYPE_MANUALYN().equalsIgnoreCase("1"));
             view.ManualStationReqd(expense.getMANUAL_TAYN_STATION().equalsIgnoreCase("1"));
            // view.ActualFareReqd(expense.getACTUALFAREYN().equalsIgnoreCase("Y"));
@@ -519,6 +520,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
 
 
             cbohelp.delete_Expense_withID("" + othExpense.getId());
+            cbohelp.markAsCalled(CallType.EXPENSE, false);
         }
 
 

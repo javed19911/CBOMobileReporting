@@ -23,6 +23,7 @@ import com.cbo.utils.MultiSelectDetailView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import utils_new.AppAlert;
@@ -42,6 +43,7 @@ public class CBOImageView extends MultiSelectDetailView<String,CBOImageView.MyVi
 
     public static final int REQUEST_CAMERA=2001;
 
+    private int maxAttachment = 3;
     private iCBOImageView listenter;
     public void setListener(iCBOImageView listener){
         this.listenter = listener;
@@ -68,12 +70,17 @@ public class CBOImageView extends MultiSelectDetailView<String,CBOImageView.MyVi
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.delete){
-                String filePath = getDataList().get(getAdapterPosition());
-                getDataList().remove(getAdapterPosition());
-                getAdapter().notifyItemRemoved(getAdapterPosition());
-                if (listenter !=null){
-                    listenter.OnDeleted(filePath);
+                try {
+                    String filePath = getDataList().get(getAdapterPosition());
+                    getDataList().remove(getAdapterPosition());
+                    getAdapter().notifyItemRemoved(getAdapterPosition());
+                    if (listenter !=null){
+                        listenter.OnDeleted(filePath);
+                    }
+                }catch (Exception e){
+                    getAdapter().notifyDataSetChanged();
                 }
+
 
             }
             else {
@@ -102,15 +109,27 @@ public class CBOImageView extends MultiSelectDetailView<String,CBOImageView.MyVi
     }
 
 
+    public int getMaxAttachment() {
+        return maxAttachment;
+    }
+
+    public void setMaxAttachment(int maxAttachment) {
+        this.maxAttachment = maxAttachment;
+    }
+
     public void addAttachment(Activity context) {
-        String filenameTemp = Custom_Variables_And_Method.PA_ID+"_"+ Custom_Variables_And_Method.DCR_ID+"_OthExp_"+Custom_Variables_And_Method.getInstance().get_currentTimeStamp()+".jpg";
+        addAttachment(context,AttachImage.ChooseFrom.all);
+    }
+
+
+    public void addAttachment(Activity context, AttachImage.ChooseFrom chooseFrom) {
+        String filenameTemp = Custom_Variables_And_Method.PA_ID+"_"+ Custom_Variables_And_Method.DCR_ID+"_attach_"+Custom_Variables_And_Method.getInstance().get_currentTimeStamp()+".jpg";
         //choosePhoto = new ChoosePhoto(context, REQUEST_CAMERA, ChoosePhoto.ChooseFrom.all);
         Intent intent = new Intent(context, AttachImage.class);
         intent.putExtra("Output_FileName",filenameTemp);
-        intent.putExtra("SelectFrom", AttachImage.ChooseFrom.all);
+        intent.putExtra("SelectFrom", chooseFrom);
         context.startActivityForResult(intent,REQUEST_CAMERA);
     }
-
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -129,6 +148,37 @@ public class CBOImageView extends MultiSelectDetailView<String,CBOImageView.MyVi
 
             }
         }
+    }
+
+    public void setAttachment(String attacments){
+        updateDataList(attacments.isEmpty() ? new ArrayList() : new ArrayList(Arrays.asList(attacments.split("\\|\\^"))));
+    }
+    public String getAttachmentStr() {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+
+        for(String file : getDataList()) {
+            if (count != 0) {
+                sb.append("|^");
+            }
+            ++count;
+            sb.append(file);
+        }
+        return sb.toString();
+    }
+
+    public String getAttachmentNameStr() {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+
+        for(String file : getDataList()) {
+            if (count != 0) {
+                sb.append("|^");
+            }
+            ++count;
+            sb.append(file.substring(file.lastIndexOf("/")+1));
+        }
+        return sb.toString();
     }
 
     private void PreviewImage(Context context,String path){
@@ -209,8 +259,8 @@ public class CBOImageView extends MultiSelectDetailView<String,CBOImageView.MyVi
 
     @Override
     public void onClickListener() {
-        if (getDataList().size()>=3){
-            AppAlert.getInstance().getAlert(getContext(),"Alert!!!","Only 3 attachment is allowed..");
+        if (getDataList().size()>=getMaxAttachment()){
+            AppAlert.getInstance().getAlert(getContext(),"Alert!!!","Only "+getMaxAttachment()+" attachment is allowed..");
         }else if (listenter != null) {
              listenter.OnAddClicked();
         }

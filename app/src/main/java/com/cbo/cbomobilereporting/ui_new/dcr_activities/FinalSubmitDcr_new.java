@@ -89,6 +89,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     Map<String, String> Lat_Long_Reg = new HashMap<>();
     Map<String, String> dcr_Dairy = new HashMap<>();
     Map<String, String> dcr_RxCalls= new HashMap<>();
+    Map<String, String> dcr_CommitChem_Reminder = new HashMap<>();
 
     String sb_DCRLATCOMMIT_KM, sb_DCRLATCOMMIT_LOC_LAT, sb_sDCRLATCOMMIT_IN_TIME, sDCRLATCOMMIT_ID, sDCRLATCOMMIT_LOC;
     String sDCRITEM_DR_ID, sDCRITEM_ITEMIDIN, sDCRITEM_ITEM_ID_ARR, sDCRITEM_QTY_ARR, sDCRITEM_ITEM_ID_GIFT_ARR, sDCRITEM_QTY_GIFT_ARR, sDCRITEM_POB_QTY, sDCRITEM_POB_VALUE, sDCRITEM_VISUAL_ARR,sDCRITEM_NOC_ARR;
@@ -108,6 +109,9 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String sDCRDAIRYITEM_POB_QTY,sDAIRY_FILE,sDCRDAIRY_INTERSETEDYN;
 
     String aDCRDRRX_DOC_DATE,aDCRDRRX_DR_ID,aDCRDRRX_ITEM_ID,aDCRDRRX_QTY,aDCRDRRX_AMOUNT;
+
+    String sDCRRC_CHEM_ID,sDCRRC_LOC_CHEM,sDCRRC_IN_TIME_CHEM,sDCRRC_KM_CHEM,sDCRRC_SRNO_CHEM;
+    String sDCRRC_BATTERY_PERCENT_CHEM,sDCRRC_REMARK_CHEM,sDCRRC_FILE_CHEM,sRC_REF_LAT_LONG_CHEM;
 
     public AppPrefrences appPrefrences;
 
@@ -634,6 +638,33 @@ public class FinalSubmitDcr_new extends CustomActivity {
         }
 
 
+
+        dcr_CommitChem_Reminder = cboFinalTask_new.dcr_ChemReminder(null);
+        if ((dcr_CommitChem_Reminder.isEmpty()) || (dcr_CommitChem_Reminder.size() == 0)) {
+
+            sDCRRC_CHEM_ID = "";
+            sDCRRC_LOC_CHEM = "";
+            sDCRRC_IN_TIME_CHEM = "";
+            sDCRRC_KM_CHEM = "";
+            sDCRRC_SRNO_CHEM = "";
+            sDCRRC_BATTERY_PERCENT_CHEM="";
+            sDCRRC_REMARK_CHEM="";
+            sDCRRC_FILE_CHEM="";
+            sRC_REF_LAT_LONG_CHEM = "";
+        } else {
+
+            sDCRRC_CHEM_ID = dcr_CommitChem_Reminder.get("sb_sDCRRC_CHEM_ID");
+            sDCRRC_LOC_CHEM = dcr_CommitChem_Reminder.get("sb_sDCRRC_LOC_CHEM");
+            sDCRRC_IN_TIME_CHEM = dcr_CommitChem_Reminder.get("sb_sDCRRC_IN_TIME_CHEM");
+            sDCRRC_KM_CHEM = dcr_CommitChem_Reminder.get("sb_sDCRRC_KM_CHEM");
+            sDCRRC_SRNO_CHEM = dcr_CommitChem_Reminder.get("sb_sDCRRC_SRNO_CHEM");
+            sDCRRC_BATTERY_PERCENT_CHEM = dcr_CommitChem_Reminder.get("sb_sDCRRC_BATTERY_PERCENT_CHEM");
+            sDCRRC_REMARK_CHEM =dcr_CommitChem_Reminder.get("sb_sDCRRC_REMARK_CHEM");
+            sDCRRC_FILE_CHEM =dcr_CommitChem_Reminder.get("sb_sDCRRC_FILE_CHEM");
+            sRC_REF_LAT_LONG_CHEM = dcr_CommitChem_Reminder.get("sb_sRC_REF_LAT_LONG_CHEM");
+        }
+
+
         //customMethod.getDataFromFromAllTables();
         //sFinalKm = mycon.getDataFrom_FMCG_PREFRENCE("final_km");
         // ArrayList<String> array=customMethod.kmWithWayPoint();
@@ -813,6 +844,18 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
 
+        request.put("sDCRRC_CHEM_ID", sDCRRC_CHEM_ID);
+        request.put("sDCRRC_LOC_CHEM", sDCRRC_LOC_CHEM);
+        request.put("sDCRRC_IN_TIME_CHEM", sDCRRC_IN_TIME_CHEM);
+        request.put("sDCRRC_KM_CHEM", sDCRRC_KM_CHEM);
+        request.put("sDCRRC_SRNO_CHEM", sDCRRC_SRNO_CHEM);
+        request.put("sDCRRC_BATTERY_PERCENT_CHEM", sDCRRC_BATTERY_PERCENT_CHEM);
+        request.put("sDCRRC_REMARK_CHEM", sDCRRC_REMARK_CHEM);
+        request.put("sDCRRC_FILE_CHEM", sDCRRC_FILE_CHEM);
+        request.put("sRC_REF_LAT_LONG_CHEM", sRC_REF_LAT_LONG_CHEM);
+
+
+
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(-1);
 
@@ -830,7 +873,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DCRCommitFinal_New_22", request)
+                .execute(new ResponseBuilder("DCRCommitFinal_New_23", request)
                         .setTables(tables)
                         .setDescription("Please Wait..\n" +
                                 "Final Submit in process......")
@@ -866,6 +909,15 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
                                     MyCustumApplication.getInstance().Logout((Activity) context);
                                     /*finish();*/
+                                }else if(c.getString("MESSAGE").toUpperCase().contains("[REPLAN]")) {
+
+                                    AppAlert.getInstance().Alert(context, "Alert !!!", c.getString("MESSAGE"), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            startActivity(new Intent(context, GetDCR.class));
+                                        }
+                                    });
+
                                 } else {
 
                                     AppAlert.getInstance().getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));

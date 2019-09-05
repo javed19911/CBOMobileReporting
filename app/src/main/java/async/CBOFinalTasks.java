@@ -28,6 +28,7 @@ public class CBOFinalTasks {
         Custom_Variables_And_Method.CHEMIST_NOT_VISITED = "";
         Custom_Variables_And_Method.STOCKIST_NOT_VISITED = "";
         cbohelp.deleteDoctorRc();
+        cbohelp.deleteChemRc();
         cbohelp.deleteDoctorItem();
         cbohelp.deleteDoctorItemPrescribe();
         cbohelp.deleteDoctor();

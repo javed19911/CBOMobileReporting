@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.net.Uri;
 
 import androidx.core.content.ContextCompat;
+
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,6 +134,7 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
                         distance.setBackgroundColor(0xffE2921F);
                     }else{
                         distance.setText("Within Range");
+                        distance.setBackgroundColor(0xff2C7164);
                     }
 
                 }

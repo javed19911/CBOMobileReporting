@@ -573,6 +573,87 @@ public class CBOFinalTask_New {
             return map_DrRemider;
         }
 
+
+    public Map<String,String> dcr_ChemReminder(String updated)
+    {
+        Map<String,String> map_DrRemider = new HashMap<String,String>();
+        StringBuilder sb_sDCRRC_CHEM_ID = new StringBuilder();
+        StringBuilder sb_sDCRRC_LOC_CHEM = new StringBuilder();
+        StringBuilder sb_sDCRRC_IN_TIME_CHEM = new StringBuilder();
+        StringBuilder sb_sDCRRC_KM_CHEM = new StringBuilder();
+        StringBuilder sb_sDCRRC_SRNO_CHEM = new StringBuilder();
+        StringBuilder sb_sDCRRC_BATTERY_PERCENT_CHEM = new StringBuilder();
+        StringBuilder sb_sDCRRC_REMARK_CHEM = new StringBuilder();
+        StringBuilder sb_sDCRRC_FILE_CHEM = new StringBuilder();
+        StringBuilder sb_sRC_REF_LAT_LONG_CHEM = new StringBuilder();
+
+        cbohelp=new CBO_DB_Helper(mContext);
+        ArrayList<String>chem_remId=new ArrayList<String>();
+        chem_remId=cbohelp.getChemRc(updated);
+        if(chem_remId.size()>0) {
+            String saperator ="";
+            String saperator_1 ="";
+            for (int i = 0; i < chem_remId.size(); i++) {
+                try {
+                    String loc = cbohelp.getLatLong_ChemRc(chem_remId.get(i));
+                    String locExtra = cbohelp.getLocExtra_ChemRc(chem_remId.get(i));
+                    String address =  "";
+                    cbohelp.Chem_RCupdateAllItemAddress(chem_remId.get(i), loc +"@"+locExtra+ "!^" + address);
+
+                    if (updated != null) {
+                        try {
+
+                            address =  customVariablesAndMethod.getAddressByLatLong(mContext, loc);
+                            cbohelp.Chem_RCupdateAllItemAddress(chem_remId.get(i), loc +"@"+locExtra+ "!^" + address);
+
+                        }catch (Exception e){
+                            Log.v("javed stk",e.toString());
+                        }
+
+
+                    }
+
+                    if (i==0) {
+                        saperator ="";
+                        saperator_1 ="";
+
+                    } else {
+                        saperator = "^";
+                        saperator_1="|";
+                    }
+
+
+                    sb_sDCRRC_CHEM_ID.append(saperator).append(chem_remId.get(i));
+                    sb_sDCRRC_LOC_CHEM.append(saperator_1).append( cbohelp.getAddress_ChemRc(chem_remId.get(i)));
+                    sb_sDCRRC_IN_TIME_CHEM.append(saperator).append(cbohelp.getTime_ChemRc(chem_remId.get(i)));
+                    sb_sDCRRC_KM_CHEM.append(saperator).append(cbohelp.getKm_ChemRc(chem_remId.get(i)));
+                    sb_sDCRRC_SRNO_CHEM.append(saperator).append(cbohelp.getSRNO_ChemRc(chem_remId.get(i)));
+                    sb_sDCRRC_BATTERY_PERCENT_CHEM.append(saperator).append(cbohelp.ChemRc_Battery(chem_remId.get(i)));
+                    sb_sDCRRC_REMARK_CHEM.append(saperator).append(cbohelp.ChemRc_remark(chem_remId.get(i)));
+                    sb_sDCRRC_FILE_CHEM.append(saperator).append(cbohelp.ChemRc_file(chem_remId.get(i)));
+                    sb_sRC_REF_LAT_LONG_CHEM.append(saperator).append(cbohelp.ChemRc_RefLatLong(chem_remId.get(i)));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            map_DrRemider.put("sb_sDCRRC_CHEM_ID",""+sb_sDCRRC_CHEM_ID);
+            map_DrRemider.put("sb_sDCRRC_LOC_CHEM",""+sb_sDCRRC_LOC_CHEM);
+            map_DrRemider.put("sb_sDCRRC_IN_TIME_CHEM",""+sb_sDCRRC_IN_TIME_CHEM);
+            map_DrRemider.put("sb_sDCRRC_KM_CHEM",""+sb_sDCRRC_KM_CHEM);
+
+            map_DrRemider.put("sb_sDCRRC_SRNO_CHEM",""+sb_sDCRRC_SRNO_CHEM);
+            map_DrRemider.put("sb_sDCRRC_BATTERY_PERCENT_CHEM",""+sb_sDCRRC_BATTERY_PERCENT_CHEM);
+            map_DrRemider.put("sb_sDCRRC_REMARK_CHEM",""+sb_sDCRRC_REMARK_CHEM);
+            map_DrRemider.put("sb_sDCRRC_FILE_CHEM",""+sb_sDCRRC_FILE_CHEM);
+            map_DrRemider.put("sb_sRC_REF_LAT_LONG_CHEM",""+sb_sRC_REF_LAT_LONG_CHEM);
+
+            cbohelp.close();
+        }
+        return map_DrRemider;
+    }
+
     public Map<String,String> get_Lat_Long_Reg(String updated)
     {
         Map<String,String> map_Lat_Long_Reg = new HashMap<String,String>();

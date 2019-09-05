@@ -57,8 +57,35 @@ public class vmCall extends CBOViewModel<iCall> {
                     } while (c.moveToNext());
 
                 }
+            }else if (getBuilder().getType().equals(CallBuilder.CallType.DoctorRiminder)) {
+                Cursor c = cbohelp.getRcDoctorListLocal();
+                if (c.moveToFirst()) {
+                    do {
+                        docList.add(new SpinnerModel(c.getString(c.getColumnIndex("dr_name")) + "-" + c.getString(c.getColumnIndex("DR_AREA")),
+                                c.getString(c.getColumnIndex("dr_id")), c.getString(c.getColumnIndex("LAST_VISIT_DATE")),
+                                c.getString(c.getColumnIndex("CLASS")), c.getString(c.getColumnIndex("POTENCY_AMT")),
+                                c.getString(c.getColumnIndex("ITEM_NAME")), c.getString(c.getColumnIndex("ITEM_POB")),
+                                c.getString(c.getColumnIndex("ITEM_SALE")), c.getString(c.getColumnIndex("DR_AREA")),
+                                c.getString(c.getColumnIndex("PANE_TYPE")), c.getString(c.getColumnIndex("DR_LAT_LONG")),
+                                c.getString(c.getColumnIndex("FREQ")), c.getString(c.getColumnIndex("NO_VISITED")),
+                                c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
+                                c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN"))
+                                , c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
+                                c.getString(c.getColumnIndex("APP_PENDING_YN")),c.getString(c.getColumnIndex("DRLAST_PRODUCT"))));
+                    } while (c.moveToNext());
+
+                }
             }else if (getBuilder().getType().equals(CallBuilder.CallType.Chemist)){
                 Cursor c = cbohelp.getChemistListLocal();
+
+                if (c.moveToFirst()) {
+                    do {
+
+                        docList.add(new SpinnerModel(c.getString(c.getColumnIndex("chem_name")), c.getString(c.getColumnIndex("chem_id")), c.getString(c.getColumnIndex("LAST_VISIT_DATE")), c.getString(c.getColumnIndex("DR_LAT_LONG")), c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")), c.getString(c.getColumnIndex("CALLYN"))));
+                    } while (c.moveToNext());
+                }
+            }else if (getBuilder().getType().equals(CallBuilder.CallType.ChemistRiminder)){
+                Cursor c = cbohelp.getRcChemListLocal();
 
                 if (c.moveToFirst()) {
                     do {

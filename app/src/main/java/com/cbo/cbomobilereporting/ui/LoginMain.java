@@ -190,6 +190,7 @@ public class LoginMain extends CustomActivity {
                     cbohelp.deleteTempStockist();
                     cbohelp.deleteTempDr();
                     cbohelp.deleteDoctorRc();
+                    cbohelp.deleteChemRc();
                     cbohelp.deleteDoctor();
                     cbohelp.deleteDoctormore();
 

@@ -22,16 +22,18 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.OthExpenseDB;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpense;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpense;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mOthExpense;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import utils_new.Custom_Variables_And_Method;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -743,9 +745,45 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     }
 
+//    private void init_DA_type_new(TableLayout stk,int groupPosition) {
+//        stk.removeAllViews();
+//        CBOOtherExpenseSummary DA_EXP = new CBOOtherExpenseSummary(_context);
+//        DA_EXP.setExp_type(eExpense.DA);
+//        stk.addView(DA_EXP);
+//        CBOOtherExpenseSummary TA_EXP = new CBOOtherExpenseSummary(_context);
+//        TA_EXP.setExp_type(eExpense.TA);
+//        stk.addView(TA_EXP);
+//        CBOOtherExpenseSummary Other_EXP = new CBOOtherExpenseSummary(_context);
+//        Other_EXP.setExp_type(eExpense.None);
+//        stk.addView(Other_EXP);
+//    }
+
+    private Double getSum(ArrayList<mOthExpense> othExpenses,Double defaultAmt,Boolean skipDefault){
+        Double total = 0d;
+        for (mOthExpense othExpense : othExpenses){
+            total += othExpense.getAmount();
+        }
+
+        return total == 0  && !skipDefault? defaultAmt : total;
+    }
+
     private void init_DA_type(TableLayout stk,int groupPosition) {
 
         stk.removeAllViews();
+
+        OthExpenseDB othExpenseDB = new OthExpenseDB(_context);
+
+        mExpense expense = new mExpense();
+
+        Double Dis_val = getSum(othExpenseDB.get(eExpense.TA) ,
+                expense.getTA_Amt(),expense.getTA_TYPE_MANUALYN().equalsIgnoreCase("1")
+                        && expense.getMANUAL_TAYN_MANDATORY().equalsIgnoreCase("1"));
+
+        Double DA_val =getSum(othExpenseDB.get(eExpense.DA) ,
+                expense.getDA_Amt(),false);
+
+
+
         TableRow tbrow0 = new TableRow(_context);
         //tbrow0.setBackgroundColor(0xff125688);
         TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableLayout.LayoutParams.WRAP_CONTENT, 1f);
@@ -757,7 +795,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         tv0.setLayoutParams(params);
         tbrow0.addView(tv0);
         TextView tv1 = new TextView(_context);
-        tv1.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "DA_TYPE"));
+        //tv1.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "DA_TYPE"));
+        tv1.setText(expense.getDA_TYPE());
         tv1.setGravity(Gravity.RIGHT);
         tv1.setPadding(5, 5, 5, 0);
         tv1.setTextColor(Color.BLACK);
@@ -775,7 +814,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         tv10.setLayoutParams(params);
         tbrow1.addView(tv10);
         TextView tv11 = new TextView(_context);
-        tv11.setText(_context.getResources().getString(R.string.rs) + " " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "da_val","0"));
+        //tv11.setText(_context.getResources().getString(R.string.rs) + " " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "da_val","0"));
+        tv11.setText(AddToCartView.toCurrency(String.format("%.2f",DA_val)));
         tv11.setPadding(5, 5, 5, 0);
         tv11.setTextColor(Color.BLACK);
         tv11.setGravity(Gravity.RIGHT);
@@ -783,9 +823,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         tbrow1.addView(tv11);
         stk.addView(tbrow1);
 
-        Double Dis_val =0D;
-        if (!(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "ACTUALFAREYN","").equalsIgnoreCase("Y")
-                || MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("TA_TYPE_MANUALYN","0").equalsIgnoreCase("1")) ){
+
+        /*if (!(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "ACTUALFAREYN","").equalsIgnoreCase("Y")
+                || MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("TA_TYPE_MANUALYN","0").equalsIgnoreCase("1")) ){*/
+
             TableRow tbrow2 = new TableRow(_context);
             //tbrow2.setBackgroundColor(0xff125688);
             TextView tv21 = new TextView(_context);
@@ -796,15 +837,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             tv21.setLayoutParams(params);
             tbrow2.addView(tv21);
             TextView tv22 = new TextView(_context);
-            tv22.setText(_context.getResources().getString(R.string.rs) + " " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "distance_val", "0"));
+            //tv22.setText(_context.getResources().getString(R.string.rs) + " " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "distance_val", "0"));
+            tv22.setText(AddToCartView.toCurrency(String.format("%.2f",Dis_val)));
             tv22.setGravity(Gravity.RIGHT);
             tv22.setPadding(5, 5, 5, 0);
             tv22.setTextColor(Color.BLACK);
             tv22.setTypeface(null, Typeface.BOLD);
             tbrow2.addView(tv22);
             stk.addView(tbrow2);
-            Dis_val = Double.parseDouble(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "distance_val","0"));
-        }
+            //Dis_val = Double.parseDouble(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "distance_val","0"));
+       // }
 
         TableRow tbrow4 = new TableRow(_context);
         //tbrow4.setBackgroundColor(0xff125688);
@@ -818,15 +860,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView tv41 = new TextView(_context);
 
 
-        Double other = 0D;
-        int length=getChildrenCount(groupPosition);
+        Double other = getSum(othExpenseDB.get(eExpense.None) ,0D,true);
+        /*int length=getChildrenCount(groupPosition);
 
         if (listView.isGroupExpanded(groupPosition)){
             length=getChildrenCount(groupPosition)-1;
         }
         for (int i = 0; i <length;i++){
             other+=Double.parseDouble(getChild(groupPosition, i).get("time").get(i));
-        }
+        }*/
 
         tv41.setText(_context.getResources().getString(R.string.rs)+" "+other);
         tv41.setPadding(5, 5, 5, 0);
@@ -836,7 +878,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         tbrow4.addView(tv41);
         stk.addView(tbrow4);
 
-        net_value = Double.parseDouble(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context, "da_val","0"))
+        net_value = DA_val
                 + Dis_val
                 + other;
 

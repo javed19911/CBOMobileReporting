@@ -188,7 +188,7 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
                 tab_stockist.setVisibility(View.INVISIBLE);
                 tab_doctor.setBackgroundResource(R.drawable.tab_selected);
 
-            }else if (intent.getStringExtra("type").equals("C")){
+            }else if (intent.getStringExtra("type").equals("C") || intent.getStringExtra("type").equals("Cr")){
                 doc_type="C";
                 name_tag.setText("Chemist Name");
                 tab_doctor.setVisibility(View.INVISIBLE);
@@ -360,7 +360,7 @@ public class Doctor_registration_GPS extends AppCompatActivity implements Locati
                 customVariablesAndMethod.getAlert(context,"Select !!!","Please Select a Doctor");
             }else if (doc_type.equals("DA")) {
                 customVariablesAndMethod.getAlert(context,"Select !!!","Please Select a Dairy");
-            }else if (doc_type.equals("C"))  {
+            }else if (doc_type.equals("C") )  {
                 customVariablesAndMethod.getAlert(context,"Select !!!","Please Select a Chemist");
             }else {
                 customVariablesAndMethod.getAlert(context,"Select !!!","Please Select a Stockist");

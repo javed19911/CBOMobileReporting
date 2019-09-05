@@ -269,17 +269,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="right">
 
-                    <Button
-                        android:textColor="#000"
-                        android:background="@color/transparent"
-                        android:layout_width="80dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_height="40dp"
-                        android:id="@+id/cancel"
-                        android:text="Cancel"
 
-                        android:layout_marginRight="10dp"/>
 
                     <Button
                         android:textColor="#000"
@@ -290,6 +280,18 @@
                         android:layout_height="40dp"
                         android:id="@+id/save"
                         android:text="Add"
+
+                        android:layout_marginRight="10dp"/>
+
+                    <Button
+                        android:textColor="#000"
+                        android:background="@color/transparent"
+                        android:layout_width="80dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/cancel"
+                        android:text="Cancel"
 
                         android:layout_marginRight="10dp"/>
                 </LinearLayout>

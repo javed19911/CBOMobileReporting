@@ -461,7 +461,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
         final ArrayList<String> header_title = new ArrayList<>();
         try {
             doctor_list_summary = cbohelp.getCallDetail("tempdr", "", "1");
-            tenivia_traker=cbohelp.getCallDetail("tenivia_traker","","1");
+            tenivia_traker=cbohelp.getCallDetail("tenivia_traker","","0");
             //expense_list=new CBO_DB_Helper(context).getCallDetail("tempdr");
 
             summary_list = new LinkedHashMap<>();
@@ -732,9 +732,9 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
     @Override
     public void delete_Call(final String Dr_id, final String Dr_name) {
 
-
+        String title = MyCustumApplication.getInstance().getTaniviaTrakerMenuName();
         HashMap<String, ArrayList<String>>  tenivia_traker=cbohelp.getCallDetail("tenivia_traker",Dr_id,"1");
-        if (!tenivia_traker.isEmpty () && (tenivia_traker.get ("id").contains ("-99") )) {
+        if ( title.isEmpty() || (!tenivia_traker.isEmpty () && tenivia_traker.get ("id").contains ("-99")) ) {
 
 
             AppAlert.getInstance().setPositiveTxt("Delete").DecisionAlert(context, "Delete!!!", "Do you Really want to delete " + Dr_name + " ?", new AppAlert.OnClickListener() {
@@ -809,9 +809,9 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                     "You can't delete from here.\n " + MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ " for "+
                             Dr_name +" Found...\n" +
                             "To delete, first remove " +Dr_name+" from "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ " in DCR...");*/
-            customVariablesAndMethod.getAlert(context, MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +"!!!",
+            customVariablesAndMethod.getAlert(context, title +"!!!",
                     "You can't delete from here.\n Because you have " + MyCustumApplication.getInstance().getTaniviaTrakerMenuName()+ ".\n"+
-                            "If you want to delete then first delete from "+MyCustumApplication.getInstance().getTaniviaTrakerMenuName() +".");
+                            "If you want to delete then first delete from "+title +".");
         }
 
 
@@ -1217,14 +1217,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
 
     @Override
     public void onBackPressed() {
-
-        Intent i = new Intent(DrCall.this, ViewPager_2016.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
         finish();
-
-
         super.onBackPressed();
 
     }

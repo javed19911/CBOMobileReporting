@@ -28,7 +28,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 47;
+    private static final int DATABASE_VERSION = 49;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -105,6 +105,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     String DROP_VSTOCK = "drop view "+ VSTOCK;
 
+
+
     public CBO_DB_Helper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         getDetailsForOffline();
@@ -128,6 +130,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
 
+    String RC_CHEM = "CREATE TABLE phdcrchem_rc ( id integer primary key,dcr_id text,chem_id text,address text,time text,latLong text,updated text,rc_km text,srno text,batteryLevel text,remark text,file text,LOC_EXTRA text,Ref_latlong text)";
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -142,7 +146,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_DOCTOR_SAMPLE = "CREATE TABLE " + DOCTOR_ITEM_TABLE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text, updated text, noc  text DEFAULT '0')";
         String CREATE_DR_RX_TABLE = "CREATE TABLE " + DR_RX_TABLE + "(id integer primary key, dr_id text,item_id text)";
         String CREATE_DOCTOR_PRESCRIBE = "CREATE TABLE " + Dr_PRESCRIBE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text)";
-        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer,GENERIC_NAME text,chem_rate double,dr_rate double)";
+        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer,GENERIC_NAME text,chem_rate double,dr_rate double,CAMPAIGN text)";
         String PH_DOCTOR_IETM = "CREATE TABLE " + PH_DOCTOR_ITEM_TABLE + "( id integer primary key,dr_id integer,item_id integer,item_name text)";
 
         String ALLMST = "CREATE TABLE phallmst ( id integer primary key,allmst_id integer,table_name text,field_name text,remark text )";
@@ -291,8 +295,10 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_Lat_Long_Reg);
 
         db.execSQL(PH_STK_ITEM_RATE_TABLE);
+        db.execSQL(RC_CHEM);
 
         db.execSQL(CREATE_VSTOCK);
+
 
     }
 
@@ -523,6 +529,10 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN DRLAST_PRODUCT text DEFAULT ''");
             case 46:
                 db.execSQL("ALTER TABLE "+Tenivia_traker+" ADD COLUMN updated text DEFAULT '0'");
+            case 47:
+                db.execSQL(RC_CHEM);
+            case 48:
+                db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE+" ADD COLUMN CAMPAIGN text DEFAULT ''");
 
 
         }
@@ -1208,7 +1218,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     //=============================================================Doctor Products=======================================================================================
     public long insertProducts(String id, String name, double stk_rate,double chem_rate,double dr_rate, String gift,
-                               String SHOW_ON_TOP,String SHOW_YN,int SPL_ID,String GENERIC_NAME) {
+                               String SHOW_ON_TOP,String SHOW_YN,int SPL_ID,String GENERIC_NAME,String CAMPAIGN) {
 
         Long l = 0l;
         try {
@@ -1224,6 +1234,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("SHOW_YN", SHOW_YN);
             cv.put("SPL_ID", SPL_ID);
             cv.put("GENERIC_NAME", GENERIC_NAME);
+            cv.put("CAMPAIGN", CAMPAIGN);
             l=sd.insert(DOCTOR_PRODUCTS_TABLE, null, cv);
 
         } finally {
@@ -1303,9 +1314,11 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 StockQuery = " and (VSTOCK.BALANCE > 0 " + "OR phitem.item_name in('"+includeItems.replace(",","','")+"'))";
             }
             //return sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='GIFT' ", null);
-            return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE,phitem.SPL_ID from phitem"
+            return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE,phitem.SPL_ID,phitem.CAMPAIGN from phitem"
                     + " left join VSTOCK on VSTOCK.ITEM_ID = phitem.item_id"
                     + " where gift_type='GIFT' "+ StockQuery, null);
+
+
         } finally {
            // sd.close();
         }
@@ -1937,6 +1950,27 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }finally {
             //sd.close();
         }
+    }
+
+    public Cursor getRcChemListLocal() {
+        try {
+            sd = this.getWritableDatabase();
+            return sd.rawQuery("select phchemist.chem_id,phchemist.chem_name,phchemist.LAST_VISIT_DATE," +
+                    "DR_LAT_LONG,DR_LAT_LONG2,DR_LAT_LONG3,SHOWYN, CASE WHEN IFNull(phdcrchem_rc.chem_id,0) >0 THEN 1 ELSE 0 END AS CALLYN" +
+                    " from phchemist LEFT OUTER JOIN phdcrchem_rc  ON phchemist.chem_id=phdcrchem_rc.chem_id" +
+                    " where SHOWYN = '1' ", null);
+            /*return sd.rawQuery("select phdoctor.dr_id,phdoctor.dr_name,phdoctor.LAST_VISIT_DATE," +
+                    "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE" +
+                    ",phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ, phdoctor.NO_VISITED," +
+                    "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
+                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,phdoctor.DRLAST_PRODUCT,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
+                    " CASE WHEN IFNull(phdcrdr_rc.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
+                    "from phdoctor LEFT OUTER JOIN phdcrdr_rc  ON phdoctor.DR_ID=phdcrdr_rc.DR_ID " +
+                    "where SHOWYN = '1' order by PANE_TYPE1 DESC", null);*/
+        } finally {
+            //sd.close();
+        }
+
     }
 
 
@@ -3626,6 +3660,273 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }
     }
 
+    //===============================================================Chem-Reminder Table==================================================================================
+
+
+    public long insertChemRem(String dcrid, String chem_id, String address, String time, String latLong, String updated,
+                            String rc_km,String srno,String batteryLevel,String remark,String file,String LOC_EXTRA,String Ref_latlong) {
+        Long a = 0l;
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("dcr_id", dcrid);
+            cv.put("chem_id", chem_id);
+            cv.put("address", address);
+            cv.put("time", time);
+            cv.put("latLong", latLong);
+            cv.put("updated", updated);
+            cv.put("rc_km", rc_km);
+            cv.put("srno", srno);
+            cv.put("batteryLevel", batteryLevel);
+            cv.put("remark", remark);
+            cv.put("file", file);
+            cv.put("LOC_EXTRA", LOC_EXTRA);
+            cv.put("Ref_latlong", Ref_latlong);
+            a = sd.insert("phdcrchem_rc", null, cv);
+        }finally {
+            sd.close();
+        }
+        return a;
+    }
+
+    public void updateKm_ChemRC(String km, String id) {
+
+        try {
+            sd = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+
+            if (!id.equals("")) {
+                cv.put("updated", "" + 1);
+                cv.put("rc_km", km);
+
+                int result = sd.update("phdcrchem_rc", cv, "chem_id =" + id, null);
+                Log.e("Km inserted Reminder", km + "....." + result);
+            }
+        }finally {
+            sd.close();
+        }
+    }
+
+    public ArrayList<String> getChemRc() {
+
+        return getChemRc(null);
+    }
+
+    public ArrayList<String> getChemRc(String updated) {
+        ArrayList<String> drlist = new ArrayList<String>();
+        sd = this.getWritableDatabase();
+        Cursor c=null;
+        if (updated==null) {
+            c = sd.rawQuery("select * from phdcrchem_rc", null);
+        }else{
+            c = sd.rawQuery("select * from phdcrchem_rc where updated='"+updated+"'", null);
+        }
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    drlist.add(c.getString(c.getColumnIndex("chem_id")));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return drlist;
+    }
+
+    public String getKm_ChemRc(String chem_id) {
+        String dcrid = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select rc_km from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    dcrid = c.getString(c.getColumnIndex("rc_km"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return dcrid;
+    }
+
+
+    public String getSRNO_ChemRc(String chem_id) {
+        String dcrid = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select srno from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    dcrid = c.getString(c.getColumnIndex("srno"));
+                    // Log.d("javed SRNO table",dcrid);
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return dcrid;
+    }
+
+    public String ChemRc_Battery(String chem_id) {
+        String value = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select batteryLevel from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    value = c.getString(c.getColumnIndex("batteryLevel"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return value;
+    }
+
+    public String ChemRc_remark(String chem_id) {
+        String value = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select remark from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    value = c.getString(c.getColumnIndex("remark"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return value;
+    }
+
+    public String ChemRc_file(String chem_id) {
+        String value = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select file from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    value = c.getString(c.getColumnIndex("file"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return value;
+    }
+
+    public String ChemRc_RefLatLong(String chem_id) {
+        String value = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select Ref_latlong from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    value = c.getString(c.getColumnIndex("Ref_latlong"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return value;
+    }
+    public String getTime_ChemRc(String chem_id) {
+        String dcrid = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select time from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    dcrid = c.getString(c.getColumnIndex("time"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return dcrid;
+    }
+
+    public String getAddress_ChemRc(String chem_id) {
+        String dcrid = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select address from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    dcrid = c.getString(c.getColumnIndex("address"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return dcrid;
+    }
+    public String getLatLong_ChemRc(String chem_id) {
+        String dcrid = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select latLong from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    dcrid = c.getString(c.getColumnIndex("latLong"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return dcrid;
+    }
+    public String getLocExtra_ChemRc(String chem_id) {
+        String dcrid = "";
+        sd = this.getWritableDatabase();
+        Cursor c = sd.rawQuery("select LOC_EXTRA from phdcrchem_rc where chem_id='" + chem_id + "'", null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    dcrid = c.getString(c.getColumnIndex("LOC_EXTRA"));
+                } while (c.moveToNext());
+            }
+        } finally {
+            c.close();
+            sd.close();
+        }
+        return dcrid;
+    }
+
+    public void Chem_RCupdateAllItemAddress(String chem_id, String address) {
+
+        try {
+            ContentValues cv = new ContentValues();
+            sd = this.getWritableDatabase();
+
+            cv.put("address", address);
+
+            long result = sd.update("phdcrchem_rc", cv, "chem_id =" + chem_id, null);
+        }finally {
+            sd.close();
+        }
+
+    }
+    public void deleteChemRc() {
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrchem_rc", null, null);
+        }finally {
+            sd.close();
+        }
+    }
+
+
     //==============================================================================VERSION TABLE==========================================================================
 
     public long insertVersionInLocal(String ver) {
@@ -5061,6 +5362,14 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     where_cluse = " where " + id + "='" + look_for_id + "'";
                 }
                 query = "Select  dr_id,time,remark from " + table + " " + where_cluse + " order by id";
+            }else if (table.equals("phdcrchem_rc")) {
+                id = "chem_id";
+                name = "chem_id";
+                time = "time";
+                if (!look_for_id.equals("")) {
+                    where_cluse = " where " + id + "='" + look_for_id + "'";
+                }
+                query = "Select  chem_id,time,remark from " + table + " " + where_cluse + " order by id";
             } else if (table.equals("Expenses")) {
                 id = "exp_head_id";
                 name = "exp_head";
@@ -5433,6 +5742,23 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                 }
                             }
 
+                        }else if (table.equals("phdcrchem_rc")) {
+
+                            if (!c.getString(c.getColumnIndex("remark")).equals("")) {
+                                dr_remark = c.getString(c.getColumnIndex("remark"));
+                            }
+
+                            Cursor c1 = sd.rawQuery("select chem_id,chem_name  from phchemist where chem_id='" + dr_id + "'", null);
+
+                            try {
+                                if (c1.moveToFirst()) {
+                                    do {
+                                        dr_name = c1.getString(c1.getColumnIndex("chem_name"));
+                                    } while (c1.moveToNext());
+                                }
+                            } finally {
+                                c1.close();
+                            }
                         }
 
                         switch (table) {
@@ -5945,6 +6271,17 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         try {
             sd = this.getWritableDatabase();
             sd.delete("phdcrdr_rc", "dr_id='" + dr_id + "'", null);
+        }finally {
+            sd.close();
+        }
+
+    }
+
+
+    public void delete_ChemistRemainder_from_local_all(String dr_id) {
+        try {
+            sd = this.getWritableDatabase();
+            sd.delete("phdcrchem_rc", "chem_id='" + dr_id + "'", null);
         }finally {
             sd.close();
         }

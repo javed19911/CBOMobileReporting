@@ -110,9 +110,7 @@ public class Rpt_Unlogged extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Intent i = new Intent(getApplicationContext(), ViewPager_2016.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+
         finish();
         super.onBackPressed();
     }

@@ -81,7 +81,7 @@ public class AttachImage extends CustomActivity {
             filename = getIntent().getStringExtra("Output_FileName");
         }
 
-        if (getIntent().getStringExtra("SelectFrom") == null) {
+        if (getIntent().getSerializableExtra("SelectFrom") == null) {
             choosefrom = ChooseFrom.all;
         }else{
             choosefrom = (ChooseFrom) getIntent().getSerializableExtra("SelectFrom");

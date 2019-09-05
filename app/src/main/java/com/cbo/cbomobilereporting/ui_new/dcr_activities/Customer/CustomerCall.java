@@ -553,8 +553,6 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
             toolbar.setNavigationOnClickListener(view -> onBackPressed());
         }
 

@@ -26,10 +26,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import interfaces.SampleInterface;
-import me.leolin.shortcutbadger.ShortcutBadger;
-import utils.Font_helper;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
@@ -54,7 +50,7 @@ public class SplashScreen_2016 extends CustomActivity  {
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"MethodCallFinal", "N");
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Tracking", "N");
-        ShortcutBadger.applyCount(this, 0);
+        //ShortcutBadger.applyCount(this, 0);
 
         cursorLoginDetail=   cbohelp.getLoginDetail();
         customVariablesAndMethod.deleteFmcg_ByKey(context, "logo");

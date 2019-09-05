@@ -30,7 +30,6 @@ import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Mail;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -45,7 +44,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import me.leolin.shortcutbadger.ShortcutBadger;
 import utils_new.Custom_Variables_And_Method;
 
 
@@ -402,8 +400,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
 
-            int badgeCount = cboDbHelper.getNotification_count(); //+1;
-            ShortcutBadger.applyCount(this, badgeCount); //for 1.1.4+
+            //int badgeCount = cboDbHelper.getNotification_count(); //+1;
+            //ShortcutBadger.applyCount(this, badgeCount); //for 1.1.4+
 
 
         } catch (JSONException e) {

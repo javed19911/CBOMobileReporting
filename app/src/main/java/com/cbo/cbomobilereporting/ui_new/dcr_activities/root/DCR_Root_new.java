@@ -1,5 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.root;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -35,10 +36,12 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.mDayPlan;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
+import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
 import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.CboProgressDialog;
 import com.uenics.javed.CBOLibrary.Response;
 
 import org.json.JSONArray;
@@ -64,8 +67,10 @@ import utils_new.GPS_Timmer_Dialog;
 import utils_new.Route_Dialog;
 import utils_new.Service_Call_From_Multiple_Classes;
 import utils_new.Work_With_Dialog;
+import utils_new.cboUtils.CBOImageView;
+import utils_new.up_down_ftp;
 
-public class DCR_Root_new extends AppCompatActivity {
+public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.AdapterCallback{
 
     EditText late_remark,divert_remark;
     Spinner work_type;
@@ -110,6 +115,8 @@ public class DCR_Root_new extends AppCompatActivity {
     private Location currentBestLocation;
     String mLatLong;
     String mAddress,LocExtra="";
+    CBOImageView attachment;
+    CboProgressDialog cboProgressDialog = null;
 
     mDayPlan dayPlan;
     LocationDB locationDB;
@@ -145,8 +152,6 @@ public class DCR_Root_new extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
         }
         dcrpendingDates = (TextView) findViewById(R.id.dcr_pending_dates_route);
         dcrPendingDatesLayout = (LinearLayout) findViewById(R.id.pending_dcr_dates_layouts_route);
@@ -182,6 +187,8 @@ public class DCR_Root_new extends AppCompatActivity {
         root =  findViewById(R.id.rootroot);
         getRoot = (Button) findViewById(R.id.rootgetroot);
         get_area_again = (Button) findViewById(R.id.get_ara_again);
+
+        attachment = findViewById(R.id.attachment);
 
         context=this;
 
@@ -250,6 +257,35 @@ public class DCR_Root_new extends AppCompatActivity {
             DIVERTWWYN.setVisibility(View.VISIBLE);
             DIVERTWWYN_TXT.setVisibility(View.VISIBLE);
         }
+
+        attachment.setTitle(MyCustumApplication.getInstance().getDCR().getAttachmentTilte());
+        attachment.setMaxAttachment(1);
+        if (MyCustumApplication.getInstance().getDCR().getAttachmentTilte().isEmpty()){
+            attachment.setVisibility(View.GONE);
+        }
+
+
+        attachment.setListener(new CBOImageView.iCBOImageView() {
+            @Override
+            public void OnAddClicked() {
+                attachment.addAttachment((Activity) context, AttachImage.ChooseFrom.camera);
+            }
+
+            @Override
+            public void OnAdded() {
+                OnUpdated(attachment.getDataList());
+            }
+
+            @Override
+            public void OnDeleted(String file) {
+                OnUpdated(attachment.getDataList());
+            }
+
+            @Override
+            public void OnUpdated(ArrayList<String> files) {
+
+            }
+        });
 
         DIVERTWWYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -353,6 +389,7 @@ public class DCR_Root_new extends AppCompatActivity {
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"sDivert_Remark","");
             //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked","N");
             MyCustumApplication.getInstance().getDCR().setDivertRoute(false);
+            MyCustumApplication.getInstance().getDCR().setAttachment("");
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0");
             if (!customVariablesAndMethod.IsBackDate(context) ) {
@@ -456,6 +493,7 @@ public class DCR_Root_new extends AppCompatActivity {
             setRoute(root_name);
             setArea(area_name);
 
+            attachment.setAttachment(MyCustumApplication.getInstance().getDCR().getAttachment());
 
         }
 
@@ -856,6 +894,8 @@ public class DCR_Root_new extends AppCompatActivity {
             customVariablesAndMethod.getAlert(context,"Divert Remark !!!","Please enter Divert Remark");
         }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"IsBackDate","1").equals("0") && late_remark.getText().toString().length()< remarkLenght ) {
             customVariablesAndMethod.getAlert(context,"Back-Date entry !!!","Please enter the reason for Back-Date entry in not less then "+remarkLenght+" letters");
+        }else if (MyCustumApplication.getInstance().getDCR().getAttachmentMandatory() && attachment.getDataList().size()==0) {
+            customVariablesAndMethod.getAlert(context,attachment.getTitle()+ "!!!","Please attach "+attachment.getTitle());
         }else if (routeCheck.contains("^")) {
 
             ArrayList<String> splitData = new ArrayList<String>();
@@ -930,6 +970,11 @@ public class DCR_Root_new extends AppCompatActivity {
 
         switch (reqcode) {
 
+            case CBOImageView.REQUEST_CAMERA :
+                if (rescode==RESULT_OK) {
+                    attachment.onActivityResult(reqcode, rescode, iob);
+                }
+                break;
             case 0:
                 if (rescode==RESULT_OK) {
                     Bundle b1 = iob.getExtras();
@@ -1102,6 +1147,7 @@ public class DCR_Root_new extends AppCompatActivity {
             request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
             request.put("sSTAION_ADDAREA", getArea());
             request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
+            request.put("FILE_NAME", attachment.getAttachmentNameStr());
 
 
 
@@ -1113,7 +1159,7 @@ public class DCR_Root_new extends AppCompatActivity {
             progress1.setCancelable(false);
             progress1.show();
 
-            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_11",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+            new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_12",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
             //End of call to service
             work_type_Selected="w";
 
@@ -1165,6 +1211,8 @@ public class DCR_Root_new extends AppCompatActivity {
         request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
         request.put("sSTAION_ADDAREA", getArea());
         request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
+        request.put("FILE_NAME", attachment.getAttachmentNameStr());
+
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -1174,7 +1222,7 @@ public class DCR_Root_new extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_11",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_12",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="l";
@@ -1228,6 +1276,7 @@ public class DCR_Root_new extends AppCompatActivity {
         request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
         request.put("sSTAION_ADDAREA", getArea());
         request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
+        request.put("FILE_NAME", attachment.getAttachmentNameStr());
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -1237,7 +1286,7 @@ public class DCR_Root_new extends AppCompatActivity {
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_11",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
+        new CboServices(this,mHandler).customMethodForAllServices(request,"DCR_COMMIT_ROUTE_12",MESSAGE_INTERNET_SUBMIT_WORKING,tables);
 
         //End of call to service
         work_type_Selected="n";
@@ -1257,7 +1306,15 @@ public class DCR_Root_new extends AppCompatActivity {
         }
     }
 
-    public void submitDCR() {
+    public void submitDCR(Boolean skipUpload) {
+
+        if (!skipUpload && attachment.filesToUpload().length >0
+                && !attachment.getAttachmentStr().equalsIgnoreCase(MyCustumApplication.getInstance().getDCR().getAttachment())){
+            cboProgressDialog = new CboProgressDialog(context, "Please Wait..\nuploading Image");
+            cboProgressDialog.show();
+            new up_down_ftp().uploadFile(attachment.filesToUpload(), context);
+        }
+
         work_name = getWorkwith();
         MyCustumApplication.getInstance().getDCR().setDivertRoute(ROUTEDIVERTYN.isChecked());
         //customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ROUTEDIVERTYN_Checked",ROUTEDIVERTYN.isChecked() ? "Y":"N") ;
@@ -1406,7 +1463,7 @@ public class DCR_Root_new extends AppCompatActivity {
 //                    }
 //                    break;
                 case GPS_TIMMER:
-                    submitDCR();
+                    submitDCR(false);
                     break;
                 case WORK_WITH_DILOG:
                     b1 = msg.getData();
@@ -1806,7 +1863,6 @@ public class DCR_Root_new extends AppCompatActivity {
 
             new CustomTextToSpeech().setTextToSpeech("");
 
-            cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
             long val = cbo_helper.insertUtils(Custom_Variables_And_Method.pub_area);
             long val2 = cbo_helper.insertDcrDetails(Custom_Variables_And_Method.DCR_ID, Custom_Variables_And_Method.pub_area);
 
@@ -1826,6 +1882,8 @@ public class DCR_Root_new extends AppCompatActivity {
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"dcr_date_real", real_date);
             cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
+
+            MyCustumApplication.getInstance().getDCR().setAttachment(attachment.getAttachmentStr());
 
             dayPlan.setTime(customVariablesAndMethod.currentTime(context));
             dayPlan.setLatLong(customVariablesAndMethod.get_best_latlong(context));
@@ -1887,6 +1945,33 @@ public class DCR_Root_new extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void started(Integer responseCode, String message, String description) {
+
+    }
+
+    @Override
+    public void progess(Integer responseCode, Long FileSize, Float value, String description) {
+
+    }
+
+    @Override
+    public void complete(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        submitDCR(true);
+    }
+
+    @Override
+    public void aborted(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        AppAlert.getInstance().getAlert(context,message,description);
+    }
+
+    @Override
+    public void failed(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        AppAlert.getInstance().getAlert(context,message,description);
+    }
 }
 
 

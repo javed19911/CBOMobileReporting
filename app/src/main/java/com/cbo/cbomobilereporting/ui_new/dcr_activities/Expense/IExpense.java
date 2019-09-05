@@ -23,6 +23,7 @@ public interface IExpense {
     void ManualDA_TypeReqd(Boolean required);
     void ManualDAReqd(Boolean required);
     void ManualTAReqd(Boolean required);
+    void ManualTAMandetory(Boolean required);
     void ManualStationReqd(Boolean required);
     void ManualDistanceReqd(Boolean required);
     void ActualFareReqd(Boolean required);

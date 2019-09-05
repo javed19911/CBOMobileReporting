@@ -35,6 +35,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
     private Double DefaultAmount = 0d;
     private Double ManualAount = 0d;
     private String OtherDetail ="";
+    private Boolean ManualMandetory = false;
 
     private Expense_interface expense_interface;
 
@@ -65,7 +66,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
         initialize();
     }
 
-    private void initialize(){
+    public void initialize(){
         setHeaderReqd(false);
         setTitle("Other Expense");
     }
@@ -102,7 +103,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
                     title = "Other Expenses";
         }
         if ((!getOtherDetail().isEmpty() && !getOtherDetail().contains("*"))
-                || (!getOtherDetail().isEmpty() && ManualAount == 0 && DefaultAmount !=0 && !IsAddBtnReqd())) {
+                || (!getOtherDetail().isEmpty() && ManualAount == 0 && DefaultAmount !=0 && !(IsAddBtnReqd() && IsManualMandetory()))) {
             subTitle =  " ( " + getOtherDetail() + " ) ";
         }
 
@@ -132,8 +133,16 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
         updateDataList(getDataList());
     }
 
+    public Boolean IsManualMandetory() {
+        return ManualMandetory;
+    }
+
+    public void setManualMandetory(Boolean manualMendetory) {
+        ManualMandetory = manualMendetory;
+    }
+
     public Double getAmount(){
-        return ManualAount > 0 || IsAddBtnReqd()? ManualAount : DefaultAmount;
+        return ManualAount > 0 || (IsAddBtnReqd() && IsManualMandetory())? ManualAount : DefaultAmount;
     }
 
     @Override

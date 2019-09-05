@@ -2,14 +2,16 @@ package com.cbo.cbomobilereporting.databaseHelper.Location;
 
 import android.location.Location;
 
-import com.cbo.cbomobilereporting.databaseHelper.Call.mCall;
+//import com.cbo.cbomobilereporting.databaseHelper.Call.mCall;
+
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.mCall;
 
 import java.util.Date;
 
-public class mLocation {
+public class mLocation<T> {
 
     private Location location;
-    private mCall call = null;
+    private T call = null;
     private String Address="";
     private String timestamp;
     private String DCR_ID;
@@ -24,7 +26,7 @@ public class mLocation {
         return location;
     }
 
-    public mCall getCall() {
+    public T getCall() {
         return call;
     }
 
@@ -51,10 +53,12 @@ public class mLocation {
         return this;
     }
 
-    public mLocation setCall(mCall call) {
+
+    public mLocation setCall(T call) {
         this.call = call;
         return this;
     }
+
 
     public mLocation setAddress(String address) {
         Address = address;

@@ -21,6 +21,8 @@ public class Controls {
 
     private Boolean RouteWise;
 
+    private Boolean giftCampaignWise;
+
     public Boolean IsGPSRequired() {
         if (GPSRequired == null){
             GPSRequired = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("gps_needed","N").equalsIgnoreCase("Y");
@@ -28,9 +30,9 @@ public class Controls {
         return GPSRequired;
     }
 
-    public void setGpsRequired(Boolean GPSRequired) {
-        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("gps_needed",GPSRequired ? "Y":"N");
-        this.GPSRequired = GPSRequired;
+    public void setGpsRequired(String GPSRequired) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("gps_needed",GPSRequired );
+        this.GPSRequired = null;
     }
 
     public Boolean IsRouteWise() {
@@ -40,8 +42,20 @@ public class Controls {
         return RouteWise;
     }
 
-    public void setRouteWise(Boolean RouteWise) {
-        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("root_needed",RouteWise ? "Y":"N");
-        this.RouteWise = RouteWise;
+    public void setRouteWise(String RouteWise) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("root_needed",RouteWise );
+        this.RouteWise = null;
+    }
+
+    public Boolean IsGiftCampaignWiseReqd() {
+        if (giftCampaignWise == null){
+            giftCampaignWise = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTCAMPWISEYN","N").equalsIgnoreCase("Y");
+        }
+        return giftCampaignWise;
+    }
+
+    public void setGiftCampaignWiseReqd(String giftCampaignWise) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("GIFTCAMPWISEYN",giftCampaignWise );
+        this.giftCampaignWise = null;
     }
 }

@@ -27,14 +27,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyPermanentlyInvalidatedException;
-import android.security.keystore.KeyProperties;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +54,6 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -362,7 +361,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                         if (!keyguardManager.isKeyguardSecure()) {
                             // textView.setText("Lock screen security not enabled in Settings");
                         }else{
-                            generateKey();
+                            /*generateKey();
 
 
                             if (cipherInit()) {
@@ -370,7 +369,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                 helper = new FingerprintHandler(this);
                                 helper.startAuth(fingerprintManager, cryptoObject);
 
-                            }
+                            }*/
                         }
                     }
                 }
@@ -384,7 +383,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    /*@RequiresApi(api = Build.VERSION_CODES.M)
     protected void generateKey() {
         try {
             keyStore = KeyStore.getInstance("AndroidKeyStore");
@@ -441,7 +440,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
         } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException("Failed to init Cipher", e);
         }
-    }
+    }*/
 
     private class GetFmcg extends AsyncTask<Void, Void, String> {
         ProgressDialog commitDialog;

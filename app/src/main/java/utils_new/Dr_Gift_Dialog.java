@@ -27,15 +27,18 @@ import android.widget.TextView;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.uenics.javed.CBOLibrary.Response;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
 import utils.adapterutils.MyAdapter2;
+import utils.adapterutils.SpinnerModel;
 import utils.networkUtil.NetworkUtil;
 
 public class Dr_Gift_Dialog implements Up_Dwn_interface {
@@ -69,6 +72,7 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
     Dialog dialog;
     public ProgressDialog progress1;
     private  static final int MESSAGE_INTERNET=1;
+    String campaign ="";
 
 
     public Dr_Gift_Dialog(@NonNull Context context, Handler hh, Bundle Msg, Integer response_code) {
@@ -120,6 +124,7 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
             gift_name = Msg.getString("gift_name");
             gift_qty = Msg.getString("gift_qty");
             Title = Msg.getString("title");
+            campaign = Msg.getString("campaign");
         }
 
 
@@ -315,15 +320,34 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         String ItemIdNotIn="0";
         cbohelp.giftDelete();
 
-        Cursor c1=cbohelp.getAllGifts(ItemIdNotIn, !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y"));
+        Cursor c1=cbohelp.getAllGifts(ItemIdNotIn,
+                !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y"));
         if(c1.moveToFirst()){
             do{
-                list.add(new GiftModel(c1.getString(c1.getColumnIndex("item_name")), c1.getString(c1.getColumnIndex("item_id")), "",
-                        c1.getInt(c1.getColumnIndex("STOCK_QTY")), c1.getInt(c1.getColumnIndex("BALANCE")),c1.getInt(c1.getColumnIndex("SPL_ID"))));
-
+                if (!Controls.getInstance().IsGiftCampaignWiseReqd() ||
+                        IfItemAllowedForCampaign(c1.getString(c1.getColumnIndex("CAMPAIGN")))) {
+                    list.add(new GiftModel(c1.getString(c1.getColumnIndex("item_name")), c1.getString(c1.getColumnIndex("item_id")), "",
+                            c1.getInt(c1.getColumnIndex("STOCK_QTY")), c1.getInt(c1.getColumnIndex("BALANCE")), c1.getInt(c1.getColumnIndex("SPL_ID"))));
+                }
             }while(c1.moveToNext());
         }
         return list;
+    }
+
+    private Boolean IfItemAllowedForCampaign(String itemCampagn){
+        if (campaign.trim().isEmpty() || itemCampagn.trim().isEmpty() ){
+            return false;
+        }
+        ArrayList<String> docCampaigns = new ArrayList<String>(Arrays.asList(campaign.split(",")));
+
+        for (String docCampaign : docCampaigns) {
+            if (itemCampagn.contains(docCampaign)){
+                return true;
+            }
+        }
+
+
+        return false;
     }
 
     private  void Nogift(){

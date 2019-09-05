@@ -499,10 +499,12 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
                     }
 
                     sb_rx.append(seprator).append(main_item_list.get(i).getId());
-                    sb_rx_Qty.append(seprator).append(main_item_list.get(i).getRx_Qty().isEmpty()
-                            ?"0":main_item_list.get(i).getRx_Qty());
+                    String qty =  main_item_list.get(i).getRx_Qty().isEmpty()
+                            ?"0":main_item_list.get(i).getRx_Qty();
+                    sb_rx_Qty.append(seprator).append(qty);
 
-                    sb_rx_amt.append(seprator).append("");
+                    double amt = Double.parseDouble(qty) * Double.parseDouble(main_item_list.get(i).getRate());
+                    sb_rx_amt.append(seprator).append(String.format("%.2f",amt));
                     sb_rx_Qty_caption.append(seprator).append(main_item_list.get(i).getName());
                     sb_rx_amt_caption.append(seprator).append("");
                     j++;

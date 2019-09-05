@@ -11,6 +11,7 @@ public class CallBuilder implements Serializable{
         Doctor("D"),
         DoctorRiminder("Dr"),
         Chemist("C"),
+        ChemistRiminder("Cr"),
         Stockist("S"),
         Dairy("DA"),
         Poultry("P");

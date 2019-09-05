@@ -638,6 +638,11 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
     }
 
     @Override
+    public void ManualTAMandetory(Boolean required) {
+        TAExp.setManualMandetory(required);
+    }
+
+    @Override
     public void ManualStationReqd(Boolean required) {
         if (required){
             ManualStation.setVisibility(View.VISIBLE);

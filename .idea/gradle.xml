@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/CBOLibrary" />
-            <option value="$PROJECT_DIR$/ShortcutBadger" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/cbo_utils" />
             <option value="$PROJECT_DIR$/cboorder" />
