@@ -186,12 +186,13 @@ public class vmCustomerCall extends CBOViewModel<iCustomerCall> {
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", view.getCompanyCode());
         request.put("iCHEM_ID", callmodel.getId() );
+        request.put("iLOGIN_PA_ID", view.getUserId() );
 
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
 
-        new MyAPIService(context).execute(new ResponseBuilder("DCRLEAD_PENDING_URL",request)
+        new MyAPIService(context).execute(new ResponseBuilder("DCRLEAD_PENDING_URL_1",request)
                 .setTables(tables)
                 .setResponse(new CBOServices.APIResponse() {
                     @Override

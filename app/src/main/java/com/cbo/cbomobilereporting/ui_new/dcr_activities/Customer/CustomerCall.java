@@ -1188,7 +1188,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
                 viewModel.getCustomer().getWorkwithreqd()){
             customVariablesAndMethod.msgBox(context, "Please Select Workwith...");
         }else if (dr_remark_edit.getText().toString().trim().equalsIgnoreCase("")){
-            customVariablesAndMethod.msgBox(context, "Please enter remark...");
+            customVariablesAndMethod.msgBox(context, "Please enter Call Discussion...");
         }else if (viewModel.getCustomer().getLeads().size() == 0 &&
                 viewModel.getCustomer().getLeadReqd()){
             customVariablesAndMethod.msgBox(context, "Please Select atleast one lead...");

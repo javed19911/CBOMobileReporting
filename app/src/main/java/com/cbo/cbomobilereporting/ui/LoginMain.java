@@ -329,7 +329,8 @@ public class LoginMain extends CustomActivity {
                             AppAlert.getInstance().getAlert(context,"Alert !!!","User is currently Logged-In with some other device\n" +
                                     "To Login as Support...\nPlease ask the user to update his App from Play Store....");
                         }else{
-                            AppAlert.getInstance().setPositiveTxt("Support LogIn?").DecisionAlert(context, "Alert !!!", "User is currently Logged-In with some other device\n" +
+                            AppAlert.getInstance().setPositiveTxt("Support LogIn?")
+                                    .setNagativeTxt("Reset IMEI?").DecisionAlert(context, "Alert !!!", "User is currently Logged-In with some other device\n" +
                                             "Do You want to Login for Support?",
                                     new AppAlert.OnClickListener() {
                                         @Override
@@ -369,7 +370,34 @@ public class LoginMain extends CustomActivity {
 
                                         @Override
                                         public void onNegativeClicked(View item, String result) {
+                                            AppAlert.getInstance().inputAlert(context, "Password??",
+                                                    "Please Enter Password to Reset IMEI...", "Password", new AppAlert.OnClickListener() {
+                                                        @Override
+                                                        public void onPositiveClicked(View item, String result) {
+                                                            try {
+                                                                if (result.equalsIgnoreCase(c.getString("LIVE_PWD"))) {
+                                                                    GenerateResetOTP(company_code,"0",mylog);
+                                                                }else{
+                                                                    //((EditText)item).setError("Invalid Password");
+                                                                    AppAlert.getInstance().Alert(context, "Invalid Password!!!",
+                                                                            "Please enter correct password...",
+                                                                            new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    Login();
+                                                                                }
+                                                                            });
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
 
+                                                        @Override
+                                                        public void onNegativeClicked(View item, String result) {
+
+                                                        }
+                                                    });
                                         }
                                     });
                         }
@@ -392,6 +420,142 @@ public class LoginMain extends CustomActivity {
         }
         //Log.d("MYAPP", "objects are1: " + result);
         //progress1.dismiss();
+    }
+
+
+    private void GenerateResetOTP(String company_code, String pa_id, String pa_name) {
+        HashMap<String, String> request = new HashMap<>();
+        request.put("sCompanyFolder", company_code);
+        request.put("iPaId", pa_id);
+        request.put("sUserName",pa_name);
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("GenerateOTPForIMEIReset", request)
+                        .setDescription("Please Wait.. \n Generating OTP ...")
+                        .setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+
+                                parser_generate_reset_otp(message);
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+                            }
+
+
+                        })
+                );
+
+
+    }
+
+    private void parser_generate_reset_otp(Bundle result) {
+        if(result!=null){
+            try{
+                String table0 = result.getString("Tables0");
+                JSONArray jsonArray1 = new JSONArray(table0);
+                for (int i = 0; i < jsonArray1.length(); i++) {
+                    JSONObject c = jsonArray1.getJSONObject(i);
+                    if(!c.getString("OTP").equals("")&& c.getString("OTP")!=null){
+
+                        AppAlert.getInstance().inputAlert(context, "OTP??",
+                                "Please Enter OTP to Reset IMEI...", "OTP", new AppAlert.OnClickListener() {
+                                    @Override
+                                    public void onPositiveClicked(View item, String result) {
+                                        try {
+                                            if (result.equalsIgnoreCase(c.getString("OTP"))) {
+                                                onResetIMEI(company_code,c.getString("USER_ID"),c.getString("USER_NAME"));
+                                            }else{
+                                                //((EditText)item).setError("Invalid Password");
+                                                AppAlert.getInstance().Alert(context, "Invalid OTP!!!",
+                                                        "Please enter correct OTP...",
+                                                        new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                Login();
+                                                            }
+                                                        });
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onNegativeClicked(View item, String result) {
+
+                                    }
+                                });
+                    }
+                };
+
+
+
+            }catch (JSONException e) {
+                Log.d("MYAPP", "objects are: " + e.toString());
+                CboServices.getAlert(this, "Missing field error", getResources().getString(R.string.service_unavilable) + e.toString());
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void onResetIMEI(String company_code, String pa_id, String pa_name) {
+        HashMap<String, String> request = new HashMap<>();
+        request.put("sCompanyFolder", company_code);
+        request.put("PA_ID", pa_id);
+        request.put("USER_NAME", pa_name);
+        request.put("KEY","9810969095");
+
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DeviceIdReset", request)
+                        .setDescription("Please Wait.. \n Generating OTP ...").setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) throws JSONException {
+
+                                // parser_reset_imei(message);
+                                if(message!=null){
+
+                                    String table0 = message.getString("Tables0");
+                                    JSONArray jsonArray1 = new JSONArray(table0);
+                                    for (int i = 0; i < jsonArray1.length(); i++) {
+                                        JSONObject c = jsonArray1.getJSONObject(i);
+                                        if(c.getString("DCRID").equalsIgnoreCase("DELETE")){
+                                            Login();
+                                        }else{
+                                            AppAlert.getInstance().getAlert(context,"Error!!!",c.getString("DCRID"));
+                                        }
+                                    }
+
+
+
+
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+                            }
+
+
+                        })
+                );
+
+
     }
 
     private void process_login_data(Bundle result)  {

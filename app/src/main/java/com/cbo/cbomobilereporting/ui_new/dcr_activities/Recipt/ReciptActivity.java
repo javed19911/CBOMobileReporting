@@ -69,7 +69,6 @@ public class ReciptActivity
         super.onCreate(savedInstanceState);
        setContentView(R.layout.reciept_activity);
         vmRecpiet = ViewModelProviders.of(ReciptActivity.this).get(vmRecpiet.class);
-        vmRecpiet.setListener(context,this);
         vmRecpiet.setView(context,this);
     }
 

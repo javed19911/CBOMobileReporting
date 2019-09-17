@@ -344,6 +344,7 @@ public class Sync_service extends Service {
                 sDCRDAIRYITEM_POB_QTY= "";
                 sDAIRY_FILE= "";
                 sDCRDAIRY_INTERSETEDYN= "";
+                sDAIRY_REF_LAT_LONG = "";
             } else {
 
                 sDAIRY_ID = dcr_Dairy.get("sDAIRY_ID");
@@ -362,6 +363,7 @@ public class Sync_service extends Service {
                 sDCRDAIRYITEM_POB_QTY = dcr_Dairy.get("sDCRDAIRYITEM_POB_QTY");
                 sDAIRY_FILE = dcr_Dairy.get("sDAIRY_FILE");
                 sDCRDAIRY_INTERSETEDYN = dcr_Dairy.get("sDCRDAIRY_INTERSETEDYN");
+                sDAIRY_REF_LAT_LONG = dcr_Dairy.get("sDAIRY_REF_LAT_LONG");
             }
 
             if (IsGPRS_ON && (!dcr_Commit_rx.isEmpty() || dcr_Commit_rx.size() > 0 ||

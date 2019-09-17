@@ -65,7 +65,7 @@ public class ItemFilterActivity extends AppCompatActivity implements iNewOrder {
         ImageView clearQry = findViewById(R.id.clearQry);
         itemlist_filter = (RecyclerView) findViewById(R.id.itemList);
         itemAdapter = new ItemAdapter(this, viewModel.getItems(),itemType);
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         itemlist_filter.setLayoutManager(mLayoutManager1);
         itemlist_filter.setItemAnimator(new DefaultItemAnimator());
         itemlist_filter.setAdapter(itemAdapter);

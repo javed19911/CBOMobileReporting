@@ -23,10 +23,6 @@ import utils_new.AppAlert;
 import utils_new.CustomDatePicker;
 
 public class vmRecpiet extends CBOViewModel<IRecipt> {
-
-    private IRecipt iRecpiet;
-
-    Context context;
     private ArrayList<mRecipt>reciptArrayList= new ArrayList<mRecipt>();
     private mRecipt recipt;
 
@@ -42,11 +38,6 @@ public class vmRecpiet extends CBOViewModel<IRecipt> {
     }
 
 
-    public void setListener(Context context, IRecipt iRecipt) {
-        this.context = context;
-        this.iRecpiet = iRecipt;
-    }
-
 
 
     public mRecipt getRecipt() {
@@ -57,12 +48,7 @@ public class vmRecpiet extends CBOViewModel<IRecipt> {
         this.recipt = mRecipt;
     }
 
-    public void setListener(IRecipt listener){
-        this.iRecpiet=listener;
-        if(iRecpiet !=null){
-            iRecpiet.onRecieptlistchanged(reciptArrayList);
-        }
-    }
+
 
 
     public Double getTotalRecieptAmt(){
@@ -92,9 +78,9 @@ public class vmRecpiet extends CBOViewModel<IRecipt> {
                         .setResponse(new CBOServices.APIResponse() {
                             @Override
                             public void onComplete(Bundle message) {
-                                if (iRecpiet != null) {
-                                    iRecpiet.onRecieptlistchanged(reciptArrayList);
-                                    iRecpiet.OnTotalUpdated(getTotalRecieptAmt());
+                                if (view != null) {
+                                    view.onRecieptlistchanged(reciptArrayList);
+                                    view.OnTotalUpdated(getTotalRecieptAmt());
                                 }
 
                             }
@@ -162,8 +148,8 @@ public class vmRecpiet extends CBOViewModel<IRecipt> {
                             public void onComplete(Bundle message) throws JSONException {
 
 
-                                if (iRecpiet != null)
-                                    iRecpiet.onRecpieptDeleted(context);
+                                if (view != null)
+                                    view.onRecpieptDeleted(context);
 
 
 

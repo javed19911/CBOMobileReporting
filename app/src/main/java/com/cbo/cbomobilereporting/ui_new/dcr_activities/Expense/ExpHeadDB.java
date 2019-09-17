@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import cbomobilereporting.cbo.com.cboorder.DBHelper.DBHelper;
 
 public class ExpHeadDB extends DBHelper {
+
     public ExpHeadDB(Context c) {
         super(c);
     }
@@ -38,12 +39,12 @@ public class ExpHeadDB extends DBHelper {
 
     @Override
     public void onTableUpdate(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch(newVersion) {
-            case 2:
+        switch(oldVersion) {
+            case 1:
                 db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN SHOW_IN_TA_DA text DEFAULT '0'");
-            case 3:
+            case 2:
                 db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN KMYN text DEFAULT '0'");
-            case 4:
+            case 3:
                 db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN HEADTYPE_GROUP text DEFAULT '0'");
                 default:
         }

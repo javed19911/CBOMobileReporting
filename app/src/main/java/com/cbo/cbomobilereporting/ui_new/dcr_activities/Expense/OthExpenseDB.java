@@ -49,8 +49,8 @@ public class OthExpenseDB extends DBHelper {
 
     @Override
     public void onTableUpdate(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch(newVersion) {
-            case 2:
+        switch(oldVersion) {
+            case 1:
                 db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN km text DEFAULT '0'");
             default:
         }

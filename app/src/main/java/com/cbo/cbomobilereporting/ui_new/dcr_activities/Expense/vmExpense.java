@@ -187,7 +187,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
         request.put("sDATYPE", "NA");
         request.put("iDISTANCE_ID", "99999");
         request.put("sREMARK", getFinalRemark());
-        request.put("sLOC2", "" + MyCustumApplication.getInstance().getUser().getLocation() + "!^" + MyCustumApplication.getInstance().getUser().getLocation());
+        request.put("sLOC2", MyCustumApplication.getInstance().getUser().getLocation().getLatitude() + "," + MyCustumApplication.getInstance().getUser().getLocation().getLongitude() + "!^" + MyCustumApplication.getInstance().getUser().getLocation());
         request.put("iOUTTIME", "99");
 
         ArrayList<Integer> tables = new ArrayList<>();
