@@ -3,7 +3,8 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 public enum eExpense {
     None,
     TA,
-    DA;
+    DA,
+    SERVER;
 
     private static eExpense[] list = eExpense.values();
 

@@ -509,16 +509,16 @@
             android:name=".ui_new.dcr_activities.DCRCall.DCRCallActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name="Bill.BillReport.BillActivity"
+            android:name="bill.BillReport.BillActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name="Bill.CompanySelecter.CompanyActivity"
+            android:name="bill.CompanySelecter.CompanyActivity"
             android:theme="@style/AppThemeNoBar" />
         <activity
-            android:name="Bill.Cart.CompanyCartActivity"
+            android:name="bill.Cart.CompanyCartActivity"
             android:theme="@style/AppThemeNoBar" />
         <activity
-            android:name="Bill.ItemFilter.CompanyItemFilter"
+            android:name="bill.ItemFilter.CompanyItemFilter"
             android:theme="@style/AppThemeNoBar" />
 
     </application>

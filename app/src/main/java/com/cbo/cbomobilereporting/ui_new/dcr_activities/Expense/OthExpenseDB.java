@@ -29,7 +29,7 @@ public class OthExpenseDB extends DBHelper {
     public String getTableQuery() {
         return "CREATE TABLE " + getTable() + "(id Integer PRIMARY KEY AUTOINCREMENT," +
                 "exp_head_id text,exp_head text,amount text,remark text," +
-                "FILE_NAME text,exp_ID text,time text,km text)";
+                "FILE_NAME text,exp_ID text,time text,km text,editable Integer)";
     }
 
     @Override
@@ -39,7 +39,7 @@ public class OthExpenseDB extends DBHelper {
 
     @Override
     public int getTableVersion() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -52,6 +52,8 @@ public class OthExpenseDB extends DBHelper {
         switch(oldVersion) {
             case 1:
                 db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN km text DEFAULT '0'");
+            case 2:
+                db.execSQL("ALTER TABLE " + this.getTable() + " ADD COLUMN editable Integer DEFAULT 1");
             default:
         }
     }
@@ -68,6 +70,7 @@ public class OthExpenseDB extends DBHelper {
             cv.put("exp_ID", othExpense.getId());
             cv.put("time", othExpense.getTime());
             cv.put("km", othExpense.getKm());
+            cv.put("editable", othExpense.IsEditable()? 1: 0);
             getDatabase().insert(getTable(), null, cv);
         //}finally {
             //sd.close();
@@ -91,9 +94,19 @@ public class OthExpenseDB extends DBHelper {
                             .setAttachment(c.getString(c.getColumnIndex("FILE_NAME")))
                             .setRemark(c.getString(c.getColumnIndex("remark")))
                             .setAmount(c.getDouble(c.getColumnIndex("amount")))
-                            .setKm(c.getDouble(c.getColumnIndex("km")));
+                            .setKm(c.getDouble(c.getColumnIndex("km")))
+                            .setEditable(c.getInt(c.getColumnIndex("editable")) == 1 );
+
                     mExpHead expHead = expHeadDB.get(c.getInt(c.getColumnIndex("exp_head_id")));
-                    if (expHead != null && (For_DA_TA == expHead.getSHOW_IN_TA_DA())) {
+                    if ((expHead != null && (For_DA_TA == expHead.getSHOW_IN_TA_DA()))
+                            || (expHead != null && eExpense.SERVER == expHead.getSHOW_IN_TA_DA() && For_DA_TA == eExpense.None)
+                            /*|| (expHead == null && For_DA_TA == eExpense.None)*/) {
+
+                        /*if (expHead == null){
+                            expHead = new mExpHead(c.getInt(c.getColumnIndex("exp_head_id"))
+                                    ,c.getString(c.getColumnIndex("exp_head")));
+                        }*/
+
                         othExpense.setExpHead(expHead);
                         data.add(othExpense);
                     }
@@ -138,6 +151,11 @@ public class OthExpenseDB extends DBHelper {
 
     public void delete(mOthExpense othExpense){
         getDatabase().delete(getTable(),"exp_ID='"+othExpense.getId()+"'",null);
+    }
+
+    public void deleteDefaultTypes(){
+        String query ="Select exp_head_id from " + getTable() + " LEFT JOIN "+expHeadDB.getTable()+" ON exp_head_id = FIELD_ID where SHOW_IN_TA_DA = '"+eExpense.SERVER.name()+"'";
+        getDatabase().delete(getTable(),"exp_head_id in ("+query+")",null);
     }
 
     public boolean IsExpHeadGroupAdded(String headtype_group) {

@@ -1026,7 +1026,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
         String[] parts = work_with_id.split(",");
 
         if (getWorkwith().equalsIgnoreCase("")
-                && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
+                && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1") || lay1.getVisibility() == View.GONE) {
             part1 = MyCustumApplication.getInstance().getUser().getID();
 
             cbo_helper.deleteDRWorkWith();
@@ -1258,7 +1258,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
         request.put("iWORK_WITH2", workwith2);
         request.put("iWORK_WITH3", workwith34);
         request.put("sDA_TYPE", "" + work_val);
-        request.put("iDISTANCE_ID",  "" + root_id);
+        request.put("iDISTANCE_ID", rootLayout.getVisibility() == View.VISIBLE ? "" + root_id : "0" );
         request.put("sREMARK", "");
         request.put("sLOC1",  mLatLong +"@"+LocExtra+ "!^" + mAddress);
         request.put("iRETID", "0");
@@ -1274,7 +1274,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
         request.put("sINDP_WW", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_with_individual_id",""));
         request.put("sDivert_Remark",divert_remark.getText().toString());
         request.put("iDIVERTWWYN",customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERTWWYN_Checked","0"));
-        request.put("sSTAION_ADDAREA", getArea());
+        request.put("sSTAION_ADDAREA",  areaLayout.getVisibility() == View.VISIBLE ? getArea() : "");
         request.put("ISSUPPORTUSER", MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()?"Y":"N");
         request.put("FILE_NAME", attachment.getAttachmentNameStr());
 

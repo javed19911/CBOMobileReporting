@@ -23,7 +23,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <fragment
-                android:name="Bill.NewOrder.FBillNeworder"
+                android:name="bill.NewOrder.FBillNeworder"
                 android:id="@+id/fcompanyneworder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -405,15 +405,16 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
 
                                 }
                             });
-                }*/else if(viewModel.IsFormForFinalSubmit()  && viewModel.getFinalRemark().isEmpty()){
-                    AppAlert.getInstance().Alert(context, "DCR Remark !!", "Please enter DCR remark...",
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    final_remark.requestFocus();
-                                }
-                            });
-                }
+                }*/
+//                else if(viewModel.IsFormForFinalSubmit()  && viewModel.getFinalRemark().isEmpty()){
+//                    AppAlert.getInstance().Alert(context, "DCR Remark !!", "Please enter DCR remark...",
+//                            new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    final_remark.requestFocus();
+//                                }
+//                            });
+//                }
                 else if ( actual_fare_layout.getVisibility()==View.VISIBLE ){
 
 
@@ -458,6 +459,7 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
             public void onClick(View view, int position, boolean isLongClick) {
                 mDA da = viewModel.getExpense().getDAs().get(position);
                 viewModel.setSelectedDA(da);
+                viewModel.setSelectedDistance(new mDistance());
 
 
                 /*btn_DaType.setText(da.getName());
@@ -747,11 +749,11 @@ public class Expense extends CustomActivity implements IExpense,aExpense.Expense
 
     @Override
     public void OnFinalRemarkReqd(Boolean required) {
-        if (required){
-            final_remark_layout.setVisibility(View.VISIBLE);
-        }else{
+//        if (required){
+//            final_remark_layout.setVisibility(View.VISIBLE);
+//        }else{
             final_remark_layout.setVisibility(View.GONE);
-        }
+        //}
     }
 
     @Override

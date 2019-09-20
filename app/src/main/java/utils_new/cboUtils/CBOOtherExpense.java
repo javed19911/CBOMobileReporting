@@ -157,8 +157,8 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
             holder.exp_remak.setText(item.getRemark());
         }
 
-        holder.edit_exp.setVisibility(View.VISIBLE);
-        holder.delete_exp.setVisibility(View.VISIBLE);
+        holder.edit_exp.setVisibility(item.IsEditable()? View.VISIBLE : GONE);
+        holder.delete_exp.setVisibility(item.IsEditable()? View.VISIBLE : GONE);
 
         if (!item.getAttachment().equals("")){
             holder.attachment.setVisibility(View.VISIBLE);

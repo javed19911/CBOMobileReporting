@@ -85,7 +85,7 @@ public class SpoDistributorsWise extends AppCompatActivity {
             rpt_typ="P";
         }else if(SpoRptAdapter.clickCount==3){
             Title="SPO Bill Wise Report";
-            cnftxt="Bill";
+            cnftxt= "bill";
             rpt_typ="B";
         }
         textView.setText(Title);

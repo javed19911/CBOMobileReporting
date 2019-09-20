@@ -1,6 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -272,6 +274,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
         tables.add(2);
         tables.add(3);
         tables.add(4);
+        tables.add(5);
 
         new MyAPIService(context).execute(new ResponseBuilder("DCREXPDDLALLROUTE_MOBILE",request)
                 .setTables(tables)
@@ -303,7 +306,8 @@ public class vmExpense  extends CBOViewModel<IExpense> {
     public void parserExpDDl(Bundle result) throws JSONException {
 
 
-                cbohelp.delete_EXP_Head();
+                //cbohelp.delete_EXP_Head();
+                othExpenseDB.deleteDefaultTypes();
                 othExpenseDB.getExpHeadDB().delete();
 
                 String table0 = result.getString("Tables0");
@@ -328,10 +332,10 @@ public class vmExpense  extends CBOViewModel<IExpense> {
 
                     othExpenseDB.getExpHeadDB().insert(expHead);
 
-                    cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
-                            jsonObject1.getString("MANDATORYYN_NEW"), jsonObject1.getString("DA_ACTION"),
-                            jsonObject1.getString("CHECKDUPLICATE_HEADTYPE"), jsonObject1.getString("ATTACHYN"),
-                            jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
+//                    cbohelp.Insert_EXP_Head(jsonObject1.getString("FIELD_NAME"), jsonObject1.getString("ID"),
+//                            jsonObject1.getString("MANDATORYYN_NEW"), jsonObject1.getString("DA_ACTION"),
+//                            jsonObject1.getString("CHECKDUPLICATE_HEADTYPE"), jsonObject1.getString("ATTACHYN"),
+//                            jsonObject1.getString("MAX_AMT"), jsonObject1.getString("TAMST_VALIDATEYN"));
 
                 }
 
@@ -438,10 +442,37 @@ public class vmExpense  extends CBOViewModel<IExpense> {
                     expense.getDistances().add(distance);
                 }
 
+
+
+
+                String table5 = result.getString("Tables5");
+                JSONArray jsonArray6 = new JSONArray(table5);
+                for (int i = 0; i < jsonArray6.length(); i++) {
+                    JSONObject object1 = jsonArray6.getJSONObject(i);
+
+                    mOthExpense othExpense = new mOthExpense()
+                            .setId(object1.getInt("ID"))
+                            .setExpHead(new mExpHead(object1.getInt("EXP_HEAD_ID"),object1.getString("HEAD_NAME"))
+                                    .setSHOW_IN_TA_DA(eExpense.getExp(object1.getInt("TA_DA"))))
+                            .setAmount(object1.getDouble("AMOUNT"))
+                            .setAttachment(object1.getString("FILE_NAME"))
+                            .setEditable(object1.getInt("EDITDELETEYN")==1);
+
+
+                    othExpenseDB.getExpHeadDB().insert(othExpense.getExpHead());
+                    othExpenseDB.insert(othExpense);
+//
+//                    cbohelp.delete_Expense_defaultType();
+//                    cbohelp.insert_Expense("" + othExpense.getExpHead().getId(),
+//                            othExpense.getExpHead().getName(), "" + othExpense.getAmount(),
+//                            othExpense.getRemark(), othExpense.getAttachment(),
+//                            "" + othExpense.getId(),othExpense.getTime());
+                }
+
+
                 expense.setOthExpenses(othExpenseDB.get(eExpense.None));
                 expense.setTA_Expenses(othExpenseDB.get(eExpense.TA));
                 expense.setDA_Expenses(othExpenseDB.get(eExpense.DA));
-
 
 
     }
@@ -540,7 +571,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
         request.put("sCompanyFolder",view.getCompanyCode());
         request.put("iDcrId", view.getDCRId());
         request.put("sDaType", getExpense().getDA_TYPE());
-        request.put("iDistanceId", "");
+        request.put("iDistanceId", getExpense().getSelectedDistance().getId());
         request.put("iDA_VALUE", ""+getExpense().getDA_Amt());
         request.put("DA_TYPE_SAVEYN",getExpense().getDA_TYPE_MANUALYN());
         request.put("sStation", getExpense().getStation());
@@ -564,7 +595,8 @@ public class vmExpense  extends CBOViewModel<IExpense> {
                         String value2 = object.getString("DCR_ID");
                         if (value2.equalsIgnoreCase("1")) {
                             if (IsFormForFinalSubmit()) {
-                                FinalSubmit(context);
+                                //FinalSubmit(context);
+                                context.startActivity(new Intent(context, FinalSubmitDcr_new.class));
                             } else {
 
                                 cbohelp.markAsCalled(CallType.EXPENSE, true);

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import Bill.BillReport.BillActivity;
+import bill.BillReport.BillActivity;
 import saleOrder.Activities.ClientActivity;
 import utils.adapterutils.Transaction_Grid_Adapter;
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -131,6 +131,7 @@ public class TransactionMenuInGrid extends Fragment {
 
                             } else {
                                 Intent complaintView = new Intent(context, BillActivity.class);
+                                complaintView.putExtra("title",menuname);
                                 startActivity(complaintView);
                             }
                             break;

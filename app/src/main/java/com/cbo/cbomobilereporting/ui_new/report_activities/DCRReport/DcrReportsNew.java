@@ -23,9 +23,9 @@ import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.F_T
 
 import java.util.ArrayList;
 
-/**
- * Created by Akshit.Udainiya on 2/15/2015.
- */
+import utils_new.AppAlert;
+
+
 public class DcrReportsNew extends AppCompatActivity{
     Context context;
     RecyclerView listView;
@@ -73,16 +73,20 @@ public class DcrReportsNew extends AppCompatActivity{
             public void onClick(View view) {
 
 
-
+                if (fTeamMonthDivision.getViewModel().getUser() == null
+                        || fTeamMonthDivision.getViewModel().getUser().getId().isEmpty()
+                        || fTeamMonthDivision.getViewModel().getUser().getId().equalsIgnoreCase("0")) {
+                    AppAlert.getInstance().getAlert(context, "Employee ?", "Please Select Employee from the list....");
+                } else {
                     vm_dcr_report.getDCRReports(context, fTeamMonthDivision.getViewModel().getUser().getId(), fTeamMonthDivision.getViewModel().getMonth().getId(), new VM_DCR_Report.OnResultListener() {
 
                         @Override
                         public void onSuccess(ArrayList<mDCR_Report> item) {
 
-                            rptAdapter = new DcrNewAdapter(context, item,fTeamMonthDivision.getViewModel().getUser().getId());
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager (context);
+                            rptAdapter = new DcrNewAdapter(context, item, fTeamMonthDivision.getViewModel().getUser().getId());
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
                             listView.setLayoutManager(mLayoutManager);
-                            listView.setItemAnimator(new DefaultItemAnimator ());
+                            listView.setItemAnimator(new DefaultItemAnimator());
                             listView.setAdapter(rptAdapter);
 
 
@@ -95,8 +99,8 @@ public class DcrReportsNew extends AppCompatActivity{
 
                             ViewCompat.setNestedScrollingEnabled(
                                     listView, false);
-                         //   appBarLayout.setExpanded(false);
-                            appBarLayout.setExpanded(false,true);
+                            //   appBarLayout.setExpanded(false);
+                            appBarLayout.setExpanded(false, true);
 
 
 
@@ -116,6 +120,7 @@ public class DcrReportsNew extends AppCompatActivity{
 
                     });
                 }
+            }
 
         });
 

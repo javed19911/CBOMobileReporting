@@ -6111,6 +6111,18 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }
     }
 
+    public void delete_Expense_defaultType() {
+        try {
+            sd = this.getWritableDatabase();
+            String query ="Select exp_head_id from " + Expenses + " LEFT JOIN "+Expenses_head+" ON exp_head_id = FIELD_ID where FIELD_ID IS NULL ";//+
+
+            sd.delete(Expenses,"exp_head_id in ("+query+")",null);
+
+        }finally {
+            sd.close();
+        }
+    }
+
     public void delete_Expense() {
         try {
             sd = this.getWritableDatabase();

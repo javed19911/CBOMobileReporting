@@ -42,6 +42,7 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.Doctor_Sample;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrPrescription;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrRXActivity;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.OthExpenseDB;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Location.CentroidLocation;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
@@ -2093,8 +2094,9 @@ public class DcrmenuInGrid extends Fragment {
                 table="NonListed_call";
                 break;
             case "D_EXP":
-                flag=true;
+                flag=false;
                 table="Expenses";
+                result = new OthExpenseDB(context).getNoOfRow();
                 break;
             case "D_DR_RX":
             case "D_RX_GEN":

@@ -308,7 +308,9 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
 
         if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_LEAD_ENTRY_YN","Y").equalsIgnoreCase("Y")){
             lead_layout.setVisibility(View.GONE);
+            viewModel.getCustomer().setLeadReqd(false);
         }
+
         lead.setOnClickListener(new View.OnClickListener() {
 
             @Override

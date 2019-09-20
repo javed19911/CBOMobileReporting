@@ -21,7 +21,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
             <fragment
-                android:name="Bill.BillReport.FBillFilter"
+                android:name="bill.BillReport.FBillFilter"
                 android:id="@+id/billfragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

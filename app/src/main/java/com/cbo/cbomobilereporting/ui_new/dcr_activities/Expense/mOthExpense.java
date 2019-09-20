@@ -14,6 +14,7 @@ public class mOthExpense implements Serializable {
     private String Remark ="";
     private String Attachment = "";
     private String time = "";
+    private Boolean editable = true;
 
     /// getter
 
@@ -65,6 +66,10 @@ public class mOthExpense implements Serializable {
         return time;
     }
 
+    public boolean IsEditable(){
+        return editable;
+    }
+
     ///setter
 
     public mOthExpense setId(int id) {
@@ -114,6 +119,11 @@ public class mOthExpense implements Serializable {
 
     public mOthExpense setTime(String time) {
         this.time = time;
+        return this;
+    }
+
+    public mOthExpense setEditable(boolean editable) {
+        this.editable = editable;
         return this;
     }
 }
