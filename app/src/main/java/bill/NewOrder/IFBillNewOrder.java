@@ -4,7 +4,6 @@ public interface IFBillNewOrder {
     String getCompanyCode();
     String getPartyId();
     String getUserId();
-    void getReferencesById();
     void setItem(mBillItem item);
     mBillItem getItem();
     void setAddText(String text);

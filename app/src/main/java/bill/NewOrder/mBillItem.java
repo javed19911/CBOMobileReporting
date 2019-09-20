@@ -7,6 +7,7 @@ import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 public class mBillItem  implements Serializable {
     private String Id = "0";
     private  String Name="";
+    private String BATCH_ID="0";
     private String BATCH_NO="";
     private String MFG_DATE="";
     private String EXP_DATE="";
@@ -68,6 +69,10 @@ public class mBillItem  implements Serializable {
         return this.TotAmt;
     }
 
+    public String getBATCH_ID() {
+        return BATCH_ID;
+    }
+
     public String getBATCH_NO() {
         return BATCH_NO;
     }
@@ -117,28 +122,39 @@ public class mBillItem  implements Serializable {
         return this;
     }
 
-    public void setBATCH_NO(String BATCH_NO) {
+    public mBillItem setBATCH_ID(String BATCH_ID) {
+        this.BATCH_ID = BATCH_ID;
+        return this;
+    }
+
+    public mBillItem setBATCH_NO(String BATCH_NO) {
         this.BATCH_NO = BATCH_NO;
+        return this;
     }
 
-    public void setMFG_DATE(String MFG_DATE) {
+    public mBillItem setMFG_DATE(String MFG_DATE) {
         this.MFG_DATE = MFG_DATE;
+        return this;
     }
 
-    public void setEXP_DATE(String EXP_DATE) {
+    public mBillItem setEXP_DATE(String EXP_DATE) {
         this.EXP_DATE = EXP_DATE;
+        return this;
     }
 
-    public void setPACK(String PACK) {
+    public mBillItem setPACK(String PACK) {
         this.PACK = PACK;
+        return this;
     }
 
-    public void setMRP_RATE(Double MRP_RATE) {
+    public mBillItem setMRP_RATE(Double MRP_RATE) {
         this.MRP_RATE = MRP_RATE;
+        return this;
     }
 
-    public void setSALE_RATE(Double SALE_RATE) {
+    public mBillItem setSALE_RATE(Double SALE_RATE) {
         this.SALE_RATE = SALE_RATE;
+        return this;
     }
 
 

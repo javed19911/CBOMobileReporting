@@ -70,8 +70,8 @@ public class BillBatchDB extends DBHelper {
                     .setMFG_DATE(res.getString(res.getColumnIndex("MFG_DATE")))
                     .setEXP_DATE(res.getString(res.getColumnIndex("EXP_DATE")))
                     .setPACK(res.getString(res.getColumnIndex("PACK")))
-                    .setSALE_RATE(res.getString(res.getColumnIndex("SALE_RATE")))
-                    .setMRP_RATE(res.getString(res.getColumnIndex("MRP_RATE")));
+                    .setSALE_RATE(res.getDouble(res.getColumnIndex("SALE_RATE")))
+                    .setMRP_RATE(res.getDouble(res.getColumnIndex("MRP_RATE")));
 
 
             batches.add(batch);

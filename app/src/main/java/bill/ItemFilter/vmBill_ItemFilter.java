@@ -164,9 +164,8 @@ public class vmBill_ItemFilter extends CBOViewModel<IitemNewOrder> {
                         .setMFG_DATE(jsonObject2.getString("MFG_DATE"))
                         .setEXP_DATE(jsonObject2.getString("EXP_DATE"))
                         .setPACK(jsonObject2.getString("PACK"))
-                        .setMRP_RATE(jsonObject2.getString("MRP_RATE"))
-
-                        .setSALE_RATE(jsonObject2.getString("SALE_RATE"));
+                        .setMRP_RATE(jsonObject2.getDouble("MRP_RATE"))
+                        .setSALE_RATE(jsonObject2.getDouble("SALE_RATE"));
 
                 billbatchDB.insert(item_batch);
 

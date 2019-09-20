@@ -8,8 +8,8 @@ public class mBillBatch {
     private String MFG_DATE="0";
     private String EXP_DATE="0";
     private String PACK="0";
-    private String MRP_RATE="0";
-    private String SALE_RATE="0";
+    private Double MRP_RATE=0.0;
+    private Double SALE_RATE=0.0;
 
 
 
@@ -37,43 +37,51 @@ public class mBillBatch {
         return PACK;
     }
 
-    public String getMRP_RATE() {
+    public Double getMRP_RATE() {
         return MRP_RATE;
     }
 
-    public String getSALE_RATE() {
+    public Double getSALE_RATE() {
         return SALE_RATE;
     }
 
     public mBillBatch setITEM_ID(String ITEM_ID) {
-        this.ITEM_ID = ITEM_ID;return  this;
+        this.ITEM_ID = ITEM_ID;
+        return  this;
     }
 
     public mBillBatch setBATCH_ID(String BATCH_ID) {
-        this.BATCH_ID = BATCH_ID;return  this;
+        this.BATCH_ID = BATCH_ID;
+        return  this;
     }
 
     public mBillBatch setBATCH_NO(String BATCH_NO) {
-        this.BATCH_NO = BATCH_NO;return  this;
+        this.BATCH_NO = BATCH_NO;
+        return  this;
     }
 
     public mBillBatch setMFG_DATE(String MFG_DATE) {
-        this.MFG_DATE = MFG_DATE;return  this;
+        this.MFG_DATE = MFG_DATE;
+        return  this;
     }
 
     public mBillBatch setEXP_DATE(String EXP_DATE) {
-        this.EXP_DATE = EXP_DATE;return  this;
+        this.EXP_DATE = EXP_DATE;
+        return  this;
     }
 
     public mBillBatch setPACK(String PACK) {
-        this.PACK = PACK;return  this;
+        this.PACK = PACK;
+        return  this;
     }
 
-    public mBillBatch setMRP_RATE(String MRP_RATE) {
-        this.MRP_RATE = MRP_RATE;return  this;
+    public mBillBatch setMRP_RATE(Double MRP_RATE) {
+        this.MRP_RATE = MRP_RATE;
+        return  this;
     }
 
-    public mBillBatch setSALE_RATE(String SALE_RATE) {
-        this.SALE_RATE = SALE_RATE;return  this;
+    public mBillBatch setSALE_RATE(Double SALE_RATE) {
+        this.SALE_RATE = SALE_RATE;
+        return  this;
     }
 }

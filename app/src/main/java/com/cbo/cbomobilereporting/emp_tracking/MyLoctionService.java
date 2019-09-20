@@ -148,11 +148,11 @@ public class MyLoctionService extends Service implements
                 NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setContentTitle("CBO Mobile Reporting")
                         .setContentText("Running......")
-                        .setSmallIcon(R.drawable.cbo_noti)
                         .setTicker("CBO")
                         .setOngoing(true)
                         .setLargeIcon(Bitmap.createScaledBitmap(largeIcon, 128, 128, false))
                         .setChannelId(CHANNEL_ID)
+                        .setSmallIcon(R.drawable.cbo_noti)
                         .setContentIntent(pendingIntent);
                     /*.addAction(android.R.drawable.ic_media_previous,
                             "Previous", ppreviousIntent)

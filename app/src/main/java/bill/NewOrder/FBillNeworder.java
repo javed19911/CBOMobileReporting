@@ -24,10 +24,8 @@ import com.cbo.cbomobilereporting.R;
 
 import bill.Cart.ICompanyCart;
 import bill.ItemFilter.CompanyItemFilter;
-import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
+import bill.mBillOrder;
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
-import saleOrder.Enum.eItem;
-import saleOrder.Views.iCart;
 import utils_new.AppAlert;
 
 public class FBillNeworder extends Fragment implements IFBillNewOrder {
@@ -38,7 +36,7 @@ public class FBillNeworder extends Fragment implements IFBillNewOrder {
     private vmBillitem viewModel;
     EditText QtyTxt;
     Button Add;
-    mOrder order;
+    mBillOrder order;
     Boolean keyPressed = true;
     LinearLayout mainLayout,detailLayout;
     TextView RateTxt,AmtTxt;
@@ -92,17 +90,16 @@ public class FBillNeworder extends Fragment implements IFBillNewOrder {
         viewModel = ViewModelProviders.of (this).get (vmBillitem.class);
         viewModel.setView (context, this);
 
-        order = new mOrder();
-
+        order = new mBillOrder();
 
         filterTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  if (context instanceof iCart) {
-                    order = (((iCart) context).getOrder());
-                }*/
+                if (context instanceof ICompanyCart) {
+                    order = (((ICompanyCart) context).getOrder());
+                }
                 Intent intent = new Intent (context, CompanyItemFilter.class);
-                intent.putExtra("syncItem", !viewModel.isLoaded());
+                intent.putExtra("syncItem", false );//!viewModel.isLoaded());
                 startActivityForResult (intent, NEW_ORDER_ITEM_FILTER);
             }
         });
@@ -138,7 +135,7 @@ public class FBillNeworder extends Fragment implements IFBillNewOrder {
                 if(!getItem().getId().equals("0")) {
 
                     getItem().CalculateTotalAmount();
-                    if (context instanceof iCart) {
+                    if (context instanceof ICompanyCart) {
 
                         ((ICompanyCart) context).onItemAdded(getItem());
                     }
@@ -163,9 +160,7 @@ public class FBillNeworder extends Fragment implements IFBillNewOrder {
 
     @Override
     public String getPartyId() {
-        //chnge here
-        return  null;
-       // return order.getPartyId();
+        return order.getPartyId();
     }
 
     @Override
@@ -173,10 +168,6 @@ public class FBillNeworder extends Fragment implements IFBillNewOrder {
         return MyCustumApplication.getInstance ().getUser ().getID ();
     }
 
-    @Override
-    public void getReferencesById() {
-
-    }
 
 
     @Override
@@ -184,11 +175,9 @@ public class FBillNeworder extends Fragment implements IFBillNewOrder {
 
 
         if (getPartyId() == null) {
-
-            //change here
-           /* if (context instanceof iCart) {
-                order = (((IFBillNewOrder) context).getOrder());
-            }*/
+            if (context instanceof ICompanyCart) {
+                order = (((ICompanyCart) context).getOrder());
+            }
         }
 
         

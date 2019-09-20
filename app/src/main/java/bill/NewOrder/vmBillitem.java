@@ -16,8 +16,6 @@ public class vmBillitem  extends CBOViewModel<IFBillNewOrder> {
         billBatchDB = new BillBatchDB(context);
 
         view.setDetaileLayoutEnabled(false);
-        view.getReferencesById();
-        view.setItem(new mBillItem().setName(""));
     }
 
 
@@ -53,10 +51,23 @@ public class vmBillitem  extends CBOViewModel<IFBillNewOrder> {
     public void showBatchForSelection(Context context, mBillItem item){
         new Batch_Dialog(context,billBatchDB.batches(item) , new Batch_Dialog.OnItemClickListener() {
             @Override
-            public void ItemSelected(mBillBatch item) {
+            public void ItemSelected(mBillBatch batch) {
+                if (view != null){
+                    item.setBATCH_NO(batch.getBATCH_NO())
+                            .setBATCH_ID(batch.getBATCH_ID())
+                            .setSALE_RATE(batch.getSALE_RATE())
+                            .setMRP_RATE(batch.getMRP_RATE())
+                            .setMFG_DATE(batch.getMFG_DATE())
+                            .setEXP_DATE(batch.getEXP_DATE())
+                            .setPACK(batch.getPACK());
 
+
+
+
+                    view.setItem(item);
+                }
             }
-        });
+        }).show();
     }
 
 

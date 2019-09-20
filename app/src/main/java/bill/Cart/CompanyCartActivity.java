@@ -47,7 +47,7 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
         company = ((mCompany) getIntent().getSerializableExtra("company"));
         fcompanycart = new FCompanyCart();
         Bundle data = new Bundle();
-        data.putSerializable("itemType", eItem.PRODUCT);
+        //data.putSerializable("itemType", eItem.PRODUCT);
         fcompanycart.setArguments(data);
         viewModel = ViewModelProviders.of(this).get(vmCompanyCart.class);
 
@@ -123,17 +123,18 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
 
     @Override
     public void onItemEdit(mBillItem item) {
-
+        appBarLayout.setExpanded(true);
+        fcompanyneworder.setItem(item);
     }
 
     @Override
     public mBillOrder getOrder() {
-        return null;
+        return viewModel.getOrder();
     }
 
     @Override
     public void updateOrder(mBillOrder order) {
-
+        viewModel.setOrder(order);
     }
 
     @Override
@@ -146,23 +147,27 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
 
     @Override
     public void onBackPressed() {
-        AppAlert.getInstance()
-                .setPositiveTxt("Discard")
-                .setNagativeTxt("Cancel")
-                .DecisionAlert(context, "Alert !!!",
-                        "Are you sure to discard the changes in the order?",
-                        new AppAlert.OnClickListener() {
-                            @Override
-                            public void onPositiveClicked(View item, String result) {
-                                finish();
-                            }
+        if (orderChanged) {
+            AppAlert.getInstance()
+                    .setPositiveTxt("Discard")
+                    .setNagativeTxt("Cancel")
+                    .DecisionAlert(context, "Alert !!!",
+                            "Are you sure to discard the changes in the order?",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    finish();
+                                }
 
-                            @Override
-                            public void onNegativeClicked(View item, String result) {
-                                //fcompanycart.orderCommit();
-                            }
-                        });
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+                                    //fcompanycart.orderCommit();
+                                }
+                            });
 
+        }else{
+            finish();
+        }
     }
 
 }

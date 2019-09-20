@@ -11,6 +11,10 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@drawable/cbo_noti" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />

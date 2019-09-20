@@ -13,7 +13,6 @@ import java.util.HashMap;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import saleOrder.MyOrderAPIService;
-import saleOrder.ViewModel.CBOViewModel;
 import saleOrder.Views.iFCart;
 import utils_new.AppAlert;
 
@@ -23,7 +22,7 @@ import utils_new.AppAlert;
 
 public class vmFCart extends CBOViewModel<iFCart> {
 
-    private mOrder order = new mOrder();;
+    private mOrder order = new mOrder();
     @Override
     public void onUpdateView(Activity context, iFCart view) {
         view.getReferencesById();

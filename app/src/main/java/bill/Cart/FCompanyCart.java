@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -22,8 +24,8 @@ import com.cbo.cbomobilereporting.R;
 import bill.ItemFilter.CompanyItemFilter;
 import bill.NewOrder.mBillItem;
 import bill.mBillOrder;
-import saleOrder.Adaptor.CartAdapter;
 import saleOrder.Enum.eItem;
+import utils_new.interfaces.RecycleViewOnItemClickListener;
 
 public class FCompanyCart extends Fragment implements IFCompanycart {
 
@@ -33,9 +35,8 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
     TextView cartSubTotal, cartDiscount, cartNetAmount, cartTotal_out, saveOrder, itemFilter;
     Activity context;
     private RecyclerView itemlist_filter;
-    private CartAdapter cartAdapter;
+    private aBillCart cartAdapter;
     private vmFCompanyCart viewModel;
-    private eItem itemType = eItem.MEDICINE;
 
     private TextView Total_amt,SGST_amt,CGST_amt;
     private TextView centralTaxName,LocalTaxName;
@@ -86,13 +87,13 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
 
         itemlist_filter = (RecyclerView) view.findViewById(R.id.cart_list);
         itemFilter = view.findViewById(R.id.itemFilter);
+
+        itemFilter.setVisibility(View.GONE);
+
+
         saveOrder = view.findViewById(R.id.saveOrder);
 
         context = getActivity ();
-
-        if(getArguments().getSerializable("itemType") != null){
-            itemType =(eItem) getArguments().getSerializable("itemType");
-        }
 
 
         viewModel = ViewModelProviders.of (this).get (vmFCompanyCart.class);
@@ -117,36 +118,30 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
         });
 
 
-//chnage here
-       /* cartAdapter = new CartAdapter (context, viewModel.getOrder (),itemType);
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        cartAdapter = new aBillCart (context, viewModel.getOrder ());
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
         itemlist_filter.setLayoutManager (mLayoutManager1);
         itemlist_filter.setItemAnimator (new DefaultItemAnimator());
-        itemlist_filter.setAdapter (cartAdapter);*/
+        itemlist_filter.setAdapter (cartAdapter);
 
-     /*   cartAdapter.setOnClickListner (new RecycleViewOnItemClickListener() {
+        cartAdapter.setOnClickListner (new RecycleViewOnItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
                 if (view.getId () == R.id.delete) {
                     CalculateTotal ();
-                }else if (itemType == eItem.PRODUCT){
-                    if (view.getId () == R.id.edit) {
-                        if (context instanceof iCart) {
-                            //vhnge here
-                           // ((iCart) context).onItemEdit(viewModel.getOrder ().getItems().get(position));
-                        }
+                }else if (view.getId () == R.id.edit) {
+                    if (context instanceof ICompanyCart) {
+                        ((ICompanyCart) context).onItemEdit(viewModel.getOrder ().getItems().get(position));
                     }
-
                 }else if (view.getId () == R.id.add_to_cart) {
                     CalculateTotal ();
                 }
             }
         });
 
-        if (context instanceof iCart) {
-            updateOrder(((iCart) context).getOrder());
+        if (context instanceof ICompanyCart) {
+            updateOrder(((ICompanyCart) context).getOrder());
         }
-*/
 
     }
 
@@ -165,14 +160,13 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
         return MyCustumApplication.getInstance ().getUser ().getID ();
     }
 
-    @Override
-    public void setOrder(mBillOrder order) {
 
-    }
 
     @Override
     public void updateOrder(mBillOrder order) {
-
+        viewModel.setOrder (order);
+        cartAdapter.update (viewModel.getOrder ());
+        CalculateTotal ();
     }
 
     @Override
@@ -184,15 +178,15 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
         }
     }
 
-    /*@Override
-    public void setOrder(mOrder order) {
-        //viewModel.setOrder ((mOrder) context.getIntent ().getSerializableExtra ("order"));
+    @Override
+    public void setOrder(mBillOrder order) {
+
         viewModel.setOrder(order);
 
 
         updateTotal ();
 
-    }*/
+    }
 
 
 
@@ -200,8 +194,8 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
     public void setTile() {
 
         String title = "";
-        title = "New Order";
-     /*   if (viewModel.getOrder ().getDocId ().equalsIgnoreCase ("0")) {
+        //title = "New Order";
+        if (viewModel.getOrder ().getDocId ().equalsIgnoreCase ("0")) {
             //itemFilter.performClick ();
             title = "New Order";
 
@@ -217,12 +211,8 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
             title = "Order No. :- " + viewModel.getOrder ().getDocNo ();
         }else {
             title = "New Order";
-
-        }*/
-
-        if (itemType == eItem.PRODUCT){
-            itemFilter.setVisibility(View.GONE);
         }
+
 
         if (context instanceof ICompanyCart) {
             ((ICompanyCart) context).setTitle (title);
