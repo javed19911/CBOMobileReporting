@@ -1,8 +1,6 @@
 package com.cbo.cbomobilereporting.ui;
 
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +19,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.flurry.android.FlurryAgent;
@@ -29,14 +30,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.ExceptionHandler;
-import utils.MyConnection;
 import utils.adapterutils.PobModel;
 import utils.adapterutils.PrescribeAdapter;
 import utils_new.Custom_Variables_And_Method;
 
 
-public class PrescribeNew extends Activity {
+public class PrescribeNew extends AppCompatActivity {
     ListView mylist;
     Button save;
 

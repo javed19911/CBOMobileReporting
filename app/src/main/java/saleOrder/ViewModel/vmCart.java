@@ -2,6 +2,8 @@ package saleOrder.ViewModel;
 
 import android.app.Activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import saleOrder.Views.iCart;
 
@@ -13,7 +15,7 @@ public class vmCart extends CBOViewModel<iCart> {
 
     private mOrder order = new mOrder();;
     @Override
-    public void onUpdateView(Activity context, iCart view) {
+    public void onUpdateView(AppCompatActivity context, iCart view) {
         view.getReferencesById();
     }
 

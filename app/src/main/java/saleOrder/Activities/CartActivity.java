@@ -1,17 +1,17 @@
 package saleOrder.Activities;
 
-import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.cbo.cbomobilereporting.R;
+import com.google.android.material.appbar.AppBarLayout;
 
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
@@ -19,8 +19,8 @@ import saleOrder.Enum.eItem;
 import saleOrder.Fragments.CartFragment;
 import saleOrder.Fragments.FNewOrder;
 import saleOrder.Model.mParty;
-import saleOrder.Views.iCart;
 import saleOrder.ViewModel.vmCart;
+import saleOrder.Views.iCart;
 import utils_new.AppAlert;
 
 public class CartActivity extends AppCompatActivity implements iCart {
@@ -29,7 +29,7 @@ public class CartActivity extends AppCompatActivity implements iCart {
     TextView title,subTitle;
 
     private vmCart viewModel;
-    Activity context;
+    AppCompatActivity context;
     CartFragment cartFragment;
     FNewOrder newOrder;
     AppBarLayout appBarLayout;

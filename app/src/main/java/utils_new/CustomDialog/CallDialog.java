@@ -1,6 +1,5 @@
 package utils_new.CustomDialog;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +7,6 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Vibrator;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -20,6 +15,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;

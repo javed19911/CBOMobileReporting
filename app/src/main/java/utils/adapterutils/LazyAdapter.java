@@ -1,10 +1,5 @@
 package utils.adapterutils;
 
-import java.util.List;
-
-
-
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +7,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
+
+import java.util.List;
 
 import utils_new.Custom_Variables_And_Method;
 
 
 public class LazyAdapter extends ArrayAdapter<DocSampleModel>{
 	private final List<DocSampleModel> list;   
-	private final Activity context;
+	private final AppCompatActivity context;
 	public ImageLoader imageLoader; 
 	final int stub_id = R.drawable.no_image;
 	String visual_pdf;
 	Custom_Variables_And_Method customVariablesAndMethod;
-	public LazyAdapter(Activity context, List<DocSampleModel> list){
+	public LazyAdapter(AppCompatActivity context, List<DocSampleModel> list){
 		super(context, R.layout.row_doclist, list);
 		this.context = context;
 		this.list = list;

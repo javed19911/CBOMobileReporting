@@ -15,7 +15,7 @@
         android:padding="3dp"
         android:layout_weight="1"
         android:background="@drawable/custom_square_transparent_bg">
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="fill_parent"
             android:layout_height="match_parent">
 
@@ -222,11 +222,19 @@
 
                 </LinearLayout>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/attachments"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:id="@+id/filename"
+                    android:visibility="gone"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -238,13 +246,14 @@
                     android:minWidth="220dp"
                     android:minHeight="220dp"
                     android:scaleType="fitXY"
+                    android:visibility="gone"
                     android:layout_marginTop="5dp"
                     android:id="@+id/attach_img"
                     android:layout_gravity="center_horizontal"/>
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
     <LinearLayout

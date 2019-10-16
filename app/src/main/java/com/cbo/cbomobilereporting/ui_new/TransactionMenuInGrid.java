@@ -29,6 +29,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import bill.BillReport.BillActivity;
+import bill.openingStock.OpeningStockActivity;
+import bill.openingStock.mPage;
 import saleOrder.Activities.ClientActivity;
 import utils.adapterutils.Transaction_Grid_Adapter;
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -132,6 +134,56 @@ public class TransactionMenuInGrid extends Fragment {
                             } else {
                                 Intent complaintView = new Intent(context, BillActivity.class);
                                 complaintView.putExtra("title",menuname);
+                                startActivity(complaintView);
+                            }
+                            break;
+                        }
+                        case "T_PHYSTOCK":{
+                            if (!networkUtil.internetConneted(context)) {
+
+                                customVariablesAndMethod.Connect_to_Internet_Msg(context);
+
+                            } else {
+                                Intent complaintView = new Intent(context, OpeningStockActivity.class);
+                                complaintView.putExtra("page",new mPage(menuname,OpeningStockActivity.DOC_TYPE.PHYSICAL_STOCK.name())
+                                        .setOnLoadApi("PHY_GRID_MOBILE")
+                                        .setOnDetailApi("PHY_POPULATE_MOBILE")
+                                        .setOnDeleteApi("PHY_DELETE_MOBILE")
+                                .setOnFinalizeApi("PHY_COMMIT_MOBILE"));
+                                startActivity(complaintView);
+                            }
+                            break;
+                        }
+
+                        case "T_OPSTOCK_ENTRY":{
+                            if (!networkUtil.internetConneted(context)) {
+
+                                customVariablesAndMethod.Connect_to_Internet_Msg(context);
+
+                            } else {
+                                Intent complaintView = new Intent(context, OpeningStockActivity.class);
+                                complaintView.putExtra("page",new mPage(menuname,OpeningStockActivity.DOC_TYPE.OPENING.name())
+                                        .setOnLoadApi("OP_GRID_MOBILE")
+                                        .setOnDetailApi("OP_POPULATE_MOBILE")
+                                        .setOnDetailApi("OP_DELETE_MOBILE")
+                                        .setOnFinalizeApi("OP_COMMIT_MOBILE"));
+                                startActivity(complaintView);
+                            }
+                            break;
+                        }
+                        case "T_PURCHASE_ENTRY":{
+                            if (!networkUtil.internetConneted(context)) {
+
+                                customVariablesAndMethod.Connect_to_Internet_Msg(context);
+
+                            } else {
+                                Intent complaintView = new Intent(context, OpeningStockActivity.class);
+                                complaintView.putExtra("page",
+                                        new mPage(menuname,OpeningStockActivity.DOC_TYPE.PURCHASE.name())
+                                                .setOnLoadApi("STR_GRID_MOBILE")
+                                                .setOnDetailApi("STR_POPULATE_MOBILE")
+                                                .setOnDeleteApi("STR_DELETE_MOBILE")
+                                                .setOnFinalizeApi("STR_COMMIT_MOBILE"));
                                 startActivity(complaintView);
                             }
                             break;

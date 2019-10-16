@@ -4,7 +4,6 @@ package com.cbo.cbomobilereporting.emp_tracking;
  * Created by pc24 on 14/06/2017.
  */
 
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,8 +14,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import androidx.core.app.ActivityCompat;
 import android.util.Log;
+
+import androidx.appcompat.app.AlertDialog;
 
 import utils_new.Custom_Variables_And_Method;
 

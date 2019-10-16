@@ -1,6 +1,5 @@
 package CameraGalaryPkg;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
-
 
 import com.cbo.cbomobilereporting.R;
 
@@ -72,7 +72,7 @@ public class ChoosePhoto {
             if (permissionUtil.verifyPermissions(mContext, permissionUtil.getCameraPermissions()) && permissionUtil.verifyPermissions(mContext, permissionUtil.getGalleryPermissions()))
                 showAlertDialog();
             else {
-                ActivityCompat.requestPermissions((Activity) mContext, permissionUtil.getCameraPermissions(), SELECT_PICTURE_CAMERA);
+                ActivityCompat.requestPermissions((AppCompatActivity) mContext, permissionUtil.getCameraPermissions(), SELECT_PICTURE_CAMERA);
             }
         } else {
             showAlertDialog();
@@ -107,7 +107,7 @@ public class ChoosePhoto {
 
 
 
-        ((Activity) mContext).startActivityForResult(chooserIntent, CHOOSE_PHOTO_INTENT);
+        ((AppCompatActivity) mContext).startActivityForResult(chooserIntent, CHOOSE_PHOTO_INTENT);
     }
 
     // Change this method(edited)
@@ -207,7 +207,7 @@ public class ChoosePhoto {
                 //Utils.showToast(mContext, mContext.getString(R.string.error_cant_select_cropping_app));
                 selectedImageUri = sourceImage;
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, sourceImage);
-                ((Activity) mContext).startActivityForResult(intent, ResponseCode);
+                ((AppCompatActivity) mContext).startActivityForResult(intent, ResponseCode);
                 return;
             } else {
                 intent.setDataAndType(sourceImage, "image/*");
@@ -224,11 +224,11 @@ public class ChoosePhoto {
                     Intent i = new Intent(intent);
                     ResolveInfo res = list.get(0);
                     i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                    ((Activity) mContext).startActivityForResult(intent, ResponseCode);
+                    ((AppCompatActivity) mContext).startActivityForResult(intent, ResponseCode);
                 } else {
                     Intent i = new Intent(intent);
                     i.putExtra(Intent.EXTRA_INITIAL_INTENTS, list.toArray(new Parcelable[list.size()]));
-                    ((Activity) mContext).startActivityForResult(intent, ResponseCode);
+                    ((AppCompatActivity) mContext).startActivityForResult(intent, ResponseCode);
                 }
             }
         }catch (Exception e){

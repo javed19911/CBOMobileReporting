@@ -1,21 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new.approval_activities.BackgroundNotification;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.SystemAlertActivity;
-
-import utils_new.Custom_Variables_And_Method;
 
 public class BackGroundAppAlert {
 

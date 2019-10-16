@@ -1,6 +1,5 @@
 package com.cbo.cbomobilereporting;
 
-import java.io.File;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -14,9 +13,11 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.multidex.MultiDexApplication;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.multidex.MultiDexApplication;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.DCR.mDCR;
@@ -26,6 +27,8 @@ import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.for_all_activities.CustomWebView;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Msg_ho;
+
+import java.io.File;
 
 import utils.CBOUtils.Constants;
 import utils_new.Custom_Variables_And_Method;
@@ -179,7 +182,7 @@ public class MyCustumApplication extends MultiDexApplication {
     }
 
 
-    public void Logout(Activity context){
+    public void Logout(AppCompatActivity context){
         stopLoctionService(false);
         Intent intent = new Intent(context, LoginFake.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -1,7 +1,6 @@
 
 package utils.adapterutils;
 
-import android.app.Activity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -13,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -28,14 +29,14 @@ import utils_new.InputFilterMinMax;
 public class PobAdapter extends ArrayAdapter<PobModel> {
 	private final List<PobModel>list;
 	Ipob listener;
-	private final Activity context;
+	private final AppCompatActivity context;
 	private Boolean showNOC,clicked= true;
 	private Boolean showRxQty = false;
 	CBO_DB_Helper cbo_db_helper;
     Custom_Variables_And_Method customVariablesAndMethod;
     String DCRGIFT_QTY_VALIDATE ="";
 	
-	public PobAdapter(Activity context, List<PobModel> list,Boolean showNOC,Boolean showRxQty,Ipob listener){
+	public PobAdapter(AppCompatActivity context, List<PobModel> list, Boolean showNOC, Boolean showRxQty, Ipob listener){
 		super(context, R.layout.dr_pob_row, list);
 		this.context = context;
 		this.listener = listener;

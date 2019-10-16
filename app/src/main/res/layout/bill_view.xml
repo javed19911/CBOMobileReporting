@@ -27,6 +27,7 @@
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax"
                 android:layout_marginTop="70dp"
+                tools:layout="@layout/fragment_bill_filter"
 
                 />
             <androidx.appcompat.widget.Toolbar

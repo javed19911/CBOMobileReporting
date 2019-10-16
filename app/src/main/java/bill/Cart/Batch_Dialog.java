@@ -1,14 +1,20 @@
 package bill.Cart;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 
@@ -16,16 +22,13 @@ import java.util.ArrayList;
 
 import bill.NewOrder.mBillBatch;
 
-/**
- * Created by pc24 on 28/11/2017.
- */
 
 public class Batch_Dialog {
 
     Context context;
     private ArrayList<mBillBatch> List;
     private ArrayList<mBillBatch> ListCopy;
-    private AlertDialog myalertDialog = null;
+    private Dialog  dialog = null;
 
     private OnItemClickListener Listener = null;
 
@@ -40,30 +43,50 @@ public class Batch_Dialog {
         this.Listener = Listener;
     }
 
-    public void show() {
+    public void show(String title) {
 
 
 
-        AlertDialog.Builder myDialog = new AlertDialog.Builder(context);
-        final EditText editText = new EditText(context);
-        final ListView listview=new ListView(context);
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.addView(editText);
-        layout.addView(listview);
-        myDialog.setView(layout);
-        aBillBatch arrayAdapter=new aBillBatch(context, R.layout.spin_row,ListCopy);
+
+
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.batch_dialog, null, false);
+
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.setContentView(view);
+        final Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setBackgroundDrawableResource(R.color.White_new);
+        window.setGravity(Gravity.CENTER);
+
+        TextView textView =(TextView) view.findViewById(R.id.hadder_text_1);
+        textView.setText(title );
+
+        TextView filter =(TextView) view.findViewById(R.id.filterTxt);
+        ImageView clearFilter = view.findViewById(R.id.clearQry);
+        ListView listview=(ListView) view.findViewById(R.id.list);
+
+        aBillBatch arrayAdapter=new aBillBatch(context, R.layout.bill_row,ListCopy);
         listview.setAdapter(arrayAdapter);
-        listview.setOnItemClickListener((parent, view, position, id) -> {
+        listview.setOnItemClickListener((parent, view1, position, id) -> {
 
-            myalertDialog.dismiss();
+            dialog.dismiss();
             if (Listener != null){
                 Listener.ItemSelected(ListCopy.get(position));
             }
 
         });
 
-        editText.addTextChangedListener(new TextWatcher() {
+
+        clearFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filter.setText("");
+            }
+        });
+        filter.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
 
             }
@@ -74,12 +97,12 @@ public class Batch_Dialog {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int textlength = editText.getText().length();
+                int textlength = filter.getText().length();
                 ListCopy.clear();
                 for (int i = 0; i < List.size(); i++) {
                     if (textlength <= List.get(i).getBATCH_NO().length()  ) {
 
-                        if (List.get(i).getBATCH_NO().toLowerCase().contains(editText.getText().toString().toLowerCase().trim())) {
+                        if (List.get(i).getBATCH_NO().toLowerCase().contains(filter.getText().toString().toLowerCase().trim())) {
                             ListCopy.add(List.get(i));
                         }
                     }
@@ -91,7 +114,8 @@ public class Batch_Dialog {
                 }
             }
         });
-        myalertDialog=myDialog.show();
+        //dialog.setCancelable(false);
+        dialog.show();
 
     }
 

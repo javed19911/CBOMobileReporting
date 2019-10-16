@@ -3,6 +3,8 @@ package saleOrder.ViewModel;
 import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -15,7 +17,6 @@ import java.util.HashMap;
 
 import saleOrder.Model.mParty;
 import saleOrder.MyOrderAPIService;
-import saleOrder.ViewModel.CBOViewModel;
 import saleOrder.Views.iClient;
 
 /**
@@ -34,7 +35,7 @@ public class vmClient extends CBOViewModel<iClient> {
     }
 
     @Override
-    public void onUpdateView(Activity context, iClient view) {
+    public void onUpdateView(AppCompatActivity context, iClient view) {
         view.getReferencesById();
         view.setTile();
 
@@ -42,10 +43,10 @@ public class vmClient extends CBOViewModel<iClient> {
     }
 
 
-    private void getPartiesAPI(Activity context){
+    private void getPartiesAPI(AppCompatActivity context){
         getPartiesAPI(context,true);
     }
-    public void getPartiesAPI(final Activity context, Boolean SyncYN){
+    public void getPartiesAPI(final AppCompatActivity context, Boolean SyncYN){
 
 //        items = itemDB.items(getFilterQry(),getKit_Type());
 //

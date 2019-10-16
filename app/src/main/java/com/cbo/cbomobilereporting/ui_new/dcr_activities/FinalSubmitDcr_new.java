@@ -12,6 +12,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.view.MenuItem;
@@ -907,7 +909,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
                                     stopLoctionService();
                                     customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
-                                    MyCustumApplication.getInstance().Logout((Activity) context);
+                                    MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
                                     /*finish();*/
                                 }else if(c.getString("MESSAGE").toUpperCase().contains("[REPLAN]")) {
 

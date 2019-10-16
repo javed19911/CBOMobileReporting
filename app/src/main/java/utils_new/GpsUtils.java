@@ -6,9 +6,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
 import android.location.LocationManager;
-import androidx.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -19,6 +22,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import static android.content.ContentValues.TAG;
 public class GpsUtils {
     private Context context;
@@ -50,7 +54,7 @@ public class GpsUtils {
         } else {
             mSettingsClient
                     .checkLocationSettings(mLocationSettingsRequest)
-                    .addOnSuccessListener((Activity) context, new OnSuccessListener<LocationSettingsResponse>() {
+                    .addOnSuccessListener((AppCompatActivity) context, new OnSuccessListener<LocationSettingsResponse>() {
                         @SuppressLint("MissingPermission")
                         @Override
                         public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
@@ -60,7 +64,7 @@ public class GpsUtils {
                             }
                         }
                     })
-                    .addOnFailureListener((Activity) context, new OnFailureListener() {
+                    .addOnFailureListener((AppCompatActivity) context, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             int statusCode = ((ApiException) e).getStatusCode();

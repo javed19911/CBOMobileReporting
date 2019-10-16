@@ -55,14 +55,14 @@
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:visibility="gone"
-                    android:src="@drawable/ic_upload_complete"
+                    card_view:srcCompat="@drawable/ic_upload_complete"
                     android:id="@+id/downloaded"/>
 
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:visibility="gone"
-                    android:src="@drawable/ic_upload_failed"
+                    card_view:srcCompat="@drawable/ic_upload_failed"
                     android:id="@+id/failed"/>
 
 

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee">
+    android:orientation="vertical">
 
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
         android:id="@+id/toolbar"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/search"
                 android:id="@+id/filterTxt"
                 android:paddingLeft="10dp"
                 android:textColor="@android:color/black"
@@ -43,11 +44,63 @@
                 android:layout_gravity="center_vertical"
                 android:id="@+id/clearQry"
                 android:layout_marginRight="3dp"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"/>
 
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/headerBg"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="5dp"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            android:layout_marginRight="3dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Product"
+            android:textColor="#000"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:id="@+id/stock"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:layout_height="wrap_content"
+            android:text="Stock"/>
+
+
+
+
+
+
+
+
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -92,4 +145,4 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>

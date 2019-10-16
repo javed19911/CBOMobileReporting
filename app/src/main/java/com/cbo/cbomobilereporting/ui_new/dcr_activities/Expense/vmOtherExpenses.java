@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -19,12 +19,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 import saleOrder.ViewModel.CBOViewModel;
 import services.MyAPIService;
-import utils.adapterutils.Expenses_Adapter;
-import utils.adapterutils.SpinnerModel;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
@@ -37,7 +34,7 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
     private ExpHeadDB expHeadDB = null;
     private CBO_DB_Helper cbohelp = null;
     @Override
-    public void onUpdateView(Activity context, IOtherExpense view) {
+    public void onUpdateView(AppCompatActivity context, IOtherExpense view) {
         othExpenseDB = new OthExpenseDB(context);
         expHeadDB = new ExpHeadDB(context);
         cbohelp = new CBO_DB_Helper(context);
@@ -172,7 +169,7 @@ public class vmOtherExpenses extends CBOViewModel<IOtherExpense> {
     }
 
 
-    public void other_expense_commit(Activity context){
+    public void other_expense_commit(AppCompatActivity context){
         //Start of call to service
 
         HashMap<String,String> request=new HashMap<>();

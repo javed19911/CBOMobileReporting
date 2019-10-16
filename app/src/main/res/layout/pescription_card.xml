@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/no_image"
+        card_view:srcCompat="@drawable/no_image"
         android:id="@+id/pescription"
         android:scaleType="fitXY"
         android:layout_margin="2dp"

@@ -109,13 +109,13 @@
                             android:layout_height="40dp"
                             android:paddingLeft="3dp"
                             android:id="@+id/edit"
-                            android:src="@android:drawable/ic_menu_edit"/>
+                            card_view:srcCompat="@android:drawable/ic_menu_edit"/>
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:paddingLeft="3dp"
                             android:id="@+id/delete"
-                            android:src="@drawable/dlt"/>
+                            card_view:srcCompat="@drawable/dlt"/>
 
                     </LinearLayout>
 
@@ -139,7 +139,7 @@
                             android:id="@+id/more"
                             android:background="@drawable/countkart"
                             android:layout_marginRight="10dp"
-                            android:src="@android:drawable/arrow_down_float"
+                            card_view:srcCompat="@android:drawable/arrow_down_float"
                             android:layout_alignRight="@+id/saprator"/>
 
                     </RelativeLayout>

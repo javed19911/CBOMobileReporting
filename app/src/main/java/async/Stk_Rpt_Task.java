@@ -1,16 +1,16 @@
 package async;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.CBOReportView;
 
 import services.ServiceHandler;
 import services.TaskListener;
-import utils.MyConnection;
 
 /**
  * Created by Akshit on 3/27/2015.
@@ -22,7 +22,7 @@ public class Stk_Rpt_Task extends AsyncTask<String,String,String> {
     public Context context;
     public CBO_DB_Helper db_helper;
 
-    public Stk_Rpt_Task(Activity context){
+    public Stk_Rpt_Task(AppCompatActivity context){
         this.context = context;
     }
 

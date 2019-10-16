@@ -1,13 +1,11 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +13,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -64,7 +65,7 @@ public class PospondFarmerMeeting extends AppCompatActivity {
         TpListView = findViewById(R.id.TP_list);
         Back = findViewById(R.id.back);
 
-        adapter = new TPList_Adapter((Activity) context,tpList);
+        adapter = new TPList_Adapter((AppCompatActivity) context,tpList);
         TpListView.setAdapter(adapter);
 
 

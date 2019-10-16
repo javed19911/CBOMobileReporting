@@ -1,7 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new;
 
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,42 +15,36 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-
-import com.google.android.material.internal.NavigationMenuView;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
-import androidx.fragment.app.FragmentStatePagerAdapter;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.core.view.GravityCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import android.view.View;
-
-
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.Contact_Us;
+import com.cbo.cbomobilereporting.ui_new.report_activities.Dashboard.FDashboard;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.material.internal.NavigationMenuView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.ByteArrayOutputStream;
@@ -63,6 +56,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import bill.Dashboard.FBillDashboard;
 import de.hdodenhof.circleimageview.CircleImageView;
 import services.Sync_service;
 import utils.networkUtil.AppPrefrences;
@@ -271,12 +265,24 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
         Menu menu = navigationView.getMenu();
         menu.removeGroup(R.id.group1);
         tabs = cbo_db_helper.getTab();
+        if (cbo_db_helper.getMenu("REPORTS","R_DASHBOARD_SALES").size()>0) {
+            tabs.add(0, "BILL_DASHBOARD");
+        }
+        //tabs.add(0,"DASHBOARD");
         MenuItem menuItem;
         menuItem = menu.add(R.id.group1, 0, 0, "Home");
         menuItem.setIcon(R.drawable.ic_home_icon);
 
         for (int i = 1; i <= tabs.size(); i++) {
             switch (tabs.get(i - 1)) {
+                case "DASHBOARD":
+                    menuItem = menu.add(R.id.group1, i, i, "DASHBOARD");
+                    menuItem.setIcon(R.drawable.ic_manager);
+                    break;
+                case "BILL_DASHBOARD":
+                    menuItem = menu.add(R.id.group1, i, i, "DASHBOARD");
+                    menuItem.setIcon(R.drawable.ic_manager);
+                    break;
                 case "DCR":
                     menuItem = menu.add(R.id.group1, i, i, "DCR");
                     menuItem.setIcon(R.drawable.ic_manager);
@@ -353,8 +359,18 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         ArrayList<String> tabs=cbo_db_helper.getTab();
+        if (cbo_db_helper.getMenu("REPORTS","R_DASHBOARD_SALES").size()>0) {
+            tabs.add(0, "BILL_DASHBOARD");
+        }
+        //tabs.add(0,"DASHBOARD");
         for(int i=0;i<tabs.size();i++){
             switch (tabs.get(i)){
+                case "DASHBOARD":
+                    adapter.addFragment(new FDashboard(),  "DASHBOARD");
+                    break;
+                case "BILL_DASHBOARD":
+                    adapter.addFragment(new FBillDashboard(),  "DASHBOARD");
+                    break;
                 case "DCR":
                     adapter.addFragment(new DcrmenuInGrid(), "DCR");
                     break;

@@ -1,7 +1,6 @@
 package utils_new;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,6 +26,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -38,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import interfaces.Ipob;
@@ -107,7 +108,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dr_sample, null, false);
 
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.setContentView(view);
         final Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -327,7 +328,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
 
             }
         }
-        adapter = new PobAdapter((Activity) context, display_item_list,
+        adapter = new PobAdapter((AppCompatActivity) context, display_item_list,
                 customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),
                 customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"RXQTYYN","N").equalsIgnoreCase("Y"),
                 this::onItemSelectedListChanged);
@@ -386,7 +387,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
         protected void onPostExecute(List<PobModel> result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            adapter = new PobAdapter((Activity) context, result,
+            adapter = new PobAdapter((AppCompatActivity) context, result,
                     customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),
                     customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"RXQTYYN","N").equalsIgnoreCase("Y"),
                     Dr_Sample_Dialog.this);

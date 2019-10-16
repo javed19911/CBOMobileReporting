@@ -1,7 +1,5 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.DCRCall;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +12,6 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -32,8 +30,6 @@ import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.ChemRcCallDB;
-import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrRcCallDB;
-import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
@@ -51,7 +47,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import locationpkg.Const;
-import services.CboServices;
 import services.MyAPIService;
 import services.Sync_service;
 import utils.adapterutils.ExpandableListAdapter;
@@ -351,7 +346,7 @@ public  class DCRCallActivity extends CustomActivity implements ExpandableListAd
                         }
                     });
 
-                    MyCustumApplication.getInstance().Logout((Activity) context);
+                    MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
                     break;
                 case 99:
                     if ((null != msg.getData())) {

@@ -42,7 +42,7 @@
                     <ImageView
                         android:layout_width="10dp"
                         android:layout_height="10dp"
-                        android:src="@drawable/ic_user"
+                        app:srcCompat="@drawable/ic_user"
                         android:layout_marginTop="5dp"
                         android:visibility="gone"
                         android:layout_marginRight="2dp"/>
@@ -51,26 +51,27 @@
                         android:id="@+id/rec_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Name"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
                         android:textStyle="bold"
-                        android:visibility="visible"
+                        android:paddingLeft="3dp"
                         android:textColor="@color/colorPrimary"
                         android:textSize="15sp"
                         />
+
                 </LinearLayout>
 
 
                 <TextView
                     android:id="@+id/rec_remak"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="12dp"
+                    android:layout_height="wrap_content"
+                    android:text="bill print"
                     android:gravity="left"
+                    android:paddingLeft="5dp"
                     android:layout_weight="1"
-                    android:textColor="#8c8c8c"
-                    android:textSize="12dp" />
+                    android:textSize="13dp" />
+
             </LinearLayout>
 
 
@@ -131,12 +132,12 @@
                         android:id="@+id/rcpt_edit"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@android:drawable/ic_menu_edit" />
+                        app:srcCompat="@android:drawable/ic_menu_edit" />
                     <ImageView
                         android:id="@+id/delete_rec"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@android:drawable/ic_menu_delete" />
+                        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 
                 </LinearLayout>
@@ -149,137 +150,6 @@
 
 
         </LinearLayout>
-
-
-
-
-
-       <!-- <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:visibility="gone"
-                android:src="@drawable/calendar" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="Order No-"
-                android:visibility="gone"
-                android:layout_marginLeft="2dp"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                />
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/order" />
-
-            <TextView
-                android:id="@+id/followdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="Order No-"
-                android:layout_marginLeft="2dp"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:textSize="17sp"
-                />
-            <TextView
-                android:id="@+id/rcpt_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_weight="2.8"
-                android:text="xxx-85"
-                android:layout_marginLeft="2dp"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:textSize="17sp"
-                />
-
-
-
-
-
-
-
-        </LinearLayout>-->
-        <!--<LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="3"
-            >
-            &lt;!&ndash;//calensder icon chnge using existing icon&ndash;&gt;
-           &lt;!&ndash; <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="7dp"
-                android:src="@drawable/calender_00" />&ndash;&gt;
-
-           &lt;!&ndash; <TextView
-                android:id="@+id/rcpt_date"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Mail From: "
-                android:layout_weight="2.8"
-                android:textColor="@color/colorAccent"
-                android:textSize="17sp"
-                android:textStyle="normal" />&ndash;&gt;
-
-
-           &lt;!&ndash; <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="xxx-85"
-                android:visibility="invisible"
-                android:layout_marginLeft="2dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                />&ndash;&gt;
-
-
-
-            &lt;!&ndash;//both these layoutv are  belopw are4 added as upper layout.&ndash;&gt;
-            <ImageView
-                android:id="@+id/rcpt_edit"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:src="@android:drawable/ic_menu_edit" />
-            <ImageView
-                android:id="@+id/delete_rec"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:src="@android:drawable/ic_menu_delete" />
-
-
-
-        </LinearLayout>-->
-
-
-
-
 
 
 

@@ -64,14 +64,40 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
 
- </androidx.viewpager.widget.ViewPager>
+            </androidx.viewpager.widget.ViewPager>
+
+
+            <TextView
+                android:id="@+id/viewpager_marquee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="17dp" />
+        </LinearLayout>
+
 
 
         <RelativeLayout
@@ -83,24 +109,7 @@
             android:background="@android:color/transparent"
             android:gravity="bottom">
 
-            <TextView
-                android:id="@+id/viewpager_marquee"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="2dp"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:maxLines="1"
-                android:scrollHorizontally="true"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="17dp" />
+
 
 
             <LinearLayout

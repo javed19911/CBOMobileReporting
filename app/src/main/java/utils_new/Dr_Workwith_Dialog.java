@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +19,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+
 import java.util.ArrayList;
+
 import utils.adapterutils.Dcr_Workwith_Adapter;
 import utils.adapterutils.Dcr_Workwith_Model;
 
@@ -64,7 +68,7 @@ public class Dr_Workwith_Dialog {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.doctor_workwith, null, false);
 
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.setContentView(view);
         final Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -190,7 +194,7 @@ public class Dr_Workwith_Dialog {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
             String[] selected_list={};
-            adapter=new Dcr_Workwith_Adapter((Activity) context,result,selected_list,false);
+            adapter=new Dcr_Workwith_Adapter((AppCompatActivity) context,result,selected_list,false);
             mylist.setAdapter(adapter);
             pd.dismiss();
 

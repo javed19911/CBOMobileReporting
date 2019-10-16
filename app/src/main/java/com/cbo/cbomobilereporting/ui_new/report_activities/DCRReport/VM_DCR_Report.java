@@ -1,12 +1,15 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport;
 
-import android.app.Activity;
-
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.F_TeamMonthDivision;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,11 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import services.MyAPIService;
-
-import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.uenics.javed.CBOLibrary.CBOServices;
-import com.uenics.javed.CBOLibrary.ResponseBuilder;
-
 import utils_new.AppAlert;
 
 
@@ -51,7 +49,7 @@ public class VM_DCR_Report extends ViewModel {
         this.lastPaId = lastPaId;
         this.monthId = monthId;
         if (mDCR_reports == null){
-            showReportsToUI((Activity) context,listener);
+            showReportsToUI((AppCompatActivity) context,listener);
         }else{
             listener.onSuccess(mDCR_reports);
         }
@@ -66,7 +64,7 @@ public class VM_DCR_Report extends ViewModel {
                 .setDP_MissedTypeReq(false);
     }
 
-    private void showReportsToUI(final Activity context, OnResultListener listener){
+    private void showReportsToUI(final AppCompatActivity context, OnResultListener listener){
 
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());

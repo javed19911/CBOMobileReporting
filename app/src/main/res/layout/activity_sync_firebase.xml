@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/close"
         android:background="@drawable/button_gradient_corner"
-        android:src="@drawable/close_btn"/>
+        app:srcCompat="@drawable/close_btn"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:padding="5dp"
                 android:layout_below="@+id/subtitle"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_sync_downloadicon"
+                app:srcCompat="@drawable/ic_sync_downloadicon"
                 android:visibility="visible" />
 
             <ProgressBar

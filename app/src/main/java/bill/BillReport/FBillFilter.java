@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import bill.CompanySelecter.ICompany;
+import bill.openingStock.OpeningStockActivity;
 import saleOrder.MyOrderAPIService;
 import utils_new.AppAlert;
 import utils_new.CustomDatePicker;
@@ -42,6 +43,7 @@ public class FBillFilter extends Fragment implements ICompany {
     Date TDateSelected, FDateSelected;
 
     private  ArrayList <mCompany> Companies= new ArrayList<>();
+    private ArrayList<mPay> payModes = new ArrayList<>();
 
 
 
@@ -145,7 +147,7 @@ public class FBillFilter extends Fragment implements ICompany {
         request.put("iPA_ID", MyCustumApplication.getInstance().getUser().getID());
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(0);
-
+        tables.add(1);
 
         new MyOrderAPIService(context)
                 .execute(
@@ -180,16 +182,23 @@ public class FBillFilter extends Fragment implements ICompany {
         JSONArray jsonArray = null;
         jsonArray = new JSONArray(table0);
         Companies.clear();
-        //  Partylist.add(new DropDownModel("--Select--", "0"));
         for (int i = 0; i < jsonArray.length(); i++) {
 
             JSONObject c = jsonArray.getJSONObject(i);
             Companies.add(new mCompany(c.getString("COMPANY_NAME"), c.getString("COMPANY_ID")));
-            if(i==jsonArray.length()-1){
 
-                //view.onPartyListUpdated();
-            }
         }
+
+
+        String table1 = bundle.getString("Tables1");
+        JSONArray jsonArray1  = new JSONArray(table1);
+        payModes.clear();
+        for (int i = 0; i < jsonArray1.length(); i++) {
+            JSONObject c = jsonArray1.getJSONObject(i);
+            payModes.add(new mPay(c.getInt("ID"), c.getString("PAYMENT_MODE")));
+
+        }
+
 
 
 
@@ -213,13 +222,24 @@ public class FBillFilter extends Fragment implements ICompany {
         return Companies;
     }
 
+    public ArrayList<mPay> getPayModes(){
+        return payModes;
+    }
+
     @Override
     public void onPartyListUpdated(ArrayList<mCompany> Companies) {
-        this.Companies.addAll(Companies);
+        //this.Companies.addAll(Companies);
         selectedCompany = Companies.get(Companies.size()-1);
         name.setText(selectedCompany.getName());
 
-        ((BillActivity) getActivity()).getBills();
+        if (getActivity().getClass() == BillActivity.class) {
+            ((BillActivity) getActivity()).getBills();
+        }else if(getActivity().getClass() == DashboardBill.class) {
+            ((DashboardBill) getActivity()).getBills();
+        }else if(getActivity().getClass() == OpeningStockActivity.class) {
+            ((OpeningStockActivity) getActivity()).getBills();
+        }
+
 
     }
 

@@ -1,37 +1,28 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 
 import android.app.Activity;
-
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Environment;
-
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.Controls;
-import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.uenics.javed.CBOLibrary.CboProgressDialog;
 
@@ -40,11 +31,7 @@ import java.util.ArrayList;
 
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import utils_new.AppAlert;
-import utils_new.Custom_Variables_And_Method;
 import utils_new.cboUtils.CBOOtherExpense;
-import utils_new.cboUtils.CBOPOB;
-import utils_new.cboUtils.CBOStation;
-import utils_new.cboUtils.DASpinner;
 import utils_new.interfaces.RecycleViewOnItemClickListener;
 import utils_new.up_down_ftp;
 

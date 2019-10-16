@@ -3,13 +3,12 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.uenics.javed.CBOLibrary.CBOServices;
@@ -24,7 +23,6 @@ import java.util.HashMap;
 
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import saleOrder.ViewModel.CBOViewModel;
-import services.CboServices;
 import services.MyAPIService;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -39,7 +37,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
     private Custom_Variables_And_Method customVariablesAndMethod;
 
     @Override
-    public void onUpdateView(Activity context, IExpense view) {
+    public void onUpdateView(AppCompatActivity context, IExpense view) {
         cbohelp = new CBO_DB_Helper(context);
         othExpenseDB = new OthExpenseDB(context);
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
@@ -169,7 +167,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
         }
     }
 
-    private void FinalSubmit(Activity context) {
+    private void FinalSubmit(AppCompatActivity context) {
         //Start of call to service
 
         String ACTUALFARE = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("ACTUALFARE","");
@@ -223,7 +221,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
 
     }
 
-    private void parserFinalSubmit(Bundle result,Activity context) throws JSONException{
+    private void parserFinalSubmit(Bundle result, AppCompatActivity context) throws JSONException{
                 customVariablesAndMethod.SetLastCallLocation(context);
 
                 String table0 = result.getString("Tables0");
@@ -254,13 +252,13 @@ public class vmExpense  extends CBOViewModel<IExpense> {
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Final_submit", "Y");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "work_type_Selected", "w");
 
-                MyCustumApplication.getInstance().Logout((Activity) context);
+                MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
 
 
     }
 
 
-    private void getExpDLL(Activity context){
+    private void getExpDLL(AppCompatActivity context){
         //Start of call to service
 
         HashMap<String,String> request=new HashMap<>();
@@ -480,7 +478,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
 
 
 
-    public void deleteExpense(Activity context,mOthExpense othExpense){
+    public void deleteExpense(AppCompatActivity context, mOthExpense othExpense){
         //Start of call to service
 
         HashMap<String,String> request=new HashMap<>();
@@ -561,7 +559,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
     }
 
 
-    public void expense_commit(Activity context){
+    public void expense_commit(AppCompatActivity context){
 
         MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE( "da_val",""+getExpense().getDA_Amt());
 
@@ -652,7 +650,7 @@ public class vmExpense  extends CBOViewModel<IExpense> {
     }
 
 
-    public void expense_commit_attachment(Activity context){
+    public void expense_commit_attachment(AppCompatActivity context){
         //Start of call to service
 
         mOthExpense othExpense = new mOthExpense()

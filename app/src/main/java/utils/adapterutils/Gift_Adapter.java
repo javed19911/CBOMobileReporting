@@ -1,6 +1,5 @@
 package utils.adapterutils;
 
-import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,6 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 
 import java.util.List;
@@ -20,9 +21,9 @@ import java.util.List;
 public class Gift_Adapter extends ArrayAdapter<GiftModel> {
 
     private final List<GiftModel> list;
-    private final Activity context;
+    private final AppCompatActivity context;
 
-    public Gift_Adapter(Activity context, List<GiftModel> list) {
+    public Gift_Adapter(AppCompatActivity context, List<GiftModel> list) {
         super(context, R.layout.stk_sample_row, list);
         this.context = context;
         this.list = list;

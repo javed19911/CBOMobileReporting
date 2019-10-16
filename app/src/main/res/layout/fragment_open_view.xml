@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#05009900"
+    android:id="@+id/mainLayout"
+    android:orientation="vertical">
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filterTxt"
+        android:layout_weight="1"
+        android:gravity="center|left"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:textColor="@android:color/black"
+        android:hint="Search Items/Products"
+        android:textSize="15sp"
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:textColorHint="@android:color/darker_gray"
+        android:background="@drawable/input_txt"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:id="@+id/detail_layout"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Batch"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/batch"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="Batch"
+                    android:gravity="right"
+                    android:background="@drawable/input_txt"
+                    android:padding="5dp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:textColor="@android:color/black"
+                    android:text="Stock"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/stock"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:padding="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Qty."/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:text=":"/>
+
+
+                <EditText
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/Qty"
+                    android:inputType="number"
+                    android:padding="5dp"
+                    android:gravity="right"
+                    android:hint="Qty."
+                    android:selectAllOnFocus="true"
+                    android:minWidth="30dp"
+                    android:background="@drawable/input_txt"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:textColor="@android:color/black"
+                    android:text="Pack"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/pack"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:padding="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/FreeQtyLayout"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Free Qty"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:text=":"/>
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/FreeQty"
+                    android:inputType="number"
+                    android:padding="5dp"
+                    android:gravity="right"
+                    android:hint="Free Qty."
+                    android:selectAllOnFocus="true"
+                    android:minWidth="40dp"
+                    android:background="@drawable/input_txt"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="right">
+
+                                <Button
+                                    android:layout_width="90dp"
+                                    android:layout_height="35dp"
+                                    android:id="@+id/add"
+                                    android:textColor="@color/white"
+                                    android:layout_gravity="bottom"
+                                    android:text="Add"
+                                    android:layout_marginLeft="5dp"
+                                    android:background="@drawable/button_back_light_2016"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Rate"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/rate"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:gravity="right"
+                    android:background="@drawable/input_txt"
+                    android:padding="5dp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:textColor="@android:color/black"
+                    android:text="MRP"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/mrp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text=""
+                    android:padding="5dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Disc.%"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:text=":"/>
+
+
+                <EditText
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Discount1"
+                    android:inputType="numberDecimal"
+                    android:padding="5dp"
+                    android:gravity="right"
+                    android:selectAllOnFocus="true"
+                    android:minWidth="40dp"
+                    android:background="@drawable/input_txt"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:textColor="@android:color/black"
+                    android:text="Disc. Amt."/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/discAmt"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:padding="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:visibility="invisible"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Net Amount"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/amount"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:gravity="right"
+                    android:text="dddd"
+                    android:enabled="false"
+                    android:background="@drawable/input_txt"
+                    android:padding="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/schemeLayout"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+
+                <TextView
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Scheme"/>
+
+
+                <TextView
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text=":"/>
+
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:id="@+id/scheme"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text=""
+                    android:padding="5dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="5dp"
+        android:background="?colorPrimary"/>
+
+
+</LinearLayout>

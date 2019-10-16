@@ -1,6 +1,5 @@
 package utils_new;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,10 +12,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.SystemAlertActivity;
+import androidx.appcompat.app.AlertDialog;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.cbo.cbomobilereporting.R;
+import com.cbo.cbomobilereporting.ui_new.SystemAlertActivity;
 
 
 /**

@@ -1,12 +1,13 @@
 package utils.adapterutils;
 
-import android.app.Activity;
-import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 
@@ -17,12 +18,12 @@ import utils_new.Custom_Variables_And_Method;
 
 public class TPList_Adapter extends ArrayAdapter<SpinnerModel> {
 		private final ArrayList<SpinnerModel> list;
-		private final Activity context;
+		private final AppCompatActivity context;
 		Custom_Variables_And_Method customVariablesAndMethod;
 
 
 
-		public TPList_Adapter(Activity context, ArrayList<SpinnerModel> list)
+		public TPList_Adapter(AppCompatActivity context, ArrayList<SpinnerModel> list)
 		{
 			super(context, R.layout.dcr_workwith_row,list);
 			this.context = context;

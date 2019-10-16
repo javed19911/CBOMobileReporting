@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +15,7 @@
         android:id="@+id/close"
         android:elevation="6dp"
         android:background="#1f527e"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"/>
     <!--  this list contains products -->
 
     <LinearLayout
@@ -92,7 +93,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/calendar"/>
+                        app:srcCompat="@drawable/calendar"/>
                 </LinearLayout>
 
 
@@ -134,7 +135,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/calendar"/>
+                        app:srcCompat="@drawable/calendar"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -287,7 +288,7 @@
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center_vertical"
-                                        android:src="@drawable/msg_1"/>
+                                        app:srcCompat="@drawable/msg_1"/>
                                 </LinearLayout>
 
                             </RelativeLayout>
@@ -357,7 +358,7 @@
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:layout_gravity="center_vertical"
-                                    android:src="@drawable/msg_1"/>
+                                    app:srcCompat="@drawable/msg_1"/>
                             </LinearLayout>
                         </RelativeLayout>
 

@@ -1,12 +1,8 @@
 package saleOrder.Fragments;
 
 import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -40,7 +42,7 @@ import utils_new.AppAlert;
 public class FNewOrder  extends Fragment implements iFNewOrder {
 
     TextView filterTxt;
-    Activity context;
+    AppCompatActivity context;
     private static final int NEW_ORDER_ITEM_FILTER = 10;
     private vmItem viewModel;
     EditText QtyTxt,Manualdiscount,managerDiscount,remarkTxt,FreeQty;
@@ -82,7 +84,7 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated (view, savedInstanceState);
 
-        context = getActivity();
+        context = (AppCompatActivity) getActivity();
 
         filterTxt = view.findViewById(R.id.filterTxt);
         QtyTxt = view.findViewById(R.id.Qty);
@@ -95,6 +97,7 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
         freeQtyLayout = view.findViewById(R.id.FreeQtyLayout);
         FreeQty = view.findViewById(R.id.FreeQty);
         schemeTxt = view.findViewById(R.id.scheme);
+
 
         RateTxt = view.findViewById(R.id.rate);
         AmtTxt = view.findViewById(R.id.amount);

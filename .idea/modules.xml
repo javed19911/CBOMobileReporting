@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/CBOLibrary/CBOLibrary.iml" filepath="$PROJECT_DIR$/CBOLibrary/CBOLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/CBOMobileReporting.iml" filepath="$PROJECT_DIR$/CBOMobileReporting.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/attachment/attachment.iml" filepath="$PROJECT_DIR$/attachment/attachment.iml" />
       <module fileurl="file://$PROJECT_DIR$/cbo_utils/cbo_utils.iml" filepath="$PROJECT_DIR$/cbo_utils/cbo_utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/cboorder/cboorder.iml" filepath="$PROJECT_DIR$/cboorder/cboorder.iml" />
       <module fileurl="file://$PROJECT_DIR$/dbhelper/dbhelper.iml" filepath="$PROJECT_DIR$/dbhelper/dbhelper.iml" />

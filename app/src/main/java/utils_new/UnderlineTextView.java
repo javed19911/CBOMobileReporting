@@ -6,13 +6,14 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * Created by pc24 on 10/12/2016.
  */
 
-public class UnderlineTextView extends TextView {
+public class UnderlineTextView extends AppCompatTextView {
     private boolean m_modifyingText = false;
 
     public UnderlineTextView(Context context)

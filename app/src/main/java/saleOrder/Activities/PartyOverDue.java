@@ -1,20 +1,17 @@
 package saleOrder.Activities;
 
-import android.app.Activity;
-
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -33,7 +30,7 @@ import saleOrder.Views.iPartyOverDue;
 public class PartyOverDue extends CustomActivity implements iPartyOverDue {
 
     vmPartyOverDue viewModel;
-    Activity context;
+    AppCompatActivity context;
 
     RecyclerView itemlist;
     mParty party;

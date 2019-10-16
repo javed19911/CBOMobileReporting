@@ -9,19 +9,22 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import com.cbo.cbomobilereporting.R;
 
@@ -42,6 +45,7 @@ public class AttachImage extends CustomActivity {
 
     public enum ChooseFrom{
         camera,
+        frontCamera,
         galary,
         all;
     }
@@ -124,6 +128,7 @@ public class AttachImage extends CustomActivity {
             cameraUrl = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         }
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUrl);
+
         cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
 
@@ -133,6 +138,11 @@ public class AttachImage extends CustomActivity {
 
         final Intent chooserIntent;
         if (choosefrom == ChooseFrom.camera){
+            chooserIntent = Intent.createChooser(cameraIntent, context.getString(R.string.choose_photo_title));
+        }else if (choosefrom == ChooseFrom.frontCamera){
+            cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+            cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+            cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
             chooserIntent = Intent.createChooser(cameraIntent, context.getString(R.string.choose_photo_title));
         }else if (choosefrom == ChooseFrom.galary){
             chooserIntent = Intent.createChooser(galleryIntent, context.getString(R.string.choose_photo_title));
@@ -148,12 +158,29 @@ public class AttachImage extends CustomActivity {
         startActivityForResult(chooserIntent, CHOOSE_PHOTO_INTENT);
     }
 
+    private int findFrontFacingCamera() {
+        int cameraId = -1;
+        // Search for the front facing camera
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                Log.d("AttachImage", "Camera found");
+                cameraId = i;
+                break;
+            }
+        }
+        return cameraId;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
+
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case ChoosePhoto.CHOOSE_PHOTO_INTENT :
+                case ChoosePhoto.CHOOSE_PHOTO_INTENT:
                     File dir = new File(Environment.getExternalStorageDirectory(), "CBO");
                     if (!dir.exists()) {
                         if (!dir.mkdirs()) {
@@ -161,20 +188,22 @@ public class AttachImage extends CustomActivity {
                             //return true;
                         }
                     }
-                      if (data != null && data.getData() != null) {
+                    if (data != null && data.getData() != null) {
                         handleGalleryResult(data);
                     } else {
                         handleCameraResult(cameraUrl);
                     }
 
                     break;
-                case SELECTED_IMG_CROP :
+                case SELECTED_IMG_CROP:
                     previewCapturedImage();
                     break;
 
                 default:
-
+                    super.onActivityResult(requestCode, resultCode, data);
             }
+        }else{
+            onBackPressed();
         }
     }
 
@@ -299,7 +328,7 @@ public class AttachImage extends CustomActivity {
                 //Utils.showToast(mContext, mContext.getString(R.string.error_cant_select_cropping_app));
                 selectedImageUri = sourceImage;
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, sourceImage);
-                ((Activity) context).startActivityForResult(intent, SELECTED_IMG_CROP);
+                ((AppCompatActivity) context).startActivityForResult(intent, SELECTED_IMG_CROP);
                 return;
             } else {
                 intent.setDataAndType(sourceImage, "image/*");
@@ -316,11 +345,11 @@ public class AttachImage extends CustomActivity {
                     Intent i = new Intent(intent);
                     ResolveInfo res = list.get(0);
                     i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                    ((Activity) context).startActivityForResult(intent, SELECTED_IMG_CROP);
+                    ((AppCompatActivity) context).startActivityForResult(intent, SELECTED_IMG_CROP);
                 } else {
                     Intent i = new Intent(intent);
                     i.putExtra(Intent.EXTRA_INITIAL_INTENTS, list.toArray(new Parcelable[list.size()]));
-                    ((Activity) context).startActivityForResult(intent, SELECTED_IMG_CROP);
+                    ((AppCompatActivity) context).startActivityForResult(intent, SELECTED_IMG_CROP);
                 }
             }
         }catch (Exception e){

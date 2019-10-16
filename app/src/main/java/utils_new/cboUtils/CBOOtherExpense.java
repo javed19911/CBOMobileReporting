@@ -1,8 +1,6 @@
 package utils_new.cboUtils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,7 +28,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
 
 
     Fragment fragment;
-    Activity activity;
+    AppCompatActivity activity;
     eExpense exp_type = eExpense.None;
 
     private Double DefaultAmount = 0d;
@@ -75,7 +74,7 @@ public class CBOOtherExpense extends MultiSelectDetailView<mOthExpense, CBOOther
         this.fragment = fragment;
         setExp_type(exp_type);
     }
-    public void setContext(Activity activity, eExpense exp_type){
+    public void setContext(AppCompatActivity activity, eExpense exp_type){
         this.activity = activity;
         setExp_type(exp_type);
     }

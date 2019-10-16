@@ -1,20 +1,21 @@
 package utils_new.cboUtils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.cbo.cbomobilereporting.R;
@@ -117,12 +118,12 @@ public class CBOImageView extends MultiSelectDetailView<String,CBOImageView.MyVi
         this.maxAttachment = maxAttachment;
     }
 
-    public void addAttachment(Activity context) {
+    public void addAttachment(AppCompatActivity context) {
         addAttachment(context,AttachImage.ChooseFrom.all);
     }
 
 
-    public void addAttachment(Activity context, AttachImage.ChooseFrom chooseFrom) {
+    public void addAttachment(AppCompatActivity context, AttachImage.ChooseFrom chooseFrom) {
         String filenameTemp = Custom_Variables_And_Method.PA_ID+"_"+ Custom_Variables_And_Method.DCR_ID+"_attach_"+Custom_Variables_And_Method.getInstance().get_currentTimeStamp()+".jpg";
         //choosePhoto = new ChoosePhoto(context, REQUEST_CAMERA, ChoosePhoto.ChooseFrom.all);
         Intent intent = new Intent(context, AttachImage.class);
@@ -133,7 +134,7 @@ public class CBOImageView extends MultiSelectDetailView<String,CBOImageView.MyVi
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == AppCompatActivity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CAMERA :
                     File OutputFile = (File) data.getSerializableExtra("Output");

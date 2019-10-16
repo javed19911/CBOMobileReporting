@@ -24,7 +24,7 @@
                 android:id="@+id/img_thumbnail"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/no_image"
+                card_view:srcCompat="@drawable/no_image"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY" />
 

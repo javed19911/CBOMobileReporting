@@ -271,7 +271,7 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
                     customVariablesAndMethod.msgBox(context,"Please Enter the Expense Amt....");
                 }  else if (viewModel.getOthExpense().getRemark().trim().isEmpty()) {
                     customVariablesAndMethod.msgBox(context,"Please Enter the Remark....");
-                } else if (viewModel.getOthExpense().getExpHead().getDA_ACTION() == 1
+                } /*else if (viewModel.getOthExpense().getExpHead().getDA_ACTION() == 1
                         && viewModel.getExpense().getACTUALDA_FAREYN().equalsIgnoreCase("Y")
                         && viewModel.getExpense().getDA_Amt() != 0) {
 
@@ -282,7 +282,7 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
                                     onBackPressed();
                                 }
                             });
-                }else if (viewModel.getOthExpense().getExpHead().getATTACHYN() != 0
+                }*/else if (viewModel.getOthExpense().getExpHead().getATTACHYN() != 0
                         && viewModel.getNewAttachment().equalsIgnoreCase("")
                         && viewModel.getOthExpense().getAttachment().equalsIgnoreCase("")) {
                     customVariablesAndMethod.msgBox(context,"Please add an attachment....");
@@ -446,18 +446,20 @@ public class OtherExpense extends CustomActivity implements IOtherExpense,up_dow
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
+
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case CBOImageView.REQUEST_CAMERA :
-                    cboImageView.onActivityResult(requestCode,resultCode,data);
+                case CBOImageView.REQUEST_CAMERA:
+                    cboImageView.onActivityResult(requestCode, resultCode, data);
                     break;
-                case REQUEST_CAMERA :
+                case REQUEST_CAMERA:
                     File OutputFile = (File) data.getSerializableExtra("Output");
                     viewModel.setNewAttachment(OutputFile.getName());
                     previewCapturedImage(OutputFile.getPath());
                     break;
 
                 default:
+                    super.onActivityResult(requestCode, resultCode, data);
 
             }
         }

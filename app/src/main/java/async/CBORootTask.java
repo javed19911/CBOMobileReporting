@@ -1,15 +1,18 @@
 package async;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
 import services.ServiceHandler;
 import services.TaskListener;
 import utils.adapterutils.RootModel;
@@ -24,7 +27,7 @@ public class CBORootTask extends AsyncTask<String,String,String>{
 
     CBO_DB_Helper cbohelp;
 
-    public CBORootTask(Activity context){
+    public CBORootTask(AppCompatActivity context){
         mContext = context;
     }
 

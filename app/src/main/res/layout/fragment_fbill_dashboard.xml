@@ -1,0 +1,125 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="bill.Dashboard.FBillDashboard">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/header"
+        android:visibility="gone"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@color/headerBg"
+        android:orientation="horizontal">
+
+
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Particulars"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:textStyle="bold"
+            android:paddingLeft="3dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="Total Sale"
+            android:gravity="right"
+            android:paddingRight="3dp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.6"
+            android:textSize="12dp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="Cash Sale"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:paddingRight="3dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.5"
+            android:textSize="12dp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="Other Sale"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:paddingRight="3dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.5"
+            android:textSize="12dp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="Bills"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:paddingRight="3dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.3"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefressLayoutRecycler"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_height="wrap_content">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dashboard_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>

@@ -2,6 +2,8 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.DCRCall;
 
 import android.app.Activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
@@ -12,7 +14,7 @@ public class vmChemRcCall extends CBOViewModel<IChemRcCall> {
    private mChemistRc chemist;
     CBO_DB_Helper cbohelp;
     @Override
-    public void onUpdateView(Activity context, IChemRcCall view) {
+    public void onUpdateView(AppCompatActivity context, IChemRcCall view) {
         if(view!= null) {
             view.getRefrenceByid();
             view.setActivityTitle(view.getActivityTitle());

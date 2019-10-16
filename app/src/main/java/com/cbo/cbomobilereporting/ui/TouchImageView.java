@@ -10,13 +10,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 
-public class TouchImageView extends ImageView {
+import androidx.appcompat.widget.AppCompatImageView;
+
+public class TouchImageView extends AppCompatImageView {
 
 	Matrix matrix;
 

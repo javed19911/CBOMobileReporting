@@ -1,13 +1,7 @@
 package utils.adapterutils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +16,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 
 import java.util.Arrays;
@@ -33,11 +30,11 @@ import utils_new.Custom_Variables_And_Method;
 public class RCPA_Adapter extends ArrayAdapter<GiftModel> {
 
     private final List<GiftModel> list;
-    private final Activity context;
+    private final AppCompatActivity context;
     Custom_Variables_And_Method customVariablesAndMethod;
     private String[] product,qty,remark;
 
-    public RCPA_Adapter(Activity context, List<GiftModel> list) {
+    public RCPA_Adapter(AppCompatActivity context, List<GiftModel> list) {
         super(context, R.layout.stk_sample_row, list);
         this.context = context;
         this.list = list;

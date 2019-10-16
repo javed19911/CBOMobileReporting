@@ -1,26 +1,22 @@
 package com.cbo.cbomobilereporting.ui;
 
 
-
-import java.util.ArrayList;
-
-
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager;
-
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.cbo.cbomobilereporting.R;
+
+import java.util.ArrayList;
 
 import utils.Utils;
 import utils.adapterutils.FullScreenImageAdapter;
 import utils.adapterutils.ImageLoader;
 
-public class FullScreenViewActivity extends Activity{
+public class FullScreenViewActivity extends AppCompatActivity {
 
 	private Utils utils;
 	private FullScreenImageAdapter adapter;

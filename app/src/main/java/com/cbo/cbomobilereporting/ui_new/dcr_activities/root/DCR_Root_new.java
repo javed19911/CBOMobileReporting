@@ -1,7 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.root;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,11 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,12 +27,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mDayPlan;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.Expense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
@@ -43,6 +44,7 @@ import com.cbo.cbomobilereporting.ui_new.personal_activities.Add_Delete_Leave;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.CboProgressDialog;
 import com.uenics.javed.CBOLibrary.Response;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,9 +58,6 @@ import services.CboServices;
 import services.MyAPIService;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
-import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.uenics.javed.CBOLibrary.ResponseBuilder;
-
 import utils_new.AppAlert;
 import utils_new.Area_Dialog;
 import utils_new.CustomTextToSpeech;
@@ -268,7 +267,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
         attachment.setListener(new CBOImageView.iCBOImageView() {
             @Override
             public void OnAddClicked() {
-                attachment.addAttachment((Activity) context, AttachImage.ChooseFrom.camera);
+                attachment.addAttachment((AppCompatActivity) context, AttachImage.ChooseFrom.frontCamera);
             }
 
             @Override

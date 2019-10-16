@@ -1,7 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities
 
-import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,8 +11,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.location.Location
 import android.os.*
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -34,7 +32,6 @@ import utils.adapterutils.SpinAdapter
 import utils.adapterutils.SpinAdapter_new
 import utils.adapterutils.SpinnerModel
 import com.cbo.cbomobilereporting.MyCustumApplication
-import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall
 import com.uenics.javed.CBOLibrary.CBOServices
 import com.uenics.javed.CBOLibrary.ResponseBuilder
 import org.json.JSONArray
@@ -1499,7 +1496,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
 
         when (requestCode) {
             0 ->{
-                if (resultCode == Activity.RESULT_OK){
+                if (resultCode == AppCompatActivity.RESULT_OK){
                     val b1 = data!!.extras
                     name = b1!!.getString("val")//id
                     name2 = b1.getString("val2")//score or pob
@@ -1521,7 +1518,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 }
             }
             1 -> {
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == AppCompatActivity.RESULT_OK) {
                     val b1 = data!!.extras
                     name3 = b1!!.getString("giftid")
                     name4 = b1.getString("giftqan")
@@ -1543,7 +1540,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 work_with_id = b1.getString("workwith_id")
                 workwithdr.setText("" + work_with_name)
             }
-            Report_Registration.REQUEST_CAMERA -> if (resultCode == Activity.RESULT_OK) {
+            Report_Registration.REQUEST_CAMERA -> if (resultCode == AppCompatActivity.RESULT_OK) {
 
 
                 val file1 = File(Environment.getExternalStorageDirectory().toString() + File.separator + "CBO" + File.separator + alertdFragment.filename)
@@ -1572,7 +1569,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                     }
                 } else if (file1.exists() && Custom_Variables_And_Method.internetConneted(context)) {
                     val currentBestLocation = customVariablesAndMethod.getObject(context, "currentBestLocation", Location::class.java)
-                    SendAttachment(context as Activity).execute(Custom_Variables_And_Method.COMPANY_CODE + ": Out of Range Error report", context.resources.getString(R.string.app_name) + "\n Company Code :" + Custom_Variables_And_Method.COMPANY_CODE + "\n DCR ID :" + Custom_Variables_And_Method.DCR_ID + "\n PA ID : " + Custom_Variables_And_Method.PA_ID + "\n App version : " + Custom_Variables_And_Method.VERSION + "\n Message : " + alertdFragment.Alertmassege +
+                    SendAttachment(context as AppCompatActivity).execute(Custom_Variables_And_Method.COMPANY_CODE + ": Out of Range Error report", context.resources.getString(R.string.app_name) + "\n Company Code :" + Custom_Variables_And_Method.COMPANY_CODE + "\n DCR ID :" + Custom_Variables_And_Method.DCR_ID + "\n PA ID : " + Custom_Variables_And_Method.PA_ID + "\n App version : " + Custom_Variables_And_Method.VERSION + "\n Message : " + alertdFragment.Alertmassege +
                             "\nLocation-timestamp : " + currentBestLocation!!.time + "\nLocation-Lat : " + currentBestLocation.latitude +
                             "\nLocation-long : " + currentBestLocation.longitude + "\n time : " + customVariablesAndMethod.currentTime(context) + "\nlatlong : " + customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "shareLatLong", Custom_Variables_And_Method.GLOBAL_LATLON), alertdFragment.compressImage(file1))
 
@@ -1584,7 +1581,7 @@ class DairyCall : AppCompatActivity() , ExpandableListAdapter.Summary_interface{
                 /**/
 
 
-            } else if (resultCode == Activity.RESULT_CANCELED) {
+            } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
                 // user cancelled Image capture
                 Toast.makeText(context,
                         "image capture cancelled ", Toast.LENGTH_SHORT)

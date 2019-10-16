@@ -1,19 +1,5 @@
 package com.cbo.cbomobilereporting.ui_new.utilities_activities;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-
-import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.flurry.android.FlurryAgent;
-
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -24,8 +10,6 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -36,9 +20,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.cbo.cbomobilereporting.R;
+import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.flurry.android.FlurryAgent;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import services.ServiceHandler;
 import utils_new.Custom_Variables_And_Method;

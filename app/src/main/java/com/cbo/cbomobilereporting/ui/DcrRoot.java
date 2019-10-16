@@ -1,10 +1,5 @@
 package com.cbo.cbomobilereporting.ui;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +7,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,13 +14,19 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.flurry.android.FlurryAgent;
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import async.CBORootTask;
 import services.ServiceHandler;
@@ -245,7 +244,7 @@ public class DcrRoot extends AppCompatActivity{
 		}
 	}
 
-    public void setRootDataToUI( final Activity context){
+    public void setRootDataToUI( final AppCompatActivity context){
          final CBORootTask rootTask=new CBORootTask(context);
             DcrRoot.this.getMrId();
             DcrRoot.this.setMrids();

@@ -1,19 +1,20 @@
 package saleOrder.Activities;
 
 import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ import saleOrder.ViewModel.vmOrder;
 public class MyOrder extends AppCompatActivity implements iOrder {
 
     vmOrder viewModel;
-    Activity context;
+    AppCompatActivity context;
     mParty party;
 
     private TabLayout tabLayout;

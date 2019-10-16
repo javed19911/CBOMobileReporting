@@ -1,7 +1,6 @@
 package utils_new;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -26,6 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.Response;
@@ -38,10 +40,12 @@ import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import interfaces.Ipob;
 import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
-import utils.adapterutils.MyAdapter;;
+import utils.adapterutils.MyAdapter;
 import utils.model.DropDownModel;
 import utils.networkUtil.NetworkUtil;
 import utils_new.CustomDialog.Spinner_Dialog;
+
+;
 
 public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
 
@@ -93,7 +97,7 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.stk_sample, null, false);
 
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.setContentView(view);
         final Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -142,7 +146,7 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
         getModelLocal();
 
         if (main_item_list.size()>0) {
-            adapter = new MyAdapter((Activity) context, display_item_list,this);
+            adapter = new MyAdapter((AppCompatActivity) context, display_item_list,this);
 
 
 
@@ -442,14 +446,14 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
 
             }
         }
-        adapter = new MyAdapter((Activity) context, display_item_list,this::onItemSelectedListChanged);
+        adapter = new MyAdapter((AppCompatActivity) context, display_item_list,this::onItemSelectedListChanged);
         mylist.setAdapter(adapter);
         onItemSelectedListChanged();
     }
     @Override
     public void onDownloadComplete() {
         getModelLocal();
-        adapter = new MyAdapter((Activity) context, display_item_list,this::onItemSelectedListChanged);
+        adapter = new MyAdapter((AppCompatActivity) context, display_item_list,this::onItemSelectedListChanged);
         mylist.setAdapter(adapter);
         onItemSelectedListChanged();
     }

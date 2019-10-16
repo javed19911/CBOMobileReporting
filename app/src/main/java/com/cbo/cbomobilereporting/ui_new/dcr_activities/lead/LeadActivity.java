@@ -1,19 +1,19 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.lead;
 
-import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.R;
 
@@ -30,7 +30,7 @@ public class LeadActivity extends AppCompatActivity implements iLead{
     private vmLead viewModel;
     TextView itemincart;
     LinearLayout done;
-    Activity context;
+    AppCompatActivity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

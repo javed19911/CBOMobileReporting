@@ -1,20 +1,22 @@
 package saleOrder.Fragments;
 
 import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -25,12 +27,12 @@ import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
 import saleOrder.Activities.CartAttachment;
-import saleOrder.Adaptor.CartAdapter;
 import saleOrder.Activities.ItemFilterActivity;
+import saleOrder.Adaptor.CartAdapter;
 import saleOrder.Enum.eItem;
+import saleOrder.ViewModel.vmFCart;
 import saleOrder.Views.iCart;
 import saleOrder.Views.iFCart;
-import saleOrder.ViewModel.vmFCart;
 import utils_new.AppAlert;
 
 public class CartFragment extends Fragment implements iFCart {
@@ -39,7 +41,7 @@ public class CartFragment extends Fragment implements iFCart {
     private static final int ITEM_FILTER = 0;
     private static final int ATTACHMENT = 10;
     TextView cartSubTotal, cartDiscount, cartNetAmount, cartTotal_out, saveOrder, itemFilter;
-    Activity context;
+    AppCompatActivity context;
     private RecyclerView itemlist_filter;
     private CartAdapter cartAdapter;
     private vmFCart viewModel;
@@ -98,7 +100,7 @@ public class CartFragment extends Fragment implements iFCart {
         itemFilter = view.findViewById(R.id.itemFilter);
         saveOrder = view.findViewById(R.id.saveOrder);
 
-        context = getActivity ();
+        context = (AppCompatActivity) getActivity ();
 
         if(getArguments().getSerializable("itemType") != null){
             itemType =(eItem) getArguments().getSerializable("itemType");

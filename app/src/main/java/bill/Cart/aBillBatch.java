@@ -11,9 +11,12 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import bill.NewOrder.mBillBatch;
+import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
+import utils_new.CustomDatePicker;
 
 
 public class aBillBatch extends ArrayAdapter<String> {
@@ -38,34 +41,37 @@ public class aBillBatch extends ArrayAdapter<String> {
         return getCustomView(position, convertView, parent);
     }
 
+    @Override
+    public int getCount() {
+        return super.getCount();
+    }
+
     public View getCustomView(int position, View convertView, ViewGroup parent) {
 
-        View row = inflater.inflate(R.layout.spin_row, parent, false);
+        View row = inflater.inflate(R.layout.bill_row, parent, false);
         mBillBatch tempValues;
-        tempValues = data.get(position);
 
-        TextView label =  row.findViewById(R.id.spin_name);
-        TextView sub = row.findViewById(R.id.spin_id);
-        TextView distance = row.findViewById(R.id.distance);
-        ImageView loc_icon =  row.findViewById(R.id.loc_icon);
-        LinearLayout distanceLayout = row.findViewById(R.id.distanceLayout);
 
-        distance.setVisibility(View.GONE);
-        loc_icon.setVisibility(View.GONE);
-        distanceLayout.setVisibility(View.GONE);
+        TextView batch_no =  row.findViewById(R.id.batch_no);
+        TextView pack = row.findViewById(R.id.pack);
+        TextView exp = row.findViewById(R.id.exp);
+        TextView rate =  row.findViewById(R.id.rate);
+        TextView stock =  row.findViewById(R.id.stock);
+        TextView mfg =  row.findViewById(R.id.mfg);
 
-        {
-            // Set values for spinner each row
+            tempValues = data.get(position);
+            batch_no.setText(tempValues.getBATCH_NO());
+            pack.setText(tempValues.getPACK());
+
             try {
-                label.setText(tempValues.getBATCH_NO());
-                //sub.setText(tempValues.getId());
-                //label.setTextColor( Color.parseColor( tempValues.getColour()));
-            } catch (Exception e) {
+                exp.setText(CustomDatePicker.formatDate(CustomDatePicker.getDate(tempValues.getEXP_DATE(),CustomDatePicker.ShowFormatOld),"MMM-yy") );
+            } catch (ParseException e) {
+                exp.setText(tempValues.getEXP_DATE());
                 e.printStackTrace();
             }
-
-
-        }
+            mfg.setText(String.format("%.2f", tempValues.getMRP_RATE()));
+            rate.setText(String.format("%.2f", tempValues.getSALE_RATE()));
+            stock.setText(String.format("%.0f", tempValues.getSTOCK()));
 
         return row;
     }

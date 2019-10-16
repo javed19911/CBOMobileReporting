@@ -1,15 +1,15 @@
 package async;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import services.ServiceHandler;
 import services.TaskListener;
-import utils.MyConnection;
 
 /**
  * Created by Akshit on 3/20/2015.
@@ -22,7 +22,7 @@ public class TpReportTask extends AsyncTask<String,String,String>
     private TaskListener<String> stringTaskListener;
     CBO_DB_Helper cboDbHelper;
 
-    public TpReportTask(Activity context){ mContext = context;}
+    public TpReportTask(AppCompatActivity context){ mContext = context;}
 
     @Override
     protected String doInBackground(String... params) {

@@ -1,4 +1,4 @@
-package com.cbo.cbomobilereporting.ui_new.report_activities;
+package com.cbo.cbomobilereporting.ui_new.report_activities.Dashboard;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,9 +35,6 @@ import utils.adapterutils.ExpandableDashboardAdapter;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.UnderlineTextView;
 
-/**
- * Created by Akshit Udainiya on 4/23/15.
- */
 public class DashboardReport extends AppCompatActivity {
     TextView month_txt;
     Custom_Variables_And_Method customVariablesAndMethod;

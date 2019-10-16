@@ -1,13 +1,5 @@
 package utils.adapterutils;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-
-
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +7,15 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -27,14 +24,14 @@ import utils_new.Custom_Variables_And_Method;
 public class Dcr_Workwith_Adapter extends ArrayAdapter<Dcr_Workwith_Model>
 	{
 		private final List<Dcr_Workwith_Model> list;   
-		private final Activity context;
+		private final AppCompatActivity context;
 		String[] selected_list,independent_list;
 		boolean show_independent=false,checked=true;
 		Custom_Variables_And_Method customVariablesAndMethod;
 		private Boolean freeze = false;
 		ArrayList<String> areaList = new ArrayList<>();
 
-		public Dcr_Workwith_Adapter(Activity context,ArrayList<Dcr_Workwith_Model> list,String[] selected_list,String[] independent_list)
+		public Dcr_Workwith_Adapter(AppCompatActivity context, ArrayList<Dcr_Workwith_Model> list, String[] selected_list, String[] independent_list)
 		{
 			super(context, R.layout.dcr_workwith_row,list);
 			this.context = context;       
@@ -52,7 +49,7 @@ public class Dcr_Workwith_Adapter extends ArrayAdapter<Dcr_Workwith_Model>
 			customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 		}
 
-		public Dcr_Workwith_Adapter(Activity context,ArrayList<Dcr_Workwith_Model> list,String[] selected_list,Boolean freeze)
+		public Dcr_Workwith_Adapter(AppCompatActivity context, ArrayList<Dcr_Workwith_Model> list, String[] selected_list, Boolean freeze)
 		{
 			super(context, R.layout.dcr_workwith_row,list);
 			this.context = context;

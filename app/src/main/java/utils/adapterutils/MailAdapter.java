@@ -1,9 +1,5 @@
 package utils.adapterutils;
 
-import java.util.List;
-
-
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +8,19 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
+
+import java.util.List;
 
 
 public class MailAdapter extends ArrayAdapter<MailModel>{
 	
 	private final List<MailModel> list;   
-	private final Activity context;
+	private final AppCompatActivity context;
 	
-	public MailAdapter(Activity context, List<MailModel> list)
+	public MailAdapter(AppCompatActivity context, List<MailModel> list)
     {
 	   super(context, R.layout.mail_row, list);
 	   this.context = context;       

@@ -1,16 +1,13 @@
 package utils_new;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -33,7 +33,6 @@ import java.util.List;
 import services.Up_Dwn_interface;
 import utils.adapterutils.GiftModel;
 import utils.adapterutils.MyAdapter2;
-import utils.networkUtil.NetworkUtil;
 
 public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
 
@@ -81,7 +80,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.chemist_gift, null, false);
 
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.setContentView(view);
         final Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -167,7 +166,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
 
 
         if (list.size()>0) {
-            adapter = new MyAdapter2((Activity) context, list);
+            adapter = new MyAdapter2((AppCompatActivity) context, list);
             mylist.setAdapter(adapter);
 
             String[] sample_name1= gift_name.split(",");
@@ -296,7 +295,7 @@ public class Chemist_Gift_Dialog  implements Up_Dwn_interface {
     @Override
     public void onDownloadComplete() {
         getModelLocal();
-        adapter=new MyAdapter2((Activity) context,list);
+        adapter=new MyAdapter2((AppCompatActivity) context,list);
         mylist.setAdapter(adapter);
         dialog.show();
     }

@@ -7,8 +7,8 @@ android {
         applicationId "com.cbo.cbomobilereporting"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 328
-        versionName "3.28"
+        versionCode 329
+        versionName "3.29"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        jackOptions {
@@ -23,9 +23,7 @@ android {
     }
 
     lintOptions {
-
         checkReleaseBuilds false
-
     }
 
     dexOptions {
@@ -36,12 +34,13 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    buildToolsVersion = '28.0.3'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -70,6 +69,7 @@ dependencies {
     implementation project(path: ':cboorder')
     implementation project(path: ':dbhelper')
     implementation project(path: ':cbo_utils')
+    implementation project(path: ':attachment')
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
 
     implementation 'com.google.android.gms:play-services-location:17.0.0'

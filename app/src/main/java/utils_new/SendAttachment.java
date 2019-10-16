@@ -1,24 +1,33 @@
 package utils_new;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+import java.util.Properties;
+
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class SendAttachment extends AsyncTask {
 
 private ProgressDialog statusDialog;
-private Activity sendMailActivity;
+private AppCompatActivity sendMailActivity;
     Custom_Variables_And_Method customVariablesAndMethod;
 
-    public SendAttachment(Activity activity) {
+    public SendAttachment(AppCompatActivity activity) {
             sendMailActivity = activity;
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 

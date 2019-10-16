@@ -175,7 +175,7 @@ ADDED from AndroidManifest.xml:79:9
 		ADDED from AndroidManifest.xml:81:13
 	android:name
 		ADDED from AndroidManifest.xml:80:13
-activity#com.cbo.cbomobilereporting.ui_new.report_activities.DashboardReport
+activity#com.cbo.cbomobilereporting.ui_new.report_activities.Dashboard.DashboardReport
 ADDED from AndroidManifest.xml:83:9
 	android:configChanges
 		ADDED from AndroidManifest.xml:85:13

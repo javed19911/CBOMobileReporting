@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -100,7 +103,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.chm_sample, null, false);
 
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.setContentView(view);
         final Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -480,9 +483,9 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             }
         }
         if (callFromRcpa.equals("intent_fromRcpaCAll")) {
-            adapter = new RCPA_Adapter((Activity) context, display_item_list);
+            adapter = new RCPA_Adapter((AppCompatActivity) context, display_item_list);
         }else {
-            adapter = new MyAdapter((Activity) context, display_item_list,this);
+            adapter = new MyAdapter((AppCompatActivity) context, display_item_list,this);
         }
         mylist.setAdapter(adapter);
         onItemSelectedListChanged();
@@ -563,9 +566,9 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             super.onPostExecute(result);
 
             if (callFromRcpa.equals("intent_fromRcpaCAll")) {
-                adapter = new RCPA_Adapter((Activity) context, result);
+                adapter = new RCPA_Adapter((AppCompatActivity) context, result);
             }else {
-                adapter = new MyAdapter((Activity) context, result,Chm_Sample_Dialog.this::onItemSelectedListChanged);
+                adapter = new MyAdapter((AppCompatActivity) context, result,Chm_Sample_Dialog.this::onItemSelectedListChanged);
             }
 
             pd.dismiss();
@@ -604,7 +607,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
                 dialog.show();
 
             } else if(who == 0){
-                android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(context);
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 builder1.setTitle("CBO");
                 builder1.setIcon(R.drawable.alert1);
                 builder1.setMessage(" No Data In List.." + "\n" + "Please Download Data.....");

@@ -3,6 +3,8 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.lead;
 import android.app.Activity;
 import android.database.Cursor;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class vmLead extends CBOViewModel<iLead> {
 
 
     @Override
-    public void onUpdateView(Activity context, iLead view) {
+    public void onUpdateView(AppCompatActivity context, iLead view) {
         cbohelp = new CBO_DB_Helper(context);
         view.getReferencesById();
         view.setTile();

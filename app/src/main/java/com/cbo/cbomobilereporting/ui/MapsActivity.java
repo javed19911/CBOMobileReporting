@@ -1,23 +1,18 @@
 package com.cbo.cbomobilereporting.ui;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,15 +21,12 @@ import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import services.MyAPIService;
-import services.ServiceHandler;
-import utils.MyConnection;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
@@ -150,7 +142,7 @@ public class MapsActivity extends CustomActivity implements OnMapReadyCallback {
 
         if (mMap == null) {
 
-            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_activity);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_activity);
             mapFragment.getMapAsync(this);
             //mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_activity)).getMap();
 

@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -39,7 +41,7 @@ public class vmAddRecipt  extends CBOViewModel<IReciptEntry> {
 
 
     @Override
-    public void onUpdateView(Activity context, IReciptEntry view) {
+    public void onUpdateView(AppCompatActivity context, IReciptEntry view) {
 
         if (view != null){
             view.getReferencesById();

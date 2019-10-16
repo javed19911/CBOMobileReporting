@@ -1,14 +1,15 @@
 package com.cbo.cbomobilereporting.ui;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 
 
-public class AnotherActivity  extends Activity{
+public class AnotherActivity  extends AppCompatActivity {
 	TextView rpt;
 	
 	public void onCreate(Bundle b)

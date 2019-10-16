@@ -1,6 +1,5 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -27,8 +28,6 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
-
-import static java.lang.Thread.sleep;
 
 public class DCR_Summary_new extends CustomActivity {
 

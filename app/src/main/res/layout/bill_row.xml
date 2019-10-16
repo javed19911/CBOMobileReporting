@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:background="#04000000">
+
+
+
+    <TextView
+        android:text="Batch"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_weight="2"
+        android:textSize="14dp"
+        android:gravity="center_vertical"
+        android:id="@+id/batch_no"
+        android:layout_marginLeft="5dip"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/distance"
+        android:layout_toStartOf="@+id/distance" />
+
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_marginBottom="5dp"
+        android:id="@+id/pack"
+        android:text="Pack"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_weight="1.4"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"/>
+
+
+
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_marginBottom="5dp"
+        android:id="@+id/exp"
+        android:text="Exp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_weight="1.2"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_marginBottom="5dp"
+        android:id="@+id/mfg"
+        android:text="Mrp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_weight="1.2"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_marginBottom="5dp"
+        android:id="@+id/rate"
+        android:text="Rate"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_weight="1.4"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_marginBottom="5dp"
+        android:id="@+id/stock"
+        android:text="Stock"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_weight="2"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

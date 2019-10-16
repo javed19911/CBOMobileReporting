@@ -1,17 +1,14 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,6 +26,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -472,7 +472,7 @@ public class Msg_ho extends AppCompatActivity {
     class Controller {
         final static int FILE_SELECTED = 4;
 
-        Activity getActivity() {
+        AppCompatActivity getActivity() {
             return Msg_ho.this;
         }
     }
@@ -534,13 +534,13 @@ public class Msg_ho extends AppCompatActivity {
             return mHandled;
         }
         void onResult(int resultCode, Intent intent) {
-            if (resultCode == Activity.RESULT_CANCELED && mCaughtActivityNotFoundException) {
+            if (resultCode == AppCompatActivity.RESULT_CANCELED && mCaughtActivityNotFoundException) {
                 // Couldn't resolve an activity, we are going to try again so skip
                 // this result.
                 mCaughtActivityNotFoundException = false;
                 return;
             }
-            Uri result = intent == null || resultCode != Activity.RESULT_OK ? null
+            Uri result = intent == null || resultCode != AppCompatActivity.RESULT_OK ? null
                     : intent.getData();
             // As we ask the camera to save the result of the user taking
             // a picture, the camera application does not return anything other
@@ -548,7 +548,7 @@ public class Msg_ho extends AppCompatActivity {
             // was written to disk in the in the case that we
             // did not get an intent returned but did get a RESULT_OK. If it was,
             // we assume that this result has came back from the camera.
-            if (result == null && intent == null && resultCode == Activity.RESULT_OK) {
+            if (result == null && intent == null && resultCode == AppCompatActivity.RESULT_OK) {
                 File cameraFile = new File(mCameraFilePath);
                 if (cameraFile.exists()) {
                     result = Uri.fromFile(cameraFile);

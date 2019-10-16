@@ -1,6 +1,5 @@
 package services;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,9 +18,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.cbo.cbomobilereporting.R;
 import com.uenics.javed.CBOLibrary.CBOServices;
-import com.uenics.javed.CBOLibrary.Response;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;

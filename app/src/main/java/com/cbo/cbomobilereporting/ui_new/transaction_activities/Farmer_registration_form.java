@@ -600,7 +600,6 @@ public class Farmer_registration_form extends AppCompatActivity implements up_do
                         } else if (fRemark.isEmpty()) {
                             customVariablesAndMethod.msgBox(context, "Please Enter Remark.... ");
                         } else {
-                            db_helper.Save(string_date_SERVER, string_owner_name, string_owner_mob, string_farmer_attendence, string_group_meeting_place, string_product_detail, string_IH_attendence_mcc, string_directr_sale_to_farmer, string_order_book_for_mcc, fRemark);
                             //new UploadPhotoInBackGround().execute();
                             progress1.setMessage("Please Wait..\nuploading Image");
                             progress1.setCancelable(false);
@@ -626,7 +625,6 @@ public class Farmer_registration_form extends AppCompatActivity implements up_do
                         } else if (fRemark.isEmpty()) {
                             customVariablesAndMethod.msgBox(context, "Please Enter Remark.... ");
                         } else {
-                            db_helper.Save(string_date_SERVER, string_owner_name, string_owner_mob, string_farmer_attendence, string_group_meeting_place, string_product_detail, string_IH_attendence_mcc, string_directr_sale_to_farmer, string_order_book_for_mcc, fRemark);
                             //new UploadPhotoInBackGround().execute();
                             progress1.setMessage("Please Wait..\nuploading Image");
                             progress1.setCancelable(false);
@@ -938,6 +936,16 @@ public class Farmer_registration_form extends AppCompatActivity implements up_do
             super.onPostExecute(result);
             progress1.dismiss();
             if (!result.contains("[ERROR]")) {
+
+               /* db_helper.Save(string_date_SERVER, string_owner_name, string_owner_mob, string_farmer_attendence,
+                        string_group_meeting_place, string_product_detail, string_IH_attendence_mcc,
+                        string_directr_sale_to_farmer, string_order_book_for_mcc, fRemark);*/
+
+
+                db_helper.Save(string_date_SERVER, string_owner_name, string_owner_mob, string_farmer_attendence,
+                        string_group_meeting_place, string_product_detail, string_IH_attendence_mcc,
+                        string_directr_sale_to_farmer, string_order_book_for_mcc, fRemark);
+
                 customVariablesAndMethod.msgBox(context,"Registration Successfully ....");
                 finish();
             }else{

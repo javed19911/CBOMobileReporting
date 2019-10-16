@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -89,7 +90,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:id="@+id/upload_pic_btn_2016"
-                        android:src="@drawable/upload_image_white"
+                        app:srcCompat="@drawable/upload_image_white"
                         android:layout_marginRight="5dp"
                         />
                     <utils.font_package.Text_view_Regular
@@ -111,7 +112,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:id="@+id/updn_2016"
-                        android:src="@drawable/upload_download_white"
+                        app:srcCompat="@drawable/upload_download_white"
                         android:layout_marginLeft="3.5dp"
                         android:layout_marginRight="3.5dp"/>
 
@@ -137,7 +138,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:id="@+id/reset_2016"
-                        android:src="@drawable/reset_day_plan_white"
+                        app:srcCompat="@drawable/reset_day_plan_white"
                         android:layout_marginLeft="5dp"/>
 
 
@@ -170,7 +171,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:id="@+id/myutil_captureSign_2016"
-                        android:src="@drawable/capture_image_white"
+                        app:srcCompat="@drawable/capture_image_white"
                         android:layout_weight="2"
                         android:layout_marginRight="5dp"
                         />
@@ -196,7 +197,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:id="@+id/map_view_2016"
-                        android:src="@drawable/map_view_white"
+                        app:srcCompat="@drawable/map_view_white"
                         android:layout_marginRight="3.5dp"
                         android:layout_marginLeft="3.5dp"/>
 
@@ -221,7 +222,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:id="@+id/web_view_2016"
-                        android:src="@drawable/web_login_white"
+                        app:srcCompat="@drawable/web_login_white"
                         android:layout_marginRight="3.5dp"
                         android:layout_marginLeft="3.5dp"/>
 
@@ -258,7 +259,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:id="@+id/down_vaid_2016"
-                        android:src="@drawable/upload_download_white"
+                        app:srcCompat="@drawable/upload_download_white"
                         android:layout_marginLeft="3.5dp"
                         android:layout_marginRight="3.5dp"/>
 
@@ -284,7 +285,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:id="@+id/show_visual1_2016"
-                        android:src="@drawable/capture_image_white"
+                        app:srcCompat="@drawable/capture_image_white"
                         android:layout_weight="2"
                         android:layout_marginLeft="10dp"
                         />

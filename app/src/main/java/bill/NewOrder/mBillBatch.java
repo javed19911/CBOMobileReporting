@@ -1,5 +1,10 @@
 package bill.NewOrder;
 
+import java.util.ArrayList;
+
+import cbomobilereporting.cbo.com.cboorder.Model.mDeal;
+import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
+
 public class mBillBatch {
 
     private String ITEM_ID="0";
@@ -10,8 +15,15 @@ public class mBillBatch {
     private String PACK="0";
     private Double MRP_RATE=0.0;
     private Double SALE_RATE=0.0;
+    private Double STOCK = 0.0;
+    private mDeal Deal = new mDeal();
+    private mDiscount ManualDiscount = new mDiscount("Manual Discount");
+    private mDiscount MangerDiscount = new mDiscount("Manager Discount");
+    private ArrayList<mDiscount> MiscDiscount = new ArrayList();
 
 
+
+    ///setter
 
     public String getITEM_ID() {
         return ITEM_ID;
@@ -44,6 +56,29 @@ public class mBillBatch {
     public Double getSALE_RATE() {
         return SALE_RATE;
     }
+
+    public Double getSTOCK() {
+        return STOCK;
+    }
+
+    public mDeal getDeal() {
+        return this.Deal;
+    }
+
+
+    public mDiscount getMangerDiscount() {
+        return this.MangerDiscount;
+    }
+
+    public ArrayList<mDiscount> getMiscDiscount() {
+        return this.MiscDiscount;
+    }
+
+    public mDiscount getManualDiscount() {
+        return this.ManualDiscount;
+    }
+
+    ///setter
 
     public mBillBatch setITEM_ID(String ITEM_ID) {
         this.ITEM_ID = ITEM_ID;
@@ -83,5 +118,31 @@ public class mBillBatch {
     public mBillBatch setSALE_RATE(Double SALE_RATE) {
         this.SALE_RATE = SALE_RATE;
         return  this;
+    }
+
+    public mBillBatch setSTOCK(Double STOCK) {
+        this.STOCK = STOCK;
+        return  this;
+    }
+
+    public mBillBatch setDeal(mDeal deal) {
+        this.Deal = deal;
+        return this;
+    }
+
+    public mBillBatch setMangerDiscount(mDiscount mangerDiscount) {
+        this.MangerDiscount = mangerDiscount;
+
+        return this;
+    }
+
+    public mBillBatch setMiscDiscount(ArrayList<mDiscount> miscDiscount) {
+        this.MiscDiscount = miscDiscount;
+        return this;
+    }
+
+    public mBillBatch setManualDiscount(mDiscount manualDiscount) {
+        this.ManualDiscount = manualDiscount;
+        return this;
     }
 }

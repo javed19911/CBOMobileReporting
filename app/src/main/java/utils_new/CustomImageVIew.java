@@ -8,13 +8,14 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Created by pc24 on 20/12/2016.
  */
 
-public class CustomImageVIew extends ImageView implements View.OnTouchListener {
+public class CustomImageVIew extends AppCompatImageView implements View.OnTouchListener {
 
 
     private Matrix matrix = new Matrix();

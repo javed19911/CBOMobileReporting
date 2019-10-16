@@ -1,7 +1,6 @@
 
 package utils.adapterutils;
 
-import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,6 +12,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 
 import java.util.List;
@@ -20,9 +21,9 @@ import java.util.List;
 
 public class PrescribeAdapter extends ArrayAdapter<PobModel> {
     private final List<PobModel>list;
-    private final Activity context;
+    private final AppCompatActivity context;
 
-    public PrescribeAdapter(Activity context, List<PobModel> list){
+    public PrescribeAdapter(AppCompatActivity context, List<PobModel> list){
         super(context, R.layout.dr_pob_row, list);
         this.context = context;
 

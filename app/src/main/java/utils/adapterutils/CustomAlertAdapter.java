@@ -1,8 +1,5 @@
 package utils.adapterutils;
 
-import java.util.ArrayList;
-
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
+
+import java.util.ArrayList;
 
 public class CustomAlertAdapter extends BaseAdapter{
 
@@ -19,7 +20,7 @@ public class CustomAlertAdapter extends BaseAdapter{
     private ArrayList data;
     private LayoutInflater mInflater=null;
     SpinnerModel tempValues=null;
-    public CustomAlertAdapter(Activity activty, ArrayList<String> list)
+    public CustomAlertAdapter(AppCompatActivity activty, ArrayList<String> list)
     {
         this.ctx=activty;
         mInflater = activty.getLayoutInflater();

@@ -4,28 +4,42 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import bill.NewOrder.mBillItem;
 import bill.mBillOrder;
-import cbomobilereporting.cbo.com.cboorder.Model.mItem;
-import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import saleOrder.MyOrderAPIService;
 import saleOrder.ViewModel.CBOViewModel;
 import utils_new.AppAlert;
+import utils_new.CustomDatePicker;
 
 public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
     private mBillOrder order = new mBillOrder();;
+    private mCustomer customer = new mCustomer();
     @Override
-    public void onUpdateView(Activity context, IFCompanycart view) {
+    public void onUpdateView(AppCompatActivity context, IFCompanycart view) {
         view.getReferencesById();
         view.setTile();
 
 
+    }
+
+    public mCustomer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(mCustomer customer) {
+        this.customer = customer;
     }
 
     public mBillOrder getOrder(){
@@ -35,28 +49,41 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
         this.order = order;
     }
 
+    public void orderCommit(AppCompatActivity context, String Pay_mode){
+        orderCommitAll(context, "BILL_COMMIT_MOBILE",  Pay_mode);
+    }
 
-    public void orderCommit(Activity context, String Pay_mode){
+    public void orderCommitAll(AppCompatActivity context,String MethodName, String Pay_mode){
 
         String itemString = "",qtyString = "",rateString = "",amtString = "";
         String sTax_Percent = "",sTax_Percent1 = "",sTax_Amt = "",sTax_Amt1 = "";
         String sDisc_Amt = "";
-        String sDisc_Percent = "",sDisc_Percent1= "",sDisc_Percent2= "",
-                sDisc_Percent3= "",sDisc_Percent4= "",sDisc_Percent5= "";
-        String sRemark ="",sDealId = "",sDealOn = "",sDealQty = "",sFreeQty ="";
+        String sDisc_Percent = "",sDisc_Percent1= "",sDisc_Percent2= "";
+        String sDealId = "",sDealOn = "",sDealQty = "",sFreeQty ="";
 
         for(mBillItem item : order.getItems()){
 
             if (item.getQty() != 0.0) {
-                itemString = item.getId() + "," + itemString;
+                itemString = item.getBATCH_ID() + "," + itemString;
                 qtyString = item.getQty() + "," + qtyString;
                 rateString = item.getSALE_RATE() + "," + rateString;
                 amtString = String.format("%.2f", item.getAmt()) + "," + amtString;
 
-//                sTax_Percent = item.getGST().getCGST()  + "," + sTax_Percent;
-//                sTax_Percent1 =  item.getGST().getSGST() + "," + sTax_Percent1;
-//                sTax_Amt =   item.get  + "," + sTax_Amt;
-//                sTax_Amt1 =   item.getSGSTAmt()  + "," + sTax_Amt1;
+                sTax_Percent = item.getGST().getCGST()  + "," + sTax_Percent;
+                sTax_Percent1 =  item.getGST().getSGST()  + "," + sTax_Percent1;
+                sTax_Amt =   item.getCGSTAmt()  + "," + sTax_Amt;
+                sTax_Amt1 =   item.getSGSTAmt()  + "," + sTax_Amt1;
+
+                sDisc_Amt = (item.getAmt() - item.getNetAmt()) + "," +  sDisc_Amt;
+                sDisc_Percent = item.getMiscDiscount().get(0).getPercent() + "," + sDisc_Percent;
+                sDisc_Percent1 = item.getMiscDiscount().get(1).getPercent() + "," + sDisc_Percent1;
+                sDisc_Percent2 = item.getMiscDiscount().get(2).getPercent() + "," + sDisc_Percent2;
+
+
+                sDealId = item.getDeal().getId()+ "," + sDealId;
+                sDealOn = item.getDeal().getQty()+ "," + sDealOn;
+                sDealQty = item.getDeal().getFreeQty() + "," + sDealQty;
+                sFreeQty = item.getFreeQty()  + "," + sFreeQty;
 
             }
         }
@@ -67,47 +94,64 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
 
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", view.getCompanyCode());
-        request.put("iPaId", order.getPartyId());
-        request.put("iOrdId", order.getDocId());
-        request.put("sItemIdStr", itemString);
-        request.put("sQtyStr", qtyString);
-        request.put("sRateStr", rateString);
-        request.put("sAmountStr", amtString);
-        request.put("iNetAmt", ""+ String.format("%.2f", order.getTotAmt())  );
+        request.put("iCOMPANY_ID", order.getPartyId());
+        request.put("iPOSTING_ID", order.getDocId());
+        request.put("BATCH_ID_STR", itemString);
+        request.put("QTY_STR", qtyString);
+        request.put("RATE_STR", rateString);
+        request.put("AMOUNT_STR", amtString);
+        request.put("NET_AMT_STR", ""+ String.format("%.2f", order.getTotAmt())  );
         request.put("sPymtMode", Pay_mode);
-        request.put("iLogin_PA_ID", view.getUserId());
+        request.put("LOGIN_PA_ID", view.getUserId());
 
-        request.put("sDisc_Amt",sDisc_Amt);
-        request.put("sTax_Percent", sTax_Percent);
-        request.put("sTax_Percent1",sTax_Percent1 );
-        request.put("sTax_Amt", sTax_Amt);
-        request.put("sTax_Amt1", sTax_Amt1);
-        request.put("sDisc_Percent", sDisc_Percent);
-        request.put("sDisc_Percent1", sDisc_Percent1);
-        request.put("sDisc_Percent2", sDisc_Percent2);
-        request.put("sDisc_Percent3", sDisc_Percent3);
-        request.put("sDisc_Percent4", sDisc_Percent4);
-        request.put("sDisc_Percent5", sDisc_Percent5);
-        request.put("sRemark", sRemark);
+        request.put("DISC_AMT_STR",sDisc_Amt);
+        request.put("TAX_PERCENT_STR", sTax_Percent);
+        request.put("TAX_PERCENT2_STR",sTax_Percent1 );
+        request.put("TAX_AMT_STR", sTax_Amt);
+        request.put("TAX_AMT2_STR", sTax_Amt1);
+        request.put("DISC_PERCENT_STR", sDisc_Percent);
+        request.put("DISC_PERCENT2_STR", sDisc_Percent1);
+        request.put("DISC_PERCENT3_STR", sDisc_Percent2);
 
         request.put("sDealId", sDealId);
         request.put("sDealOn", sDealOn);
         request.put("sDealQty", sDealQty);
-        request.put("sFreeQty", sFreeQty);
+        request.put("FREE_QTY_STR", sFreeQty);
+        request.put("PAYMENT_MODE", order.getPayMode());
+        try {
+            request.put("DOC_DATE", CustomDatePicker.formatDate(CustomDatePicker.getDate(order.getDocDate(),CustomDatePicker.ShowFormatOld) ,CustomDatePicker.CommitFormat));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        request.put("MOBILE", getCustomer().getMobile());
+        request.put("CUSTOMER_NAME", getCustomer().getName());
+        request.put("DOB", getCustomer().getDOB());
+        request.put("DOA", getCustomer().getDOA());
+        request.put("ROUND_AMT",""+order.getRouAmt());
+        request.put("GST_NO",getCustomer().getGST_NO());
+
+
+
 
 
         ArrayList<Integer> tables=new ArrayList<>();
-        tables.add(0);
+        tables.add(2);
 
         new MyOrderAPIService(context)
-                .execute(new ResponseBuilder("OrderCommit_1",request)
+                .execute(new ResponseBuilder(MethodName,request)
                         .setDescription("Please Wait..." +
-                                "\nBooking your Order...")
+                                "\nBooking your Bill...")
                         .setResponse(new CBOServices.APIResponse() {
                             @Override
-                            public void onComplete(Bundle bundle) throws Exception {
+                            public void onComplete(Bundle result) throws Exception {
+                                String table1 = result.getString("Tables2");
+                                JSONArray jsonArray = new JSONArray(table1);
+                                JSONObject jsonObject2 = jsonArray.getJSONObject(0);
                                 AppAlert.getInstance().Alert(context, "Success!!!",
-                                        "Order Successfully Placed...", new View.OnClickListener() {
+                                        order.getStatus().equalsIgnoreCase("V")?
+                                                ("Bill generated Successfully ...\nBill No. : "+ jsonObject2.getString("BILL_NO") ):
+                                                ("Bill Updated Successfully ...\nBill No. : "+ jsonObject2.getString("BILL_NO")), new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
                                                 context.finish();
@@ -125,7 +169,6 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
                                 AppAlert.getInstance().getAlert(context,s,s1);
                             }
                         }));
-
         //End of call to service
     }
 
@@ -137,7 +180,7 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
         if (getOrder().getItems().size() > 0) {
 
             for (mBillItem orderItem : getOrder().getItems()) {
-                if (orderItem.getId().equals(item.getId())) {
+                if (orderItem.getBATCH_ID().equals(item.getBATCH_ID())) {
                     return orderItem;
                 }
             }

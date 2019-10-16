@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#aaa"
+        android:elevation="3dp"
+        android:layout_margin="5dp"
+        card_view:cardCornerRadius="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/brand_layout"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/brand"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="5dp"
+                                android:paddingLeft="5dp"
+                                android:textColor="@android:color/black"
+                                android:text="Treamal Inj 2 ml"
+                                android:textSize="15dp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="5dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/brand_batch"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@android:color/black"
+                                    android:text="batch"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+
+                                <TextView
+                                    android:id="@+id/brand_pack"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@android:color/black"
+                                    android:text="pack"
+                                    android:paddingLeft="5dp"
+                                    android:textSize="12dp" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:layout_gravity="end"
+                                android:textSize="17dp"
+                                android:id="@+id/Qty"
+                                android:textColor="@color/colorPrimaryDark"/>
+
+
+
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="*Estimated Price"
+                                android:layout_gravity="end"
+                                android:gravity="end"
+                                android:visibility="gone"
+                                android:textSize="12sp"
+                                android:id="@+id/priceRemark"
+                                android:textColor="@android:color/black"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#4444" />
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:paddingLeft="3dp"
+                            android:id="@+id/edit"
+                            card_view:srcCompat="@android:drawable/ic_menu_edit"/>
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:paddingLeft="3dp"
+                            android:id="@+id/delete"
+                            card_view:srcCompat="@drawable/dlt"/>
+
+                    </LinearLayout>
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:id="@+id/sapratorLayout">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:id="@+id/saprator"
+                            android:layout_centerVertical="true"
+                            android:background="#4444"/>
+
+                        <ImageButton
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/more"
+                            android:background="@drawable/countkart"
+                            android:layout_marginRight="10dp"
+                            card_view:srcCompat="@android:drawable/arrow_down_float"
+                            android:layout_alignRight="@+id/saprator"/>
+
+                    </RelativeLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/extraLayout">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_weight="1">
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1 x 0.00"
+                                    android:textSize="12dp"
+                                    android:id="@+id/rate"
+                                    android:textColor="@android:color/black"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical|end"
+                                android:layout_weight="1.5">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="20.0"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/amount"
+                                    android:textColor="@android:color/black"/>
+
+
+
+                            </LinearLayout>
+
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Discount"
+                                android:layout_weight="1"
+                                android:textSize="12dp"
+                                android:id="@+id/discountName"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0.00"
+                                android:textSize="12dp"
+                                android:textStyle="bold"
+                                android:id="@+id/discount"
+                                android:textColor="@android:color/black"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Amount"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:textSize="12dp"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100.00"
+                                android:layout_gravity="end"
+                                android:textStyle="bold"
+                                android:textSize="12dp"
+                                android:id="@+id/brand_net_amt"
+                                android:textColor="@android:color/black"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:id="@+id/centralTax"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="CGST"
+                                android:id="@+id/centralTaxName"
+                                android:layout_weight="1"
+                                android:textSize="12dp"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100.00"
+                                android:layout_gravity="end"
+                                android:textSize="12dp"
+                                android:id="@+id/CGST_amt"
+                                android:textColor="@android:color/black"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:id="@+id/LocalTax"
+                            android:paddingRight="5dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="SGST"
+                                android:id="@+id/LocalTaxName"
+                                android:layout_weight="1"
+                                android:textSize="12dp"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100.00"
+                                android:layout_gravity="end"
+                                android:textSize="12dp"
+                                android:id="@+id/SGST_amt"
+                                android:textColor="@android:color/black"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Net Amount"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:textSize="13dp"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100.00"
+                                android:layout_gravity="end"
+                                android:textStyle="bold"
+                                android:textSize="13dp"
+                                android:id="@+id/brand_tot_amt"
+                                android:textColor="@android:color/black"/>
+
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

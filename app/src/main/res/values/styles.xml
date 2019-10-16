@@ -12,13 +12,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionBarStyle">@style/ActionBar</item>
-        <item name="android:icon">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="colorControlNormal">#000</item>
+        <item name="icon">@color/white</item>
     </style>
 
     <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Appdilogtheme" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -39,7 +41,7 @@
 
     <style name="ActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/background</item>
+        <item name="background">@color/background</item>
         <item name="background">@color/background</item>
     </style>
 
@@ -66,7 +68,7 @@
     </style>
 
     <style name="WindowTitleBackground">
-        <item name="android:background">@color/titlebackgroundcolor</item>
+        <item name="background">@color/titlebackgroundcolor</item>
     </style>
 
     <style name="DialogTheme">

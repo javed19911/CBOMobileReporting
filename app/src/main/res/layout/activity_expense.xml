@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -110,7 +111,7 @@
                                 android:padding="2.5dp"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
-                                android:src="@android:drawable/ic_menu_camera" />
+                                app:srcCompat="@android:drawable/ic_menu_camera" />
                         </LinearLayout>
 
 
@@ -242,7 +243,7 @@
                             android:layout_margin="1dp"
                             android:layout_weight="7"
                             android:padding="6.5dp"
-                            android:src="@drawable/drop_icon" />
+                            app:srcCompat="@drawable/drop_icon" />
                     </LinearLayout>
 
                     <View
@@ -305,7 +306,7 @@
                             android:layout_margin="1dp"
                             android:layout_weight="7"
                             android:padding="6.5dp"
-                            android:src="@drawable/drop_icon" />
+                            app:srcCompat="@drawable/drop_icon" />
                     </LinearLayout>
 
                     <View

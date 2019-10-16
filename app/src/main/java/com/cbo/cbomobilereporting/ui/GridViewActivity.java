@@ -1,25 +1,22 @@
 package com.cbo.cbomobilereporting.ui;
 
 
-
-import java.util.ArrayList;
-
-
-
-import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.GridView;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
+
+import java.util.ArrayList;
 
 import utils.AppConstant;
 import utils.Utils;
 import utils.adapterutils.GridViewImageAdapter;
 
-public class GridViewActivity extends Activity {
+public class GridViewActivity extends AppCompatActivity {
 
 	private Utils utils;
 	private ArrayList<String> imagePaths = new ArrayList<String>();

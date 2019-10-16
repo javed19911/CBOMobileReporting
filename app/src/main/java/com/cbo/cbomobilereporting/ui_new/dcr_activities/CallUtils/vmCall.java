@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class vmCall extends CBOViewModel<iCall> {
 
 
     @Override
-    public void onUpdateView(Activity context, iCall view) {
+    public void onUpdateView(AppCompatActivity context, iCall view) {
         cbohelp = new CBO_DB_Helper(context);
         view.getReferencesById();
         view.setTile();

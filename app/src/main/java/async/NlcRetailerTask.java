@@ -1,9 +1,10 @@
 package async;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.CBOReportView;
@@ -20,7 +21,7 @@ public class NlcRetailerTask extends AsyncTask<String,String,String > {
     private TaskListener<String> mListener;
     CBO_DB_Helper cboDbHelper;
 
-    public NlcRetailerTask(Activity context){
+    public NlcRetailerTask(AppCompatActivity context){
         this.context =context;
 
     }

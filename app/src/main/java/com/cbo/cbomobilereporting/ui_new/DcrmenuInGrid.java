@@ -43,6 +43,7 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrPrescription;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrRXActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.OthExpenseDB;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Location.CentroidLocation;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
@@ -115,7 +116,8 @@ public class DcrmenuInGrid extends Fragment {
 
 
     ArrayList<Map<String, String>> Appraisal_list=null;
-    ArrayList<Map<String, String>> mandatory_pending_exp_head=null;
+    //ArrayList<Map<String, String>> mandatory_pending_exp_head=null;
+    ArrayList<mExpHead> mandatory_pending_exp_head=null;
 
 
     @Nullable
@@ -1145,7 +1147,8 @@ public class DcrmenuInGrid extends Fragment {
         String mWork_val = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_head");
 
         Appraisal_list=cboDbHelper.get_Appraisal("0","");
-        mandatory_pending_exp_head=cboDbHelper.get_mandatory_pending_exp_head();
+        //mandatory_pending_exp_head=cboDbHelper.get_mandatory_pending_exp_head();
+        mandatory_pending_exp_head = new OthExpenseDB(context).getMandatoryPendingExpHead();
 
        /* result+=cboDbHelper.getmenu_count("phdcrdr_rc");
         result+=cboDbHelper.getmenu_count("tempdr");
@@ -1198,7 +1201,8 @@ public class DcrmenuInGrid extends Fragment {
 
                 String pending_list="";
                 for (int i = 0; i < mandatory_pending_exp_head.size(); i++) {
-                    pending_list+=mandatory_pending_exp_head.get(i).get("PA_NAME")+"\n";
+                    //pending_list+=mandatory_pending_exp_head.get(i).get("PA_NAME")+"\n";
+                    pending_list+=mandatory_pending_exp_head.get(i).getName()+"\n";
                 }
                 customVariablesAndMethod.getAlert(context,"Expenses Pending",pending_list);
 
@@ -1580,7 +1584,8 @@ public class DcrmenuInGrid extends Fragment {
 
             String pending_list = "";
             for (int i = 0; i < mandatory_pending_exp_head.size(); i++) {
-                pending_list += mandatory_pending_exp_head.get(i).get("PA_NAME") + "\n";
+               // pending_list += mandatory_pending_exp_head.get(i).get("PA_NAME") + "\n";
+                pending_list+=mandatory_pending_exp_head.get(i).getName()+"\n";
             }
             if (listener != null) {
                 listener.onError("Expenses Pending", pending_list);

@@ -1,8 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Recipt;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,37 +9,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.uenics.javed.CBOLibrary.CBOServices;
-import com.uenics.javed.CBOLibrary.ResponseBuilder;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
-import services.MyAPIService;
 import utils_new.AppAlert;
-import utils_new.Custom_Variables_And_Method;
 
 public class ReciptActivity
         extends CustomActivity
@@ -171,7 +158,7 @@ public class ReciptActivity
         getMenuInflater().inflate(R.menu.recipt_menu, menu);
         this.menu = menu;
         MenuItem searchItem = menu.findItem(R.id.menu_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -271,7 +258,7 @@ public class ReciptActivity
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == AppCompatActivity.RESULT_OK) {
             switch (requestCode) {
                 case ADDRECIEPTRESULT:
                     vmRecpiet.GetALLRecpietList(mContext);

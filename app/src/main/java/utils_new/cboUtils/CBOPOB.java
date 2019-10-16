@@ -1,6 +1,5 @@
 package utils_new.cboUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +27,7 @@ public class CBOPOB extends MultiSelectView<PobModel, CBOPOB.MyViewHolder> {
 
     public static final int POB_DIALOG= 10002;
     Fragment fragment;
-    Activity activity;
+    AppCompatActivity activity;
     CallType callType = CallType.NONE;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, headQtr,character,amt;
@@ -81,7 +81,7 @@ public class CBOPOB extends MultiSelectView<PobModel, CBOPOB.MyViewHolder> {
         this.fragment = fragment;
         setCallType(callType);
     }
-    public void setActivity(Activity activity,CallType callType){
+    public void setActivity(AppCompatActivity activity, CallType callType){
         this.activity = activity;
         setCallType(callType);
     }

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +20,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -190,7 +192,7 @@ public class Area_Dialog {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dcr_area, null, false);
 
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.setContentView(view);
         final Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -273,7 +275,7 @@ public class Area_Dialog {
                         }
                     }
                 }
-                mylist.setAdapter(new Dcr_Workwith_Adapter((Activity) context,array_sort,selected_list,freeze));
+                mylist.setAdapter(new Dcr_Workwith_Adapter((AppCompatActivity) context,array_sort,selected_list,freeze));
 
             }
 
@@ -389,7 +391,7 @@ public class Area_Dialog {
                 }
 
                 array_sort = new ArrayList<Dcr_Workwith_Model>(Arrays.asList(TitleName));
-                ArrayAdapter<Dcr_Workwith_Model> adapter = new Dcr_Workwith_Adapter((Activity) context, array_sort, selected_list,freeze);
+                ArrayAdapter<Dcr_Workwith_Model> adapter = new Dcr_Workwith_Adapter((AppCompatActivity) context, array_sort, selected_list,freeze);
                 adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
                 mylist.setAdapter(adapter);
 

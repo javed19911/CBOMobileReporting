@@ -1,17 +1,17 @@
 package com.cbo.cbomobilereporting.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.cbo.cbomobilereporting.R;
 
@@ -79,7 +79,7 @@ public class CBOReportView extends AppCompatActivity {
 
 
     }
-    public void showReportsToUI(final Activity context){
+    public void showReportsToUI(final AppCompatActivity context){
         final RptShowTask rptShowTask=new RptShowTask(context);
         rptShowTask.setListener(new TaskListener<String>() {
             ProgressDialog commitDialog;

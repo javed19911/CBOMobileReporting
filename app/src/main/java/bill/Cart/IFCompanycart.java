@@ -13,6 +13,8 @@ public interface IFCompanycart {
     void addItem(mBillItem item);
 
     void setTile();
+    void AddCustomer();
+    void customerCommit(mCustomer customer);
     void orderCommit();
     void CalculateTotal();
     void updateTotal();

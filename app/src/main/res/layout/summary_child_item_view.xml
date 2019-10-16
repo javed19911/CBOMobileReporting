@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -59,7 +60,7 @@
                             android:layout_width="15dp"
                             android:layout_height="25dp"
                             android:id="@+id/call_time_img"
-                            android:src="@drawable/call_time_img"/>
+                            app:srcCompat="@drawable/call_time_img"/>
 
 
                 </LinearLayout>
@@ -103,7 +104,7 @@
                                         <ImageView
                                             android:layout_width="20dp"
                                             android:layout_height="18dp"
-                                            android:src="@drawable/attach"/>
+                                            app:srcCompat="@drawable/attach"/>
 
                                         <View
                                             android:layout_width="2dp"
@@ -124,13 +125,13 @@
                             android:layout_marginRight="2dp"
                             android:layout_marginLeft="2dp"
                             android:layout_toLeftOf="@+id/call_delete"
-                            android:src="@android:drawable/ic_menu_edit"/>
+                            app:srcCompat="@android:drawable/ic_menu_edit"/>
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:id="@+id/call_delete"
                             android:layout_alignParentRight="true"
-                            android:src="@android:drawable/ic_menu_delete"/>
+                            app:srcCompat="@android:drawable/ic_menu_delete"/>
 
                 </RelativeLayout>
 

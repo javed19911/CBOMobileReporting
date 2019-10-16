@@ -5,19 +5,20 @@ package utils;
  */
 
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
 public class SendMailTask extends AsyncTask {
 
     private ProgressDialog statusDialog;
-    private Activity sendMailActivity;
+    private AppCompatActivity sendMailActivity;
 
-    public SendMailTask(Activity activity) {
+    public SendMailTask(AppCompatActivity activity) {
         sendMailActivity = activity;
 
     }

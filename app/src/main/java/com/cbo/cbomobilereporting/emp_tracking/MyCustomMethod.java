@@ -2,7 +2,6 @@ package com.cbo.cbomobilereporting.emp_tracking;
 
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,10 +15,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.SystemClock;
 import android.provider.Settings;
-import androidx.core.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 

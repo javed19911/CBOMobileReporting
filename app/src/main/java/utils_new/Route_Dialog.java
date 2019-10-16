@@ -1,6 +1,5 @@
 package utils_new;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -8,10 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -25,6 +20,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
@@ -35,7 +33,6 @@ import async.CBORootTask;
 import services.ServiceHandler;
 import services.TaskListener;
 import utils.adapterutils.DcrRootAdapter;
-import utils.adapterutils.Dcr_Workwith_Adapter;
 import utils.adapterutils.RootModel;
 
 /**
@@ -118,7 +115,7 @@ public class Route_Dialog {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dcr_root, null, false);
 
-        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ((AppCompatActivity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.setContentView(view);
         final Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -149,7 +146,7 @@ public class Route_Dialog {
         sAllYn=Msg.getString("sAllYn");
         allowMultipleRoute = Msg.getBoolean("allowMultipleRoute");
 
-        setRootDataToUI((Activity) context);
+        setRootDataToUI((AppCompatActivity) context);
         Custom_Variables_And_Method.work_with_area_id="";
 
 
@@ -260,7 +257,7 @@ public class Route_Dialog {
     }
 
 
-    public void setRootDataToUI( final Activity context){
+    public void setRootDataToUI( final AppCompatActivity context){
         final CBORootTask rootTask=new CBORootTask(context);
         //getMrId();
         setMrids();

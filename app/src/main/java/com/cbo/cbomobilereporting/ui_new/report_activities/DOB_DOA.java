@@ -1,13 +1,10 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,10 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -153,7 +152,7 @@ public class DOB_DOA extends AppCompatActivity {
 
                 DatePickerDialog datePickerDialog= null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    datePickerDialog = new DatePickerDialog(DOB_DOA.this, AlertDialog.THEME_HOLO_DARK,mDateSetListener,yy,mm,dd);
+                    datePickerDialog = new DatePickerDialog(DOB_DOA.this, android.R.style.Theme_Material_Light_Dialog_Alert,mDateSetListener,yy,mm,dd);
                 }
                 flag=false;
                 datePickerDialog.show();
@@ -165,7 +164,7 @@ public class DOB_DOA extends AppCompatActivity {
 
                 DatePickerDialog datePickerDialog= null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    datePickerDialog = new DatePickerDialog(DOB_DOA.this, AlertDialog.THEME_HOLO_DARK,mDateSetListener,yy,mm,dd);
+                    datePickerDialog = new DatePickerDialog(DOB_DOA.this, android.R.style.Theme_Material_Light_Dialog_Alert,mDateSetListener,yy,mm,dd);
                 }
                 flag=true;
                 datePickerDialog.show();

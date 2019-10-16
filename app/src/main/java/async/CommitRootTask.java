@@ -1,8 +1,9 @@
 package async;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
@@ -18,7 +19,7 @@ public class CommitRootTask extends AsyncTask<String,String,String>{
     private TaskListener<String> mListener;
     CBO_DB_Helper cbohelp;
 
-    public CommitRootTask(Activity context){
+    public CommitRootTask(AppCompatActivity context){
         mContext = context;
     }
     /*(String sCompanyFolder,String iPA_ID,String sDCR_DATE,String sSTATION,

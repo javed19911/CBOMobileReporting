@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/textColorPrimary"
@@ -184,7 +185,7 @@
                                     android:layout_margin="1dp"
                                     android:layout_weight="5"
                                     android:padding="6.5dp"
-                                    android:src="@drawable/drop_icon" />
+                                    app:srcCompat="@drawable/drop_icon" />
                             </LinearLayout>
 
                             <TextView
@@ -304,7 +305,7 @@
                                 android:layout_margin="1dp"
                                 android:layout_weight="7"
                                 android:padding="6.5dp"
-                                android:src="@drawable/drop_icon" />
+                                app:srcCompat="@drawable/drop_icon" />
                         </LinearLayout>
 
 
@@ -449,7 +450,7 @@
                                         android:layout_margin="1dp"
                                         android:layout_weight="7"
                                         android:padding="6.5dp"
-                                        android:src="@drawable/drop_icon" />
+                                        app:srcCompat="@drawable/drop_icon" />
                                 </LinearLayout>
 
 

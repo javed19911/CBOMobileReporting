@@ -1,7 +1,6 @@
 package utils.adapterutils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -218,7 +220,7 @@ public class AddDeleteLeaveAdapter extends BaseAdapter {
                         /*Intent intent = new Intent(context, LoginFake.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         context.startActivity(intent);*/
-                        MyCustumApplication.getInstance().Logout((Activity) context);
+                        MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
 
                     } else {
                         customVariablesAndMethod.msgBox(context,"Server Not responding" + "\n" + "Please try after Some time");

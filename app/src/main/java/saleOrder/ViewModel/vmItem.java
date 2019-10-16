@@ -3,6 +3,8 @@ package saleOrder.ViewModel;
 import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -21,7 +23,6 @@ import cbomobilereporting.cbo.com.cboorder.Enum.eTax;
 import cbomobilereporting.cbo.com.cboorder.Model.mDeal;
 import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
-import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.Model.mTax;
 import saleOrder.MyOrderAPIService;
 import saleOrder.Views.iFNewOrder;
@@ -39,7 +40,7 @@ public class vmItem extends CBOViewModel<iFNewOrder> {
     private ItemDB itemDB;
 
     @Override
-    public void onUpdateView(Activity context, iFNewOrder view) {
+    public void onUpdateView(AppCompatActivity context, iFNewOrder view) {
         disDB = new discountDB(context);
         itemDB = new ItemDB(context);
         //view.getReferencesById();
@@ -206,7 +207,7 @@ public class vmItem extends CBOViewModel<iFNewOrder> {
 
 
 
-    public void getOrderItem(final Activity context){
+    public void getOrderItem(final AppCompatActivity context){
 
         if (!isLoaded()) {
             //Start of call to service

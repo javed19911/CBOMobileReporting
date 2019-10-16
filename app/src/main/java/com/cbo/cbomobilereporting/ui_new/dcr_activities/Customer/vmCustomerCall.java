@@ -1,9 +1,10 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.CBOServices;
@@ -11,7 +12,6 @@ import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,7 +36,7 @@ public class vmCustomerCall extends CBOViewModel<iCustomerCall> {
 
 
     @Override
-    public void onUpdateView(Activity context, iCustomerCall view) {
+    public void onUpdateView(AppCompatActivity context, iCustomerCall view) {
         cbohelp = new CBO_DB_Helper(context);
         view.getReferencesById();
         view.setTile();
@@ -70,7 +70,7 @@ public class vmCustomerCall extends CBOViewModel<iCustomerCall> {
         return callModel;
     }
 
-    public void setCallmodel(Activity context, SpinnerModel callmodel) {
+    public void setCallmodel(AppCompatActivity context, SpinnerModel callmodel) {
         callModel = callmodel;
         LeadSummaryLink = "";
         mCustomerCall customerCall = (mCustomerCall) new mCustomerCall()
@@ -179,7 +179,7 @@ public class vmCustomerCall extends CBOViewModel<iCustomerCall> {
 
     }
 
-    public void getLeadSummaryURL(Activity context,SpinnerModel callmodel){
+    public void getLeadSummaryURL(AppCompatActivity context, SpinnerModel callmodel){
 
         //Start of call to service
 

@@ -1,0 +1,160 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/textColorPrimary"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+
+
+    <include layout="@layout/hadder_2016"
+        android:id="@+id/header1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/search"
+            android:id="@+id/filterTxt"
+            android:textColor="@android:color/black"
+            android:hint="Search Batch/Items"
+            android:textSize="13sp"
+            android:textColorHint="@android:color/darker_gray"
+            android:layout_gravity="center_vertical"
+            android:background="#0fff"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/clearQry"
+            android:layout_marginRight="3dp"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"/>
+
+    </LinearLayout>
+
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="3dp"
+       android:background="@color/colorPrimary"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/headerBgLight">
+
+
+
+        <TextView
+            android:text="Batch"
+            android:textColor="@color/white"
+            android:layout_weight="2"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:id="@+id/batch_no"
+            android:layout_marginLeft="5dp"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/distance"
+            android:layout_toStartOf="@+id/distance" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/pack"
+            android:text="Pack"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="1.4"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"/>
+
+
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/exp"
+            android:text="Exp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="1.2"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/mfg"
+            android:text="Mrp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="1.2"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/rate"
+            android:text="Rate"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="1.4"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/stock"
+            android:text="Stock"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="2"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"/>
+
+
+</LinearLayout>

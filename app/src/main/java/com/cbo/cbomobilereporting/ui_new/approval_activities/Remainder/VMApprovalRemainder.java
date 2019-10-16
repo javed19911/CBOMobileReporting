@@ -1,13 +1,15 @@
 package com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import org.json.JSONArray;
@@ -18,8 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import services.CboServices;
-import com.cbo.cbomobilereporting.MyCustumApplication;
-
 import utils_new.Custom_Variables_And_Method;
 
 /**
@@ -74,7 +74,7 @@ public class VMApprovalRemainder extends ViewModel {
                 " Fetching data");
         progress1.setCancelable(false);
 
-        if (context instanceof Activity) {
+        if (context instanceof AppCompatActivity) {
             progress1.show();
         }
 

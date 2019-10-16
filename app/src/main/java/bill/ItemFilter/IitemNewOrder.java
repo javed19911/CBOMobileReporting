@@ -3,7 +3,7 @@ package bill.ItemFilter;
 import java.util.ArrayList;
 
 import bill.NewOrder.mBillItem;
-import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
+import bill.mBillOrder;
 
 public interface IitemNewOrder {
 
@@ -21,5 +21,5 @@ public interface IitemNewOrder {
 
     void onItemsChanged(ArrayList<mBillItem> var1);
 
-    void onOrderChanged(mOrder var1);
+    void onOrderChanged(mBillOrder var1);
 }

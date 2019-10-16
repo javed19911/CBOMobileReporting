@@ -1,10 +1,5 @@
 package utils.adapterutils;
 
-import java.util.List;
-
-
-
-import android.app.Activity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -16,7 +11,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
+
+import java.util.List;
 
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -26,12 +25,12 @@ import utils_new.InputFilterMinMax;
 public class MyAdapter2 extends ArrayAdapter<GiftModel> {
 
 	private final List<GiftModel> list;   
-	private final Activity context;
+	private final AppCompatActivity context;
 	Custom_Variables_And_Method customVariablesAndMethod;
 	private Boolean clicked= true;
 	String DCRGIFT_QTY_VALIDATE ="";
 	
-    public MyAdapter2(Activity context, List<GiftModel> list) {
+    public MyAdapter2(AppCompatActivity context, List<GiftModel> list) {
 	   super(context, R.layout.dr_gift_row, list);
 	   this.context = context;       
 	   this.list = list;

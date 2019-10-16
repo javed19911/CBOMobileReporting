@@ -28,4 +28,12 @@
     <color name="activity_bg">#aaa</color>
     <color name="primary">#000</color>
     <color name="white">#FFFFFF</color>
+    <color name="headerBgLight">#AA1B8FE4</color>
+
+
+    <color name="colorSalesMonth">#FFFF00</color>
+    <color name="colorSaleTill">#7aa4</color>
+    <color name="colorStock">#789424</color>
+    <color name="colorCollection">#eb6223</color>
+    <color name="colorSaleToday">#000</color>
 </resources>

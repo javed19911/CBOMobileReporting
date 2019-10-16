@@ -1,21 +1,19 @@
 package utils;
 
 
-
-
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Locale;
-
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Environment;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class Utils {
 

@@ -1,5 +1,16 @@
 package utils.adapterutils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+
+import com.cbo.cbomobilereporting.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,21 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-
-import com.cbo.cbomobilereporting.R;
-
 import utils.AppConstant;
-import utils.MyConnection;
 import utils_new.Custom_Variables_And_Method;
 
 public class ImageLoader {

@@ -1,8 +1,5 @@
 package utils.adapterutils;
 
-import java.util.List;
-
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +8,21 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
+
+import java.util.List;
 
 
 public class DCR_UpdateAdapter extends ArrayAdapter<Dcr_Workwith_Model>
 {
 	private final List<Dcr_Workwith_Model> list;   
 	private List<String> selected_ids;
-	private final Activity context;
+	private final AppCompatActivity context;
 	
 	
-	public DCR_UpdateAdapter(Activity context,List<Dcr_Workwith_Model>list,List<String> selected_ids)
+	public DCR_UpdateAdapter(AppCompatActivity context, List<Dcr_Workwith_Model>list, List<String> selected_ids)
 	{ 
 		super(context, R.layout.dcr_workwith_row,list);
 		this.context = context;       

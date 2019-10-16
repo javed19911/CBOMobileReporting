@@ -164,7 +164,7 @@
                             android:layout_margin="1dp"
                             android:layout_weight="4"
                             android:padding="1dp"
-                            android:src="@drawable/calender_00" />
+                            card_view:srcCompat="@drawable/calender_00" />
                     </LinearLayout>
 
                 </LinearLayout>

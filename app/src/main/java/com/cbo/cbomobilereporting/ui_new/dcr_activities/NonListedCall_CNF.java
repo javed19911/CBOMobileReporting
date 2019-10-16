@@ -2,7 +2,6 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -17,16 +16,11 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,6 +37,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -196,7 +197,7 @@ public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog= null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    datePickerDialog = new DatePickerDialog(context, AlertDialog.THEME_HOLO_DARK,mDateSetListener,yy,mm,dd);
+                    datePickerDialog = new DatePickerDialog(context,android.R.style.Theme_Material_Light_Dialog_Alert,mDateSetListener,yy,mm,dd);
                 }
                 flag=false;
                 datePickerDialog.show();
@@ -209,7 +210,7 @@ public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog= null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    datePickerDialog = new DatePickerDialog(context, AlertDialog.THEME_HOLO_DARK,mDateSetListener,yy,mm,dd);
+                    datePickerDialog = new DatePickerDialog(context,android.R.style.Theme_Material_Light_Dialog_Alert,mDateSetListener,yy,mm,dd);
                 }
                 flag=true;
                 datePickerDialog.show();

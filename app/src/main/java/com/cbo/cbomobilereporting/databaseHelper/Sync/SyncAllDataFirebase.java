@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.ExpHeadDB;
@@ -205,7 +207,7 @@ public class SyncAllDataFirebase {
                         cboProgressDialog.setDescription("Please Wait..\nDownloading completed !!!!");
                         DBRef.removeEventListener(this);
                         cboProgressDialog.dismiss();
-                        MyCustumApplication.getInstance().Logout((Activity) context);
+                        MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
                     }
 
                     @Override

@@ -6384,14 +6384,15 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     datanum.put("mail_id", c.getString(c.getColumnIndex("mail_id")));
                     datanum.put("id", c.getString(c.getColumnIndex("id")));
                     datanum.put("category", c.getString(c.getColumnIndex("category")));
-                    String[] file_name=c.getString(c.getColumnIndex("file_path")).split(",");
+                   /* String[] file_name=c.getString(c.getColumnIndex("file_path")).split(",");
 
                     if (file_name.length>0 && file_name[0]!=null){
                         datanum.put("FILE_NAME", file_name[0]);
                     }else{
                         datanum.put("FILE_NAME","");
-                    }
+                    }*/
 
+                    datanum.put("FILE_NAME",c.getString(c.getColumnIndex("file_path")).replace(",","|^"));
                     datanum.put("REMARK", c.getString(c.getColumnIndex("remark")));
                     datanum.put("IS_READ",c.getString(c.getColumnIndex("is_read")));
                     data.add(datanum);

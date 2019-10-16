@@ -1,6 +1,8 @@
 package saleOrder.ViewModel;
 
 import android.app.Activity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 
 /**
@@ -10,7 +12,7 @@ import androidx.lifecycle.ViewModel;
 public abstract class CBOViewModel<T> extends ViewModel {
     private int count = 0;
     protected T view;
-    public void setView(Activity context, T view){
+    public void setView(AppCompatActivity context, T view){
         this.view = view;
         if (view != null){
             onUpdateView(context,view);
@@ -25,5 +27,5 @@ public abstract class CBOViewModel<T> extends ViewModel {
         count++;
         return count;
     }
-    public abstract void onUpdateView(Activity context, T view);
+    public abstract void onUpdateView(AppCompatActivity context, T view);
 }

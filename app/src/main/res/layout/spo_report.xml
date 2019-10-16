@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -115,7 +116,7 @@
                         android:layout_margin="1dp"
                         android:layout_weight="5"
                         android:padding="6.5dp"
-                        android:src="@drawable/drop_icon" />
+                        app:srcCompat="@drawable/drop_icon" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -188,7 +189,7 @@
                         android:layout_margin="1dp"
                         android:layout_weight="5"
                         android:padding="6.5dp"
-                        android:src="@drawable/drop_icon" />
+                        app:srcCompat="@drawable/drop_icon" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -249,7 +250,7 @@
                         android:layout_margin="1dp"
                         android:layout_weight="4"
                         android:padding="5dp"
-                        android:src="@drawable/calendar" />
+                        app:srcCompat="@drawable/calendar" />
                 </LinearLayout>
                 <TextView
                     android:layout_width="130dp"
@@ -300,7 +301,7 @@
                         android:layout_margin="1dp"
                         android:layout_weight="4"
                         android:padding="5dp"
-                        android:src="@drawable/calendar" />
+                        app:srcCompat="@drawable/calendar" />
                 </LinearLayout>
 
                 <TextView
@@ -353,7 +354,7 @@
                         android:layout_margin="1dp"
                         android:layout_weight="4"
                         android:padding="5dp"
-                        android:src="@drawable/drop_icon" />
+                        app:srcCompat="@drawable/drop_icon" />
                 </LinearLayout>
 
 
@@ -407,7 +408,7 @@
                         android:layout_margin="1dp"
                         android:layout_weight="4"
                         android:padding="5dp"
-                        android:src="@drawable/drop_icon" />
+                        app:srcCompat="@drawable/drop_icon" />
                 </LinearLayout>
             </LinearLayout>
             <utils.font_package.Button_Bold

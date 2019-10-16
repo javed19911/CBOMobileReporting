@@ -5,11 +5,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:orientation="vertical"
-    tools:showIn="@layout/dcrreportsnew">
+    android:orientation="vertical">
 
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:id="@+id/header"
+        android:background="@color/headerBg"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/expand"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23dp"
+
+            />
+
+        <TextView
+            android:id="@+id/party_name"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Company Name"
+            android:textStyle="bold"
+            android:paddingLeft="3dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+
+        <TextView
+            android:id="@+id/doc_no"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="Bill No."
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.5"
+            android:textSize="12dp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.6"
+            android:textSize="12dp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/amt"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="Bill Amt."
+            android:gravity="right"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.7"
+            android:textSize="12dp" />
+
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefressLayoutRecycler"
@@ -17,16 +103,63 @@
         android:layout_weight="1"
         android:layout_height="wrap_content">
 
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bill_report_content"
             android:layout_width="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
+
+
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:id="@+id/footer"
+        android:layout_alignParentBottom="true"
+        android:background="@color/headerBg"
+        android:orientation="horizontal">
+
+
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Total"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textStyle="bold"
+            android:paddingLeft="3dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp"
+            />
+
+
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/Totamt"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.3"
+            android:textSize="12dp" />
+
+    </LinearLayout>
 
 
 

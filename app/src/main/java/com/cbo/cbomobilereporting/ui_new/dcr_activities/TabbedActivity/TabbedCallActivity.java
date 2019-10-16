@@ -1,22 +1,20 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.TabbedActivity;
 
+import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;
-
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.DcrmenuInGrid;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DoctorSample.DoctorSampleFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class TabbedCallActivity extends AppCompatActivity implements iTabbedCall{
 
     vmTabbedCall viewModel;
-    Activity context;
+    AppCompatActivity context;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;

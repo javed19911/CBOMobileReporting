@@ -1,25 +1,26 @@
 package com.cbo.cbomobilereporting.ui_new;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.fragment.app.Fragment;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport.DcrReportsNew;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;
-import com.cbo.cbomobilereporting.ui_new.report_activities.DashboardReport;
+import com.cbo.cbomobilereporting.ui_new.report_activities.Dashboard.DashboardReport;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DrWiseVisit;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Logged_UnLogged;
 import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.MissedDoctorActivity;
@@ -31,10 +32,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import bill.Dashboard.Dashboard;
 import saleOrder.Activities.MyOrder;
 import saleOrder.Model.mParty;
 import utils.adapterutils.ReportMenu_Grid_Adapter;
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -85,6 +86,7 @@ public class ReportMenuInGrid extends Fragment {
                // TextView textView = (TextView) view.findViewById(R.id.text_src);
                // String itemLebel = textView.getText().toString();
                 String itemLebel = getKeyList.get(position);
+                String menuname = listOfAllTab.get(position);
                 String url=new CBO_DB_Helper(getActivity()).getMenuUrl("REPORTS",itemLebel);
                 if(url!=null && !url.equals("")) {
                     /*Intent i = new Intent(getActivity(), CustomWebView.class);
@@ -147,6 +149,12 @@ public class ReportMenuInGrid extends Fragment {
                             onClickSalesOrderSummary();
                             break;
                         }
+                        case "R_DASHBOARD_SALES" : {
+                            Intent intent = new Intent(context, Dashboard.class);
+                            intent.putExtra("title",menuname);
+                            startActivity(intent);
+                            break;
+                        }
                         default: {
                             url = new CBO_DB_Helper(getActivity()).getMenuUrl("REPORTS", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
@@ -192,7 +200,7 @@ public class ReportMenuInGrid extends Fragment {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
             builder.setToolbarColor(getResources().getColor( R.color.colorPrimaryDark));
-            customTabsIntent.launchUrl((Activity) context,
+            customTabsIntent.launchUrl((AppCompatActivity) context,
                     Uri.parse( new CBO_DB_Helper(context).getMenuUrl("REPORTS","MSG_HO")));
 
            /* Intent i = new Intent(getActivity(), Msg_ho.class);

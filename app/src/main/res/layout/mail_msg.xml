@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -101,7 +102,7 @@
                             android:id="@+id/attach"
                             android:layout_marginRight="10dp"
                             android:layout_alignParentRight="true"
-                            android:src="@drawable/attach"/>
+                            app:srcCompat="@drawable/attach"/>
 
                     </RelativeLayout>
                 <!--</LinearLayout>-->
@@ -138,7 +139,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:src="@drawable/mail_replay"
+                    app:srcCompat="@drawable/mail_replay"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent" />
                 <TextView
@@ -155,7 +156,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:src="@drawable/mail_replay"
+                    app:srcCompat="@drawable/mail_replay"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent" />
                 <TextView
@@ -172,7 +173,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:src="@drawable/mail_forward"
+                    app:srcCompat="@drawable/mail_forward"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent" />
                 <TextView
@@ -189,7 +190,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:src="@android:drawable/ic_menu_edit"
+                    app:srcCompat="@android:drawable/ic_menu_edit"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent" />
                 <TextView
@@ -206,7 +207,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:src="@android:drawable/ic_menu_delete"
+                    app:srcCompat="@android:drawable/ic_menu_delete"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent" />
                 <TextView

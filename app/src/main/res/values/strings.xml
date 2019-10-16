@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="number">
-        <item>"0"</item>
-        <item>"1"</item>
-        <item>"2" </item>
-        <item>"3"</item>
-        <item>"4"</item>
-        <item>"5"</item>
-        <item>"6" </item>
-        <item>"7"</item>
-        <item>"8"</item>
-        <item>"9"</item>
-        <item>"10"</item>
-
-    </string-array>
-
-
     <string name="app_name">CBO Mobile Reporting</string>
+
+
     <string name="app_tag">CBOMobileReporting</string>
     <string name="spinner_title">Select Work Type</string>
     <string name="spinner_title2">Work With</string>
@@ -32,30 +18,30 @@
     <string name="spinner_title11">Select Shift</string>
     <string name="spinner_title12">Select Status</string>
     <string name="spinner_title13">Select Employee</string>
+    <string name="chm_loc">Location</string>
     <!--
 <string name="background">@drawable/bg2</string>
 <string name="background2">@drawable/new_bg</string>
     -->
-    <string name="chm_loc">Location</string>
     <string name="chm_locsize">20px</string>
     <string name="chm_name">Chemist Name</string>
     <string name="chm_pob">P.O.B.</string>
     <string name="chm_hint">    Enter P.O.B.</string>
     <string name="myapp">    welcome Screen.</string>
     <string name="address_output_string">%1$s %2$s %3$s</string>
-
-    <!-- Latitude, longitude format -->
     <string name="latitude_longitude">%1$.8f, %2$.8f</string>
 
-    <!-- Menu title -->
+    <!-- Latitude, longitude format -->
     <string name="action_settings">Settings</string>
 
-    <!-- Labels -->
+    <!-- Menu title -->
     <string name="latlng">Lat/Long:</string>
+
+    <!-- Labels -->
     <string name="address">Address:</string>
+    <string name="connected">Client connected</string>
 
     <!-- Messages -->
-    <string name="connected">Client connected</string>
     <string name="connection_error_code_unknown">Unknown connection error code:  %1$d</string>
     <string name="connection_failed">Connection failed</string>
     <string name="disconnected">Client disconnected</string>
@@ -101,35 +87,20 @@
     <string name="service_unavilable">We are facing some technical issues. We will have it resolved shortly so please try again after some time. If possible, do send a screenshot to support@cboinfotech.com. \n</string>
     <string name="try_later">Please try after sometime.</string>
     <string name="rs">\u20B9 </string>
-
     <string name="Internet_error">Connection timeout. Please try after some time or Switch ON/OFF your Internet \n</string>
 
     <string name="uploads_disabled">File uploads are disabled.</string>
+
     <string name="choose_upload">Choose file for upload</string>
     <string name="choose_photo_title">Select Photo</string>
-
     <string name="invitation_yes">Yes</string>
+
     <string name="invitation_del_no">No</string>
-    <string-array name="navigation">
-        <item name="item1" />
-        <item name="item2" />
-        <item name="item3" />
-        <item name="item4" />
-        <item name="item5" />
-        <item name="item6" />
-        <item name="item7" />
-    </string-array>
-
-    <string-array name="nonListed_call">
-
-        <item name="Doctor" />
-        <item name="Chemist" />
-        <item name="Stockist" />
-    </string-array>
-
     <string name="title_activity_main__menu">Main_Menu</string>
     <string name="title_section1">Section 1</string>
+
     <string name="title_section2">Section 2</string>
+
     <string name="title_section3">Section 3</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -140,9 +111,42 @@
     <string name="error_no_camera">Sorry you have no support for CAMERA</string>
     <string name="title_activity_location_test"></string>
     <string name="search_hint">Enter Name</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_message">You must grant permission to access camera and external storage to run this application.</string>
+    <string name="permission_warning">All permissions are required.</string>
+
+    <string-array name="number">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"2" </item>
+        <item>"3"</item>
+        <item>"4"</item>
+        <item>"5"</item>
+        <item>"6" </item>
+        <item>"7"</item>
+        <item>"8"</item>
+        <item>"9"</item>
+        <item>"10"</item>
+
+    </string-array>
+    <string-array name="navigation">
+        <item name="item1" />
+        <item name="item2" />
+        <item name="item3" />
+        <item name="item4" />
+        <item name="item5" />
+        <item name="item6" />
+        <item name="item7" />
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="nonListed_call">
+
+        <item name="Doctor" />
+        <item name="Chemist" />
+        <item name="Stockist" />
+    </string-array>
 
 
 </resources>

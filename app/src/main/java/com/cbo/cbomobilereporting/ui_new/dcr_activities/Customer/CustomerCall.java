@@ -1,8 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -36,6 +32,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -81,14 +83,14 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
         ExpandableListAdapter.Summary_interface,up_down_ftp.AdapterCallback {
 
     private vmCustomerCall viewModel;
-    Activity context;
+    AppCompatActivity context;
     Button drname,get_workwithBtn,back;
     ImageView spinner_img_drCall,attachImg,remark_img,status_img;
     CheckBox dr_attach_add_chk;
     TextView loc,get_workwith;
     RelativeLayout loc_layout;
     Button products, gift,lead,add,btn_remark,statusBtn;
-    AlertDialog  myalertDialog = null;
+    AlertDialog myalertDialog = null;
 
 
     String sample_name="",sample_pob="",sample_sample="";

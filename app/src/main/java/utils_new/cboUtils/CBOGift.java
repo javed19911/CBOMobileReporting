@@ -1,21 +1,21 @@
 package utils_new.cboUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.LeadActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.SamplePOBBuilder;
@@ -27,7 +27,7 @@ public class CBOGift extends MultiSelectView<PobModel,CBOGift.MyViewHolder> {
 
     public static final int GIFT_DIALOG= 10001;
     Fragment fragment;
-    Activity activity;
+    AppCompatActivity activity;
     CallType callType = CallType.NONE;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, headQtr,character,amt;
@@ -81,7 +81,7 @@ public class CBOGift extends MultiSelectView<PobModel,CBOGift.MyViewHolder> {
         this.fragment = fragment;
         setCallType(callType);
     }
-    public void setActivity(Activity activity,CallType callType){
+    public void setActivity(AppCompatActivity activity, CallType callType){
         this.activity = activity;
         setCallType(callType);
     }

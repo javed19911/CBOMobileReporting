@@ -2,7 +2,6 @@ package com.cbo.cbomobilereporting.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -22,8 +21,6 @@ import android.os.StrictMode;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -36,6 +33,10 @@ import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -271,7 +272,7 @@ public class Leave_Request extends AppCompatActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             startActivity(i);*/
-            MyCustumApplication.getInstance().Logout((Activity) context);
+            MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
         } else {
 
             empName.setText("" + pa_name);
@@ -818,7 +819,7 @@ public class Leave_Request extends AppCompatActivity {
 
 /////////////////////////////////// LeaveRequstGrid Task//////////////////////////////
 
-    public void leaveRequstGridMethod(final Activity context) {
+    public void leaveRequstGridMethod(final AppCompatActivity context) {
 
         if (!leaveIdExtra.equals("Intent Not Found")){
 

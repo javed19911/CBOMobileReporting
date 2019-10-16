@@ -1,14 +1,10 @@
 package com.cbo.cbomobilereporting.ui_new;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +14,12 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
@@ -31,14 +33,12 @@ import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity;
 import com.uenics.javed.CBOLibrary.Response;
 
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import services.ServiceHandler;
 import utils.adapterutils.Util_Grid_Adapter;
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
@@ -48,7 +48,7 @@ public class UtilitiesMenuInGrid extends Fragment {
 
 
     View v;
-    Activity context;
+    AppCompatActivity context;
     GridView gridView;
     String fmcgYN;
     NetworkUtil networkUtil;
@@ -75,7 +75,7 @@ public class UtilitiesMenuInGrid extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        context = getActivity();
+        context = (AppCompatActivity) getActivity();
 
 
         gridView = (GridView) v.findViewById(R.id.grid_view_example);

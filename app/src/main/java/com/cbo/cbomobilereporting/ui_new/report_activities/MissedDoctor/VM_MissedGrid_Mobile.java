@@ -1,13 +1,16 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.DrVisitedList;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.F_TeamMonthDivision;
@@ -20,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import services.CboServices;
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.AppAlert;
 import utils_new.CustomError;
 import utils_new.Custom_Variables_And_Method;
@@ -71,7 +73,7 @@ public class VM_MissedGrid_Mobile  extends ViewModel{
               this.last_missedType = f_teamMonthDivision.getViewModel().getMissedFilter().getId();
 
               if (mMissedGridArrayList == null) {
-                  ShowMissedGrid((Activity) context, listener);
+                  ShowMissedGrid((AppCompatActivity) context, listener);
               } else {
                   listener.onSuccess(mMissedGridArrayList);
               }
@@ -84,7 +86,7 @@ public class VM_MissedGrid_Mobile  extends ViewModel{
     }
 
 
-    private void ShowMissedGrid(Activity context, OnResultlistener listener) {
+    private void ShowMissedGrid(AppCompatActivity context, OnResultlistener listener) {
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
         progress1 = new ProgressDialog(context);
 

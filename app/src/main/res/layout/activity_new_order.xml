@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
         android:id="@+id/toolbar"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
@@ -43,7 +43,7 @@
                 android:layout_gravity="center_vertical"
                 android:id="@+id/clearQry"
                 android:layout_marginRight="3dp"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"/>
 
         </LinearLayout>
 

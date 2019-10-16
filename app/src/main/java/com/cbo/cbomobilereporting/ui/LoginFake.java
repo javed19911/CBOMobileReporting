@@ -1,10 +1,7 @@
 package com.cbo.cbomobilereporting.ui;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-
 import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -27,31 +23,32 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyPermanentlyInvalidatedException;
-import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.cbo.cbomobilereporting.FingerprintHandler;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
+import com.cbo.cbomobilereporting.ui_new.MyCamera;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
 import com.flurry.android.FlurryAgent;
@@ -62,30 +59,18 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsStates;
 
-import services.Sync_service;
-
-import com.cbo.cbomobilereporting.MyCustumApplication;
-
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 
+import bill.Dashboard.Dashboard;
+import services.Sync_service;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
@@ -286,16 +271,26 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                     //new SyncAllDataFirebase(context);
                     LoginFake(false);
 
+
                     //new CustomTextToSpeech().setTextToSpeech("1");
 
                     /*Intent intent = new Intent(context, AttachImage.class);
                     startActivity(intent);*/
+//
+//                    String filenameTemp = Custom_Variables_And_Method.PA_ID+"_"+ Custom_Variables_And_Method.DCR_ID+"_attach_"+Custom_Variables_And_Method.getInstance().get_currentTimeStamp()+".jpg";
+//                    Intent intent = new Intent(context, MyCamera.class);
+//                    intent.putExtra("Output_FileName",filenameTemp);
+//                    intent.putExtra("SelectFrom", AttachImage.ChooseFrom.frontCamera);
+//                    startActivity(intent);
+                    //startActivityForResult(intent,0);
 
                     /*Intent intent = new Intent(context, Doctor_registration_GPS.class);
                     intent.putExtra("id",0);
                     intent.putExtra("name","hg");
                     intent.putExtra("type","S");
                     startActivity(intent);*/
+
+
                 }
             }
         });
@@ -348,7 +343,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 // Checks whether fingerprint permission is set on manifest
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
                     //textView.setText("Fingerprint authentication permission not enabled");
-                    ActivityCompat.requestPermissions((Activity) context,
+                    ActivityCompat.requestPermissions((AppCompatActivity) context,
                             new String[] { Manifest.permission.USE_FINGERPRINT},
                             REQUEST_FINGERPRINT_PERMISSION);
                 }else{
@@ -441,6 +436,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
             throw new RuntimeException("Failed to init Cipher", e);
         }
     }*/
+
 
     private class GetFmcg extends AsyncTask<Void, Void, String> {
         ProgressDialog commitDialog;
@@ -569,7 +565,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                     ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
                 //takePictureButton.setEnabled(false);
-                ActivityCompat.requestPermissions((Activity) context, new String[] { Manifest.permission.CAMERA,
+                ActivityCompat.requestPermissions((AppCompatActivity) context, new String[] { Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_PHONE_STATE
                 }, REQUEST_PERMISSION);
@@ -582,7 +578,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                                 ContextCompat.checkSelfPermission(context,
                                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )){
-                    ActivityCompat.requestPermissions((Activity) context, new String[] {
+                    ActivityCompat.requestPermissions((AppCompatActivity) context, new String[] {
                             Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION
                     }, REQUEST_PERMISSION);
@@ -1028,10 +1024,11 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         Intent intent = new Intent();
         final LocationSettingsStates states = LocationSettingsStates.fromIntent(intent);
         switch (requestCode) {
-            case REQUEST_CODE :
+            case REQUEST_CODE:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (!Settings.canDrawOverlays(this)) {
                         Toast.makeText(context, "Please allow the permission to Login", Toast.LENGTH_LONG).show();
@@ -1051,7 +1048,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                         // mycon.msgBox("You Press Cancel..");
                         break;
                     default:
-                        break;
+                        super.onActivityResult(requestCode, resultCode, data);
                 }
                 break;
         }

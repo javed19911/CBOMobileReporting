@@ -3,7 +3,6 @@ package utils_new;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,9 +20,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,12 +30,18 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -49,6 +51,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,11 +64,6 @@ import java.util.List;
 import java.util.Locale;
 
 import locationpkg.LocationTest;
-import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
 import utils.networkUtil.NetworkUtil;
 
 import static android.content.ContentValues.TAG;
@@ -1206,14 +1207,14 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         Task<LocationSettingsResponse> result =
                 LocationServices.getSettingsClient(context).checkLocationSettings( builder.build());
 
-        result.addOnSuccessListener((Activity) context, new OnSuccessListener<LocationSettingsResponse>() {
+        result.addOnSuccessListener((AppCompatActivity) context, new OnSuccessListener<LocationSettingsResponse>() {
             @SuppressLint("MissingPermission")
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                 //  GPS is already enable, callback GPS status through listener
 
             }
-        }).addOnFailureListener((Activity) context, new OnFailureListener() {
+        }).addOnFailureListener((AppCompatActivity) context, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         int statusCode = ((ApiException) e).getStatusCode();

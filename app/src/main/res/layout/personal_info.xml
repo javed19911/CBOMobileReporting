@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -51,7 +52,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginRight="5dp"
                 android:layout_weight="2"
-                android:src="@drawable/change_pwd" />
+                app:srcCompat="@drawable/change_pwd" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"
@@ -75,7 +76,7 @@
                 android:layout_marginLeft="3.5dp"
                 android:layout_marginRight="3.5dp"
                 android:layout_weight="2"
-                android:src="@drawable/salary_slip" />
+                app:srcCompat="@drawable/salary_slip" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"
@@ -100,7 +101,7 @@
                 android:layout_height="135dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="2"
-                android:src="@drawable/circular" />
+                app:srcCompat="@drawable/circular" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"
@@ -135,7 +136,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginRight="5dp"
                 android:layout_weight="2"
-                android:src="@drawable/decl_ofsaving" />
+                app:srcCompat="@drawable/decl_ofsaving" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"
@@ -160,7 +161,7 @@
                 android:layout_marginLeft="3.5dp"
                 android:layout_marginRight="3.5dp"
                 android:layout_weight="2"
-                android:src="@drawable/perso_info" />
+                app:srcCompat="@drawable/perso_info" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"
@@ -185,7 +186,7 @@
                 android:layout_height="135dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="2"
-                android:src="@drawable/form16" />
+                app:srcCompat="@drawable/form16" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"
@@ -220,7 +221,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginRight="5dp"
                 android:layout_weight="2"
-                android:src="@drawable/dcr_reports_white" />
+                app:srcCompat="@drawable/dcr_reports_white" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"
@@ -245,7 +246,7 @@
                 android:layout_marginLeft="3.5dp"
                 android:layout_marginRight="3.5dp"
                 android:layout_weight="2"
-                android:src="@drawable/request_leave_white" />
+                app:srcCompat="@drawable/request_leave_white" />
 
             <utils.font_package.Text_view_Regular
 
@@ -271,7 +272,7 @@
                 android:layout_height="135dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="2"
-                android:src="@drawable/form16" />
+                app:srcCompat="@drawable/form16" />
 
             <utils.font_package.Text_view_Regular
                 android:layout_width="fill_parent"

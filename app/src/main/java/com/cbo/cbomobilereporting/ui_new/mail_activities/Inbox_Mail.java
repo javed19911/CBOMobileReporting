@@ -158,10 +158,22 @@ public class Inbox_Mail extends AppCompatActivity {
                 JSONArray jsonArray1 = new JSONArray(table0);
                 for (int i = 0; i < jsonArray1.length(); i++) {
                     JSONObject object = jsonArray1.getJSONObject(i);
+                    String files = object.getString("FILE_NAME"); //+"|^"+object.getString("FILE_NAME2")+"|^"+object.getString("FILE_NAME3")
+                    if (files.isEmpty()){
+                        files = object.getString("FILE_NAME2");
+                    }else{
+                        files = files + "|^" + object.getString("FILE_NAME2");
+                    }
+                    if (files.isEmpty()){
+                        files = object.getString("FILE_NAME3");
+                    }else{
+                        files = files + "|^" + object.getString("FILE_NAME3");
+                    }
+
                     cbohelp.insert_Mail(object.getInt("ID"),object.getString("FROM_PA_ID"),object.getString("FROM_PA_NAME"),object.getString("FWD_DATE"),object.getString("FWD_TIME"),
                             object.getString("IS_READ"),object.getString("MAIL_TYPE"),object.getString("CC"),object.getString("SUBJECT"),object.getString("REMARK")
                             ,object.getString("FILE_HEADING")+","+object.getString("FILE_HEADING2")+","+object.getString("FILE_HEADING3")
-                            ,object.getString("FILE_NAME")+","+object.getString("FILE_NAME2")+","+object.getString("FILE_NAME3"));
+                            ,files);
                 }
                 data=cbohelp.get_Mail("i","");
                 outboxMail_adapter=new OutboxMail_Adapter(Inbox_Mail.this,data);

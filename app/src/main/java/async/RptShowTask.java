@@ -1,10 +1,13 @@
 package async;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+
 import services.ServiceHandler;
 import services.TaskListener;
 
@@ -16,7 +19,7 @@ public class RptShowTask extends AsyncTask<String,String,String> {
     private TaskListener<String> mListener;
     CBO_DB_Helper cbohelp;
 
-    public RptShowTask(Activity context){
+    public RptShowTask(AppCompatActivity context){
         mContext = context;
     }
 

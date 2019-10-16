@@ -1,7 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,7 +9,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,15 +28,19 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrCallDB;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
-import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.cbo.cbomobilereporting.ui.GridViewActivity;
 import com.cbo.cbomobilereporting.ui.PrescribeNew;
 import com.cbo.cbomobilereporting.ui.VideoPlay;
+import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.flurry.android.FlurryAgent;
 
 import java.sql.ResultSet;
@@ -50,8 +52,6 @@ import java.util.LinkedHashMap;
 import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
-import com.cbo.cbomobilereporting.MyCustumApplication;
-
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Dr_Gift_Dialog;
@@ -540,7 +540,7 @@ public class Doctor_Sample extends AppCompatActivity {
                 intent.putExtra("EXIT", true);
                 startActivity(intent);
                 finish();*/
-                MyCustumApplication.getInstance().Logout((Activity) context);
+                MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
             }
         });
 
@@ -609,7 +609,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         intent.putExtra("EXIT", true);
                         startActivity(intent);
                         finish();*/
-                        MyCustumApplication.getInstance().Logout((Activity) context);
+                        MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
                     }
 
                 }
@@ -959,7 +959,7 @@ public class Doctor_Sample extends AppCompatActivity {
                     intent.putExtra("EXIT", true);
                     startActivity(intent);
                     finish();*/
-                    MyCustumApplication.getInstance().Logout((Activity) context);
+                    MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
                 }else {
                     customVariablesAndMethod.msgBox(context,"Plese enter POB quantity");
                 }
@@ -1132,7 +1132,7 @@ public class Doctor_Sample extends AppCompatActivity {
                     intent.putExtra("EXIT", true);
                     startActivity(intent);
                     finish();*/
-                    MyCustumApplication.getInstance().Logout((Activity) context);
+                    MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
                     break;
                 case 99:
                     if ((null != msg.getData())) {
@@ -1157,7 +1157,7 @@ public class Doctor_Sample extends AppCompatActivity {
                 intent.putExtra("EXIT", true);
                 startActivity(intent);
                 finish();*/
-                MyCustumApplication.getInstance().Logout((Activity) context);
+                MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
             }else {
                 customVariablesAndMethod.msgBox(context,"Plese enter POB quantity");
             }

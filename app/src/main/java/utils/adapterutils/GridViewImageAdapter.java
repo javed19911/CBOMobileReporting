@@ -1,32 +1,33 @@
 package utils.adapterutils;
 
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cbo.cbomobilereporting.ui.FullScreenViewActivity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-
-import com.cbo.cbomobilereporting.ui.FullScreenViewActivity;
-
 public class GridViewImageAdapter extends BaseAdapter {
 
-	private Activity _activity;
+	private AppCompatActivity _activity;
 	private ArrayList<String> _filePaths = new ArrayList<String>();
 	private int imageWidth;
 
-	public GridViewImageAdapter(Activity activity, ArrayList<String> filePaths,
-			int imageWidth) {
+	public GridViewImageAdapter(AppCompatActivity activity, ArrayList<String> filePaths,
+                                int imageWidth) {
 		this._activity = activity;
 		this._filePaths = filePaths;
 		this.imageWidth = imageWidth;

@@ -55,7 +55,7 @@
                 android:layout_margin="0.5dp"
                 android:layout_gravity="center"
                 android:padding="6.5dp"
-                android:src="@drawable/drop_icon" />
+                app:srcCompat="@drawable/drop_icon" />
         </LinearLayout>
 
 
@@ -110,7 +110,7 @@
                 android:layout_gravity="center"
 
                 android:padding="6.5dp"
-                android:src="@drawable/drop_icon" />
+                app:srcCompat="@drawable/drop_icon" />
         </LinearLayout>
 
 
@@ -164,7 +164,7 @@
                 android:layout_margin="0.5dp"
                 android:layout_gravity="center"
                 android:padding="6.5dp"
-                android:src="@drawable/drop_icon" />
+                app:srcCompat="@drawable/drop_icon" />
         </LinearLayout>
 
 

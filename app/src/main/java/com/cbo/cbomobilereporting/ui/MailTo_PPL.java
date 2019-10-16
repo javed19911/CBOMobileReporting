@@ -1,15 +1,5 @@
 package com.cbo.cbomobilereporting.ui;
 
-import java.lang.reflect.Array;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -29,13 +20,17 @@ import com.flurry.android.FlurryAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import services.ServiceHandler;
-import utils.MyConnection;
 import utils.adapterutils.MailAdapter;
 import utils.adapterutils.MailModel;
 import utils_new.Custom_Variables_And_Method;
 
-public class MailTo_PPL extends Activity{
+public class MailTo_PPL extends AppCompatActivity {
 	ListView mylist;
 	Button done;
 	ResultSet rs;

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -24,7 +26,7 @@ public class vmFCart extends CBOViewModel<iFCart> {
 
     private mOrder order = new mOrder();
     @Override
-    public void onUpdateView(Activity context, iFCart view) {
+    public void onUpdateView(AppCompatActivity context, iFCart view) {
         view.getReferencesById();
         view.setTile();
     }
@@ -37,7 +39,7 @@ public class vmFCart extends CBOViewModel<iFCart> {
     }
 
 
-    public void orderCommit(Activity context, String Pay_mode){
+    public void orderCommit(AppCompatActivity context, String Pay_mode){
 
         String itemString = "",qtyString = "",rateString = "",amtString = "";
         String sTax_Percent = "",sTax_Percent1 = "",sTax_Amt = "",sTax_Amt1 = "";

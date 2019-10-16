@@ -1,25 +1,18 @@
 package com.cbo.cbomobilereporting.ui;
 
-import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
-import com.flurry.android.FlurryAgent;
-
-import java.util.Date;
-
-import utils.MyConnection;
 
 /**
  * Created by Akshit on 5/7/2015.
  */
-public class Comming_Soon extends Activity {
+public class Comming_Soon extends AppCompatActivity {
 
 
     TextView textView_welcome,login_text,signup_text,reset_pin;

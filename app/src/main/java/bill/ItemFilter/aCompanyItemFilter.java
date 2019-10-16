@@ -31,13 +31,12 @@ public class aCompanyItemFilter extends RecyclerView.Adapter<aCompanyItemFilter.
     private IitemFilter listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, headQtr,character;
+        public TextView name, stock;
 
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
-            headQtr = (TextView) view.findViewById(R.id.headqtr);
-            character = view.findViewById(R.id.character);
+            stock = (TextView) view.findViewById(R.id.stock);
         }
     }
 
@@ -70,7 +69,7 @@ public class aCompanyItemFilter extends RecyclerView.Adapter<aCompanyItemFilter.
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.company_medicine_card, parent, false);
+                .inflate(R.layout.bill_item_card, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -79,12 +78,10 @@ public class aCompanyItemFilter extends RecyclerView.Adapter<aCompanyItemFilter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         mBillItem item = itemscopy.get(position);
         holder.name.setText(item.getName());
-        holder.headQtr.setVisibility(View.GONE);
+        holder.stock.setText(""+item.getStock());
 
-        final Drawable drawable = holder.character.getBackground();
-        Random rnd = new Random();
-        final int[] color = {Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))};
-        drawable.setColorFilter(color[0], PorterDuff.Mode.SRC_IN);
+
+
         holder.itemView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

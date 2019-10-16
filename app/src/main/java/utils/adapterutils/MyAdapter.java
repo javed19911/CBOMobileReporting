@@ -1,9 +1,5 @@
 package utils.adapterutils;
 
-import java.util.List;
-
-
-import android.app.Activity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -16,7 +12,11 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.R;
+
+import java.util.List;
 
 import interfaces.Ipob;
 import utils_new.AppAlert;
@@ -28,12 +28,12 @@ public class MyAdapter extends ArrayAdapter<GiftModel> {
 
     private final List<GiftModel> list;
     Ipob listener;
-    private final Activity context;
+    private final AppCompatActivity context;
     private Boolean clicked= true;
     Custom_Variables_And_Method customVariablesAndMethod;
     String DCRGIFT_QTY_VALIDATE ="";
 
-    public MyAdapter(Activity context, List<GiftModel> list, Ipob listener) {
+    public MyAdapter(AppCompatActivity context, List<GiftModel> list, Ipob listener) {
         super(context, R.layout.stk_sample_row, list);
         this.context = context;
         this.listener = listener;

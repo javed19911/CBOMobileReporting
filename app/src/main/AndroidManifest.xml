@@ -3,57 +3,6 @@
     package="com.cbo.cbomobilereporting"
     android:installLocation="internalOnly">
 
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:resizeable="true"
-        android:smallScreens="true"
-        android:xlargeScreens="true" />
-
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/cbo_noti" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-    <uses-feature android:name="android.hardware.location.network" />
-    <uses-feature android:name="android.hardware.location.gps" />
-
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_GPS" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
-    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
-    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
-    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" />
-    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
     <application
         android:name=".MyCustumApplication"
         android:allowBackup="false"
@@ -61,7 +10,17 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui_new.dcr_activities.Location.CentroidLocation"></activity>
+        <activity android:name="bill.stockEntry.OpenScreenActivity" />
+        <activity android:name="bill.openingStock.OpeningStockActivity"/>
+        <activity android:name=".ui_new.MyCamera"/>
+        <activity android:name="bill.BillReport.DashboardBill" />
+        <activity android:name="bill.Outlet.Outlet" />
+        <activity android:name="bill.Dashboard.Dashboard" />
+        <activity
+            android:name="bill.Cart.AddCustomer"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme" />
+        <activity android:name=".ui_new.dcr_activities.Location.CentroidLocation" />
         <activity
             android:name=".ui_new.dcr_activities.TabbedActivity.TabbedCallActivity"
             android:theme="@style/AppThemeNoBar" />
@@ -83,11 +42,6 @@
             android:label="@string/title_activity_location_test"
             android:theme="@style/Appdilogtheme" />
         <activity android:name=".ui_new.dcr_activities.Expense.Expense" />
-
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
-
         <activity
             android:name=".ui_new.SplashScreen_2016"
             android:clearTaskOnLaunch="true">
@@ -105,34 +59,6 @@
                 <data android:scheme="package" />
             </intent-filter>
         </activity>
-
-        <service android:name="services.NotificationService" />
-
-        <receiver android:name="receivers.DOB_DOA_broadcastreciever">
-            <intent-filter>
-                <action android:name="DOB_DOA_notification_flag" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="receivers.MyBroadcastReceiver" />
-
-        <service
-            android:name="fcm.MyFirebaseMessagingService"
-            android:permission="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-       <!-- <service android:name="fcm.MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>-->
-        <!--<service android:name="fcm.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>-->
-
         <activity
             android:name=".ui_new.utilities_activities.PersonalInfo"
             android:configChanges="orientation|screenSize" />
@@ -153,6 +79,20 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
+        <!--
+ <service android:name="fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        -->
+        <!--
+<service android:name="fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        -->
         <activity android:name=".ui_new.dcr_activities.Work_Feedback_Of_Managers" />
         <activity
             android:name=".ui_new.dcr_activities.DrPrescription"
@@ -161,7 +101,7 @@
             android:name=".ui_new.dcr_activities.DrCall"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
-            android:name=".ui_new.report_activities.DashboardReport"
+            android:name=".ui_new.report_activities.Dashboard.DashboardReport"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui_new.personal_activities.Add_Delete_Leave"
@@ -327,11 +267,6 @@
         <activity
             android:name=".ui_new.dcr_activities.root.ExpenseRoot"
             android:configChanges="orientation|screenSize" />
-
-        <service
-            android:name="services.Sync_service"
-            android:enabled="true" />
-
         <activity
             android:name=".ui.VideoPlay"
             android:screenOrientation="landscape" />
@@ -351,34 +286,6 @@
         <activity
             android:name=".ui_new.transaction_activities.Farmer_registration_form"
             android:configChanges="orientation|screenSize" />
-
-        <service
-            android:name=".emp_tracking.MyLoctionService"
-            android:stopWithTask="false" />
-
-        <receiver
-            android:name=".emp_tracking.LocationBroadcast"
-            android:enabled="true" /> <!-- ****Below broadcast Start the Receiver  after Boot Completed -->
-        <receiver
-            android:name=".emp_tracking.StartAlarmAfterDeviceRestart"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".emp_tracking.ServiceForSendingData10Minute" />
-        <service
-            android:name=".ui_new.approval_activities.Remainder.FloatingRemainderApproval"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".ui_new.approval_activities.BackgroundNotification.FloatingAlertService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <receiver android:name=".emp_tracking.ReciverFor10minuteData" />
-
         <activity
             android:name="utils_new.Update_Avilable"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -401,24 +308,9 @@
         <activity
             android:name=".ui_new.dcr_activities.DCR_Summary_new"
             android:configChanges="orientation|screenSize|keyboardHidden" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <activity
             android:name=".ui_new.dcr_activities.area.Dcr_Open_New"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize" /> <!-- ****Below broadcast Start the Receiver  after Boot Completed -->
         <activity
             android:name=".ui_new.dcr_activities.root.DCR_Root_new"
             android:configChanges="orientation|screenSize" />
@@ -429,25 +321,6 @@
             android:name=".ui_new.transaction_activities.Doctor_registration_GPS"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".ui_new.report_activities.LoggedUnlogged_Dat" />
-
-        <receiver android:name="utils_new.GpsLocationReceiver">
-            <intent-filter>
-                <action android:name="android.location.PROVIDERS_CHANGED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/providers_path" />
-        </provider>
-
         <activity android:name=".ui_new.dcr_activities.DairyCall" />
         <activity
             android:name="locationpkg.LocationTest"
@@ -458,22 +331,22 @@
             android:excludeFromRecents="true"
             android:theme="@style/Appdilogtheme" />
         <activity android:name=".ui_new.dcr_activities.PospondFarmerMeeting" />
-
-        <receiver android:name="utils_new.CustomTextToSpeech" />
-
         <activity
             android:name=".ui_new.SystemAlertActivity"
             android:excludeFromRecents="true"
             android:label=""
             android:theme="@style/Appdilogtheme" />
         <activity android:name=".ui_new.report_activities.MissedDoctor.MissedDoctorActivity" />
-
-        <meta-data
-            android:name="android.app.searchable"
-            android:resource="@xml/searchable" />
-
         <activity android:name=".ui_new.approval_activities.Remainder.RemainderActivity" />
         <activity android:name=".ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
         <activity
             android:name=".ui_new.dcr_activities.DrRXActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -500,31 +373,150 @@
         <activity
             android:name=".ui_new.dcr_activities.lead.LeadActivity"
             android:theme="@style/AppThemeNoBar" />
-
-        <activity
-            android:name=".ui_new.dcr_activities.Recipt.ReciptActivity"/>
-
+        <activity android:name=".ui_new.dcr_activities.Recipt.ReciptActivity" />
         <activity
             android:name=".ui_new.dcr_activities.Recipt.AddRecpiet"
             android:label="@string/title_activity_location_test"
             android:theme="@style/Appdilogtheme" />
-
         <activity
             android:name=".ui_new.dcr_activities.DCRCall.DCRCallActivity"
             android:configChanges="orientation|screenSize" />
         <activity
             android:name="bill.BillReport.BillActivity"
             android:configChanges="orientation|screenSize" />
-        <activity
-            android:name="bill.CompanySelecter.CompanyActivity"
-            android:theme="@style/AppThemeNoBar" />
-        <activity
-            android:name="bill.Cart.CompanyCartActivity"
-            android:theme="@style/AppThemeNoBar" />
-        <activity
-            android:name="bill.ItemFilter.CompanyItemFilter"
-            android:theme="@style/AppThemeNoBar" />
+        <activity android:name="bill.CompanySelecter.CompanyActivity" />
+        <activity android:name="bill.Cart.CompanyCartActivity" />
+        <activity android:name="bill.ItemFilter.CompanyItemFilter" />
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/providers_path" />
+        </provider>
+
+        <receiver android:name="receivers.DOB_DOA_broadcastreciever">
+            <intent-filter>
+                <action android:name="DOB_DOA_notification_flag" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="receivers.MyBroadcastReceiver" />
+        <receiver
+            android:name=".emp_tracking.LocationBroadcast"
+            android:enabled="true" />
+        <receiver
+            android:name=".emp_tracking.StartAlarmAfterDeviceRestart"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".emp_tracking.ReciverFor10minuteData" />
+        <receiver android:name="utils_new.GpsLocationReceiver">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="utils_new.CustomTextToSpeech" />
+
+        <service android:name="services.NotificationService" />
+        <service
+            android:name="fcm.MyFirebaseMessagingService"
+            android:permission="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="services.Sync_service"
+            android:enabled="true" />
+        <service
+            android:name=".emp_tracking.MyLoctionService"
+            android:stopWithTask="false" />
+        <service android:name=".emp_tracking.ServiceForSendingData10Minute" />
+        <service
+            android:name=".ui_new.approval_activities.Remainder.FloatingRemainderApproval"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".ui_new.approval_activities.BackgroundNotification.FloatingAlertService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@drawable/cbo_noti" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature android:name="android.hardware.location.network" />
+
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
+    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" />
+    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 </manifest>
+
+<!--    19286482856-->

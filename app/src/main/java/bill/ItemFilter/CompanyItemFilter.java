@@ -21,6 +21,7 @@ import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import java.util.ArrayList;
 
 import bill.NewOrder.mBillItem;
+import bill.mBillOrder;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 
 public class CompanyItemFilter extends CustomActivity implements IitemNewOrder {
@@ -37,7 +38,7 @@ public class CompanyItemFilter extends CustomActivity implements IitemNewOrder {
         setContentView(R.layout.activity_comnpany_new_order);
 
         viewModel = ViewModelProviders.of(this).get(vmBill_ItemFilter.class);
-       // viewModel.setOrder((mOrder) getIntent().getSerializableExtra("order"));
+        viewModel.setOrder((mBillOrder) getIntent().getSerializableExtra("order"));
         viewModel.setSync(getIntent().getBooleanExtra("syncItem",true));
 
         viewModel.setView(context,this);
@@ -102,16 +103,7 @@ public class CompanyItemFilter extends CustomActivity implements IitemNewOrder {
 
     }
 
-    @Override
-    public String getPartyID() {
-        return null;
-    }
 
-    @Override
-    public String getUserID() {
-        return null;
-    }
-/*
     @Override
     public String getPartyID() {
 
@@ -121,7 +113,7 @@ public class CompanyItemFilter extends CustomActivity implements IitemNewOrder {
     @Override
     public String getUserID() {
         return MyCustumApplication.getInstance().getUser().getID();
-    }*/
+    }
 
 
     @Override
@@ -152,7 +144,7 @@ public class CompanyItemFilter extends CustomActivity implements IitemNewOrder {
     }
 
     @Override
-    public void onOrderChanged(mOrder order) {
+    public void onOrderChanged(mBillOrder order) {
         itemincart.setText(order.getItems().size() + " Items in cart");
 
     }

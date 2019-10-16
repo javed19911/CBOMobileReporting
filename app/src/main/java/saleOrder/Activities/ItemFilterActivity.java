@@ -1,19 +1,19 @@
 package saleOrder.Activities;
 
-import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -35,7 +35,7 @@ public class ItemFilterActivity extends AppCompatActivity implements iNewOrder {
     private ItemAdapter itemAdapter;
     private vmNewOrder viewModel;
     TextView itemincart;
-    Activity context;
+    AppCompatActivity context;
     private eItem itemType = eItem.MEDICINE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

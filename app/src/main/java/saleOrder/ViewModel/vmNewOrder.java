@@ -3,15 +3,13 @@ package saleOrder.ViewModel;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.uenics.javed.CBOLibrary.CBOServices;
-import com.uenics.javed.CBOLibrary.ResponseBuilder;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cbomobilereporting.cbo.com.cboorder.DBHelper.ItemDB;
 import cbomobilereporting.cbo.com.cboorder.DBHelper.discountDB;
@@ -23,10 +21,7 @@ import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.Model.mTax;
-import cbomobilereporting.cbo.com.cboorder.Model.mTaxComponent;
 import cbomobilereporting.cbo.com.cboorder.View.iNewOrder;
-import saleOrder.MyOrderAPIService;
-import saleOrder.ViewModel.CBOViewModel;
 
 /**
  * Created by cboios on 04/03/19.
@@ -43,7 +38,7 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
     private Boolean syncItem = true;
 
     @Override
-    public void onUpdateView(Activity context, iNewOrder view) {
+    public void onUpdateView(AppCompatActivity context, iNewOrder view) {
         if (view != null){
             itemDB = new ItemDB(context);
             discountDB = new discountDB(context);
@@ -143,10 +138,10 @@ public class vmNewOrder extends CBOViewModel<iNewOrder> {
         }
     }
 
-    private void getOrderItem(Activity context){
+    private void getOrderItem(AppCompatActivity context){
         getOrderItem(context,syncItem);
     }
-    public void getOrderItem(final Activity context, Boolean SyncYN){
+    public void getOrderItem(final AppCompatActivity context, Boolean SyncYN){
 
         items = itemDB.items(getFilterQry(),getKit_Type());
 

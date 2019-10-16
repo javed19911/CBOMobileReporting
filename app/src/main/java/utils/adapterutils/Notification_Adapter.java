@@ -1,6 +1,5 @@
 package utils.adapterutils;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -11,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Notification;
@@ -18,7 +20,6 @@ import com.cbo.cbomobilereporting.ui_new.mail_activities.Notification;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils_new.Custom_Variables_And_Method;
 
 /**

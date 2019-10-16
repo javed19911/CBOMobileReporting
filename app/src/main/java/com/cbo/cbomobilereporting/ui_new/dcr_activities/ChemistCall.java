@@ -1,7 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,9 +16,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import androidx.fragment.app.FragmentManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -45,6 +41,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.ChemistCallDB;
@@ -56,6 +58,10 @@ import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registrat
 import com.flurry.android.FlurryAgent;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.sql.ResultSet;
@@ -74,19 +80,13 @@ import utils.adapterutils.ExpandableListAdapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter_new;
 import utils.adapterutils.SpinnerModel;
-import com.cbo.cbomobilereporting.MyCustumApplication;
-import com.uenics.javed.CBOLibrary.ResponseBuilder;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
 import utils_new.Chemist_Gift_Dialog;
+import utils_new.Chm_Sample_Dialog;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Report_Registration;
-import utils_new.Chm_Sample_Dialog;
 import utils_new.SendAttachment;
 import utils_new.Service_Call_From_Multiple_Classes;
 
@@ -1286,7 +1286,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                     startActivity(intent);
 
                     finish();*/
-                    MyCustumApplication.getInstance().Logout((Activity) context);
+                    MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
                     break;
                 case 99:
                     if ((null != msg.getData())) {
@@ -1671,7 +1671,7 @@ public class ChemistCall extends AppCompatActivity implements ExpandableListAdap
                         }
                     }else if (file1.exists() && Custom_Variables_And_Method.internetConneted(context)){
                         Location currentBestLocation=customVariablesAndMethod.getObject(context,"currentBestLocation",Location.class);
-                        new SendAttachment((Activity) context).execute(Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n Message : "+alertdFragment.Alertmassege+
+                        new SendAttachment((AppCompatActivity) context).execute(Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n Message : "+alertdFragment.Alertmassege+
                                 "\nLocation-timestamp : "+currentBestLocation.getTime()+"\nLocation-Lat : "+currentBestLocation.getLatitude()+
                                 "\nLocation-long : "+currentBestLocation.getLongitude()+"\n time : " +customVariablesAndMethod.currentTime(context)+"\nlatlong : "+ customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON),alertdFragment.compressImage(file1));
 

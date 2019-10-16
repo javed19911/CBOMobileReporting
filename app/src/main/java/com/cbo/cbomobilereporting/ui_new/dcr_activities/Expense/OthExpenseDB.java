@@ -198,4 +198,38 @@ public class OthExpenseDB extends DBHelper {
     }
 
 
+
+    public ArrayList<mExpHead> getMandatoryPendingExpHead() {
+        ArrayList<mExpHead> expHeads = new ArrayList<mExpHead>();
+
+        String query ="Select * from " + expHeadDB.getTable() + " where MANDATORY='1' and  FIELD_ID NOT IN(SELECT exp_head_id FROM "+ getTable()+")";
+
+
+        Cursor c = getDatabase().rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    mExpHead expHead = new mExpHead(c.getInt(c.getColumnIndex("FIELD_ID")),
+                            c.getString(c.getColumnIndex("FIELD_NAME")))
+                            .setEXP_TYPE(eExpense.valueOf(c.getString(c.getColumnIndex("EXP_TYPE"))))
+                            .setSHOW_IN_TA_DA(eExpense.valueOf(c.getString(c.getColumnIndex("SHOW_IN_TA_DA"))))
+                            .setATTACHYN(c.getInt(c.getColumnIndex("ATTACHYN")))
+                            .setDA_ACTION(c.getInt(c.getColumnIndex("DA_ACTION")))
+                            .setMANDATORY(c.getInt(c.getColumnIndex("MANDATORY")))
+                            .setMAX_AMT(c.getDouble(c.getColumnIndex("MAX_AMT")))
+                            .setKMYN(c.getString(c.getColumnIndex("KMYN")))
+                            .setHEADTYPE_GROUP(c.getString(c.getColumnIndex("HEADTYPE_GROUP")))
+                            .setMasterValidate(c.getInt(c.getColumnIndex("TAMST_VALIDATEYN")));
+
+                    expHeads.add(expHead);
+
+
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+        }
+        return expHeads;
+    }
+
 }

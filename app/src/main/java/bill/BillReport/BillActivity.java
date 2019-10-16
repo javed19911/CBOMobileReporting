@@ -27,14 +27,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import bill.Cart.CompanyCartActivity;
+import bill.Cart.mCustomer;
 import bill.CompanySelecter.CompanyActivity;
+import bill.Outlet.mOutlet;
+import bill.mBillOrder;
+import bill.openingStock.OpeningStockActivity;
+import utils_new.AppAlert;
 import utils_new.CustomDatePicker;
 
 public class BillActivity     extends CustomActivity implements
         IBill, aBill.Bill_interface, SearchView.OnQueryTextListener {
 private  vmBill vmBill;
 private Toolbar toolbar;
-private TextView textView;
+private TextView textView,Totamt;
 private AppBarLayout appBarLayout;
 private RecyclerView  billrecyclerView;
 private aBill billadapter;
@@ -51,7 +57,7 @@ private  Menu menu;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bill_view);
         vmBill = ViewModelProviders.of(BillActivity.this).get(vmBill.class);
-
+        vmBill.setOutlet((mOutlet) getIntent().getSerializableExtra("outlet"));
 
 
     }
@@ -71,18 +77,18 @@ private  Menu menu;
         billrecyclerView =findViewById(R.id.bill_report_content);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         swipeRefressLayoutRecycler = findViewById(R.id.swipeRefressLayoutRecycler);
+        Totamt = findViewById(R.id.Totamt);
+
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setOnClickListener(view ->onBackPressed());
+            toolbar.setNavigationOnClickListener(view ->onBackPressed());
 
         }
 
         collapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         fBillFilter = (FBillFilter) getSupportFragmentManager().findFragmentById(R.id.billfragment);
-        vmBill = ViewModelProviders.of(BillActivity.this).get( vmBill.class);
-
 
         fab .setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,28 +100,30 @@ private  Menu menu;
 
         });
 
-        AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
+        if (vmBill.getOutlet() == null) {
+            AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+            mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                boolean isShow = false;
+                int scrollRange = -1;
 
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                      showOption(R.id.action_filter);
-                    // collapsingToolbarLayout.setTitle("Title");
-                    isShow = true;
-                } else if (isShow) {
+                @Override
+                public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                    if (scrollRange == -1) {
+                        scrollRange = appBarLayout.getTotalScrollRange();
+                    }
+                    if (scrollRange + verticalOffset == 0) {
+                        showOption(R.id.action_filter);
+                        // collapsingToolbarLayout.setTitle("Title");
+                        isShow = true;
+                    } else if (isShow) {
 
-                     hideOption(R.id.action_filter);
-                    // collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
-                    isShow = false;
+                        hideOption(R.id.action_filter);
+                        // collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                        isShow = false;
+                    }
                 }
-            }
-        });
+            });
+        }
 
 
         swipeRefressLayoutRecycler.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -125,6 +133,8 @@ private  Menu menu;
                 getBills();
             }
         });
+
+
 
 
         //getBills();
@@ -137,23 +147,36 @@ private  Menu menu;
                 billrecyclerView, false);
         appBarLayout.setExpanded(false,true);
 
-        vmBill.getBills(context,fBillFilter.getSelectedCompany(),fBillFilter.getFDateSelected(),
-                fBillFilter.getTDateSelected());
+        if (vmBill.getOutlet() != null){
+            hideOption(R.id.action_filter);
+            vmBill.getBills(context,vmBill.getOutlet());
+        }else{
+            vmBill.getBills(context,fBillFilter.getSelectedCompany(),fBillFilter.getFDateSelected(),
+                    fBillFilter.getTDateSelected());
+        }
+
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+       if (vmBill.isLoaded()) {
+           getBills();
+       }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.bill_report_menu, menu);
         this.menu = menu;
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        /*MenuItem searchItem = menu.findItem(R.id.menu_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));*/
         hideOption(R.id.action_filter);
         return true;
     }
@@ -184,10 +207,10 @@ private  Menu menu;
         } else  if (id == R.id.add) {
 
             Intent intent = new Intent(context, CompanyActivity.class);
+            intent.putExtra("doc_type", OpeningStockActivity.DOC_TYPE.BILL);
             intent.putExtra("Companies",fBillFilter.getCompanies());
+            intent.putExtra("PayModes",fBillFilter.getPayModes());
             startActivity(intent);
-        } else {
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -221,6 +244,11 @@ private  Menu menu;
     }
 
     @Override
+    public void updateTotBillAmt(Double totamt) {
+        Totamt.setText(String.format("%.2f", totamt));
+    }
+
+    @Override
     public void onBillDeleted(Context context) {
         fab.performClick();
 //        vmBill.getmComponey(context,fBillFilter.getViewModel().getComponeyId(),
@@ -246,6 +274,15 @@ private  Menu menu;
     }
 
     @Override
+    public void showBillDetail(mBillOrder order, mCustomer customer) {
+        Intent intent = new Intent(context, CompanyCartActivity.class);
+        intent.putExtra("order", order);
+        intent.putExtra("customer", customer);
+        intent.putExtra("PayModes",fBillFilter.getPayModes());
+        startActivity(intent);
+    }
+
+    @Override
     public boolean onQueryTextSubmit(String query) { return false; }
 
     @Override
@@ -256,17 +293,32 @@ private  Menu menu;
 
 
     @Override
-    public void Edit_Bill(mBill mbills) {
-        //customVariablesAndMethod.msgBox(context,"Under Devlopment");
+    public void Edit_Bill(mBill mbill) {
+        vmBill.getBillDet(context,mbill,"E");
+
     }
 
     @Override
-    public void Delete_Bill(mBill mbills) {
-        //customVariablesAndMethod.msgBox(context,"Under Devlopment");
+    public void Delete_Bill(mBill mbill) {
+        AppAlert.getInstance().DecisionAlert(context,
+                "Delete !!!", "Are you sure to delete\nBill : "+mbill.getBILL_PRINT()+"\nBill Amt. :- "+mbill.getNET_AMT()+" ?",
+                new AppAlert.OnClickListener() {
+                    @Override
+                    public void onPositiveClicked(View item, String result) {
+
+                        vmBill.deleteBill(context,mbill);
+                    }
+
+                    @Override
+                    public void onNegativeClicked(View item, String result) {
+
+                    }
+                });
+
     }
 
     @Override
-    public void OnClick_Bill(mBill mbills) {
-        //customVariablesAndMethod.msgBox(context,"Under Devlopment");
+    public void OnClick_Bill(mBill mbill) {
+        vmBill.getBillDet(context,mbill,"V");
     }
 }

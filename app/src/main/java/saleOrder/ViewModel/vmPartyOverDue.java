@@ -3,6 +3,8 @@ package saleOrder.ViewModel;
 import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -13,7 +15,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import saleOrder.Model.mOverDue;
 import saleOrder.MyOrderAPIService;
 import saleOrder.Views.iPartyOverDue;
@@ -24,12 +25,12 @@ public class vmPartyOverDue extends CBOViewModel<iPartyOverDue>{
     ArrayList<mOverDue> overDues = new ArrayList<>();
 
     @Override
-    public void onUpdateView(Activity context, iPartyOverDue view) {
+    public void onUpdateView(AppCompatActivity context, iPartyOverDue view) {
         view.getReferencesById();
         view.setTitle("");
     }
 
-    public ArrayList<mOverDue> getOverDues(Activity context){
+    public ArrayList<mOverDue> getOverDues(AppCompatActivity context){
 
         //Start of call to service
 

@@ -20,7 +20,7 @@ public class mBillOrder implements Serializable {
     private Double Amt = 0.0D;
     private Double NetAmt = 0.0D;
     private String PayMode;
-    private String Status = "";
+    private String Status = "V";
     private String GrNo;
     private String Transport;
     private String GrDate;
@@ -32,6 +32,7 @@ public class mBillOrder implements Serializable {
     private Double CGSTAmt;
     private Double SGSTAmt;
     private Double TotAmt;
+    private Double Round_amt = 0.0;
     private int BilledHO;
     private String Approved;
     private String Attachment;
@@ -88,6 +89,10 @@ public class mBillOrder implements Serializable {
 
     public Double getTotAmt() {
         return this.TotAmt;
+    }
+
+    public Double getRouAmt() {
+        return this.Round_amt;
     }
 
     public String getPayMode() {
@@ -173,6 +178,7 @@ public class mBillOrder implements Serializable {
     }
 
     public mBillOrder setNetAmt(Double netAmt) {
+
         this.NetAmt = netAmt;
         return this;
     }
@@ -243,7 +249,8 @@ public class mBillOrder implements Serializable {
     }
 
     public mBillOrder setTotAmt(Double totAmt) {
-        this.TotAmt = totAmt;
+        Round_amt = Math.round(totAmt) - totAmt;
+        this.TotAmt = Math.round(totAmt)+0.0;
         return this;
     }
 

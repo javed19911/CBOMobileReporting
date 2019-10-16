@@ -1,17 +1,17 @@
 package com.cbo.cbomobilereporting.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 
@@ -79,7 +79,7 @@ public class TpReport_View extends AppCompatActivity {
     }
 
 
-    public void tpReportMethod(final Activity context) {
+    public void tpReportMethod(final AppCompatActivity context) {
 
         final TpReportTask tpReportTask = new TpReportTask(context);
         tpReportTask.setListner(new TaskListener<String>() {

@@ -1,25 +1,21 @@
 package bill.Cart;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.google.android.material.appbar.AppBarLayout;
 
-import bill.BillReport.mCompany;
 import bill.NewOrder.FBillNeworder;
 import bill.NewOrder.mBillItem;
 import bill.mBillOrder;
-import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
-import saleOrder.Enum.eItem;
 import utils_new.AppAlert;
 
 public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
@@ -28,11 +24,11 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
     TextView title,subTitle;
 
     private vmCompanyCart viewModel;
-    Activity context;
+    AppCompatActivity context;
     FCompanyCart fcompanycart;
     FBillNeworder fcompanyneworder;
-    AppBarLayout appBarLayout;
-    mCompany company;
+    //AppBarLayout appBarLayout;
+//    mCompany company;
     Boolean orderChanged = false;
     MenuItem additem = null;
 
@@ -44,10 +40,11 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
         context = this;
         viewModel = ViewModelProviders.of(this).get(vmCompanyCart.class);
         updateOrder((mBillOrder) getIntent().getSerializableExtra("order"));
-        company = ((mCompany) getIntent().getSerializableExtra("company"));
+//        company = ((mCompany) getIntent().getSerializableExtra("company"));
         fcompanycart = new FCompanyCart();
         Bundle data = new Bundle();
-        //data.putSerializable("itemType", eItem.PRODUCT);
+        data.putSerializable("PayModes", getIntent().getSerializableExtra("PayModes"));
+        data.putSerializable("customer", getIntent().getSerializableExtra("customer"));
         fcompanycart.setArguments(data);
         viewModel = ViewModelProviders.of(this).get(vmCompanyCart.class);
 
@@ -56,7 +53,7 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
     }
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cart_menu, menu);
        // additem = menu.findItem(R.id.add);
@@ -76,6 +73,17 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
                 return super.onOptionsItemSelected(item);
         }
     }
+*/
+
+    @Override
+    public String getCompanyCode() {
+        return MyCustumApplication.getInstance().getUser().getCompanyCode();
+    }
+
+    @Override
+    public String getUserId() {
+        return MyCustumApplication.getInstance ().getUser ().getID ();
+    }
 
 
     @Override
@@ -89,7 +97,7 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
             toolbar.setNavigationOnClickListener(view -> onBackPressed());
         }
 
-        appBarLayout=findViewById(R.id.app_bar) ;
+        //appBarLayout=findViewById(R.id.app_bar) ;
         title  = toolbar.findViewById(R.id.title);
         subTitle = toolbar.findViewById(R.id.subTitle);
 
@@ -100,11 +108,15 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
         transaction.addToBackStack(null);
         transaction.commit();
 
-
-
+        if (!viewModel.getOrder ().getDocId ().equalsIgnoreCase ("0")
+            && viewModel.getOrder ().getStatus ().equalsIgnoreCase ("V")){
+            fcompanyneworder.HideFragment();
+        }
 
 
         onItemEdit(new mBillItem().setName(""));
+
+        viewModel.getOrderItem(context,!viewModel.isLoaded());
 
     }
 
@@ -123,7 +135,7 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
 
     @Override
     public void onItemEdit(mBillItem item) {
-        appBarLayout.setExpanded(true);
+        //appBarLayout.setExpanded(true);
         fcompanyneworder.setItem(item);
     }
 
@@ -138,9 +150,16 @@ public class CompanyCartActivity extends CustomActivity implements ICompanyCart{
     }
 
     @Override
+    public void onItemSynced() {
+        if (viewModel.getOrder().getItems().size()==0){
+            fcompanyneworder.openItemFilter(viewModel.getOrder());
+        }
+    }
+
+    @Override
     public void setTitle(String header) {
 
-        title.setText(company.getName());
+        title.setText(viewModel.getOrder().getPartyName());
         subTitle.setText(header);
     }
 

@@ -1,32 +1,29 @@
 package utils.adapterutils;
 
 
-
-import java.util.ArrayList;
-
-
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui.TouchImageView;
 
+import java.util.ArrayList;
 
 import utils.Utils;
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
-	private Activity _activity;
+	private AppCompatActivity _activity;
 	private Context c;
 	private Utils utils;
 	//final int stub_id = R.drawable.error;
@@ -40,8 +37,8 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	
 
 	// constructor
-	public FullScreenImageAdapter(Activity activity,
-			ArrayList<String> imagePaths) {
+	public FullScreenImageAdapter(AppCompatActivity activity,
+                                  ArrayList<String> imagePaths) {
 		this._activity = activity;
 		this._imagePaths = imagePaths;
 		//utils=new Utils(this);

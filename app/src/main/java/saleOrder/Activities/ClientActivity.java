@@ -1,18 +1,18 @@
 package saleOrder.Activities;
 
-import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -23,8 +23,8 @@ import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
 import saleOrder.Adaptor.ClientAdapter;
 import saleOrder.Model.mParty;
-import saleOrder.Views.iClient;
 import saleOrder.ViewModel.vmClient;
+import saleOrder.Views.iClient;
 
 public class ClientActivity extends AppCompatActivity implements iClient {
 
@@ -33,7 +33,7 @@ public class ClientActivity extends AppCompatActivity implements iClient {
     private ClientAdapter clientAdapter;
     private vmClient viewModel;
     TextView itemincart;
-    Activity context;
+    AppCompatActivity context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -3,6 +3,8 @@ package saleOrder.ViewModel;
 import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -26,7 +28,6 @@ import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.Model.mTax;
 import cbomobilereporting.cbo.com.cboorder.View.iOrder;
 import saleOrder.MyOrderAPIService;
-import saleOrder.ViewModel.CBOViewModel;
 import utils_new.AppAlert;
 
 /**
@@ -47,7 +48,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
     }
 
     @Override
-    public void onUpdateView(Activity context, iOrder view) {
+    public void onUpdateView(AppCompatActivity context, iOrder view) {
         if (view != null){
             orderDB = new OrderDB(context);
             orderDetailDB = new OrderDetailDB(context);
@@ -70,7 +71,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
         return orders;
     }
 
-    public void getOrderListAPI(Activity context, String sStatus){
+    public void getOrderListAPI(AppCompatActivity context, String sStatus){
 
         //Start of call to service
 
@@ -151,7 +152,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
     }
 
 
-    public void getOrderDetail(Activity context, final mOrder order){
+    public void getOrderDetail(AppCompatActivity context, final mOrder order){
 
         //Start of call to service
 
@@ -190,7 +191,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
         //End of call to service
     }
 
-    public void DeleteOrder(Activity context, final mOrder order){
+    public void DeleteOrder(AppCompatActivity context, final mOrder order){
 
         //Start of call to service
 
@@ -283,7 +284,7 @@ public class vmOrder extends CBOViewModel<iOrder> {
 
                 //orderDetailDB.insert(view.getPartyID(),order.getDocId(),item);
                 order.getItems().add(item);
-            }
+        }
 
         }
 

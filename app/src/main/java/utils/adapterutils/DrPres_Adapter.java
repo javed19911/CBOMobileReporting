@@ -1,17 +1,16 @@
 
 package utils.adapterutils;
 
-import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -23,12 +22,12 @@ import utils_new.Custom_Variables_And_Method;
 
 public class DrPres_Adapter extends ArrayAdapter<DrPres_Model> {
     private final List<DrPres_Model> list;
-    private final Activity context;
+    private final AppCompatActivity context;
     CBO_DB_Helper cbo_db_helper;
     Custom_Variables_And_Method customVariablesAndMethod;
     int RX_MAX_QTY=0;
 
-    public DrPres_Adapter(Activity context, List<DrPres_Model> list) {
+    public DrPres_Adapter(AppCompatActivity context, List<DrPres_Model> list) {
         super(context, R.layout.dr_pres_row, list);
         this.context = context;
         this.list = list;

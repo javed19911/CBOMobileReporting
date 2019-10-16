@@ -9,6 +9,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -52,6 +53,11 @@ public abstract class CustomActivity extends AppCompatActivity {
 
         context = this;
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
+
+        if(getIntent().getBooleanExtra("isScreenCaptureAllowed",false) ) {
+
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
 
         if(getIntent().getIntExtra("isAlertDialog",activityType.ACTIVITY.getValue()) == activityType.DIALOG.getValue()){
             activitytype = activityType.DIALOG;

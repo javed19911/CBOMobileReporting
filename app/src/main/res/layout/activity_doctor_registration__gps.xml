@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/textColorPrimary"
@@ -153,7 +154,7 @@
                                     android:layout_margin="1dp"
                                     android:layout_weight="5"
                                     android:padding="6.5dp"
-                                    android:src="@drawable/drop_icon" />
+                                    app:srcCompat="@drawable/drop_icon" />
                             </LinearLayout>
 
                             <TextView
@@ -349,7 +350,7 @@
                             android:id="@+id/refress_address"
                             android:background="@color/colorPrimary"
                             android:padding="5dp"
-                            android:src="@drawable/ref" />
+                            app:srcCompat="@drawable/ref" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -371,7 +372,7 @@
                             android:id="@+id/show_address"
                             android:background="@drawable/custom_square_transparent_bg"
                             android:padding="5dp"
-                            android:src="@android:drawable/ic_menu_view" />
+                            app:srcCompat="@android:drawable/ic_menu_view" />
 
 
                     </LinearLayout>
@@ -396,7 +397,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/loc"
+                        app:srcCompat="@drawable/loc"
                         android:id="@+id/loc_img"
                         android:minHeight="200dp"/>
 

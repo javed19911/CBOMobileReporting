@@ -134,7 +134,7 @@ public class SyncFirebaseActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (download.isEnabled() || download.getVisibility() == View.GONE) {
             if (LogOutOnBackPressed) {
-                MyCustumApplication.getInstance().Logout((Activity) context);
+                MyCustumApplication.getInstance().Logout((AppCompatActivity) context);
             } else {
                 super.onBackPressed();
             }

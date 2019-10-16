@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         card_view:cardBackgroundColor="@android:color/white"
         card_view:cardElevation="2dp"
         android:layout_margin="10dp"

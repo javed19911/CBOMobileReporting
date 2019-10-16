@@ -1,8 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,13 +8,15 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.M_TeamMonthDivision;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mDivision;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mMissedFilter;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mMonth;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mUser;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -139,7 +139,7 @@ public class VM_TeamMonthDivision extends ViewModel{
         if (mTeamMonthDivision == null){
             mTeamMonthDivision = new M_TeamMonthDivision();
 
-            ShowNameMonth((Activity) context,listener);
+            ShowNameMonth((AppCompatActivity) context,listener);
         }else{
             if(resultlistner!=null){
                 resultlistner.onSuccess(mTeamMonthDivision);
@@ -152,7 +152,7 @@ public class VM_TeamMonthDivision extends ViewModel{
 
 
 
-    private void ShowNameMonth(Activity context,OnResultlistener listener) {
+    private void ShowNameMonth(AppCompatActivity context, OnResultlistener listener) {
         customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
         progress1 = new ProgressDialog(context);
         cboDbHelper = new CBO_DB_Helper(context);

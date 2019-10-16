@@ -2,7 +2,6 @@ package utils_new;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -21,11 +20,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +27,14 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
@@ -228,7 +230,7 @@ public class Report_Registration extends DialogFragment{
 
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            ((Activity) context).startActivityForResult(intent, REQUEST_CAMERA);
+            ((AppCompatActivity) context).startActivityForResult(intent, REQUEST_CAMERA);
 
         } else {
             //Toast.makeText(context, getString(R.string.error_no_camera), Toast.LENGTH_LONG).show();

@@ -1,13 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.utilities_activities;
 
 
-import java.io.File;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
-
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,8 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,18 +19,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import com.cbo.cbomobilereporting.BuildConfig;
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.Show_Sample;
 import com.flurry.android.FlurryAgent;
 import com.uenics.javed.CBOLibrary.Response;
 
+import java.io.File;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import utils.adapterutils.DocSampleModel;
 import utils.adapterutils.LazyAdapter;
-import com.cbo.cbomobilereporting.MyCustumApplication;
-
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
@@ -298,11 +296,14 @@ public class DocPhotos extends AppCompatActivity {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
 		switch (requestCode) {
 			case 1:
 				finish();
-				startActivity(new Intent(DocPhotos.this,DocPhotos.class));
+				startActivity(new Intent(DocPhotos.this, DocPhotos.class));
 				break;
+			default:
+				super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 

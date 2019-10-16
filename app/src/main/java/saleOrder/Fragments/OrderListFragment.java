@@ -1,19 +1,21 @@
 package saleOrder.Fragments;
 
 import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 
@@ -39,7 +41,7 @@ public class OrderListFragment extends Fragment implements iOrder {
 //    private List<Order> orderList;
 
     ListView listView;
-    Activity context;
+    AppCompatActivity context;
     Order_List_Adaptor order_list_adaptor;
     mParty party;
 
@@ -75,7 +77,7 @@ public class OrderListFragment extends Fragment implements iOrder {
                 container, false);
 
 
-        context = getActivity();
+        context = (AppCompatActivity) getActivity();
         viewModel = ViewModelProviders.of(this).get(vmOrder.class);
         viewModel.setView(context,this);
 

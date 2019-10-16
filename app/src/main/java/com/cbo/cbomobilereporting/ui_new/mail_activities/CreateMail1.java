@@ -37,6 +37,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,9 +68,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import CameraGalaryPkg.FileUtil;
 import services.CboServices;
 import services.ServiceHandler;
 import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.cbo.myattachment.aAttachFile;
+import com.uenics.javed.CBOLibrary.CboProgressDialog;
+
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GalleryUtil;
 import utils_new.up_down_ftp;
@@ -78,7 +87,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
     private final int CHOOSE_FILE_REQUESTCODE=202;
     String picturePath="";
     private File output=null;
-    String filename="",filename_type="";
+    String filename="",filename_type="",filepath ="";
     int filetype=0;
 
     TextView tof, ccf, subf;
@@ -106,7 +115,11 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
     String Msg_Id,mail_type="";
     boolean save_as_draft=true;
 
+    RecyclerView attachments;
+    aAttachFile attachAdapter;
+
     public ProgressDialog progress1;
+    CboProgressDialog cboProgressDialog = null;
     private  static final int MESSAGE_INTERNET_MAIL_COMMIT=1;
 
 
@@ -120,6 +133,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
         attach_option = (RadioGroup) findViewById(R.id.attach_option);
         attach_img= (ImageView) findViewById(R.id.attach_img);
         filenameTxt = findViewById(R.id.filename);
+        attachments = findViewById(R.id.attachments);
 
         textView.setText("Compose Mail");
         setSupportActionBar(toolbar);
@@ -163,6 +177,12 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         session_id = "" + new Date().getTime();
 
+        attachAdapter = new aAttachFile(context);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+        attachments.setLayoutManager(mLayoutManager1);
+        attachments.setItemAnimator(new DefaultItemAnimator());
+        attachments.setAdapter(attachAdapter);
+
 
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
@@ -180,9 +200,11 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
             if (!data.get(0).get("FILE_NAME").equals("")) {
                 //attach_img.setImageResource(R.drawable.attach);
-                filenameTxt.setVisibility(View.VISIBLE);
+                //filenameTxt.setVisibility(View.VISIBLE);
                 final String[] aT1 = {data.get(0).get("FILE_NAME")};
                 filename=aT1[0].substring( aT1[0].lastIndexOf("/")+1);
+                filepath = data.get(0).get("FILE_NAME");
+                attachAdapter.setAttachments(filepath);
                 if(data.get(0).get("category").equals("d")) {
                     File file1 = new File(Environment.getExternalStorageDirectory() + File.separator + "CBO" + File.separator + filename);
                     if (file1.exists()){
@@ -359,7 +381,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
         } else {
 
 
-            if (!filename.equals("") && filetype==0){
+            /*if (!filename.equals("") && filetype==0){
                 progress1.setMessage("Please Wait..\nuploading Image");
                 progress1.setCancelable(false);
                 progress1.show();
@@ -378,8 +400,15 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             }else{
                 Mail_commit();
             }
+*/
 
-
+            if (!attachAdapter.getAttachmentStr().isEmpty()){
+                cboProgressDialog = new CboProgressDialog(context, "Please Wait..\nuploading Image");
+                cboProgressDialog.show();
+                new up_down_ftp().uploadFile(attachAdapter.filesToUpload(),context);
+            }else{
+                Mail_commit();
+            }
 
         }
     }
@@ -393,7 +422,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
         request.put("iSEND_PA_ID","" + PA_ID);
         request.put("sREMARK", "" + message.getText().toString());
         request.put("sSUBJECT","" + subject.getText().toString());
-        request.put("sFILE_NAME",filename);
+        request.put("sFILE_NAME",attachAdapter.getAttachmentName());
         request.put("sToPaId", toid);
         request.put("sCC_ToPaId",ccid);
         request.put("sMAIL_TYPE", mail_type);
@@ -480,8 +509,9 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                     //return true;
                 }
             }
-            filename = PA_ID+"_"+Custom_Variables_And_Method.DCR_ID+"_"+date.getTime()+ ".jpg";
+            filename = PA_ID+"_"+Custom_Variables_And_Method.DCR_ID+"_"+new Date().getTime()+ ".jpg";
             output = new File(dir, filename);
+            filepath = output.getPath();
 
 //            fileTemp = ImageUtils.getOutputMediaFile();
             ContentValues values = new ContentValues(1);
@@ -542,12 +572,15 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
 
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALLERY_ACTIVITY_CODE) {
             if(resultCode == Activity.RESULT_OK){
                 picturePath = data.getStringExtra("picturePath");
+                filepath = picturePath;
                 //perform Crop on the Image Selected from Gallery
                 filename = PA_ID+"_"+Custom_Variables_And_Method.DCR_ID+"_"+date.getTime()+ ".jpg";
                 moveFile(picturePath);
@@ -557,17 +590,24 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             if(resultCode == Activity.RESULT_OK){
 
                 Uri uri = data.getData();
-                try {
-                    filename = getPath(this, uri);
-                    filename_type="f";//file
+//                try {
+                    filename = FileUtil.getRealPathFromURI(this,uri) ;   //getPath(this, uri);
+
+                if (filename != null) {
+                    filepath = filename;
+                    attachAdapter.addAttachment(filepath);
+                    filename_type = "f";//file
                     attach_img.setImageResource(R.drawable.attach);
                     android.view.ViewGroup.LayoutParams layoutParams = attach_img.getLayoutParams();
                     layoutParams.width = 70;
                     layoutParams.height = 70;
                     attach_img.setLayoutParams(layoutParams);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
+                }else {
+                    filename = "" ;
                 }
+                /*} catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }*/
                 //Toast.makeText(context,filename,Toast.LENGTH_LONG).show();
             }
         }
@@ -747,8 +787,9 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             filename_type="i";//image
             attach_img.setImageBitmap(bitmap);*/
 
-            filenameTxt.setVisibility(View.VISIBLE);
+            //filenameTxt.setVisibility(View.VISIBLE);
             filenameTxt.setText(filename);
+            attachAdapter.addAttachment(filepath);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -828,7 +869,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             myCboDbHelper.insert_Mail(0, toid, name, customVariablesAndMethod.currentDate(), customVariablesAndMethod.currentTime(context),
                     "0", "d", "", subject.getText().toString(), message.getText().toString()
                     , filename_type
-                    , filename);
+                    , attachAdapter.getAttachmentStr());
             // filename_type="i" for image and f for file;
             customVariablesAndMethod.msgBox(context,"Saved as Draft");
         }
@@ -853,39 +894,51 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                 startActivity(i);
                 break;
             case R.id.camera:
-                filetype=0;
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    //takePictureButton.setEnabled(false);
-                    ActivityCompat.requestPermissions(CreateMail1.this, new String[] { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_CAMERA);
-                    Toast.makeText(context, "Please allow the permission", Toast.LENGTH_LONG).show();
+                if (attachAdapter.getAttachments().size() < 3) {
+                    filetype = 0;
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        //takePictureButton.setEnabled(false);
+                        ActivityCompat.requestPermissions(CreateMail1.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA);
+                        Toast.makeText(context, "Please allow the permission", Toast.LENGTH_LONG).show();
 
-                }else {
+                    } else {
 
-                    capture_Image();
+                        capture_Image();
+                    }
+                }else{
+                    AppAlert.getInstance().getAlert(context,"Alert!!!","Attachment limit exceed....");
                 }
                 break;
             case R.id.galary:
-                filetype=0;
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    //takePictureButton.setEnabled(false);
-                    ActivityCompat.requestPermissions(CreateMail1.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, GALLERY_ACTIVITY_CODE);
-                    Toast.makeText(context, "Please allow the permission", Toast.LENGTH_LONG).show();
+                if (attachAdapter.getAttachments().size() < 3) {
+                    filetype=0;
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        //takePictureButton.setEnabled(false);
+                        ActivityCompat.requestPermissions(CreateMail1.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, GALLERY_ACTIVITY_CODE);
+                        Toast.makeText(context, "Please allow the permission", Toast.LENGTH_LONG).show();
 
-                }else {
-                    open_galary();
+                    }else {
+                        open_galary();
 
+                    }
+                }else{
+                    AppAlert.getInstance().getAlert(context,"Alert!!!","Attachment limit exceed....");
                 }
                 break;
             case R.id.file:
-                filetype=1;
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    //takePictureButton.setEnabled(false);
-                    ActivityCompat.requestPermissions(CreateMail1.this, new String[] { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }, CHOOSE_FILE_REQUESTCODE);
-                    Toast.makeText(context, "Please allow the permission", Toast.LENGTH_LONG).show();
+                if (attachAdapter.getAttachments().size() < 3) {
+                    filetype=1;
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        //takePictureButton.setEnabled(false);
+                        ActivityCompat.requestPermissions(CreateMail1.this, new String[] { Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }, CHOOSE_FILE_REQUESTCODE);
+                        Toast.makeText(context, "Please allow the permission", Toast.LENGTH_LONG).show();
 
-                }else {
+                    }else {
 
-                    AccessingFiles();
+                        AccessingFiles();
+                    }
+                }else{
+                    AppAlert.getInstance().getAlert(context,"Alert!!!","Attachment limit exceed....");
                 }
                 break;
             default:
@@ -896,49 +949,6 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
     }
 
 
- /*   @Override
-    public void upload_complete(final String IsCompleted) {
-        progress1.dismiss();
-        if (IsCompleted.equals("S")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    //new UploadPhotoInBackGround().execute();
-                }
-            });
-        }else if (IsCompleted.equals("Y")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    Mail_commit();
-                }
-            });
-        }else if (IsCompleted.contains("ERROR")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    //new UploadPhotoInBackGround().execute();
-                    String folder=IsCompleted.substring(6);
-                    customVariablesAndMethod.getAlert(context,"Folder not found",folder+"   Invalid path \nPlease contact your administrator");
-                }
-            });
-        }else {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    customVariablesAndMethod.msgBox(context,"UPLOAD FAILED \n Please try again");
-                }
-            });
-        }
-    }*/
 
     @Override
     public void started(Integer responseCode, String message, String description) {
@@ -952,19 +962,22 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
     @Override
     public void complete(Integer responseCode, String message, String description) {
-        progress1.dismiss();
+        //progress1.dismiss();
+        cboProgressDialog.dismiss();
         Mail_commit();
     }
 
     @Override
     public void aborted(Integer responseCode, String message, String description) {
-        progress1.dismiss();
+        //progress1.dismiss();
+        cboProgressDialog.dismiss();
         customVariablesAndMethod.getAlert(context,message,description);
     }
 
     @Override
     public void failed(Integer responseCode, String message, String description) {
-        progress1.dismiss();
+        //progress1.dismiss();
+        cboProgressDialog.dismiss();
         customVariablesAndMethod.getAlert(context,message,description);
     }
 }
