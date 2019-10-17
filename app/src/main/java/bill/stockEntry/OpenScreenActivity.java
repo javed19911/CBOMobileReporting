@@ -176,7 +176,7 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
                     .setPositiveTxt("Discard")
                     .setNagativeTxt("Cancel")
                     .DecisionAlert(context, "Alert !!!",
-                            "Are you sure to discard the changes in the order?",
+                            "Are you sure to discard the changes?",
                             new AppAlert.OnClickListener() {
                                 @Override
                                 public void onPositiveClicked(View item, String result) {

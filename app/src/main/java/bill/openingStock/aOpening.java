@@ -57,6 +57,8 @@ public class aOpening extends RecyclerView.Adapter<aOpening.MyViewHolder> {
         holder.enter_by.setText( mOpeninglist.getENTRY_BY());
         holder.no_item.setText(mOpeninglist.getNO_ITEM());//DATE
 
+        holder.customer_name.setText(mOpeninglist.getCOMPANY_NAME());
+
         holder.delete.setVisibility(mOpeninglist.getDelete() ? View.VISIBLE : View.GONE);
         holder.edit.setVisibility(mOpeninglist.getEdit() ? View.VISIBLE : View.GONE);
 

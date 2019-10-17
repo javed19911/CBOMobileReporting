@@ -341,8 +341,8 @@ public class FNewOpen extends Fragment implements IFBillNewOrder {
 
 
         if (getPartyId() == null) {
-            if (context instanceof ICompanyCart) {
-                viewModel.setOrder(((ICompanyCart) context).getOrder());
+            if (context instanceof IOpen) {
+                viewModel.setOrder(((IOpen) context).getOrder());
             }
         }
 

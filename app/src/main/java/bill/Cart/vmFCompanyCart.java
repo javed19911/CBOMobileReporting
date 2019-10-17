@@ -140,23 +140,35 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
 
         new MyOrderAPIService(context)
                 .execute(new ResponseBuilder(MethodName,request)
-                        .setDescription("Please Wait..." +
-                                "\nBooking your Bill...")
+                        .setDescription("Please Wait..." )
                         .setResponse(new CBOServices.APIResponse() {
                             @Override
                             public void onComplete(Bundle result) throws Exception {
                                 String table1 = result.getString("Tables2");
                                 JSONArray jsonArray = new JSONArray(table1);
                                 JSONObject jsonObject2 = jsonArray.getJSONObject(0);
-                                AppAlert.getInstance().Alert(context, "Success!!!",
-                                        order.getStatus().equalsIgnoreCase("V")?
-                                                ("Bill generated Successfully ...\nBill No. : "+ jsonObject2.getString("BILL_NO") ):
-                                                ("Bill Updated Successfully ...\nBill No. : "+ jsonObject2.getString("BILL_NO")), new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                context.finish();
-                                            }
-                                        });
+
+                                if (MethodName.equalsIgnoreCase("BILL_COMMIT_MOBILE")) {
+                                    AppAlert.getInstance().Alert(context, "Success!!!",
+                                            order.getStatus().equalsIgnoreCase("V") ?
+                                                    ("Bill generated Successfully ...\nBill No. : " + jsonObject2.getString("BILL_NO")) :
+                                                    ("Bill Updated Successfully ...\nBill No. : " + jsonObject2.getString("BILL_NO")), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    context.finish();
+                                                }
+                                            });
+                                }else{
+                                    AppAlert.getInstance().Alert(context, "Success!!!",
+                                            order.getStatus().equalsIgnoreCase("V") ?
+                                                    ("Transaction has been Saved Successfully ...\nDocument No. : " + jsonObject2.getString("BILL_NO")) :
+                                                    ("Transaction has been Updated Successfully ...\nDocument No. : " + jsonObject2.getString("BILL_NO")), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    context.finish();
+                                                }
+                                            });
+                                }
                             }
 
                             @Override

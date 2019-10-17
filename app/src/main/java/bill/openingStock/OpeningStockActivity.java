@@ -304,7 +304,7 @@ public class OpeningStockActivity extends CustomActivity implements IOpening, aO
     @Override
     public void Delete_Bill(mOpening mbill) {
         AppAlert.getInstance().DecisionAlert(context,
-                "Delete !!!", "Are you sure to delete\nBill : " + mbill.getDOC_NO() + " ?",
+                "Delete !!!", "Are you sure to delete\nDocument : " + mbill.getDOC_NO() + " ?",
                 new AppAlert.OnClickListener() {
                     @Override
                     public void onPositiveClicked(View item, String result) {

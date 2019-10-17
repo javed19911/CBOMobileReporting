@@ -134,9 +134,9 @@
                         <TextView
                             android:layout_width="0px"
                             android:layout_height="wrap_content"
-                            android:text="Customer"
+                            android:text="Company"
                             android:textColor="@android:color/black"
-                            android:layout_weight="0.5"/>
+                            android:layout_weight="0.4"/>
 
                         <TextView
                             android:layout_width="wrap_content"

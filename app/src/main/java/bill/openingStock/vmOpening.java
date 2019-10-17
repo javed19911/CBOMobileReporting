@@ -153,7 +153,7 @@ public class vmOpening extends CBOViewModel<IOpening> {
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(0);
 
-        new MyOrderAPIService(context).execute(new ResponseBuilder("BILL_DELETE_MOBILE", request)
+        new MyOrderAPIService(context).execute(new ResponseBuilder(getPage().getOnDetailApi(), request)
                 .setTables(tables)
                 .setResponse(new CBOServices.APIResponse() {
                     @Override

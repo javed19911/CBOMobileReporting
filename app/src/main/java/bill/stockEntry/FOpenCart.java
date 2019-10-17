@@ -170,6 +170,7 @@ public class FOpenCart extends Fragment implements IFCompanycart {
 
 
         cartAdapter = new aOpenCart (context, viewModel.getOrder ());
+        cartAdapter.setPage(page);
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
         itemlist_filter.setLayoutManager (mLayoutManager1);
         itemlist_filter.setItemAnimator (new DefaultItemAnimator());
@@ -250,15 +251,15 @@ public class FOpenCart extends Fragment implements IFCompanycart {
         //title = "New Order";
         if (viewModel.getOrder ().getDocId ().equalsIgnoreCase ("0")) {
             //itemFilter.performClick ();
-            title = "New Doc";
+            title = "New Document";
 
         }else if (viewModel.getOrder ().getStatus ().equalsIgnoreCase ("E")) {
             itemFilter.setVisibility (View.GONE);
-            title = "Doc No. :- " + viewModel.getOrder ().getBillNo ();
+            title = "Document No. :- " + viewModel.getOrder ().getBillNo ();
 
         }else  {
             itemFilter.setVisibility (View.GONE);
-            title = "Doc No. :- " + viewModel.getOrder ().getBillNo ();
+            title = "Document No. :- " + viewModel.getOrder ().getBillNo ();
             saveOrder.setText ("<< Back");
         }
 

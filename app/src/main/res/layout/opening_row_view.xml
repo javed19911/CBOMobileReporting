@@ -121,7 +121,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -134,9 +134,9 @@
                         <TextView
                             android:layout_width="0px"
                             android:layout_height="wrap_content"
-                            android:text="Customer"
+                            android:text="Company"
                             android:textColor="@android:color/black"
-                            android:layout_weight="0.5"/>
+                            android:layout_weight="0.3"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -153,6 +153,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView

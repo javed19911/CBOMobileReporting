@@ -165,7 +165,7 @@ public class TransactionMenuInGrid extends Fragment {
                                 complaintView.putExtra("page",new mPage(menuname,OpeningStockActivity.DOC_TYPE.OPENING.name())
                                         .setOnLoadApi("OP_GRID_MOBILE")
                                         .setOnDetailApi("OP_POPULATE_MOBILE")
-                                        .setOnDetailApi("OP_DELETE_MOBILE")
+                                        .setOnDeleteApi("OP_DELETE_MOBILE")
                                         .setOnFinalizeApi("OP_COMMIT_MOBILE"));
                                 startActivity(complaintView);
                             }

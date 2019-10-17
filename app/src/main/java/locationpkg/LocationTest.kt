@@ -372,7 +372,7 @@ class LocationTest : AppCompatActivity() {
 
         val intent = Intent(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE)
         intent.putExtra(Const.LBM_EVENT_LOCATION_UPDATE, BestLocation)
-        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(MyCustumApplication.getInstance()).sendBroadcast(intent)
+        LocalBroadcastManager.getInstance(MyCustumApplication.getInstance()).sendBroadcast(intent)
 
         finish()
     }
