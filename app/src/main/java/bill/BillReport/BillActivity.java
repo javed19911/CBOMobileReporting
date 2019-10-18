@@ -37,7 +37,7 @@ import utils_new.AppAlert;
 import utils_new.CustomDatePicker;
 
 public class BillActivity     extends CustomActivity implements
-        IBill, aBill.Bill_interface, SearchView.OnQueryTextListener {
+        IBill, aBill.Bill_interface,iBillMain, SearchView.OnQueryTextListener {
 private  vmBill vmBill;
 private Toolbar toolbar;
 private TextView textView,Totamt;
@@ -157,6 +157,26 @@ private  Menu menu;
 
     }
 
+    @Override
+    public boolean isFromDateRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean isToDateRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean isShowPopup() {
+        return false;
+    }
+
+    @Override
+    public String getDocType() {
+        return "Bill";
+    }
+
 
     @Override
     protected void onResume() {
@@ -210,6 +230,9 @@ private  Menu menu;
             intent.putExtra("doc_type", OpeningStockActivity.DOC_TYPE.BILL);
             intent.putExtra("Companies",fBillFilter.getCompanies());
             intent.putExtra("PayModes",fBillFilter.getPayModes());
+            intent.putExtra("DocDate",fBillFilter.getDOCDATE());
+            intent.putExtra("IS_DOC_DATE_CHANGEBLE",fBillFilter.getDocDateChangble());
+            intent.putExtra("IS_DOC_DATE_Required",true);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

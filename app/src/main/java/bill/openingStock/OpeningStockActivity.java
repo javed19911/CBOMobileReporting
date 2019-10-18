@@ -31,6 +31,7 @@ import bill.BillReport.BillActivity;
 import bill.BillReport.FBillFilter;
 import bill.BillReport.IBill;
 import bill.BillReport.aBill;
+import bill.BillReport.iBillMain;
 import bill.BillReport.mBill;
 import bill.BillReport.mCompany;
 import bill.BillReport.vmBill;
@@ -42,7 +43,8 @@ import bill.mBillOrder;
 import bill.stockEntry.OpenScreenActivity;
 import utils_new.AppAlert;
 
-public class OpeningStockActivity extends CustomActivity implements IOpening, aOpening.Opening_interface, SearchView.OnQueryTextListener {
+public class OpeningStockActivity extends CustomActivity implements IOpening,
+        aOpening.Opening_interface, iBillMain, SearchView.OnQueryTextListener {
     public CollapsingToolbarLayout collapsingToolbarLayout;
     private vmOpening vmOpening;
     private Toolbar toolbar;
@@ -154,6 +156,26 @@ public class OpeningStockActivity extends CustomActivity implements IOpening, aO
 
     }
 
+    @Override
+    public boolean isFromDateRequired() {
+        return false;
+    }
+
+    @Override
+    public boolean isToDateRequired() {
+        return false;
+    }
+
+    @Override
+    public boolean isShowPopup() {
+        return true;
+    }
+
+    @Override
+    public String getDocType() {
+        return OpeningStockActivity.DOC_TYPE.valueOf( vmOpening.getPage().getCode()) == DOC_TYPE.OPENING ?"OP":"" ;
+    }
+
 
     @Override
     protected void onResume() {
@@ -208,6 +230,9 @@ public class OpeningStockActivity extends CustomActivity implements IOpening, aO
             intent.putExtra("doc_type", OpeningStockActivity.DOC_TYPE.valueOf(vmOpening.getPage().getCode()));
             intent.putExtra("Companies", fBillFilter.getCompanies());
             intent.putExtra("PayModes", fBillFilter.getPayModes());
+            intent.putExtra("DocDate",fBillFilter.getDOCDATE());
+            intent.putExtra("IS_DOC_DATE_CHANGEBLE",fBillFilter.getDocDateChangble());
+            intent.putExtra("IS_DOC_DATE_Required",true);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

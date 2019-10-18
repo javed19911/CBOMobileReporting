@@ -346,6 +346,11 @@ public class FCompanyCart extends Fragment implements IFCompanycart {
 //        startActivityForResult (intent, ATTACHMENT);
     }
 
+    @Override
+    public void AddRemark() {
+
+    }
+
 
 }
 

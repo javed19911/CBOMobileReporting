@@ -34,6 +34,16 @@ public class vmBillitem  extends CBOViewModel<IFBillNewOrder> {
     private mBillItem item = new mBillItem();
     private BillBatchDB billBatchDB;
     private mBillOrder order;
+    private Double defaultQty = 1.0;
+
+
+    public Double getDefaultQty() {
+        return defaultQty;
+    }
+
+    public void setDefaultQty(Double defaultQty) {
+        this.defaultQty = defaultQty;
+    }
 
     @Override
     public void onUpdateView(AppCompatActivity context, IFBillNewOrder view) {
@@ -66,14 +76,24 @@ public class vmBillitem  extends CBOViewModel<IFBillNewOrder> {
         view.setDetaileLayoutEnabled(!item.getId().equalsIgnoreCase("0"));
 
         this.item = item;
-        if ( item.getQty() == 0D) {
+
+        mBillItem orderItem = GetOrderItemWhere(item);
+
+        if (orderItem != null){
+            view.setAddText("Update");
+        }else{
+            item.setQty(defaultQty);
+            view.setAddText("ADD");
+        }
+
+        /*if ( item.getQty() == 0D) {
             //updateDiscount();
 
             item.setQty(1.0);
             view.setAddText("ADD");
         }else {
             view.setAddText("Update");
-        }
+        }*/
 
 
         Double fQty = item.getFreeQty();

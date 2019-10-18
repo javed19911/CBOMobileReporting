@@ -36,6 +36,7 @@ public class mBillOrder implements Serializable {
     private int BilledHO;
     private String Approved;
     private String Attachment;
+    private String Remark;
 
     public mBillOrder() {
         this.GST = new mTax(eTax.NONE);
@@ -47,48 +48,107 @@ public class mBillOrder implements Serializable {
         this.Attachment = "";
     }
 
+
+
     public String getId() {
         return this.Id;
+    }
+
+    public mBillOrder setId(String id) {
+        this.Id = id;
+        return this;
     }
 
     public String getPartyId() {
         return this.PartyId;
     }
 
+    public mBillOrder setPartyId(String partyId) {
+        this.PartyId = partyId;
+        return this;
+    }
+
     public String getPartyName() {
         return this.PartyName;
+    }
+
+    public mBillOrder setPartyName(String partyName) {
+        this.PartyName = partyName;
+        return this;
     }
 
     public String getDocId() {
         return this.DocId;
     }
 
+    public mBillOrder setDocId(String docId) {
+        this.DocId = docId;
+        return this;
+    }
+
     public String getDocNo() {
         return this.DocNo;
+    }
+
+    public mBillOrder setDocNo(String docNo) {
+        this.DocNo = docNo;
+        return this;
     }
 
     public String getDocDate() {
         return this.DocDate;
     }
 
+    public mBillOrder setDocDate(String docDate) {
+        this.DocDate = docDate;
+        return this;
+    }
+
     public Double getAmt() {
         return this.Amt;
+    }
+
+    public mBillOrder setAmt(Double amt) {
+        this.Amt = amt;
+        return this;
     }
 
     public Double getNetAmt() {
         return this.NetAmt;
     }
 
+    public mBillOrder setNetAmt(Double netAmt) {
+
+        this.NetAmt = netAmt;
+        return this;
+    }
+
     public Double getCGSTAmt() {
         return this.CGSTAmt;
+    }
+
+    public mBillOrder setCGSTAmt(Double CGSTAmt) {
+        this.CGSTAmt = CGSTAmt;
+        return this;
     }
 
     public Double getSGSTAmt() {
         return this.SGSTAmt;
     }
 
+    public mBillOrder setSGSTAmt(Double SGSTAmt) {
+        this.SGSTAmt = SGSTAmt;
+        return this;
+    }
+
     public Double getTotAmt() {
         return this.TotAmt;
+    }
+
+    public mBillOrder setTotAmt(Double totAmt) {
+        Round_amt = Math.round(totAmt) - totAmt;
+        this.TotAmt = Math.round(totAmt) + 0.0;
+        return this;
     }
 
     public Double getRouAmt() {
@@ -99,98 +159,13 @@ public class mBillOrder implements Serializable {
         return this.PayMode;
     }
 
-    public String getStatus() {
-        return this.Status;
-    }
-
-    public String getGrNo() {
-        return this.GrNo;
-    }
-
-    public String getTransport() {
-        return this.Transport;
-    }
-
-    public String getGrDate() {
-        return this.GrDate;
-    }
-
-    public String getBillNo() {
-        return this.BillNo;
-    }
-
-    public String getBillDate() {
-        return this.BillDate;
-    }
-
-    public String getBillAmt() {
-        return this.BillAmt;
-    }
-
-    public ArrayList<mBillItem> getItems() {
-        return this.items;
-    }
-
-    public int getBilledHO() {
-        return this.BilledHO;
-    }
-
-    public String getApproved() {
-        return this.Approved;
-    }
-
-    public String getAttachment() {
-        return this.Attachment;
-    }
-
-    public List<String> getAttachmentArr() {
-        return this.getAttachment().isEmpty() ? new ArrayList() : new ArrayList(Arrays.asList(this.Attachment.split("\\|\\^")));
-    }
-
-    public mBillOrder setId(String id) {
-        this.Id = id;
-        return this;
-    }
-
-    public mBillOrder setPartyId(String partyId) {
-        this.PartyId = partyId;
-        return this;
-    }
-
-    public mBillOrder setPartyName(String partyName) {
-        this.PartyName = partyName;
-        return this;
-    }
-
-    public mBillOrder setDocId(String docId) {
-        this.DocId = docId;
-        return this;
-    }
-
-    public mBillOrder setDocNo(String docNo) {
-        this.DocNo = docNo;
-        return this;
-    }
-
-    public mBillOrder setDocDate(String docDate) {
-        this.DocDate = docDate;
-        return this;
-    }
-
-    public mBillOrder setNetAmt(Double netAmt) {
-
-        this.NetAmt = netAmt;
-        return this;
-    }
-
-    public mBillOrder setAmt(Double amt) {
-        this.Amt = amt;
-        return this;
-    }
-
     public mBillOrder setPayMode(String payMode) {
         this.PayMode = payMode;
         return this;
+    }
+
+    public String getStatus() {
+        return this.Status;
     }
 
     public mBillOrder setStatus(String status) {
@@ -198,9 +173,17 @@ public class mBillOrder implements Serializable {
         return this;
     }
 
+    public String getGrNo() {
+        return this.GrNo;
+    }
+
     public mBillOrder setGrNo(String grNo) {
         this.GrNo = grNo;
         return this;
+    }
+
+    public String getTransport() {
+        return this.Transport;
     }
 
     public mBillOrder setTransport(String transport) {
@@ -208,9 +191,17 @@ public class mBillOrder implements Serializable {
         return this;
     }
 
+    public String getGrDate() {
+        return this.GrDate;
+    }
+
     public mBillOrder setGrDate(String grDate) {
         this.GrDate = grDate;
         return this;
+    }
+
+    public String getBillNo() {
+        return this.BillNo;
     }
 
     public mBillOrder setBillNo(String billNo) {
@@ -218,9 +209,17 @@ public class mBillOrder implements Serializable {
         return this;
     }
 
+    public String getBillDate() {
+        return this.BillDate;
+    }
+
     public mBillOrder setBillDate(String billDate) {
         this.BillDate = billDate;
         return this;
+    }
+
+    public String getBillAmt() {
+        return this.BillAmt;
     }
 
     public mBillOrder setBillAmt(String billAmt) {
@@ -228,30 +227,17 @@ public class mBillOrder implements Serializable {
         return this;
     }
 
+    public ArrayList<mBillItem> getItems() {
+        return this.items;
+    }
+
     public mBillOrder setItems(ArrayList<mBillItem> items) {
         this.items = items;
         return this;
     }
 
-    public mBillOrder setGST(mTax GST) {
-        this.GST = GST;
-        return this;
-    }
-
-    public mBillOrder setCGSTAmt(Double CGSTAmt) {
-        this.CGSTAmt = CGSTAmt;
-        return this;
-    }
-
-    public mBillOrder setSGSTAmt(Double SGSTAmt) {
-        this.SGSTAmt = SGSTAmt;
-        return this;
-    }
-
-    public mBillOrder setTotAmt(Double totAmt) {
-        Round_amt = Math.round(totAmt) - totAmt;
-        this.TotAmt = Math.round(totAmt)+0.0;
-        return this;
+    public int getBilledHO() {
+        return this.BilledHO;
     }
 
     public mBillOrder setBilledHO(int billedHO) {
@@ -259,9 +245,17 @@ public class mBillOrder implements Serializable {
         return this;
     }
 
+    public String getApproved() {
+        return this.Approved;
+    }
+
     public mBillOrder setApproved(String approved) {
         this.Approved = approved;
         return this;
+    }
+
+    public String getAttachment() {
+        return this.Attachment;
     }
 
     public mBillOrder setAttachment(String attachment) {
@@ -269,13 +263,18 @@ public class mBillOrder implements Serializable {
         return this;
     }
 
+    public String getRemark() {
+        return Remark;
+    }
+
+
     public mBillOrder setAttachment(List<String> attachment) {
         StringBuilder sb = new StringBuilder();
         int count = 0;
         Iterator var4 = attachment.iterator();
 
-        while(var4.hasNext()) {
-            String file = (String)var4.next();
+        while (var4.hasNext()) {
+            String file = (String) var4.next();
             if (count != 0) {
                 sb.append("|^");
             }
@@ -285,6 +284,21 @@ public class mBillOrder implements Serializable {
         }
 
         this.Attachment = sb.toString();
+        return this;
+    }
+
+    public List<String> getAttachmentArr() {
+        return this.getAttachment().isEmpty() ? new ArrayList() : new ArrayList(Arrays.asList(this.Attachment.split("\\|\\^")));
+    }
+
+    public mBillOrder setGST(mTax GST) {
+        this.GST = GST;
+        return this;
+    }
+
+
+    public mBillOrder setRemark(String remark) {
+        Remark = remark;
         return this;
     }
 }

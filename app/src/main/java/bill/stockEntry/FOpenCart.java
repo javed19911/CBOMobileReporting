@@ -40,8 +40,8 @@ public class FOpenCart extends Fragment implements IFCompanycart {
 
 
     private static final int ITEM_FILTER = 0;
-    private static final int ATTACHMENT = 10;
     private static final int ADD_CUSTOMER = 10;
+    private static final int ADD_REMARK = 11;
     TextView cartSubTotal, cartDiscount, cartNetAmount, cartTotal_out, saveOrder, itemFilter;
     AppCompatActivity context;
     private RecyclerView itemlist_filter;
@@ -64,6 +64,7 @@ public class FOpenCart extends Fragment implements IFCompanycart {
                         ((IOpen) context).updateOrder(viewModel.getOrder());
                     }
                     break;
+                case ADD_REMARK:
                 case ADD_CUSTOMER:
                     viewModel.setCustomer((mCustomer) data.getSerializableExtra("customer"));
                     updateOrder((mBillOrder) data.getSerializableExtra ("order"));
@@ -162,7 +163,8 @@ public class FOpenCart extends Fragment implements IFCompanycart {
                 }else if( viewModel.getOrder().getItems().size() == 0){
                     AppAlert.getInstance().getAlert(context,"No Item !!!!","Please add atleast one item to the cart... ");
                 }else {
-                    orderCommit();
+                    AddRemark();
+                    //orderCommit();
                     //AddCustomer();
                 }
             }
@@ -354,6 +356,15 @@ public class FOpenCart extends Fragment implements IFCompanycart {
 //        Intent intent = new Intent (context, CartAttachment.class);
 //        intent.putExtra ("order", viewModel.getOrder());
 //        startActivityForResult (intent, ATTACHMENT);
+    }
+
+    @Override
+    public void AddRemark() {
+        Intent intent = new Intent (context, AddRemark.class);
+        intent.putExtra("customer",viewModel.getCustomer());
+        intent.putExtra("order",viewModel.getOrder());
+        intent.putExtra("PayModes",getArguments().getSerializable("PayModes"));
+        startActivityForResult (intent, ADD_REMARK);
     }
 
 

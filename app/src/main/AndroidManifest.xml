@@ -16,6 +16,9 @@
         <activity android:name="bill.BillReport.DashboardBill" />
         <activity android:name="bill.Outlet.Outlet" />
         <activity android:name="bill.Dashboard.Dashboard" />
+        <activity android:name="bill.stockEntry.AddRemark"
+            android:label="@string/title_activity_location_test"
+            android:theme="@style/Appdilogtheme"></activity>
         <activity
             android:name="bill.Cart.AddCustomer"
             android:label="@string/title_activity_location_test"

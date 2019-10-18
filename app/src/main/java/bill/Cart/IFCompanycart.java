@@ -19,4 +19,5 @@ public interface IFCompanycart {
     void CalculateTotal();
     void updateTotal();
     void addAttachment();
+    void AddRemark();
 }

@@ -119,6 +119,7 @@ public class FNewOpen extends Fragment implements IFBillNewOrder {
 
 
         viewModel = ViewModelProviders.of (this).get (vmBillitem.class);
+        viewModel.setDefaultQty(0.0);
         viewModel.setView (context, this);
 
 
@@ -141,6 +142,7 @@ public class FNewOpen extends Fragment implements IFBillNewOrder {
             public void onClick(View v) {
                 mBillItem item = viewModel.getItem();
                 selectBatch(item,false);
+                setFocusQty(false);
             }
         });
 

@@ -7,10 +7,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -18,6 +22,9 @@ import android.widget.Button;
 
 import com.cbo.cbomobilereporting.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -34,7 +41,7 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
     private Camera camera;
 
     private SurfaceView surfaceView;
-
+    private Button captureBtn,ResetBtn,DoneBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,25 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
         setContentView(R.layout.activity_my_camera);
 
         surfaceView = findViewById(R.id.surfaceView);
+        captureBtn = findViewById(R.id.capture);
+        ResetBtn = findViewById(R.id.reset);
+        DoneBtn = findViewById(R.id.done);
+
+        DoneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSendResponse();
+            }
+        });
+
+
+        ResetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetCamera();
+            }
+        });
+
         if (surfaceView != null) {
             boolean result = checkPermission();
             if (result) {
@@ -119,9 +145,8 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
     }
 
     private void setBtnClick() {
-        Button startBtn = findViewById(R.id.startBtn);
-        if (startBtn != null) {
-            startBtn.setOnClickListener(new View.OnClickListener() {
+        if (captureBtn != null) {
+            captureBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     captureImage();
@@ -133,6 +158,11 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
     public void captureImage() {
         if (camera != null) {
             camera.takePicture(null, null, this);
+
+            ResetBtn.setVisibility(View.VISIBLE);
+            DoneBtn.setVisibility(View.VISIBLE);
+            captureBtn.setVisibility(View.INVISIBLE);
+
         }
     }
 
@@ -142,7 +172,15 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
     }
 
     private void startCamera() {
-        camera = Camera.open();
+        ResetBtn.setVisibility(View.INVISIBLE);
+        DoneBtn.setVisibility(View.INVISIBLE);
+        captureBtn.setVisibility(View.VISIBLE);
+        int cameraId = findFrontFacingCamera();
+        if (cameraId == -1) {
+            camera = Camera.open();
+        }else{
+            camera = Camera.open(cameraId);
+        }
         camera.setDisplayOrientation(90);
         try {
             camera.setPreviewDisplay(surfaceHolder);
@@ -151,6 +189,24 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
             e.printStackTrace();
         }
     }
+
+
+    private int findFrontFacingCamera() {
+        int cameraId = -1;
+        // Search for the front facing camera
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                Log.d("AttachImage", "Camera found");
+                cameraId = i;
+                break;
+            }
+        }
+        return cameraId;
+    }
+
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
@@ -162,6 +218,10 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
             // Return if preview surface does not exist
             return;
         }
+
+        ResetBtn.setVisibility(View.INVISIBLE);
+        DoneBtn.setVisibility(View.INVISIBLE);
+        captureBtn.setVisibility(View.VISIBLE);
 
         if (camera != null) {
             // Stop if preview surface is already running.
@@ -194,6 +254,30 @@ public class MyCamera extends AppCompatActivity implements SurfaceHolder.Callbac
     @Override
     public void onPictureTaken(byte[] bytes, Camera camera) {
         // Picture had been taken by camera. So, do appropriate action. For example, save it in file.
+
+        try {
+
+            FileOutputStream fo = new FileOutputStream((File) getIntent().getSerializableExtra(MediaStore.EXTRA_OUTPUT));
+            fo.write(bytes);
+            fo.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onSendResponse() {
+        Intent intent = new Intent();
+//        intent.putExtra("customer", customer);
+//        intent.putExtra("order", order);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
+        finish();
     }
 
 }

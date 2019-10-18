@@ -34,7 +34,7 @@ import bill.mBillOrder;
 import utils_new.AppAlert;
 
 public class DashboardBill extends CustomActivity implements
-    IBill, aDashboardBill.Bill_interface, SearchView.OnQueryTextListener {
+    IBill, aDashboardBill.Bill_interface,iBillMain, SearchView.OnQueryTextListener {
         private  vmBill vmBill;
         private Toolbar toolbar;
         private TextView textView,Totamt;
@@ -102,8 +102,28 @@ public class DashboardBill extends CustomActivity implements
 
         }
 
+    @Override
+    public boolean isFromDateRequired() {
+        return true;
+    }
 
-        @Override
+    @Override
+    public boolean isToDateRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean isShowPopup() {
+        return false;
+    }
+
+    @Override
+    public String getDocType() {
+        return "";
+    }
+
+
+    @Override
         protected void onResume() {
             super.onResume();
             if (vmBill.isLoaded()) {

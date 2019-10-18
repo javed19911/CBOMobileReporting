@@ -11,7 +11,8 @@ public class mOpening implements Serializable {
     private String DOC_NO = "";
     private String NO_ITEM = "";
     private String ENTRY_BY_ID = "";
-    private String COMPANY_NAME;
+    private String COMPANY_NAME="";
+    private String COMPANY_ID="0";
     private String ENTRY_BY = "";
     private String DOC_DATE_ORDER = "";
     private Boolean edit = false;
@@ -104,5 +105,13 @@ public class mOpening implements Serializable {
 
     public void setCOMPANY_NAME(String COMPANY_NAME) {
         this.COMPANY_NAME = COMPANY_NAME;
+    }
+
+    public String getCOMPANY_ID() {
+        return COMPANY_ID;
+    }
+
+    public void setCOMPANY_ID(String COMPANY_ID) {
+        this.COMPANY_ID = COMPANY_ID;
     }
 }

@@ -27,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.cbo.cbomobilereporting.R;
+import com.cbo.myattachment.AttachFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -140,10 +141,9 @@ public class AttachImage extends CustomActivity {
         if (choosefrom == ChooseFrom.camera){
             chooserIntent = Intent.createChooser(cameraIntent, context.getString(R.string.choose_photo_title));
         }else if (choosefrom == ChooseFrom.frontCamera){
-            cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
-            cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
-            cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
-            chooserIntent = Intent.createChooser(cameraIntent, context.getString(R.string.choose_photo_title));
+            chooserIntent = new Intent(AttachImage.this,MyCamera.class);
+            chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUrl);
+
         }else if (choosefrom == ChooseFrom.galary){
             chooserIntent = Intent.createChooser(galleryIntent, context.getString(R.string.choose_photo_title));
         }else{
@@ -158,21 +158,6 @@ public class AttachImage extends CustomActivity {
         startActivityForResult(chooserIntent, CHOOSE_PHOTO_INTENT);
     }
 
-    private int findFrontFacingCamera() {
-        int cameraId = -1;
-        // Search for the front facing camera
-        int numberOfCameras = Camera.getNumberOfCameras();
-        for (int i = 0; i < numberOfCameras; i++) {
-            Camera.CameraInfo info = new Camera.CameraInfo();
-            Camera.getCameraInfo(i, info);
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                Log.d("AttachImage", "Camera found");
-                cameraId = i;
-                break;
-            }
-        }
-        return cameraId;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

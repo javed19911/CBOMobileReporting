@@ -128,6 +128,7 @@ public class vmOpening extends CBOViewModel<IOpening> {
                 bill.setDOC_NO(c.getString("DOC_NO"));
                 bill.setENTRY_BY_ID(c.getString("ENTRY_BY_ID"));
                 bill.setCOMPANY_NAME(c.getString("COMPANY_NAME"));
+                bill.setCOMPANY_ID(c.getString("COMPANY_ID"));
 
                 bill.setEdit(c.getInt("EDITYN") == 1);
                 bill.setDelete(c.getInt("DELETEYN") == 1);
@@ -153,7 +154,7 @@ public class vmOpening extends CBOViewModel<IOpening> {
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(0);
 
-        new MyOrderAPIService(context).execute(new ResponseBuilder(getPage().getOnDetailApi(), request)
+        new MyOrderAPIService(context).execute(new ResponseBuilder(getPage().getOnDeleteApi(), request)
                 .setTables(tables)
                 .setResponse(new CBOServices.APIResponse() {
                     @Override
@@ -182,7 +183,7 @@ public class vmOpening extends CBOViewModel<IOpening> {
 
         mBillOrder order = new mBillOrder()
                 .setDocDate(CustomDatePicker.formatDate(bill.getDOC_DATE(), CustomDatePicker.ShowFormatOld))
-                .setPartyId(bill.getENTRY_BY_ID())
+                .setPartyId(bill.getCOMPANY_ID())
                 .setPartyName(bill.getCOMPANY_NAME())
                 .setDocId(bill.getPOSTING_ID())
                 .setDocNo(bill.getDOC_NO())

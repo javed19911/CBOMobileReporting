@@ -130,6 +130,7 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
         request.put("DOA", getCustomer().getDOA());
         request.put("ROUND_AMT",""+order.getRouAmt());
         request.put("GST_NO",getCustomer().getGST_NO());
+        request.put("REMARK",order.getRemark());
 
 
 

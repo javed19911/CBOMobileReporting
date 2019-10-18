@@ -121,7 +121,9 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
 
         onItemEdit(new mBillItem().setName(""));
 
-        viewModel.getOrderItem(context, !viewModel.isLoaded());
+        viewModel.getOrderItem(context, !viewModel.isLoaded()
+                && !(!viewModel.getOrder().getDocId().equalsIgnoreCase("0")
+                && viewModel.getOrder().getStatus().equalsIgnoreCase("V")));
 
     }
 

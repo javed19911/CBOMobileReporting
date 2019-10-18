@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class CompanyActivity extends CustomActivity {
     AppCompatActivity context;
     TextView bill_date;
     ImageView bill_date_img;
+    LinearLayout doc_date_layout;
     private ArrayList<mCompany>Companylist= new ArrayList<mCompany>();
     private OpeningStockActivity.DOC_TYPE doc_type = OpeningStockActivity.DOC_TYPE.BILL;
     mPage page ;
@@ -66,41 +68,62 @@ public class CompanyActivity extends CustomActivity {
         }
 
 
-        doc_type = (OpeningStockActivity.DOC_TYPE) getIntent().getSerializableExtra("doc_type");
-        if (getIntent().getSerializableExtra("page") != null){
-            page = (mPage) getIntent().getSerializableExtra("page");
-        }else{
-            page =  new mPage("New Bill",doc_type.name());
-        }
+
 
 
         TextView title = toolbar.findViewById(R.id.title);
         title.setText("Select Company");
         TextView filterTxt = findViewById(R.id.filterTxt);
 
+
         bill_date = findViewById(R.id.bill_date);
         bill_date_img = findViewById(R.id.bill_date_img);
-        bill_date.setText(CustomDatePicker.currentDate(CustomDatePicker.ShowFormatOld));
+        //bill_date.setText(CustomDatePicker.currentDate(CustomDatePicker.ShowFormatOld));
+        bill_date.setText(CustomDatePicker.formatDate((Date) getIntent().getSerializableExtra("DocDate"),CustomDatePicker.ShowFormatOld) );
 
-        bill_date_img.setOnClickListener(new View.OnClickListener() {
+        if (getIntent().getBooleanExtra("IS_DOC_DATE_CHANGEBLE", true)){
+            bill_date_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        new CustomDatePicker(context, null, new Date()
+
+                        ).Show(CustomDatePicker.getDate(bill_date.getText().toString(), CustomDatePicker.ShowFormatOld)
+                                , new CustomDatePicker.ICustomDatePicker() {
+                                    @Override
+                                    public void onDateSet(Date date) {
+                                        bill_date.setText(CustomDatePicker.formatDate(date, CustomDatePicker.ShowFormatOld));
+                                    }
+                                });
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+
+        bill_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    new CustomDatePicker(context, null, new Date()
-
-                    ).Show(CustomDatePicker.getDate(bill_date.getText().toString(),  CustomDatePicker.ShowFormatOld)
-                            , new CustomDatePicker.ICustomDatePicker() {
-                                @Override
-                                public void onDateSet(Date date) {
-                                    bill_date.setText(CustomDatePicker.formatDate(date,CustomDatePicker.ShowFormatOld));
-                                }
-                            });
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+                bill_date_img.performClick();
             }
         });
+
+        if (getIntent().getBooleanExtra("IS_DOC_DATE_Required", false)) {
+
+            doc_type = (OpeningStockActivity.DOC_TYPE) getIntent().getSerializableExtra("doc_type");
+            if (getIntent().getSerializableExtra("page") != null){
+                page = (mPage) getIntent().getSerializableExtra("page");
+            }else{
+                page =  new mPage("New Bill",doc_type.name());
+            }
+
+
+        }else{
+            doc_date_layout = findViewById(R.id.doc_date_layout);
+            doc_date_layout.setVisibility(View.GONE);
+        }
 
         filterTxt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -130,7 +153,11 @@ public class CompanyActivity extends CustomActivity {
         acustomer.setOnClickListner(new RecycleViewOnItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-                openCompanyCart(acustomer.getPartyAt(position));
+                if (getCallingActivity() == null) {
+                    openCompanyCart(acustomer.getPartyAt(position));
+                }else{
+                    onSendResponse(acustomer.getPartyAt(position));
+                }
             }
         });
 
@@ -161,7 +188,21 @@ public class CompanyActivity extends CustomActivity {
 
     }
 
+        public void onSendResponse(mCompany company) {
+            Intent intent = new Intent();
+            intent.putExtra("company", company);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
 
+        @Override
+        public void onBackPressed() {
+            if (getCallingActivity() != null) {
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
+            }
+            finish();
+        }
 
 
 
