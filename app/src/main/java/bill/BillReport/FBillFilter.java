@@ -126,15 +126,15 @@ public class FBillFilter extends Fragment implements ICompany {
 
 
                 }).show();*/
-//                Boolean AllRequired = false;
-//                if (getActivity() instanceof iBillMain) {
-//                    AllRequired =
-//                }
+                Boolean AllRequired = false;
+                if (getActivity() instanceof iBillMain) {
+                    AllRequired = ((iBillMain) getActivity()).IsAllRequiredInFilter();
+                }
 
                 Intent intent = new Intent(context, CompanyActivity.class);
                 intent.putExtra("Companies", getCompanies());
                 intent.putExtra("DocDate", new Date());
-                intent.putExtra("AllRequired",false);
+                intent.putExtra("IsAllRequired",AllRequired);
                 startActivityForResult(intent,COMPANY_FILTER);
 
             }
@@ -261,7 +261,7 @@ public class FBillFilter extends Fragment implements ICompany {
 
         for (int i = 0; i < jsonArray2.length(); i++) {
             JSONObject c = jsonArray2.getJSONObject(i);
-            isDoc_Date_Changeble = c.getInt("IS_CHANGEBLE") == 1;
+            isDoc_Date_Changeble = c.getInt("IS_CHANGEBLE") == 0;
             try {
                 doc_date = CustomDatePicker.getDate(c.getString("DOC_DATE"), CustomDatePicker.CommitFormat);
 

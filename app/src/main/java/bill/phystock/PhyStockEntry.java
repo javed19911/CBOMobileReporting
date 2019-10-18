@@ -1,143 +1,58 @@
-package bill.stockEntry;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+package bill.phystock;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.databaseHelper.Call.Db.BillOrderDB;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
-import FirebaseDatabase.FirebsaeDB;
 import bill.NewOrder.mBillItem;
 import bill.mBillOrder;
 import bill.openingStock.OpeningStockActivity;
 import bill.openingStock.mPage;
+import bill.stockEntry.FNewOpen;
+import bill.stockEntry.FOpenCart;
+import bill.stockEntry.vmOpenView;
 import utils_new.AppAlert;
 
-public class OpenScreenActivity extends CustomActivity implements IOpen {
+public class PhyStockEntry extends CustomActivity implements iPhyStock {
 
 
     TextView title, subTitle;
     AppCompatActivity context;
-    FOpenCart fcompanycart;
-    FNewOpen fcompanyneworder;
+    FPhyCart fcompanycart;
+    FNewPhyStock fcompanyneworder;
     //AppBarLayout appBarLayout;
 //    mCompany company;
     Boolean orderChanged = false;
     MenuItem additem = null;
-    private vmOpenView viewModel;
-
-    BillOrderDB billOrderDB;
-    boolean IsEnterInFirebase = false;
+    private vmPhyStock viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_open_screen);
-
+        setContentView(R.layout.activity_phy_stock_entry);
         context = this;
-        viewModel = ViewModelProviders.of(this).get(vmOpenView.class);
+        viewModel = ViewModelProviders.of(this).get(vmPhyStock.class);
         updateOrder((mBillOrder) getIntent().getSerializableExtra("order"));
 //        company = ((mCompany) getIntent().getSerializableExtra("company"));
-        fcompanycart = new FOpenCart();
+        fcompanycart = new FPhyCart();
         Bundle data = new Bundle();
         data.putSerializable("page", getIntent().getSerializableExtra("page"));
         data.putSerializable("PayModes", getIntent().getSerializableExtra("PayModes"));
         data.putSerializable("customer", getIntent().getSerializableExtra("customer"));
         fcompanycart.setArguments(data);
-
-        billOrderDB = new BillOrderDB(((mPage)getIntent().getSerializableExtra("page")).getCode());
-
-        billOrderDB.getDbRef(new FirebsaeDB.ILogin() {
-                            @Override
-                            public void onSuccess(DatabaseReference DBRef) {
-                                IsEnterInFirebase = true;
-                                DBRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                                        boolean IsDraftFound = false;
-                                        mBillOrder order = new mBillOrder();
-                                        Log.d("map values", dataSnapshot.toString());
-                                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                            Log.d("map values", "getting datas......");
-                                            switch (postSnapshot.getKey()){
-                                                case "0" :
-                                                    //order = postSnapshot.getValue(mBillOrder.class);
-                                                    Object object = postSnapshot.getValue(Object.class);
-                                                    String json = new Gson().toJson(object);
-                                                    order= new Gson().fromJson(json, mBillOrder.class);
-                                                    IsDraftFound = true;
-                                                    break;
-
-                                            }
-
-
-                                        }
-
-                                        if (IsDraftFound){
-                                            mBillOrder finalOrder = order;
-                                            AppAlert.getInstance().DecisionAlert(context, "Draft Found!!!",
-                                                    "Do you want to Continue\nwith the draft Document",
-                                                    new AppAlert.OnClickListener() {
-                                                        @Override
-                                                        public void onPositiveClicked(View item, String result) {
-                                                            viewModel.getOrder().setItems(finalOrder.getItems());
-                                                            Init();
-                                                        }
-
-                                                        @Override
-                                                        public void onNegativeClicked(View item, String result) {
-                                                            billOrderDB.insert(viewModel.getOrder());
-                                                            Init();
-                                                        }
-                                                    });
-                                        }else{
-                                            billOrderDB.insert(viewModel.getOrder());
-                                            Init();
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        DBRef.removeEventListener(this);
-                                        billOrderDB.insert(viewModel.getOrder());
-                                        Init();
-                                    }
-                                });
-
-                            }
-
-                            @Override
-                            public void onError(String title, String description) {
-                                IsEnterInFirebase = false;
-                            }
-                        });
-
-
-
-    }
-
-
-    private void Init(){
-        viewModel = ViewModelProviders.of(this).get(vmOpenView.class);
+        viewModel = ViewModelProviders.of(this).get(vmPhyStock.class);
 
         viewModel.setView(context, this);
+
     }
 
 
@@ -189,7 +104,7 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
         title = toolbar.findViewById(R.id.title);
         subTitle = toolbar.findViewById(R.id.subTitle);
 
-        fcompanyneworder = (FNewOpen) getSupportFragmentManager().findFragmentById(R.id.fcompanyneworder);
+        fcompanyneworder = (FNewPhyStock) getSupportFragmentManager().findFragmentById(R.id.fcompanyneworder);
 
         if (((mPage)getIntent().getSerializableExtra("page")).getCode().equalsIgnoreCase(OpeningStockActivity.DOC_TYPE.OPENING.name())){
             fcompanyneworder.setFreeQtyNA(true);
@@ -241,9 +156,6 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
     @Override
     public void updateOrder(mBillOrder order) {
         viewModel.setOrder(order);
-        if ( IsEnterInFirebase) {
-            billOrderDB.insert(viewModel.getOrder());
-        }
     }
 
     @Override
@@ -272,9 +184,6 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
                             new AppAlert.OnClickListener() {
                                 @Override
                                 public void onPositiveClicked(View item, String result) {
-                                    if ( IsEnterInFirebase) {
-                                        billOrderDB.delete(viewModel.getOrder());
-                                    }
                                     finish();
                                 }
 

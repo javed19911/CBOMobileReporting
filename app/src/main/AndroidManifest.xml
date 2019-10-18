@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name="bill.phystock.PhyStockEntry" />
         <activity android:name="bill.stockEntry.OpenScreenActivity" />
         <activity android:name="bill.openingStock.OpeningStockActivity"/>
         <activity android:name=".ui_new.MyCamera"/>

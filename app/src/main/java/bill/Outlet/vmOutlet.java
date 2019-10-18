@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import bill.Dashboard.mDashboard;
+import bill.Dashboard.mDashboardNew;
 import saleOrder.MyOrderAPIService;
 import saleOrder.ViewModel.CBOViewModel;
 import utils_new.AppAlert;
@@ -23,13 +24,13 @@ public class vmOutlet extends CBOViewModel<iOutlet> {
 
     private mOutlet TotOutlet = new mOutlet();
     private ArrayList<mOutlet> dataList = new ArrayList<>();
-    private mDashboard dashboard = new mDashboard();
+    private mDashboardNew dashboard = new mDashboardNew();
 
-    public mDashboard getDashboard() {
+    public mDashboardNew getDashboard() {
         return dashboard;
     }
 
-    public void setDashboard(mDashboard dashboard) {
+    public void setDashboard(mDashboardNew dashboard) {
         this.dashboard = dashboard;
     }
 

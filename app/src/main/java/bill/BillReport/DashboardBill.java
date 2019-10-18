@@ -122,6 +122,11 @@ public class DashboardBill extends CustomActivity implements
         return "";
     }
 
+    @Override
+    public boolean IsAllRequiredInFilter() {
+        return true;
+    }
+
 
     @Override
         protected void onResume() {

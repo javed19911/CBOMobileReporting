@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbo.cbomobilereporting.R;
@@ -18,34 +20,49 @@ import java.util.ArrayList;
 
 import bill.Outlet.Outlet;
 
-public class aDashboard extends RecyclerView.Adapter<aDashboard.MyViewHolder> {
+public class aDashboardNew extends RecyclerView.Adapter<aDashboardNew.MyViewHolder> {
 
 
     private Context context;
-    private ArrayList<mDashboard> list;
+    private ArrayList<mDashboardNew> list;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name;
-        TextView OthSale,TotSale,CashSale,bills;
+        RecyclerView itemList;
         View rowView;
+        aDashboardInner InnerAdaptor;
 
 
         public MyViewHolder(View view) {
             super(view);
             this.rowView=view;
-            //rcpt_no=(TextView)view.findViewById(R.id.rcpt_no);
             name= view.findViewById(R.id.name);
-            CashSale=(TextView) view.findViewById(R.id.CashSale);
-            TotSale=(TextView) view.findViewById(R.id.TotSale);
+            itemList= view.findViewById(R.id.itemList);
 
-            OthSale=(TextView) view.findViewById(R.id.OthSale);
-            bills = view.findViewById(R.id.bill_count);
+            InnerAdaptor = new aDashboardInner(context);
+            itemList.setLayoutManager(new LinearLayoutManager(context));
+            itemList.setItemAnimator(new DefaultItemAnimator());
+            itemList.setAdapter(InnerAdaptor);
+
+            itemList.setOnClickListener(null);
+
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!list.get(getAdapterPosition()).getDOC_TYPE().isEmpty()) {
+                        Intent intent = new Intent(context, Outlet.class);
+                        intent.putExtra("dashboard", list.get(getAdapterPosition()));
+                        context.startActivity(intent);
+                    }
+                }
+            });
+
 
         }
     }
 
 
-    public aDashboard(Context context, ArrayList<mDashboard> list){
+    public aDashboardNew(Context context, ArrayList<mDashboardNew> list){
         this.context = context;
         this.list =  list;
     }
@@ -55,7 +72,7 @@ public class aDashboard extends RecyclerView.Adapter<aDashboard.MyViewHolder> {
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.dashboard_row_view, parent, false);
+                .inflate(R.layout.dashboard_new_row_view, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -65,12 +82,9 @@ public class aDashboard extends RecyclerView.Adapter<aDashboard.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
 
-        mDashboard dashboard = list.get(position);
-        holder.name.setText(dashboard.getDOC_CAPTION());
-        holder.TotSale.setText(dashboard.getTOTAL_SALE());
-        holder.OthSale.setText(dashboard.getOTHER_SALE());
-        holder.CashSale.setText(dashboard.getCASH_SALE());
-        holder.bills.setText(dashboard.getNO_BILL());
+        mDashboardNew dashboard = list.get(position);
+        holder.name.setText(dashboard.getGROUP_NAME());
+        ((aDashboardInner)holder.itemList.getAdapter()).updateList(dashboard.getCOL_NAME(),dashboard.getCOL_VALUE());
 
 
         holder.rowView.setBackgroundColor(Color.parseColor(dashboard.getBG_COLOR()));

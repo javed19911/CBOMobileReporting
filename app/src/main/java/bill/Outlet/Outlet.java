@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import bill.Dashboard.aDashboard;
 import bill.Dashboard.mDashboard;
+import bill.Dashboard.mDashboardNew;
 import bill.Dashboard.vmDashboard;
 
 public class Outlet extends CustomActivity implements iOutlet{
@@ -36,7 +37,7 @@ public class Outlet extends CustomActivity implements iOutlet{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outlet);
         viewModel = ViewModelProviders.of(Outlet.this).get(vmOutlet.class);
-        viewModel.setDashboard((mDashboard) getIntent().getSerializableExtra("dashboard"));
+        viewModel.setDashboard((mDashboardNew) getIntent().getSerializableExtra("dashboard"));
         viewModel.setView(context,this);
     }
 
@@ -70,7 +71,7 @@ public class Outlet extends CustomActivity implements iOutlet{
 
     @Override
     public String getActivityTitle() {
-        return viewModel.getDashboard().getDOC_CAPTION();
+        return viewModel.getDashboard().getGROUP_NAME();
     }
 
     @Override

@@ -163,7 +163,10 @@ public class CompanyActivity extends CustomActivity {
 
         paymodes = (ArrayList<mPay>) getIntent().getSerializableExtra("PayModes");
         Companylist= (ArrayList<mCompany>) getIntent().getSerializableExtra("Companies");
-        Companylist.remove(Companylist.size()-1);
+
+        if (!getIntent().getBooleanExtra("IsAllRequired", false)) {
+            Companylist.remove(Companylist.size() - 1);
+        }
         acustomer.update(Companylist);
 
         //bill_date_img.performClick();
@@ -191,6 +194,7 @@ public class CompanyActivity extends CustomActivity {
         public void onSendResponse(mCompany company) {
             Intent intent = new Intent();
             intent.putExtra("company", company);
+            intent.putExtra("doc_date", bill_date.getText().toString());
             setResult(RESULT_OK, intent);
             finish();
         }

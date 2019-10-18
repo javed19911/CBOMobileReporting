@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,12 +21,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Db.BillOrderDB;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import bill.BillReport.BillActivity;
 import bill.BillReport.FBillFilter;
@@ -40,6 +43,7 @@ import bill.Cart.mCustomer;
 import bill.CompanySelecter.CompanyActivity;
 import bill.Outlet.mOutlet;
 import bill.mBillOrder;
+import bill.phystock.PhyStockEntry;
 import bill.stockEntry.OpenScreenActivity;
 import utils_new.AppAlert;
 
@@ -56,6 +60,8 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
     private FBillFilter fBillFilter;
     private SwipeRefreshLayout swipeRefressLayoutRecycler;
     private Menu menu;
+
+    private static final int COMPANY_FILTER = 0;
 
 
     @Override
@@ -176,12 +182,49 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
         return OpeningStockActivity.DOC_TYPE.valueOf( vmOpening.getPage().getCode()) == DOC_TYPE.OPENING ?"OP":"" ;
     }
 
+    @Override
+    public boolean IsAllRequiredInFilter() {
+        return false;
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         if (vmOpening.isLoaded()) {
             getBills();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+
+                case COMPANY_FILTER:
+
+                    mCompany company = (mCompany) data.getSerializableExtra("company");
+                    String doc_date = data.getStringExtra("doc_date");
+                    Intent intent = new Intent(context, OpenScreenActivity.class);
+                    if (DOC_TYPE.PHYSICAL_STOCK.name().equalsIgnoreCase(vmOpening.getPage().getCode())) {
+                        intent = new Intent(context, PhyStockEntry.class);
+                    }
+
+                    mBillOrder order = new mBillOrder().setPartyId(company.getId())
+                            .setPartyName(company.getName())
+                            .setDocDate(doc_date);
+
+
+                    intent.putExtra("page", vmOpening.getPage());
+                    intent.putExtra("order", order);
+                    intent.putExtra("customer", new mCustomer());
+                    intent.putExtra("PayModes", fBillFilter.getPayModes());
+                    startActivity(intent);
+                    break;
+                default:
+                    super.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 
@@ -225,6 +268,8 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
             return true;
         } else if (id == R.id.add) {
 
+
+
             Intent intent = new Intent(context, CompanyActivity.class);
             intent.putExtra("page", vmOpening.getPage());
             intent.putExtra("doc_type", OpeningStockActivity.DOC_TYPE.valueOf(vmOpening.getPage().getCode()));
@@ -233,7 +278,8 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
             intent.putExtra("DocDate",fBillFilter.getDOCDATE());
             intent.putExtra("IS_DOC_DATE_CHANGEBLE",fBillFilter.getDocDateChangble());
             intent.putExtra("IS_DOC_DATE_Required",true);
-            startActivity(intent);
+            startActivityForResult(intent,COMPANY_FILTER);
+            //startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

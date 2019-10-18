@@ -35,9 +35,10 @@ public class mBillItem  implements Serializable {
     private ArrayList<mDiscount> MiscDiscount = new ArrayList();
     private Double TotAmt = 0.0D;
 
+    public mBillItem() {
+    }
 
-
-    /// getter
+/// getter
 
     public String getId() {
         return Id;

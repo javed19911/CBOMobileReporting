@@ -7,6 +7,7 @@ public interface iBillMain {
     public boolean isToDateRequired();
     public boolean isShowPopup();
     public String getDocType();
+    public boolean IsAllRequiredInFilter();
 
 
 }

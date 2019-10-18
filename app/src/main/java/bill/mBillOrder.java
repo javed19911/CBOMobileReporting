@@ -38,6 +38,8 @@ public class mBillOrder implements Serializable {
     private String Attachment;
     private String Remark;
 
+
+
     public mBillOrder() {
         this.GST = new mTax(eTax.NONE);
         this.CGSTAmt = 0.0D;

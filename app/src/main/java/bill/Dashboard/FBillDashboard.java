@@ -28,6 +28,7 @@ public class FBillDashboard extends Fragment implements iDashboard {
 
     private vmDashboard viewModel;
     private aDashboard dashboardAdaptor;
+    private aDashboardNew dashboardAdaptorNew;
     private RecyclerView dashbordrecyclerView;
     private SwipeRefreshLayout swipeRefressLayoutRecycler;
 
@@ -93,6 +94,15 @@ public class FBillDashboard extends Fragment implements iDashboard {
         dashbordrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         dashbordrecyclerView.setItemAnimator(new DefaultItemAnimator());
         dashbordrecyclerView.setAdapter(dashboardAdaptor);
+        swipeRefressLayoutRecycler.setRefreshing(false);
+    }
+
+    @Override
+    public void onListUpdatedNew(ArrayList<mDashboardNew> dashboards) {
+        dashboardAdaptorNew = new aDashboardNew(getActivity(), dashboards);
+        dashbordrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        dashbordrecyclerView.setItemAnimator(new DefaultItemAnimator());
+        dashbordrecyclerView.setAdapter(dashboardAdaptorNew);
         swipeRefressLayoutRecycler.setRefreshing(false);
     }
 }

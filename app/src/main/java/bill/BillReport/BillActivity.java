@@ -177,6 +177,11 @@ private  Menu menu;
         return "Bill";
     }
 
+    @Override
+    public boolean IsAllRequiredInFilter() {
+        return true;
+    }
+
 
     @Override
     protected void onResume() {

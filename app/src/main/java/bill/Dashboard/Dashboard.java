@@ -20,9 +20,6 @@ public class Dashboard extends CustomActivity implements iDashboard {
 
     androidx.appcompat.widget.Toolbar toolbar;
     private vmDashboard viewModel;
-    private aDashboard dashboardAdaptor;
-    private RecyclerView dashbordrecyclerView;
-    private SwipeRefreshLayout swipeRefressLayoutRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +44,6 @@ public class Dashboard extends CustomActivity implements iDashboard {
     @Override
     public void setOnClickListeners() {
 
-        swipeRefressLayoutRecycler.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefressLayoutRecycler.setRefreshing(true);
-                viewModel.getDashbord(context);
-            }
-        });
 
     }
 
@@ -86,10 +76,11 @@ public class Dashboard extends CustomActivity implements iDashboard {
 
     @Override
     public void onListUpdated(ArrayList<mDashboard> dashboards) {
-        dashboardAdaptor = new aDashboard(context, dashboards);
-        dashbordrecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        dashbordrecyclerView.setItemAnimator(new DefaultItemAnimator());
-        dashbordrecyclerView.setAdapter(dashboardAdaptor);
-        swipeRefressLayoutRecycler.setRefreshing(false);
+
+    }
+
+    @Override
+    public void onListUpdatedNew(ArrayList<mDashboardNew> dashboards) {
+
     }
 }

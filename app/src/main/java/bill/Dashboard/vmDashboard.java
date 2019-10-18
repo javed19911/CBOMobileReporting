@@ -14,15 +14,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import bill.BillReport.mBill;
 import saleOrder.MyOrderAPIService;
 import saleOrder.ViewModel.CBOViewModel;
 import utils_new.AppAlert;
-import utils_new.CustomDatePicker;
 
 public class vmDashboard extends CBOViewModel<iDashboard> {
 
     private ArrayList<mDashboard> dataList = new ArrayList<>();
+    private ArrayList<mDashboardNew> dataListNew = new ArrayList<>();
 
     @Override
     public void onUpdateView(AppCompatActivity context, iDashboard view) {
@@ -50,14 +49,15 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
                     @Override
                     public void onComplete(Bundle bundle) throws Exception {
                         if (view != null) {
-                            view.onListUpdated(dataList);
+                            //view.onListUpdated(dataList);
+                            view.onListUpdatedNew(dataListNew);
                         }
                     }
 
                     @Override
                     public void onResponse(Bundle bundle) throws Exception {
 
-                        parser2(bundle);
+                        parserNew(bundle);
                     }
 
                     @Override
@@ -65,6 +65,46 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
                         AppAlert.getInstance().getAlert(context,s,s1);
                     }
                 }));
+    }
+
+    private void parserNew(Bundle result) throws Exception {
+        {
+            String table0 = result.getString("Tables0");
+            JSONArray row = new JSONArray(table0);
+
+            dataListNew.clear();
+            for (int i = 0; i < row.length(); i++) {
+                JSONObject c = row.getJSONObject(i);
+                mDashboardNew dashboard = isGroupAvialable(c.getString("GROUP_NAME"));
+                if ( dashboard == null){
+                    dashboard = new mDashboardNew();
+                    dataListNew.add(dashboard);
+                    dashboard.setDOC_TYPE(c.getString("DOC_TYPE"));
+                    dashboard.setGROUP_NAME(c.getString("GROUP_NAME"));
+                    dashboard.setBG_COLOR(c.getString("BG_COLOR"));
+                }
+
+                dashboard.getCOL_NAME().add(c.getString("COL_NAME"));
+                dashboard.getCOL_VALUE().add(c.getString("COL_VALUE"));
+
+            }
+
+
+
+        }
+
+
+    }
+
+    private mDashboardNew isGroupAvialable(String GROUP_NAME){
+
+        for (mDashboardNew dashBoardMain : dataListNew){
+            if (GROUP_NAME.equalsIgnoreCase(dashBoardMain.getGROUP_NAME())){
+                return dashBoardMain;
+            }
+        }
+
+        return null;
     }
 
     private void parser2(Bundle result) throws Exception {

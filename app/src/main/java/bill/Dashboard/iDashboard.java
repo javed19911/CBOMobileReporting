@@ -10,5 +10,6 @@ public interface iDashboard {
     String getCompanyCode();
     String getUserId();
     void onListUpdated(ArrayList<mDashboard> dashboards);
+    void onListUpdatedNew(ArrayList<mDashboardNew> dashboards);
 }
 
