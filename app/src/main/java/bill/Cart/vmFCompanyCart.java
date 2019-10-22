@@ -26,6 +26,16 @@ import utils_new.CustomDatePicker;
 public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
     private mBillOrder order = new mBillOrder();;
     private mCustomer customer = new mCustomer();
+    private boolean allowZeroQty = false;
+
+    public boolean isAllowZeroQty() {
+        return allowZeroQty;
+    }
+
+    public void setAllowZeroQty(boolean allowZeroQty) {
+        this.allowZeroQty = allowZeroQty;
+    }
+
     @Override
     public void onUpdateView(AppCompatActivity context, IFCompanycart view) {
         view.getReferencesById();
@@ -210,7 +220,7 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
         if (orderItem != null){
             getOrder().getItems().remove(orderItem);
         }
-        if (item.getQty() != 0.0) {
+        if (item.getQty() != 0.0 || isAllowZeroQty()) {
             getOrder().getItems().add(item);
         }
         if (view != null){

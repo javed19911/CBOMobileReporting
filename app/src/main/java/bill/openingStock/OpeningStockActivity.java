@@ -206,21 +206,23 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
 
                     mCompany company = (mCompany) data.getSerializableExtra("company");
                     String doc_date = data.getStringExtra("doc_date");
-                    Intent intent = new Intent(context, OpenScreenActivity.class);
-                    if (DOC_TYPE.PHYSICAL_STOCK.name().equalsIgnoreCase(vmOpening.getPage().getCode())) {
-                        intent = new Intent(context, PhyStockEntry.class);
-                    }
+
 
                     mBillOrder order = new mBillOrder().setPartyId(company.getId())
                             .setPartyName(company.getName())
                             .setDocDate(doc_date);
 
+                    showBillDetail(order,new mCustomer());
 
+                    /*Intent intent = new Intent(context, OpenScreenActivity.class);
+                    if (DOC_TYPE.PHYSICAL_STOCK.name().equalsIgnoreCase(vmOpening.getPage().getCode())) {
+                        intent = new Intent(context, PhyStockEntry.class);
+                    }
                     intent.putExtra("page", vmOpening.getPage());
                     intent.putExtra("order", order);
                     intent.putExtra("customer", new mCustomer());
                     intent.putExtra("PayModes", fBillFilter.getPayModes());
-                    startActivity(intent);
+                    startActivity(intent);*/
                     break;
                 default:
                     super.onActivityResult(requestCode, resultCode, data);
@@ -348,6 +350,9 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
     @Override
     public void showBillDetail(mBillOrder order, mCustomer customer) {
         Intent intent = new Intent(context, OpenScreenActivity.class);
+        if (DOC_TYPE.PHYSICAL_STOCK.name().equalsIgnoreCase(vmOpening.getPage().getCode())) {
+            intent = new Intent(context, PhyStockEntry.class);
+        }
         intent.putExtra("order", order);
         intent.putExtra("page", vmOpening.getPage());
         intent.putExtra("customer", customer);

@@ -93,7 +93,7 @@
                 <TextView
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.8"
+                    android:layout_weight="1"
                     android:textColor="@android:color/black"
                     android:text="Avl.Stock"/>
 
@@ -178,9 +178,9 @@
                 <TextView
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.8"
+                    android:layout_weight="1"
                     android:textColor="@android:color/black"
-                    android:text="Missmatch stock"/>
+                    android:text="Diff. stock"/>
 
 
                 <TextView

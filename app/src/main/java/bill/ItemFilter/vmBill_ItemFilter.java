@@ -200,6 +200,8 @@ public class vmBill_ItemFilter extends CBOViewModel<IitemNewOrder> {
             //if (jsonArray.length() > 0) {
                 billDB.delete();
             //}
+
+            ArrayList<mBillItem> items = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject2 = jsonArray.getJSONObject(i);
                 mBillItem item = new mBillItem()
@@ -213,9 +215,12 @@ public class vmBill_ItemFilter extends CBOViewModel<IitemNewOrder> {
                         .setCGST(jsonObject2.getDouble("CGST_PERCENT"));
 
                 item.setGST(GST);
-                billDB.insert(item);
+//                billDB.insert(item);
+                items.add(item);
 
             }
+
+            billDB.insert(items);
 
             String table1 = result.getString("Tables1");
             jsonArray = new JSONArray(table1);
@@ -223,6 +228,8 @@ public class vmBill_ItemFilter extends CBOViewModel<IitemNewOrder> {
             //if (jsonArray.length() > 0) {
                 billbatchDB.delete();
             //}
+
+            ArrayList<mBillBatch> batches = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject2 = jsonArray.getJSONObject(i);
 
@@ -250,9 +257,13 @@ public class vmBill_ItemFilter extends CBOViewModel<IitemNewOrder> {
                 item_batch.getMiscDiscount().add(new mDiscount().setType(eDiscount.P).setPercent(jsonObject2.getDouble("DIS_PERCENT3")));
 
 
-                billbatchDB.insert(item_batch);
+                //billbatchDB.insert(item_batch);
+                batches.add(item_batch);
 
             }
+
+
+            billbatchDB.insert(batches);
         }
 
     }

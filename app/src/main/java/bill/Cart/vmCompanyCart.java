@@ -121,6 +121,7 @@ public class vmCompanyCart extends CBOViewModel<ICompanyCart> {
             //if (jsonArray.length() > 0) {
             billDB.delete();
             //}
+            ArrayList<mBillItem> items = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject2 = jsonArray.getJSONObject(i);
                 mBillItem item = new mBillItem()
@@ -134,9 +135,12 @@ public class vmCompanyCart extends CBOViewModel<ICompanyCart> {
                         .setCGST(jsonObject2.getDouble("CGST_PERCENT"));
 
                 item.setGST(GST);
-                billDB.insert(item);
+//                billDB.insert(item);
+                items.add(item);
 
             }
+
+            billDB.insert(items);
 
             String table1 = result.getString("Tables1");
             jsonArray = new JSONArray(table1);
@@ -144,6 +148,7 @@ public class vmCompanyCart extends CBOViewModel<ICompanyCart> {
             //if (jsonArray.length() > 0) {
             billBatchDB.delete();
             //}
+            ArrayList<mBillBatch> batches = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject2 = jsonArray.getJSONObject(i);
 
@@ -170,10 +175,13 @@ public class vmCompanyCart extends CBOViewModel<ICompanyCart> {
                 item_batch.getMiscDiscount().add(new mDiscount().setType(eDiscount.VI).setPercent(jsonObject2.getDouble("DIS_PERCENT2")));
                 item_batch.getMiscDiscount().add(new mDiscount().setType(eDiscount.P).setPercent(jsonObject2.getDouble("DIS_PERCENT3")));
 
-
-                billBatchDB.insert(item_batch);
+                //billBatchDB.insert(item_batch);
+                batches.add(item_batch);
 
             }
+
+
+            billBatchDB.insert(batches);
         }
 
     }

@@ -57,7 +57,8 @@ public class aOpening extends RecyclerView.Adapter<aOpening.MyViewHolder> {
         holder.enter_by.setText( mOpeninglist.getENTRY_BY());
         holder.no_item.setText(mOpeninglist.getNO_ITEM());//DATE
 
-        holder.customer_name.setText(mOpeninglist.getCOMPANY_NAME());
+        holder.customer_name.setText(mOpeninglist.getENTRY_BY());
+        holder.companyName.setText(mOpeninglist.getCOMPANY_NAME());
 
         holder.delete.setVisibility(mOpeninglist.getDelete() ? View.VISIBLE : View.GONE);
         holder.edit.setVisibility(mOpeninglist.getEdit() ? View.VISIBLE : View.GONE);
@@ -137,7 +138,7 @@ public class aOpening extends RecyclerView.Adapter<aOpening.MyViewHolder> {
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView doc_date, doc_no, customer_name, enter_by, no_item, mobile, gst, amt, net_amt, payMode;
+        TextView doc_date, doc_no, customer_name, companyName, enter_by, no_item, mobile, gst, amt, net_amt, payMode;
         ImageView edit, delete, billView;
         LinearLayout conatiner, detail_layout, main_layout;
         TextView expand;
@@ -150,6 +151,7 @@ public class aOpening extends RecyclerView.Adapter<aOpening.MyViewHolder> {
             //rcpt_no=(TextView)view.findViewById(R.id.rcpt_no);
             doc_no = (TextView) view.findViewById(R.id.doc_no);
             enter_by = (TextView) view.findViewById(R.id.enter_by);
+            companyName = (TextView) view.findViewById(R.id.companyName);
             doc_date = (TextView) view.findViewById(R.id.doc_date);
 
             no_item = (TextView) view.findViewById(R.id.no_item);

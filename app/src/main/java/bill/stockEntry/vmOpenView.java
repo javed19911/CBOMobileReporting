@@ -2,9 +2,13 @@ package bill.stockEntry;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
@@ -12,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,7 +101,6 @@ public class vmOpenView extends CBOViewModel<IOpen> {
 
                         @Override
                         public void onResponse(Bundle bundle) throws Exception {
-
                             parser1(bundle);
                         }
 
@@ -123,6 +127,9 @@ public class vmOpenView extends CBOViewModel<IOpen> {
             //if (jsonArray.length() > 0) {
             billDB.delete();
             //}
+
+            ArrayList<mBillItem> items = new ArrayList<>();
+
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject2 = jsonArray.getJSONObject(i);
                 mBillItem item = new mBillItem()
@@ -136,9 +143,12 @@ public class vmOpenView extends CBOViewModel<IOpen> {
                         .setCGST(jsonObject2.getDouble("CGST_PERCENT"));
 
                 item.setGST(GST);
-                billDB.insert(item);
+//                billDB.insert(item);
+                items.add(item);
 
             }
+
+            billDB.insert(items);
 
             String table1 = result.getString("Tables1");
             jsonArray = new JSONArray(table1);
@@ -146,6 +156,15 @@ public class vmOpenView extends CBOViewModel<IOpen> {
             //if (jsonArray.length() > 0) {
             billBatchDB.delete();
             //}
+
+            //Gson gson = new Gson();
+
+           // Type type = new TypeToken<ArrayList<mBillBatch>>() {}.getType();
+            //ArrayList<mBillBatch> batches = (ArrayList<mBillBatch>) gson.fromJson(table1, type);
+
+
+
+            ArrayList<mBillBatch> batches = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject2 = jsonArray.getJSONObject(i);
 
@@ -173,9 +192,13 @@ public class vmOpenView extends CBOViewModel<IOpen> {
                 item_batch.getMiscDiscount().add(new mDiscount().setType(eDiscount.P).setPercent(jsonObject2.getDouble("DIS_PERCENT3")));
 
 
-                billBatchDB.insert(item_batch);
+                //billBatchDB.insert(item_batch);
+                batches.add(item_batch);
 
             }
+
+
+            billBatchDB.insert(batches);
         }
 
     }

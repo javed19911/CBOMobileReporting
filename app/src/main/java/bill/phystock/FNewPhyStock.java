@@ -284,7 +284,7 @@ public class FNewPhyStock extends Fragment implements IFBillNewOrder {
         Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!getItem().getId().equals("0") && getItem().getQty() != 0) {
+                if (!getItem().getId().equals("0") /*&& getItem().getQty() != 0*/) {
 
                     getItem().CalculateTotalAmount();
                     if (context instanceof iPhyStock) {
@@ -355,6 +355,9 @@ public class FNewPhyStock extends Fragment implements IFBillNewOrder {
             item.setStock(item.getQty() + item.getFreeQty());
             viewModel.updateStock(item);
         } else {
+            if (item.getQty()== 0){
+                item.setQty(item.getStock());
+            }
             viewModel.setItem(item);
         }
 

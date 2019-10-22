@@ -43,7 +43,7 @@ public class BillItemDB  extends DBHelper {
     }
 
     public void insert(mBillItem item) {
-        SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues contentValues = new ContentValues();
         contentValues.put("ITEM_ID", item.getId());
         contentValues.put("ITEM_NAME", item.getName());
@@ -52,7 +52,27 @@ public class BillItemDB  extends DBHelper {
         contentValues.put("CGST_PERCENT", item.getGST().getCGST());
         contentValues.put("STOCK", item.getStock());
 
-        db.insert(this.getTable(), (String)null, contentValues);
+        getDatabase().insert(this.getTable(), (String)null, contentValues);
+    }
+
+    public void insert(ArrayList<mBillItem> list) {
+        SQLiteDatabase db = getDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues contentValues = new ContentValues();
+            for (mBillItem item : list) {
+                contentValues.put("ITEM_ID", item.getId());
+                contentValues.put("ITEM_NAME", item.getName());
+                contentValues.put("GST_TYPE", item.getGST().getType().name());
+                contentValues.put("SGST_PERCENT", item.getGST().getSGST());
+                contentValues.put("CGST_PERCENT", item.getGST().getCGST());
+                contentValues.put("STOCK", item.getStock());
+                db.insert(this.getTable(), (String)null, contentValues);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public ArrayList<mBillItem> items(String filter_text) {

@@ -61,7 +61,7 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
 
         billOrderDB = new BillOrderDB(((mPage)getIntent().getSerializableExtra("page")).getCode());
 
-        billOrderDB.getDbRef(new FirebsaeDB.ILogin() {
+       /* billOrderDB.getDbRef(new FirebsaeDB.ILogin() {
                             @Override
                             public void onSuccess(DatabaseReference DBRef) {
                                 IsEnterInFirebase = true;
@@ -77,7 +77,7 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
                                             Log.d("map values", "getting datas......");
                                             switch (postSnapshot.getKey()){
                                                 case "0" :
-                                                    //order = postSnapshot.getValue(mBillOrder.class);
+                                                   // order = postSnapshot.getValue(mBillOrder.class);
                                                     Object object = postSnapshot.getValue(Object.class);
                                                     String json = new Gson().toJson(object);
                                                     order= new Gson().fromJson(json, mBillOrder.class);
@@ -127,10 +127,10 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
                             public void onError(String title, String description) {
                                 IsEnterInFirebase = false;
                             }
-                        });
+                        });*/
 
 
-
+        Init();
     }
 
 
@@ -273,7 +273,7 @@ public class OpenScreenActivity extends CustomActivity implements IOpen {
                                 @Override
                                 public void onPositiveClicked(View item, String result) {
                                     if ( IsEnterInFirebase) {
-                                        billOrderDB.delete(viewModel.getOrder());
+                                        //billOrderDB.delete(viewModel.getOrder());
                                     }
                                     finish();
                                 }

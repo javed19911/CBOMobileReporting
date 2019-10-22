@@ -61,16 +61,16 @@ public class FPhyCart extends Fragment implements IFCompanycart {
             switch (requestCode) {
                 case ITEM_FILTER:
                     updateOrder((mBillOrder) data.getSerializableExtra ("order"));
-                    if (context instanceof IOpen) {
-                        ((IOpen) context).updateOrder(viewModel.getOrder());
+                    if (context instanceof iPhyStock) {
+                        ((iPhyStock) context).updateOrder(viewModel.getOrder());
                     }
                     break;
                 case ADD_REMARK:
                 case ADD_CUSTOMER:
                     viewModel.setCustomer((mCustomer) data.getSerializableExtra("customer"));
                     updateOrder((mBillOrder) data.getSerializableExtra ("order"));
-                    if (context instanceof IOpen) {
-                        ((IOpen) context).updateOrder(viewModel.getOrder());
+                    if (context instanceof iPhyStock) {
+                        ((iPhyStock) context).updateOrder(viewModel.getOrder());
                     }
                     orderCommit();
                     break;
@@ -125,6 +125,7 @@ public class FPhyCart extends Fragment implements IFCompanycart {
 
 
         viewModel = ViewModelProviders.of (this).get (vmFCompanyCart.class);
+        viewModel.setAllowZeroQty(true);
         page = (mPage) context.getIntent().getSerializableExtra("page");
         viewModel.setCustomer((mCustomer) context.getIntent ().getSerializableExtra("customer"));
 
@@ -185,8 +186,8 @@ public class FPhyCart extends Fragment implements IFCompanycart {
                 if (view.getId () == R.id.delete) {
                     CalculateTotal ();
                 }else if (view.getId () == R.id.edit) {
-                    if (context instanceof IOpen) {
-                        ((IOpen) context).onItemEdit(viewModel.getOrder ().getItems().get(position));
+                    if (context instanceof iPhyStock) {
+                        ((iPhyStock) context).onItemEdit(viewModel.getOrder ().getItems().get(position));
                     }
                 }else if (view.getId () == R.id.add_to_cart) {
                     CalculateTotal ();
@@ -194,8 +195,8 @@ public class FPhyCart extends Fragment implements IFCompanycart {
             }
         });
 
-        if (context instanceof IOpen) {
-            updateOrder(((IOpen) context).getOrder());
+        if (context instanceof iPhyStock) {
+            updateOrder(((iPhyStock) context).getOrder());
         }
 
     }
@@ -229,9 +230,9 @@ public class FPhyCart extends Fragment implements IFCompanycart {
     @Override
     public void addItem(mBillItem item) {
         viewModel.addItem(item);
-        if (context instanceof IOpen) {
+        if (context instanceof iPhyStock) {
 
-            ((IOpen) context).updateOrder (viewModel.getOrder ());
+            ((iPhyStock) context).updateOrder (viewModel.getOrder ());
         }
     }
 
@@ -266,8 +267,8 @@ public class FPhyCart extends Fragment implements IFCompanycart {
             saveOrder.setText ("<< Back");
         }
 
-        if (context instanceof IOpen) {
-            ((IOpen) context).setTitle (title);
+        if (context instanceof iPhyStock) {
+            ((iPhyStock) context).setTitle (title);
 
         }
     }

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,7 @@ public class BillBatchDB extends DBHelper {
     }
 
     public void insert(mBillBatch item) {
-        SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues contentValues = new ContentValues();
         contentValues.put("ITEM_ID", item.getITEM_ID());
         contentValues.put("BATCH_ID", item.getBATCH_ID());
@@ -63,7 +64,44 @@ public class BillBatchDB extends DBHelper {
 
 
 
-        db.insert(this.getTable(), (String)null, contentValues);
+        getDatabase().insert(this.getTable(), (String)null, contentValues);
+    }
+
+
+
+
+    public void insert(ArrayList<mBillBatch> list) {
+        SQLiteDatabase db = getDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues contentValues = new ContentValues();
+            for (mBillBatch item : list) {
+                contentValues.put("ITEM_ID", item.getITEM_ID());
+                contentValues.put("BATCH_ID", item.getBATCH_ID());
+                contentValues.put("BATCH_NO", item.getBATCH_NO());
+                contentValues.put("MFG_DATE", item.getMFG_DATE());
+                contentValues.put("EXP_DATE", item.getEXP_DATE());
+                contentValues.put("PACK", item.getPACK());
+                contentValues.put("MRP_RATE", item.getMRP_RATE());
+                contentValues.put("SALE_RATE", item.getSALE_RATE());
+
+
+                contentValues.put("STOCK", item.getSTOCK());
+                contentValues.put("DEAL_TYPE", item.getDeal().getType().getValue());
+                contentValues.put("DEAL_QTY", item.getDeal().getFreeQty());
+                contentValues.put("DEAL_ON", item.getDeal().getQty());
+                contentValues.put("DIS_PERCENT1", item.getMiscDiscount().get(0).getPercent());
+                contentValues.put("DIS_PERCENT3", item.getMiscDiscount().get(1).getPercent());
+                contentValues.put("DIS_PERCENT3", item.getMiscDiscount().get(2).getPercent());
+
+
+
+                db.insert(this.getTable(), (String)null, contentValues);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public ArrayList<mBillBatch> batches(mBillItem item) {

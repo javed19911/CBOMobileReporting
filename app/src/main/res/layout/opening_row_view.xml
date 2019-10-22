@@ -40,12 +40,32 @@
                 />
 
             <TextView
+                android:id="@+id/companyName"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Name"
+                android:paddingLeft="3dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/colorPrimary"
+                android:textSize="13sp"
+                />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark"/>
+
+
+
+            <TextView
                 android:id="@+id/doc_no"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="Name"
+                android:text="Doc No"
                 android:paddingLeft="3dp"
+                android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/colorPrimary"
                 android:textSize="13sp"
@@ -61,7 +81,7 @@
                 android:id="@+id/doc_date"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
-                android:text="Doc. No."
+                android:text="Date"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/colorPrimary"
@@ -77,7 +97,7 @@
                 android:id="@+id/no_item"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
-                android:text="Date"
+                android:text="No. Item"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/colorPrimary"
@@ -85,11 +105,13 @@
                 android:textSize="12dp" />
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"/>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/enter_by"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
@@ -134,7 +156,7 @@
                         <TextView
                             android:layout_width="0px"
                             android:layout_height="wrap_content"
-                            android:text="Company"
+                            android:text="Enter By"
                             android:textColor="@android:color/black"
                             android:layout_weight="0.4"/>
 

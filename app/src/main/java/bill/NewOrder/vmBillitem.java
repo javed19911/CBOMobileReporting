@@ -82,7 +82,9 @@ public class vmBillitem  extends CBOViewModel<IFBillNewOrder> {
         if (orderItem != null){
             view.setAddText("Update");
         }else{
-            item.setQty(defaultQty);
+            if (item.getQty() ==0) {
+                item.setQty(defaultQty);
+            }
             view.setAddText("ADD");
         }
 
