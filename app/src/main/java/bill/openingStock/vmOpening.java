@@ -237,11 +237,19 @@ public class vmOpening extends CBOViewModel<IOpening> {
                                     .setAmt(jsonObject2.getDouble("AMOUNT"))
                                     .setMiscDiscount(discounts);
 
+
                             mTax GST = new mTax(eTax.getTax(jsonObject2.getInt("GST_TYPE")));
                             GST.setSGST(jsonObject2.getDouble("TAX_PERCENT1"))
                                     .setCGST(jsonObject2.getDouble("TAX_PERCENT"));
 
                             item.setGST(GST).setQty(jsonObject2.getDouble("QTY"));
+
+
+
+                            if (OpeningStockActivity.DOC_TYPE.valueOf( page.getCode()) == OpeningStockActivity.DOC_TYPE.PHYSICAL_STOCK){
+                                item.setStock(jsonObject2.getDouble("STOCK_AVIL"))
+                                        .setQty(jsonObject2.getDouble("STOCK_PHY"));
+                            }
 
                             mDeal deal = new mDeal();
                             deal.setType(eDeal.get(jsonObject2.getString("DEAL_TYPE")))

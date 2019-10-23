@@ -646,7 +646,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                 new File(path + "/cbo/profile").mkdir();
                 //filename = new File(path + "/cbo/profile/" + Custom_Variables_And_Method.PA_ID + ".jpg");
                 Log.i("in save()", "after file");
-                FileOutputStream out = new FileOutputStream(filename);
+                //FileOutputStream out = new FileOutputStream(filename);
                 Log.i("in save()", "after outputstream");
                 FileOutputStream fo = new FileOutputStream(filename);
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -656,9 +656,8 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                     bmImg.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 }
                 fo.write(bytes.toByteArray());
+                fo.flush();
                 fo.close();
-                out.flush();
-                out.close();
                 Log.i("in save()", "after outputstream closed");
                 MediaStore.Images.Media.insertImage(getContentResolver(),
                         filename.getAbsolutePath(), filename.getName(),

@@ -276,13 +276,13 @@ public class LoginFake extends CustomActivity implements  LocationListener,
 
                     /*Intent intent = new Intent(context, AttachImage.class);
                     startActivity(intent);*/
-//
+
 //                    String filenameTemp = Custom_Variables_And_Method.PA_ID+"_"+ Custom_Variables_And_Method.DCR_ID+"_attach_"+Custom_Variables_And_Method.getInstance().get_currentTimeStamp()+".jpg";
-//                    Intent intent = new Intent(context, MyCamera.class);
+//                    Intent intent = new Intent(context, AttachImage.class);
 //                    intent.putExtra("Output_FileName",filenameTemp);
 //                    intent.putExtra("SelectFrom", AttachImage.ChooseFrom.frontCamera);
 //                    startActivity(intent);
-                    //startActivityForResult(intent,0);
+//                    startActivityForResult(intent,0);
 
                     /*Intent intent = new Intent(context, Doctor_registration_GPS.class);
                     intent.putExtra("id",0);

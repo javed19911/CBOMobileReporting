@@ -73,7 +73,7 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
 
         for (mBillItem item : order.getItems()) {
 
-            if (item.getQty() != 0.0) {
+            //if (item.getQty() != 0.0) {
                 itemString = item.getBATCH_ID() + "," + itemString;
                 qtyString = item.getQty() + "," + qtyString;
 
@@ -99,7 +99,7 @@ public class vmFCompanyCart  extends CBOViewModel<IFCompanycart> {
                 sDealQty = item.getDeal().getFreeQty() + "," + sDealQty;
                 sFreeQty = item.getFreeQty() + "," + sFreeQty;
 
-            }
+            //}
         }
 
 

@@ -142,7 +142,7 @@ public class AttachImage extends CustomActivity {
             chooserIntent = Intent.createChooser(cameraIntent, context.getString(R.string.choose_photo_title));
         }else if (choosefrom == ChooseFrom.frontCamera){
             chooserIntent = new Intent(AttachImage.this,MyCamera.class);
-            chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUrl);
+            chooserIntent.putExtra("output", cameraUrl);
 
         }else if (choosefrom == ChooseFrom.galary){
             chooserIntent = Intent.createChooser(galleryIntent, context.getString(R.string.choose_photo_title));

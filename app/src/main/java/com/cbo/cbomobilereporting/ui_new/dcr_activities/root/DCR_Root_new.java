@@ -1312,6 +1312,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             cboProgressDialog = new CboProgressDialog(context, "Please Wait..\nuploading Image");
             cboProgressDialog.show();
             new up_down_ftp().uploadFile(attachment.filesToUpload(), context);
+            return;
         }
 
         work_name = getWorkwith();

@@ -174,7 +174,7 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
 
     @Override
     public boolean isShowPopup() {
-        return true;
+        return false;
     }
 
     @Override
@@ -184,7 +184,7 @@ public class OpeningStockActivity extends CustomActivity implements IOpening,
 
     @Override
     public boolean IsAllRequiredInFilter() {
-        return false;
+        return true;
     }
 
 
