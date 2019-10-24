@@ -1635,6 +1635,7 @@ public class Dcr_Open_New extends AppCompatActivity {
 
 
             if(intent.getStringExtra("plan_type").equals("p")) {
+                MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("CALL_TYPE","");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Final_submit","N");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN","");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFARE","");

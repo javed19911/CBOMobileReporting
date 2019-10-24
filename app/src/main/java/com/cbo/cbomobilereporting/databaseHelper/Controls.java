@@ -22,6 +22,7 @@ public class Controls {
     private Boolean RouteWise;
 
     private Boolean giftCampaignWise;
+    private Boolean offlineCallAllowed;
 
     public Boolean IsGPSRequired() {
         if (GPSRequired == null){
@@ -58,4 +59,18 @@ public class Controls {
         MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("GIFTCAMPWISEYN",giftCampaignWise );
         this.giftCampaignWise = null;
     }
+
+
+    public Boolean IsOfflineCallAllowed() {
+        if (offlineCallAllowed == null){
+            offlineCallAllowed = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("OFFLINE_CALLYN","N").equalsIgnoreCase("Y");
+        }
+        return offlineCallAllowed;
+    }
+
+    public void setOfflineCallAllowed(String offlineCallAllowed) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("OFFLINE_CALLYN",offlineCallAllowed );
+        this.offlineCallAllowed = null;
+    }
+
 }

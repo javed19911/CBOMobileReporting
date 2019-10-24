@@ -108,19 +108,27 @@
                 android:focusableInTouchMode="false"/>
         </LinearLayout>
 
-    <LinearLayout
+
+        <utils_new.cboUtils.CBOImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:id="@+id/attachment"/>
+
+
+        <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="20dp">
-        <utils.font_package.Text_view_Regular
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
-        android:text="Remark: "
-        android:textColor="#fff"
-        
-        android:layout_marginTop="29dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remark: "
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+
     <utils.font_package.Edit_text_Regular
                 android:layout_marginTop="5dp"
                 android:id="@+id/final_remark"

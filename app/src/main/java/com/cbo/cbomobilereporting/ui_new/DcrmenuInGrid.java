@@ -1286,30 +1286,80 @@ public class DcrmenuInGrid extends Fragment {
                                                         IfRxConditionFulfiled(new Response() {
                                                             @Override
                                                             public void onSuccess(Bundle bundle) {
-                                                                IfExpenseConditionFulfiled(new Response() {
+
+                                                                IfAllowOfflineCall(new Response() {
                                                                     @Override
                                                                     public void onSuccess(Bundle bundle) {
-                                                                        if( IsExpCriteriaFulfiled(cboDbHelper.tempDrListForFinalSubmit().size())){
-                                                                            startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
-                                                                            getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
-                                                                        }
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onError(String s, String s1) {
-                                                                        AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                                                        IfDR_SaleRequired(new Response() {
                                                                             @Override
-                                                                            public void onPositiveClicked(View item, String result) {
-                                                                                OnGridItemClick("D_EXP",null,true);
+                                                                            public void onSuccess(Bundle bundle) {
+                                                                                IfExpenseConditionFulfiled(new Response() {
+                                                                                    @Override
+                                                                                    public void onSuccess(Bundle bundle) {
+                                                                                        if( IsExpCriteriaFulfiled(cboDbHelper.tempDrListForFinalSubmit().size())){
+                                                                                            startActivity(new Intent(getActivity(), FinalSubmitDcr_new.class));
+                                                                                            getActivity().overridePendingTransition(R.anim.fed_in, R.anim.fed_out);
+                                                                                        }
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onError(String s, String s1) {
+                                                                                        AppAlert.getInstance().DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                                                                            @Override
+                                                                                            public void onPositiveClicked(View item, String result) {
+                                                                                                OnGridItemClick("D_EXP",null,true);
+                                                                                            }
+
+                                                                                            @Override
+                                                                                            public void onNegativeClicked(View item, String result) {
+
+                                                                                            }
+                                                                                        });
+                                                                                    }
+                                                                                });
                                                                             }
 
                                                                             @Override
-                                                                            public void onNegativeClicked(View item, String result) {
+                                                                            public void onError(String s, String s1) {
+                                                                                AppAlert.getInstance().setNagativeTxt("No").setPositiveTxt("Yes").DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                                                                    @Override
+                                                                                    public void onPositiveClicked(View item, String result) {
+
+                                                                                        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("DRSALEMSG_FINALSUBMITYN","");
+                                                                                        MyCustumApplication.getInstance().LoadURL("Doctor Sale",MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DR_SALE_URL","")+"&MONTH="+customVariablesAndMethod.currentDate());
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onNegativeClicked(View item, String result) {
+                                                                                        onSuccess(null);
+                                                                                    }
+                                                                                });
 
                                                                             }
                                                                         });
                                                                     }
+
+                                                                    @Override
+                                                                    public void onError(String s, String s1) {
+                                                                        AppAlert.getInstance().setNagativeTxt("No").setPositiveTxt("Yes").DecisionAlert(context, s, s1, new AppAlert.OnClickListener() {
+                                                                            @Override
+                                                                            public void onPositiveClicked(View item, String result) {
+
+                                                                                MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("CALL_TYPE","3");
+                                                                                OnGridItemClick("D_DRCALL",null, true);
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onNegativeClicked(View item, String result) {
+                                                                                onSuccess(null);
+                                                                            }
+                                                                        });
+                                                                    }
                                                                 });
+
+
+
                                                             }
 
                                                             @Override
@@ -1565,6 +1615,60 @@ public class DcrmenuInGrid extends Fragment {
             }
 
         }  else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfDR_SaleRequired(Response listener){
+
+         if (! MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DRSALEMSG_FINALSUBMITYN","").isEmpty()
+                && !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DR_SALE_URL","").isEmpty()) {
+
+             if (listener != null) {
+                 listener.onError("Alert !!!",  MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DRSALEMSG_FINALSUBMITYN",""));
+             }
+
+        }else{
+            if (listener != null){
+                listener.onSuccess(null);
+            }
+        }
+    }
+
+
+    private void IfAllowOfflineCall(Response listener){
+
+        if (Controls.getInstance().IsOfflineCallAllowed() && !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("CALL_TYPE","").equalsIgnoreCase("3")) {
+
+            ArrayList<String> drlist = new ArrayList<String>();
+            Cursor c = cboDbHelper.getDoctorListLocal("1",null);
+            if (c.moveToFirst()) {
+                do {
+                    drlist.add(c.getString(c.getColumnIndex("dr_id")));
+                } while (c.moveToNext());
+            }
+
+            ArrayList<String> Doctor_list= cboDbHelper.getDoctor();
+            int  totCalledDoctors = Doctor_list.size();
+            int totPlannedDoctors = drlist.size();
+            int totUnCalledDoctors = totPlannedDoctors - totCalledDoctors;
+            if (listener != null) {
+                if (totPlannedDoctors == totCalledDoctors ){
+                    listener.onSuccess(null);
+                }else {
+
+                  /*  String alert = "Total Planned Doctors : "+totPlannedDoctors+"\n"+
+                            "Total Called Doctors : "+totCalledDoctors+"\n"+
+                            "Total Pending Doctors : "+totUnCalledDoctors+"\n"+
+                            "Do you want to make offline calls to remaining doctors?";*/
+                    listener.onError("Alert !!!", "Have you forgotten to report any met Doctor Today?");
+                }
+            }
+
+        }else{
             if (listener != null){
                 listener.onSuccess(null);
             }

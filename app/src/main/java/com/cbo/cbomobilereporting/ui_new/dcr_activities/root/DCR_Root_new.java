@@ -259,7 +259,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
         attachment.setTitle(MyCustumApplication.getInstance().getDCR().getAttachmentTilte());
         attachment.setMaxAttachment(1);
-        if (MyCustumApplication.getInstance().getDCR().getAttachmentTilte().isEmpty()){
+        if (!MyCustumApplication.getInstance().getDCR().getAttachmentMandatory("D")){
             attachment.setVisibility(View.GONE);
         }
 
@@ -893,8 +893,6 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             customVariablesAndMethod.getAlert(context,"Divert Remark !!!","Please enter Divert Remark");
         }else if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"IsBackDate","1").equals("0") && late_remark.getText().toString().length()< remarkLenght ) {
             customVariablesAndMethod.getAlert(context,"Back-Date entry !!!","Please enter the reason for Back-Date entry in not less then "+remarkLenght+" letters");
-        }else if (MyCustumApplication.getInstance().getDCR().getAttachmentMandatory() && attachment.getDataList().size()==0) {
-            customVariablesAndMethod.getAlert(context,attachment.getTitle()+ "!!!","Please attach "+attachment.getTitle());
         }else if (routeCheck.contains("^")) {
 
             ArrayList<String> splitData = new ArrayList<String>();
@@ -913,6 +911,8 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                     //submitDCR();
                 }
             }
+        }else if (MyCustumApplication.getInstance().getDCR().getAttachmentMandatory("D") && attachment.getDataList().size()==0) {
+            customVariablesAndMethod.getAlert(context,attachment.getTitle()+ "!!!","Please attach "+attachment.getTitle());
         } else {
             new GPS_Timmer_Dialog(context,mHandler,"Day Plan in Process...",GPS_TIMMER).show();
             //submitDCR();
@@ -967,15 +967,16 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
     protected void onActivityResult(int reqcode, int rescode, Intent iob) {
 
+
         switch (reqcode) {
 
-            case CBOImageView.REQUEST_CAMERA :
-                if (rescode==RESULT_OK) {
+            case CBOImageView.REQUEST_CAMERA:
+                if (rescode == RESULT_OK) {
                     attachment.onActivityResult(reqcode, rescode, iob);
                 }
                 break;
             case 0:
-                if (rescode==RESULT_OK) {
+                if (rescode == RESULT_OK) {
                     Bundle b1 = iob.getExtras();
                     work_with_name = b1.getString("workwith_name");
                     work_with_id = b1.getString("workwith_id");
@@ -986,7 +987,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                 break;
 
             case 1:
-                if (rescode==RESULT_OK) {
+                if (rescode == RESULT_OK) {
                     Bundle b1 = iob.getExtras();
                     root_name = b1.getString("route_name");
 
@@ -1001,7 +1002,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                 }
                 break;
             case 2:
-                if (rescode==RESULT_OK) {
+                if (rescode == RESULT_OK) {
                     Bundle b1 = iob.getExtras();
                     area_name = b1.getString("area_name");
                     area_id = b1.getString("area_id");
@@ -1011,6 +1012,8 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_area_ID", area_id);
                 }
                 break;
+                default:
+                    super.onActivityResult(reqcode, rescode, iob);
 
         }
 
@@ -1934,6 +1937,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
 
             if(intent.getStringExtra("plan_type").equals("p")) {
+                MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("CALL_TYPE","");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"Final_submit","N");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFAREYN","");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFARE","");

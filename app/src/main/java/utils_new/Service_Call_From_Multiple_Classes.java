@@ -19,6 +19,7 @@ import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.GetDCR;
 import com.uenics.javed.CBOLibrary.CBOException;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.Response;
@@ -956,6 +957,10 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("GIFTSHOW_STOCKONLYYN", c.getString("GIFTSHOW_STOCKONLYYN"));
                 editor.putString("DCRCALL_ANYTIMEYN", c.getString("DCRCALL_ANYTIMEYN"));
                 editor.putString("CENTROID_METER", c.getString("CENTROID_METER"));
+                editor.putString("DCRCALL_ANYTIMEYN", c.getString("DCRCALL_ANYTIMEYN"));
+                editor.putString("CENTROID_METER", c.getString("CENTROID_METER"));
+
+                editor.putString("DRSALEMSG_FINALSUBMITYN", c.getString("DRSALEMSG_FINALSUBMITYN"));
 
 
 
@@ -964,6 +969,7 @@ public class Service_Call_From_Multiple_Classes {
                 Controls.getInstance().setGiftCampaignWiseReqd(c.getString("GIFTCAMP_WISEYN"));
                 Controls.getInstance().setGpsRequired(c.getString("GPRSYN"));
                 Controls.getInstance().setRouteWise(c.getString("ROUTE"));
+                Controls.getInstance().setOfflineCallAllowed(c.getString("OFFLINE_CALLYN"));
 
             }
 
@@ -992,6 +998,7 @@ public class Service_Call_From_Multiple_Classes {
 
 
     }
+
 
 
 
@@ -1037,7 +1044,122 @@ public class Service_Call_From_Multiple_Classes {
     }
 
 
-    private void parser_is_call_unlocked(Context context,String CheckType,Bundle result) {
+    private void parser_is_call_unlocked(Context context, String CheckType, Bundle result) {
+
+        if (result != null) {
+
+            try {
+                String table0 = result.getString("Tables0");
+                JSONArray jsonArray0 = new JSONArray(table0);
+                if (CheckType.equals("ADDAREA")) {
+                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").equalsIgnoreCase("Y")) {
+
+                        cbo_helper.doctorApproved("0");
+
+                        AppAlert.getInstance().getAlert(context, "Approved !!!", "Your Additional Area have been Approved \nYou can please proceed");
+                    } else {
+
+                        if (jsonArray0.getJSONObject(0).getString("TITLE").isEmpty()) {
+                            AppAlert.getInstance().getAlert(context, "Approval Pending !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+                                    "DCRDRADDAREA_APP_MSG", "Your Additional Area Approval is Pending... \nYou Additional Area must be approved first !!!\n" +
+                                            "Please contact your Head-Office for APPROVAL"));
+
+                        } else {
+                            AppAlert.getInstance().Alert(context, jsonArray0.getJSONObject(0).getString("TITLE"),
+                                    jsonArray0.getJSONObject(0).getString("MSG"),
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            try {
+                                                if (jsonArray0.getJSONObject(0).getString("CODE").equalsIgnoreCase("REPLAN")) {
+                                                    context.startActivity(new Intent(context, GetDCR.class));
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                        }
+
+
+                    }
+                } else if (CheckType.equals("A")) {
+                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[DIVERT_UNLOCK]")) {
+
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "DIVERTLOCKYN", "");
+                        AppAlert.getInstance().getAlert(context, "Approved !!!", "Your Calls have been Approved \nYou can please proceed");
+                    } else {
+
+                        if (jsonArray0.getJSONObject(0).getString("TITLE").isEmpty()) {
+                            AppAlert.getInstance().getAlert(context, "Approval !!!", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,
+                                    "APPROVAL_MSG", "Your Route Approval is Pending... \nYou Route must be approved first !!!\n" +
+                                            "Please contact your Head-Office for APPROVAL"));
+
+                        } else {
+                            AppAlert.getInstance().Alert(context, jsonArray0.getJSONObject(0).getString("TITLE"),
+                                    jsonArray0.getJSONObject(0).getString("MSG"),
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            try {
+                                                if (jsonArray0.getJSONObject(0).getString("CODE").equalsIgnoreCase("REPLAN")) {
+                                                    context.startActivity(new Intent(context, GetDCR.class));
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                        }
+// customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
+                    }
+                } else {
+                    if (jsonArray0.length() > 0 && jsonArray0.getJSONObject(0).getString("CALL_UNLOCK").contains("[CALL_UNLOCK]")) {
+                        customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "CALL_UNLOCK_STATUS", "[CALL_UNLOCK]");
+                        AppAlert.getInstance().getAlert(context, "CALL UNLOCKED", "Your Calls have been Unlocked \nYou can please proceed");
+                    } else {
+
+                        if (jsonArray0.getJSONObject(0).getString("TITLE").isEmpty()) {
+                            Float FIRST_CALL_LOCK_TIME = Float.valueOf(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "FIRST_CALL_LOCK_TIME", "0"));
+                            AppAlert.getInstance().getAlert(context, "CALL LOCKED", "Your Calls has been Locked... \nYou must have made your first Call before " + FIRST_CALL_LOCK_TIME + " O'clock\n" +
+                                    "Please contact your Head-Office to UNLOCK");
+// customVariablesAndMethod.getAlert(context,"CALL LOCKED","Your Calls has not been Unlocked yet \nPlease contact your administrator to proceed");
+
+                        } else {
+                            AppAlert.getInstance().Alert(context, jsonArray0.getJSONObject(0).getString("TITLE"),
+                                    jsonArray0.getJSONObject(0).getString("MSG"),
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            try {
+                                                if (jsonArray0.getJSONObject(0).getString("CODE").equalsIgnoreCase("REPLAN")) {
+                                                    context.startActivity(new Intent(context, GetDCR.class));
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                        }
+
+
+                    }
+                }
+
+//progress1.dismiss();
+            } catch (JSONException e) {
+                Log.d("MYAPP", "objects are: " + e.toString());
+                AppAlert.getInstance().getAlert(context, "Missing field error", context.getResources().getString(R.string.service_unavilable) + e.toString());
+                e.printStackTrace();
+            }
+
+        }
+//Log.d("MYAPP", "objects are1: " + result);
+//progress1.dismiss();
+
+    }
+
+   /* private void parser_is_call_unlocked(Context context,String CheckType,Bundle result) {
 
         if (result!=null ) {
 
@@ -1092,6 +1214,6 @@ public class Service_Call_From_Multiple_Classes {
         //Log.d("MYAPP", "objects are1: " + result);
         //progress1.dismiss();
 
-    }
+    }*/
 
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +24,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
+import com.cbo.cbomobilereporting.ui_new.BarcodeReaderActivity;
 
 import bill.Cart.ICompanyCart;
 import bill.ItemFilter.CompanyItemFilter;
@@ -38,6 +40,7 @@ import utils_new.AppAlert;
 public class FNewPhyStock extends Fragment implements IFBillNewOrder {
 
     private static final int NEW_ORDER_ITEM_FILTER = 10;
+    private static final int BARCODE_SCANNER = 11;
     TextView filterTxt;
     AppCompatActivity context;
     EditText QtyTxt, FreeQty, dis1;
@@ -131,6 +134,29 @@ public class FNewPhyStock extends Fragment implements IFBillNewOrder {
                 startActivityForResult(intent, NEW_ORDER_ITEM_FILTER);
             }
         });
+/*
+
+        filterTxt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (filterTxt.getRight() - filterTxt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        Intent intent = new Intent(context, BarcodeReaderActivity.class);
+                        intent.putExtra("order", viewModel.getOrder());
+                        startActivityForResult(intent, BARCODE_SCANNER);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+*/
 
 
         batchTxt.setOnClickListener(new View.OnClickListener() {

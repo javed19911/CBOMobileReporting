@@ -23,6 +23,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
+        android:drawableRight="@drawable/barcode_scanner"
         android:textColorHint="@android:color/darker_gray"
         android:background="@drawable/input_txt"/>
 

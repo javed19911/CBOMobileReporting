@@ -14,6 +14,7 @@
         <activity android:name="bill.stockEntry.OpenScreenActivity" />
         <activity android:name="bill.openingStock.OpeningStockActivity"/>
         <activity android:name=".ui_new.MyCamera"/>
+        <activity android:name=".ui_new.BarcodeReaderActivity"/>
         <activity android:name="bill.BillReport.DashboardBill" />
         <activity android:name="bill.Outlet.Outlet" />
         <activity android:name="bill.Dashboard.Dashboard" />
@@ -465,11 +466,17 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
-    </application>
 
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/cbo_noti" />
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode"/>
+
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/cbo_noti" />
+
+    </application>
 
     <supports-screens
         android:anyDensity="true"

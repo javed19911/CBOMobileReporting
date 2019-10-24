@@ -30,8 +30,10 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.CboProgressDialog;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 
@@ -55,9 +57,11 @@ import utils_new.GetVersionCode;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Service_Call_From_Multiple_Classes;
+import utils_new.cboUtils.CBOImageView;
+import utils_new.up_down_ftp;
 
 
-public class FinalSubmitDcr_new extends CustomActivity {
+public class FinalSubmitDcr_new extends CustomActivity implements up_down_ftp.AdapterCallback{
 
 
     EditText remark, loc,Late_Submit_remark;
@@ -120,7 +124,9 @@ public class FinalSubmitDcr_new extends CustomActivity {
     private static final int MESSAGE_INTERNET_FINAL_SUBMIT=0;
     private  static final int GPS_TIMMER=4;
 
-    ProgressDialog commitDialog;
+
+    CBOImageView attachment;
+    CboProgressDialog cboProgressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +143,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         TextView Dcr_date = (TextView) findViewById(R.id.DCR_Date);
         TextView Work_type = (TextView) findViewById(R.id.working_type);
 
+        attachment = findViewById(R.id.attachment);
         hader_text.setText("Final Submit");
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -208,6 +215,34 @@ public class FinalSubmitDcr_new extends CustomActivity {
         }
 
 
+        attachment.setTitle(MyCustumApplication.getInstance().getDCR().getAttachmentTilte());
+        attachment.setMaxAttachment(1);
+        if (!MyCustumApplication.getInstance().getDCR().getAttachmentMandatory("F")){
+            attachment.setVisibility(View.GONE);
+        }
+
+
+        attachment.setListener(new CBOImageView.iCBOImageView() {
+            @Override
+            public void OnAddClicked() {
+                attachment.addAttachment((AppCompatActivity) context, AttachImage.ChooseFrom.frontCamera);
+            }
+
+            @Override
+            public void OnAdded() {
+                OnUpdated(attachment.getDataList());
+            }
+
+            @Override
+            public void OnDeleted(String file) {
+                OnUpdated(attachment.getDataList());
+            }
+
+            @Override
+            public void OnUpdated(ArrayList<String> files) {
+
+            }
+        });
         submit.setOnClickListener(new View.OnClickListener() {
 
 
@@ -238,7 +273,9 @@ public class FinalSubmitDcr_new extends CustomActivity {
                         mRemark = remark.getText().toString();
                     }
 
-                    if (mRemark.equals("")) {
+                    if (MyCustumApplication.getInstance().getDCR().getAttachmentMandatory("F") && attachment.getDataList().size()==0) {
+                        customVariablesAndMethod.getAlert(context,attachment.getTitle()+ "!!!","Please attach "+attachment.getTitle());
+                    }else if (mRemark.equals("")) {
                         customVariablesAndMethod.msgBox(context,"Enter Remark....");
                     }/*else if(customVariablesAndMethod.IsCallAllowedToday(context) && Late_Submit_remark.equals("") ){
                         customVariablesAndMethod.msgBox(context,"Enter Late Submit Remark....");
@@ -257,6 +294,21 @@ public class FinalSubmitDcr_new extends CustomActivity {
         });
 
 
+    }
+
+
+    protected void onActivityResult(int reqcode, int rescode, Intent iob) {
+
+        switch (reqcode) {
+
+            case CBOImageView.REQUEST_CAMERA:
+                if (rescode == RESULT_OK) {
+                    attachment.onActivityResult(reqcode, rescode, iob);
+                }
+                break;
+                default:
+                super.onActivityResult(reqcode, rescode, iob);
+        }
     }
 
     private BroadcastReceiver mLocationUpdated = new BroadcastReceiver() {
@@ -278,7 +330,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                     break;
                 case GPS_TIMMER:
                     //finalSubmit();
-                    finalSubmitNew();
+                    finalSubmitNew(false);
                     /*Thread thread=new Thread(){
                         @Override
                         public void run() {
@@ -304,7 +356,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                         customVariablesAndMethod.msgBox(context,msg.getData().getString("Error"));
                         //Toast.makeText(getApplicationContext(),msg.getData().getString("Error"),Toast.LENGTH_SHORT).show();
                     }
-                    commitDialog.dismiss();
+
                     break;
 
 
@@ -313,9 +365,20 @@ public class FinalSubmitDcr_new extends CustomActivity {
     };
 
 
-    private void finalSubmitNew(){
 
 
+
+    private void finalSubmitNew(Boolean skipUpload){
+
+
+
+        if (!skipUpload && attachment.filesToUpload().length >0
+                && !attachment.getAttachmentStr().equalsIgnoreCase(MyCustumApplication.getInstance().getDCR().getAttachment())){
+            cboProgressDialog = new CboProgressDialog(context, "Please Wait..\nuploading Image");
+            cboProgressDialog.show();
+            new up_down_ftp().uploadFile(attachment.filesToUpload(), context);
+            return;
+        }
         ///disable submitbtn to be clicked twice
         submit.setEnabled(false);
 
@@ -1001,5 +1064,33 @@ public class FinalSubmitDcr_new extends CustomActivity {
             customVariablesAndMethod.getAlert(context,"Please Submit","Please complete your Final Submit");
         }
 
+    }
+
+    @Override
+    public void started(Integer responseCode, String message, String description) {
+
+    }
+
+    @Override
+    public void progess(Integer responseCode, Long FileSize, Float value, String description) {
+
+    }
+
+    @Override
+    public void complete(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        finalSubmitNew(true);
+    }
+
+    @Override
+    public void aborted(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        AppAlert.getInstance().getAlert(context,message,description);
+    }
+
+    @Override
+    public void failed(Integer responseCode, String message, String description) {
+        cboProgressDialog.dismiss();
+        AppAlert.getInstance().getAlert(context,message,description);
     }
 }

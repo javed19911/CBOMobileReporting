@@ -248,6 +248,11 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
             call_missed.setVisibility(View.GONE);
         }
 
+        if ( MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("CALL_TYPE","").equalsIgnoreCase("3")){
+            call_type="3";
+            hader_text.setText("Doctor Call (Offline Call)");
+        }
+
         call_missed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean ischecked) {
@@ -256,6 +261,9 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                 }else if ( plan_type.equals("1")){
                     call_type="0";
 
+                    if ( MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("CALL_TYPE","").equalsIgnoreCase("3")){
+                        call_type="3";
+                    }
                     drname.setText("---Select---");
                     dr_id="";
                     doc_name="";
@@ -1348,7 +1356,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                     } else {
                         new Service_Call_From_Multiple_Classes().CheckIfCallsUnlocked(context,"ADDAREA");
                     }
-                }else if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...")){
+                }else if (((TextView) view.findViewById(R.id.distance)).getText().toString().equals("Registration pending...") && !call_type.equalsIgnoreCase("3")){
                     if (!customVariablesAndMethod.IsGPS_GRPS_ON(context)) {
                         customVariablesAndMethod.Connect_to_Internet_Msg(context);
                         drname.setText("---Select---");
@@ -1363,7 +1371,7 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                         startActivity(intent);
                         finish();
                     }
-                }else if(((TextView) view.findViewById(R.id.distance)).getText().toString().contains("Km Away")) {
+                }else if(((TextView) view.findViewById(R.id.distance)).getText().toString().contains("Km Away") && !call_type.equalsIgnoreCase("3")) {
                     //getAlert(context,"Not In Range","You are "+((TextView) view.findViewById(R.id.distance)).getText().toString()+" from "+doc_name,true);
 
                     FragmentManager fm = getSupportFragmentManager();

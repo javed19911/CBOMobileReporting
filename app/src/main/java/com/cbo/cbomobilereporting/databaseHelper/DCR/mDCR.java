@@ -199,10 +199,11 @@ public class mDCR {
         return AttachmentTilte;
     }
 
-    public Boolean getAttachmentMandatory() {
-        if (AttachmentMandatory == null){
-            AttachmentMandatory = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SELFIE_MANDATORYYN","").equalsIgnoreCase("y");
-        }
+    public Boolean getAttachmentMandatory(String doc_type) {
+//        if (AttachmentMandatory == null){
+            AttachmentMandatory = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SELFIE_MANDATORYYN","").equalsIgnoreCase("y")||
+                    MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SELFIE_MANDATORYYN","").contains(doc_type);
+//        }
         return AttachmentMandatory;
     }
 
@@ -353,7 +354,7 @@ public class mDCR {
     }
 
     public mDCR setAttachmentTilte(String attachmentTilte) {
-        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("SHELFIE_TITLE",attachmentTilte);
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("SELFIE_TITLE",attachmentTilte);
         AttachmentTilte = attachmentTilte;
         return this;
     }
