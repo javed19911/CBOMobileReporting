@@ -1641,7 +1641,9 @@ public class DcrmenuInGrid extends Fragment {
 
     private void IfAllowOfflineCall(Response listener){
 
-        if (Controls.getInstance().IsOfflineCallAllowed() && !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("CALL_TYPE","").equalsIgnoreCase("3")) {
+        if (Controls.getInstance().IsOfflineCallAllowed()
+                && !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("CALL_TYPE","").equalsIgnoreCase("3")
+                && !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("IsBackDate","1").equalsIgnoreCase("0")) {
 
             ArrayList<String> drlist = new ArrayList<String>();
             Cursor c = cboDbHelper.getDoctorListLocal("1",null);

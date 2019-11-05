@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -30,10 +31,33 @@ public class FDashboard extends Fragment implements iDashboard {
 
     private vmDashboard mViewModel;
     UnderlineTextView previous,next;
-    TextView month_txt;
+    TextView month_txt,refreshDate;
+    Button refreshBtn;
     ExpandableListView doctor;
     ExpandableDashboardAdapter listAdapter;
 
+
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            //Only manually call onResume if fragment is already visible
+            //Otherwise allow natural fragment lifecycle to call onResume
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!getUserVisibleHint()) {
+            return;
+        }
+
+        mViewModel.update_page(getActivity(),false);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -54,6 +78,8 @@ public class FDashboard extends Fragment implements iDashboard {
         previous= (UnderlineTextView) getView().findViewById(R.id.previous);
         next= (UnderlineTextView) getView().findViewById(R.id.next);
         month_txt= (TextView) getView().findViewById(R.id.month);
+        refreshDate= (TextView) getView().findViewById(R.id.refreshtime);
+        refreshBtn=  getView().findViewById(R.id.refresh);
 
         previous.setText("<<");
         next.setText(">>");
@@ -74,6 +100,13 @@ public class FDashboard extends Fragment implements iDashboard {
             @Override
             public void onClick(View v) {
                 mViewModel.showNext(getContext());
+            }
+        });
+
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.update_page(getActivity(),true);
             }
         });
 
@@ -117,16 +150,19 @@ public class FDashboard extends Fragment implements iDashboard {
     }
 
     @Override
+    public void setRefreshedDate(String date) {
+        refreshDate.setText(date);
+    }
+
+    @Override
     public void setDashboard(HashMap<String, ArrayList<Map<String, String>>> dashboard_list, List<String> header, String Month) {
         listAdapter = new ExpandableDashboardAdapter(doctor,getContext(), header, dashboard_list,Month);
         doctor.setAdapter(listAdapter);
         doctor.setGroupIndicator(null);
 
-//        for(int i=0; i < listAdapter.getGroupCount(); i++) {
-//            if (visible_status.get(i)==1) {
-//                doctor.expandGroup(i);
-//            }
-//        }
+        for(int i=0; i < listAdapter.getGroupCount(); i++) {
+           doctor.expandGroup(i);
+        }
     }
 
     @Override

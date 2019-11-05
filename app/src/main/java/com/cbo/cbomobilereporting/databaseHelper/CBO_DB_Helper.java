@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.cbo.cbomobilereporting.databaseHelper.Call.mChemistCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
@@ -1951,6 +1952,9 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             //sd.close();
         }
     }
+
+
+
 
     public Cursor getRcChemListLocal() {
         try {
@@ -5893,6 +5897,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return Tabs;
 
     }
+
 
     public int getNotification_count() {
         Cursor cursor = null;

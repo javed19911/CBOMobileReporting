@@ -97,9 +97,10 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 			getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
 		}
 
-		save=(Button)findViewById(R.id.save_sample_btn);
-		back_img=(Button)findViewById(R.id.back_img);
-		next_img=(Button)findViewById(R.id.next_img);
+		save= findViewById(R.id.save_sample_btn);
+		back_img=findViewById(R.id.back_img);
+		next_img=findViewById(R.id.next_img);
+
 		pic_id=getIntent().getExtras().getString("myid");
 		show_id=getIntent().getExtras().getStringArrayList("samid");
 		show_name=getIntent().getExtras().getStringArrayList("sam_name");
@@ -161,6 +162,8 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 				
 			}
 		});
+
+
 		next_img.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -169,6 +172,8 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 				showNextImage();
 			}
 		});
+
+
 		back_img.setOnClickListener(new OnClickListener() {
 			
 			@Override

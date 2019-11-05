@@ -13,6 +13,7 @@ public interface iDashboard {
     void setNextBtnVisibility(Boolean visible);
     void setPreBtnVisibility(Boolean visible);
     void setMonth(String Month);
+    void setRefreshedDate(String date);
     void setDashboard(HashMap<String, ArrayList<Map<String, String>>> dashboard_list, List<String> header, String Month);
     void onDashboardUpdated(HashMap<String, ArrayList<Map<String, String>>> dashboard_list);
 }

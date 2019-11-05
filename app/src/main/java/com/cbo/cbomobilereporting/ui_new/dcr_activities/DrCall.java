@@ -527,6 +527,10 @@ public class DrCall extends AppCompatActivity implements ExpandableListAdapter.S
                     call_type="1";
                 }
 
+                if ( MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("CALL_TYPE","").equalsIgnoreCase("3")){
+                    call_type="3";
+                }
+
                 if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"MISSED_CALL_OPTION").contains("D") ) {
                     call_missed.setVisibility(View.VISIBLE);
                 }else  {

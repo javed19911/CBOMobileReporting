@@ -29,7 +29,7 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
         view.setOnClickListeners();
         view.setTitle(view.getActivityTitle());
 
-        getDashbord(context);
+        //getDashbord(context);
     }
 
 

@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import saleOrder.ViewModel.CBOViewModel;
 import services.CboServices;
 import services.MyAPIService;
 import utils_new.AppAlert;
+import utils_new.CustomDatePicker;
 
 public class vmDashboard extends CBOViewModel<iDashboard> {
     private int month =0;
@@ -34,10 +36,13 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
     private ArrayList<Map<String, String>> data2 = new ArrayList<Map<String, String>>();
     private HashMap<String, ArrayList<Map<String, String>>> dashboard_list;
     private final List<String> header_title=new ArrayList<>();
+    DashboardDB dashboardDB;
 
 
     @Override
     public void onUpdateView(AppCompatActivity context, iDashboard view) {
+
+        dashboardDB = new DashboardDB(context);
         dashboard_list=new LinkedHashMap<>();
         dashboard_list.put("Marketing",data1);
         dashboard_list.put("Sales",data2);
@@ -47,9 +52,9 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
 
         view.getReferencesById();
         view.setOnClickListeners();
-        update_page(context);
+        //update_page(context);
 
-        view.setDashboard(dashboard_list,header_title,getDate("MMM"));
+        //view.setDashboard(dashboard_list,header_title,getDate("MMM"));
     }
 
 
@@ -65,16 +70,16 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
 
     public void showNext(Context context){
         month++;
-        update_page(context);
+        update_page(context,true);
     }
 
     public void showPrevious(Context context){
         month--;
-        update_page(context);
+        update_page(context,true);
     }
 
 
-    private void update_page(Context context) {
+    public void update_page(Context context,Boolean forcefullyRefresh) {
 
 
         switch (getDate("MM")){
@@ -100,6 +105,23 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
 
         view.setMonth(getDate("MMM-yyyy"));
 
+        if (MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DASHBOARD_DATE", "")
+                .equalsIgnoreCase(CustomDatePicker.currentDate()) && !forcefullyRefresh){
+            data1.clear();
+            data2.clear();
+            data1 = dashboardDB.get("Marketing");
+            data2 = dashboardDB.get("Sales");
+
+            dashboard_list.put("Marketing",data1);
+            dashboard_list.put("Sales",data2);
+
+            if (data1.size()>0 || data2.size()>0) {
+                view.setDashboard(dashboard_list, header_title, getDate("MMM"));
+                view.setRefreshedDate(MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DASHBOARD_REFRESHED",""));
+                return;
+            }
+        }
+
         //Start of call to service
 
         HashMap<String, String> request = new HashMap<>();
@@ -116,7 +138,8 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
                 .setResponse(new CBOServices.APIResponse() {
                     @Override
                     public void onComplete(Bundle bundle) throws Exception {
-
+                        view.setDashboard(dashboard_list,header_title,getDate("MMM"));
+                        view.setRefreshedDate(MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DASHBOARD_REFRESHED",""));
                     }
 
                     @Override
@@ -140,6 +163,7 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
         JSONArray jsonArray1 = new JSONArray(table0);
         data1.clear();
         data2.clear();
+        dashboardDB.delete();
 
         for (int j = 0; j < jsonArray1.length(); j++) {
             Map<String, String> datanum1 = new HashMap<String, String>();
@@ -149,6 +173,7 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
             datanum1.put("AMOUNT", jobj.getString("AMOUNT"));
             datanum1.put("AMOUNT_CUMM", jobj.getString("AMOUNT_CUMM"));
             datanum1.put("URL", jobj.getString("URL"));
+            dashboardDB.insert(datanum1,"Marketing");
             data1.add(datanum1);
 
         }
@@ -161,9 +186,12 @@ public class vmDashboard extends CBOViewModel<iDashboard> {
             datanum2.put("AMOUNT", jobj.getString("AMOUNT"));
             datanum2.put("AMOUNT_CUMM", jobj.getString("AMOUNT_CUMM"));
             datanum2.put("URL", jobj.getString("URL"));
+            dashboardDB.insert(datanum2,"Sales");
             data2.add(datanum2);
 
         }
+
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("DASHBOARD_REFRESHED", CustomDatePicker.formatDate(new Date(),"dd-MMM hh:mm"));
     }
 
 

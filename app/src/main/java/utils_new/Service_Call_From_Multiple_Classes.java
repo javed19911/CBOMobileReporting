@@ -962,10 +962,10 @@ public class Service_Call_From_Multiple_Classes {
 
                 editor.putString("DRSALEMSG_FINALSUBMITYN", c.getString("DRSALEMSG_FINALSUBMITYN"));
 
-
+                editor.putString("DASHBOARD_TYPE", c.getString("DASHBOARD_TYPE"));
 
                 editor.commit();
-
+                MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("DASHBOARD_DATE", "");
                 Controls.getInstance().setGiftCampaignWiseReqd(c.getString("GIFTCAMP_WISEYN"));
                 Controls.getInstance().setGpsRequired(c.getString("GPRSYN"));
                 Controls.getInstance().setRouteWise(c.getString("ROUTE"));

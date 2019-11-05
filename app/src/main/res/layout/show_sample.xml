@@ -3,15 +3,18 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/hadder_2016"
-        android:id="@+id/include" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/hadder_2016" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager_introduction"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_below="@+id/include" />
+        android:layout_below="@+id/include"
+        android:fitsSystemWindows="true" />
+
+
 
     <LinearLayout
         android:id="@+id/viewPagerCountDots"
@@ -21,67 +24,60 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="horizontal" />
-
-
-
-       <!-- <utils_new.CustomImageVIew
-            android:id="@+id/img_sample"
-            android:layout_above="@+id/control"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:src="@android:drawable/ic_menu_call"
-            android:scaleType="matrix"/>-->
-
-
-
     <LinearLayout
+        android:background="#2000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+      <RelativeLayout
         android:id="@+id/control"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#00ffffff"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_centerInParent="true"
+        android:background="#00ffffff">
 
         <Button
             android:id="@+id/back_img"
-            android:layout_weight="1"
-            style="?android:attr/buttonStyleSmall"
-            android:text="Back"
-            android:background="@drawable/button_text_view_selector"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:textColor="#ffffff"
-            />
+            android:background="@drawable/ic_skip_previous_black_24dp" />
 
         <Button
             android:id="@+id/save_sample_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_text_view_selector"
-            android:text="@string/save_next"
-            android:textColor="#ffffff" />
+            android:background="@drawable/save_next"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/next_img"
-            android:layout_weight="1"
-            android:text="Next"
-            android:background="@drawable/button_text_view_selector"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="#ffffff"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            />
+            android:background="@drawable/ic_skip_next_black_24dp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-
+    <ImageView
+        android:id="@+id/cancel"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_cancel_black_24dp"></ImageView>
 
 
 </RelativeLayout>

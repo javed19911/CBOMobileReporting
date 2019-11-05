@@ -88,13 +88,13 @@ public class ExpandableDashboardAdapter extends BaseExpandableListAdapter {
 
         if (childText.get(childPosition).get("AMOUNT").equals("") && childText.get(childPosition).get("AMOUNT_CUMM").equals("")){
             row.setBackgroundColor(0xFFf4f5fa);
-            layoutParams.setMargins(90, 0, 5, 0);
+            layoutParams.setMargins(40, 0, 5, 0);
             row.setLayoutParams(layoutParams);
             remark.setTextColor(ContextCompat.getColor(_context, R.color.colorPrimaryDark));
             remark.setTypeface(null, Typeface.BOLD);
         }else{
             row.setBackgroundResource(R.drawable.custom_square_transparent_bg);
-            layoutParams.setMargins(90, 0, 5, 0);
+            layoutParams.setMargins(40, 0, 5, 0);
             row.setLayoutParams(layoutParams);
             remark.setTextColor(ContextCompat.getColor(_context, R.color.colorPrimary));
             remark.setTypeface(null, Typeface.NORMAL);

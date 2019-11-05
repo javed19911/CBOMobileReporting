@@ -62,6 +62,7 @@ import services.Sync_service;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
 import utils_new.AppAlert;
+import utils_new.CustomDatePicker;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
 
@@ -87,6 +88,8 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     Boolean showProfile=false;
     LinearLayout Sync;
     public ProgressDialog progress1;
+
+    String DashboardType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +129,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
                         PLAY_SERVICES_RESOLUTION_REQUEST,new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
-                               finish();
+                                finish();
                             }
                         }).show();
 
@@ -262,13 +265,16 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
 
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"final_km", "");
 
+        DashboardType = MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DASHBOARD_TYPE","");
+
         Menu menu = navigationView.getMenu();
         menu.removeGroup(R.id.group1);
         tabs = cbo_db_helper.getTab();
-        if (cbo_db_helper.getMenu("REPORTS","R_DASHBOARD_SALES").size()>0) {
+        if (DashboardType.equalsIgnoreCase("R")) {
             tabs.add(0, "BILL_DASHBOARD");
+        }else if (DashboardType.equalsIgnoreCase("O")) {
+            tabs.add(0,"DASHBOARD");
         }
-        //tabs.add(0,"DASHBOARD");
         MenuItem menuItem;
         menuItem = menu.add(R.id.group1, 0, 0, "Home");
         menuItem.setIcon(R.drawable.ic_home_icon);
@@ -345,8 +351,14 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
         if (b != null) {
             int id = b.getInt("Id");
             viewPager.setCurrentItem(id);
-        } else {
+        } else if (DashboardType.isEmpty() || DashboardType.equalsIgnoreCase("N")
+                || ((DashboardType.equalsIgnoreCase("R") || DashboardType.equalsIgnoreCase("O"))
+                && !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("DASHBOARD_DATE", "")
+                .equalsIgnoreCase(CustomDatePicker.currentDate()))){
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("DASHBOARD_DATE", CustomDatePicker.currentDate());
             viewPager.setCurrentItem(0);
+        }else{
+            viewPager.setCurrentItem(1);
         }
 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -359,10 +371,12 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         ArrayList<String> tabs=cbo_db_helper.getTab();
-        if (cbo_db_helper.getMenu("REPORTS","R_DASHBOARD_SALES").size()>0) {
+        if (DashboardType.equalsIgnoreCase("R")) {
             tabs.add(0, "BILL_DASHBOARD");
+        }else if (DashboardType.equalsIgnoreCase("O")) {
+            tabs.add(0,"DASHBOARD");
         }
-        //tabs.add(0,"DASHBOARD");
+
         for(int i=0;i<tabs.size();i++){
             switch (tabs.get(i)){
                 case "DASHBOARD":
