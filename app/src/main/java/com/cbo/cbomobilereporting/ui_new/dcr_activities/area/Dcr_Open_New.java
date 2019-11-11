@@ -59,6 +59,7 @@ import utils_new.AppAlert;
 import utils_new.Area_Dialog;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.DayPlanTextToSpeech;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Route_Dialog;
 import utils_new.Service_Call_From_Multiple_Classes;
@@ -754,21 +755,24 @@ public class Dcr_Open_New extends AppCompatActivity {
     protected void onActivityResult(int reqcode, int rescode, Intent iob) {
 
 
+
         switch (reqcode) {
             case 0:
-                if (rescode==RESULT_OK) {
+                if (rescode == RESULT_OK) {
                     Bundle b1 = iob.getExtras();
                     work_with_name = b1.getString("workwith_name");
                     work_with_id = b1.getString("workwith_id");
                 }
                 break;
             case 1:
-                if (rescode==RESULT_OK) {
+                if (rescode == RESULT_OK) {
                     Bundle b1 = iob.getExtras();
                     area_name = b1.getString("area_name");
                     area_id = b1.getString("area");
                 }
                 break;
+             default:
+                    super.onActivityResult(reqcode, rescode, iob);
         }
         setWorkwith(work_with_name);
         setArea(area_name);
@@ -1566,11 +1570,12 @@ public class Dcr_Open_New extends AppCompatActivity {
             cbo_helper.deleteDCRDetails();
 
             new CustomTextToSpeech().setTextToSpeech("");
+            new DayPlanTextToSpeech().stopTextToSpeech();
 
             cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
             long val = cbo_helper.insertUtils(Custom_Variables_And_Method.pub_area);
             long val2 = cbo_helper.insertDcrDetails(Custom_Variables_And_Method.DCR_ID, Custom_Variables_And_Method.pub_area);
-
+            MyCustumApplication.getInstance().getUser().setDCRId(Custom_Variables_And_Method.DCR_ID);
 
             if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")){
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "OveAllKm", "0.0");

@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui.Show_Sample;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.imagezoom.ImageAttacher;
 
 import java.util.ArrayList;
@@ -40,15 +42,23 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.pager_item, container, false);
-
-        ImageView imageView = (ImageView) itemView.findViewById(R.id.img_pager_item);
+        PhotoView imageView = (PhotoView) itemView.findViewById(R.id.img_pager_item);
+        //ImageView imageView = (ImageView) itemView.findViewById(R.id.img_pager_item);
         if (!mResources.get(position).equals("no_image")) {
-            Bitmap b = BitmapFactory.decodeFile(mResources.get(position));
-            imageView.setImageBitmap(b);
-            usingSimpleImage(imageView);
+           /* try {
+                Bitmap b = BitmapFactory.decodeFile(mResources.get(position));
+                imageView.setImageBitmap(b);
+            }catch (Exception e){
+                imageView.setImageResource(R.drawable.no_image);
+            }
+            usingSimpleImage(imageView);*/
+            Glide.with(mContext)
+                    .load(mResources.get(position))
+                    .error(R.drawable.no_image)
+                    .into(imageView);
         }else{
             imageView.setImageResource(R.drawable.no_image);
-            usingSimpleImage(imageView);
+            //usingSimpleImage(imageView);
         }
 
         container.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +71,13 @@ public class ViewPagerAdapter extends PagerAdapter {
 
 
         container.addView(itemView);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ( (Show_Sample) mContext).makeFullScreen();
+            }
+        });
 
         return itemView;
     }

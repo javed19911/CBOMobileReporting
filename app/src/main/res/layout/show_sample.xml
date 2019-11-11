@@ -24,60 +24,59 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="horizontal" />
-    <LinearLayout
-        android:background="#2000"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
       <RelativeLayout
         android:id="@+id/control"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
         android:background="#00ffffff">
 
-        <Button
+        <ImageButton
             android:id="@+id/back_img"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/ic_skip_previous_black_24dp" />
+            android:background="@drawable/gray_circle"
+            android:src="@drawable/ic_skip_previous_black_24dp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/save_sample_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            android:padding="15dp"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/save_next"
+            android:background="@drawable/gray_circle"
+            android:src="@drawable/save_next"
             android:visibility="visible" />
 
-        <Button
+        <ImageButton
             android:id="@+id/next_img"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/ic_skip_next_black_24dp" />
+            android:background="@drawable/gray_circle"
+            android:src="@drawable/ic_skip_next_black_24dp" />
 
     </RelativeLayout>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/cancel"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_cancel_black_24dp"></ImageView>
+        android:background="@drawable/gray_circle"
+        android:src="@drawable/ic_cancel_black_24dp"/>
 
 
 </RelativeLayout>

@@ -62,6 +62,7 @@ import utils_new.AppAlert;
 import utils_new.Area_Dialog;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.DayPlanTextToSpeech;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.Route_Dialog;
 import utils_new.Service_Call_From_Multiple_Classes;
@@ -87,7 +88,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
     String workwith1 = "", workwith2 = "", workwith34 = "", workWith4 = "", workWith5 = "", workWith6 = "", workWith7 = "", workWith8 = "", address = "", work_withme = "", work_name = "";
 
     String real_date = null;
-    String work_val = "",work_type_code = "";
+    String work_val = "",work_type_code = "",work_type_TPYN="";
 
     String work_with_name = "", work_with_id = "", area_name = "", area_id = "",root_id ="",root_name = "",work_with_name_ind = "", work_with_id_ind = "" ;
     String TP_work_with_name = "", TP_work_with_id = "", TP_area_name = "", TP_area_id = "",TP_root_id ="",TP_root_name = "";
@@ -120,6 +121,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
     mDayPlan dayPlan;
     LocationDB locationDB;
 
+
     String fmcg_Live_Km = "";
     Runnable r1 = new Runnable() {
         @Override
@@ -140,6 +142,52 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
     };
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        DIVERTWWYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                setUITitles();
+                if (!b){
+                    setDefaultWorkWith();
+//                    root.setText(root_name);
+//                    edt_get_area.setText(area_name);
+                }else{
+                    get_workwith.performClick();
+                }
+
+
+            }
+        });
+
+
+        ROUTEDIVERTYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERT_REMARKYN","N").equalsIgnoreCase("Y")){
+                    divert_remark.setVisibility(View.VISIBLE);
+                    divert_remark.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"sDivert_Remark",""));
+                }else {
+                    divert_remark.setVisibility(View.GONE);
+                }
+
+                setUITitles();
+
+
+
+                if (!b){
+
+                    setDefaultRoute();
+                }else{
+                    getRoot.performClick();
+                }
+
+
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -286,89 +334,6 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             }
         });
 
-        DIVERTWWYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                setUITitles();
-                if (!b){
-
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name",TP_work_with_name);
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id",TP_work_with_id);
-
-
-                    cbo_helper.deleteDRWorkWith();
-                    String[] TP_work_with_name_list = TP_work_with_name.split(",");
-                    String[] TP_work_with_id_list = TP_work_with_name.split(",");
-                    for (int i = 0; i < TP_work_with_id_list.length; i++) {
-//                        work_with_id =  TP_work_with_id_list[i] + "," + work_with_id ;
-//                        work_with_name = TP_work_with_name_list[i]  + "," + work_with_name;
-                        cbo_helper.insertDrWorkWith(TP_work_with_name_list[i], TP_work_with_id_list[i]);
-                    }
-                    cbo_helper.insertDrWorkWith("Independent", ""+PA_ID);
-
-                    work_with_name= TP_work_with_name;
-                    work_with_id=TP_work_with_id;
-//                    area_name=TP_area_name;
-//                    area_id=TP_area_id;
-//                    root_name=TP_root_name;
-//                    root_id=TP_root_id;
-
-                    setWorkwith(work_with_name);
-//                    root.setText(root_name);
-//                    edt_get_area.setText(area_name);
-                }else{
-                    get_workwith.performClick();
-                }
-
-
-            }
-        });
-
-
-
-        divert_remark.setText("");
-        ROUTEDIVERTYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DIVERT_REMARKYN","N").equalsIgnoreCase("Y")){
-                    divert_remark.setVisibility(View.VISIBLE);
-                    divert_remark.setText(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"sDivert_Remark",""));
-                }else {
-                    divert_remark.setVisibility(View.GONE);
-                }
-
-                setUITitles();
-
-
-
-                if (!b){
-//                    work_with_name= TP_work_with_name;
-//                    work_with_id=TP_work_with_id;
-
-
-//                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name","");
-//                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id","");
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_Route_Name",TP_root_name);
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"route_Route_ID",TP_root_id);
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_name",TP_area_name);
-                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"area_id",TP_area_id);
-
-
-                    area_name=TP_area_name;
-                    area_id=TP_area_id;
-                    root_name=TP_root_name;
-                    root_id=TP_root_id;
-
-//                    wwith.setText(work_with_name);
-                    setRoute(root_name);
-                    setArea(area_name);
-                }else{
-                    getRoot.performClick();
-                }
-
-
-            }
-        });
 
         if (Custom_Variables_And_Method.location_required.equals("Y")) {
             locationLayout.setVisibility(View.VISIBLE);
@@ -376,6 +341,8 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             locationLayout.setVisibility(View.GONE);
         }
 
+
+        divert_remark.setText("");
 
         intent=getIntent();
         if(intent.getStringExtra("plan_type").equals("p")) {
@@ -408,16 +375,6 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             ArrayList<Integer> tables = new ArrayList<>();
             tables.add(0);
 
-//            progress1.setMessage("Please Wait.. \n Fetching your worktype");
-//            progress1.setCancelable(false);
-//            progress1.show();
-//
-//            new CboServices(this, mHandler).customMethodForAllServices(request, "DCRWORKINGTYPE_MOBILE_2", MESSAGE_INTERNET_WORKTYPE, tables);
-//
-//            //End of call to service
-
-
-
 
             new MyAPIService(context)
                     .execute(new ResponseBuilder("DCRWORKINGTYPE_MOBILE_2", request)
@@ -448,8 +405,9 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
             work_val=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_head","Working" );
             work_type_code=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code", "W");
+            work_type_TPYN=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_TPYN", "1");
             //getworkingType.add(new SpinnerModel("Working","W"));
-            getworkingType.add(new SpinnerModel(work_val,work_type_code));
+            getworkingType.add(new SpinnerModel(work_val,work_type_code,work_type_TPYN));
 
             adapter=new SpinAdapter(getApplicationContext(),R.layout.spin_row,getworkingType);
             adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
@@ -512,11 +470,12 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View v,
-                                       int arg2, long arg3) {
+                                       int position, long arg3) {
                 // TODO Auto-generated method stub
                 try {
                     work_val = ((TextView) v.findViewById(R.id.spin_name)).getText().toString();
                     work_type_code = ((TextView) v.findViewById(R.id.spin_id)).getText().toString();
+                    work_type_TPYN = getworkingType.get(position).getPANE_TYPE();
                     Custom_Variables_And_Method.work_val = work_val;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -636,6 +595,12 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                     areaLayout.setVisibility(View.GONE);
                 }
 
+                if(intent.getStringExtra("plan_type").equals("p")) {
+                    setDefaultWorkWith();
+                    setDefaultRoute();
+                    setUITitles();
+                }
+
             }
 
             @Override
@@ -646,6 +611,10 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
             }
         });
+
+
+
+
 
         work_with_title.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -659,7 +628,8 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             @Override
             public void onClick(View v) {
                 if (!MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")
-                        || DIVERTWWYN.isChecked() || TP_work_with_name.trim().isEmpty()) {
+                        || DIVERTWWYN.isChecked() || TP_work_with_name.trim().isEmpty()
+                        || !(work_type_TPYN.isEmpty() || work_type_TPYN.equalsIgnoreCase("1"))) {
                     // TODO Auto-generated method stub
                     //showSelectColoursDialog1();
                 /*Intent i = new Intent(getApplicationContext(), Dcr_Workwith.class);
@@ -702,7 +672,8 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                         && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                     customVariablesAndMethod.msgBox(context,"Please Select Work with First...");
                 }else  if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y")
-                        &&  !ROUTEDIVERTYN.isChecked() && !TP_root_name.trim().isEmpty()) {
+                        &&  !ROUTEDIVERTYN.isChecked() && !TP_root_name.trim().isEmpty()
+                        && (work_type_TPYN.isEmpty() || work_type_TPYN.equalsIgnoreCase("1"))) {
                     AppAlert.getInstance().getAlert(context,"Alert!!!","DCR is configured as per TP. To divert please select \"Divert Route\"...");
 
                 }else {
@@ -747,7 +718,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                         && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                     customVariablesAndMethod.msgBox(context,"Please Select Work with First...");
                 } else if (root_name.equals("")) {
-                    customVariablesAndMethod.msgBox(context,"Please Select Route Fisrt .....");
+                    customVariablesAndMethod.msgBox(context,"Please Select Route First .....");
                 }else if (checkforCalls()) {
                     AppAlert.getInstance().DecisionAlert(context, "Call Found!!!", "Some Calls found in your Day Summary.\nYou can only add Additional Areas \n" +
                                     "Else Reset your Day Plan from Utility",
@@ -835,6 +806,70 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
     }
 
+
+    private void setDefaultRoute(){
+        if (work_type_TPYN.isEmpty()
+                || work_type_TPYN.equalsIgnoreCase("1")) {
+//                    work_with_name= TP_work_with_name;
+//                    work_with_id=TP_work_with_id;
+
+
+//                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_name","");
+//                    customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"work_with_id","");
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Route_Name", TP_root_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "route_Route_ID", TP_root_id);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "area_name", TP_area_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "area_id", TP_area_id);
+
+
+            area_name = TP_area_name;
+            area_id = TP_area_id;
+            root_name = TP_root_name;
+            root_id = TP_root_id;
+        }else{
+            area_name = "";
+            area_id = "";
+            root_name = "";
+            root_id = "";
+        }
+
+//                    wwith.setText(work_with_name);
+        setRoute(root_name);
+        setArea(area_name);
+    }
+
+
+    private void setDefaultWorkWith(){
+        if (work_type_TPYN.isEmpty()
+                || work_type_TPYN.equalsIgnoreCase("1")) {
+//
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "work_with_name", TP_work_with_name);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "work_with_id", TP_work_with_id);
+
+
+            cbo_helper.deleteDRWorkWith();
+            String[] TP_work_with_name_list = TP_work_with_name.split(",");
+            String[] TP_work_with_id_list = TP_work_with_name.split(",");
+            for (int i = 0; i < TP_work_with_id_list.length; i++) {
+//                        work_with_id =  TP_work_with_id_list[i] + "," + work_with_id ;
+//                        work_with_name = TP_work_with_name_list[i]  + "," + work_with_name;
+                cbo_helper.insertDrWorkWith(TP_work_with_name_list[i], TP_work_with_id_list[i]);
+            }
+            cbo_helper.insertDrWorkWith("Independent", "" + PA_ID);
+
+            work_with_name = TP_work_with_name;
+            work_with_id = TP_work_with_id;
+//                    area_name=TP_area_name;
+//                    area_id=TP_area_id;
+//                    root_name=TP_root_name;
+//                    root_id=TP_root_id;
+
+        }else{
+            work_with_name = "";
+            work_with_id = "";
+        }
+        setWorkwith(work_with_name);
+    }
 
     private void openArea(Boolean freeze){
         if (MyCustumApplication.getInstance().getDCR().getAdditionalAreaApprovalReqd().equalsIgnoreCase("Y")) {
@@ -1296,7 +1331,8 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
 
     public void setReultForNonWork() {
-        if ((Custom_Variables_And_Method.DCR_ID .equals("0") ) || (Custom_Variables_And_Method.DCR_ID != null)) {
+        if ((Custom_Variables_And_Method.DCR_ID != null)
+                && (!Custom_Variables_And_Method.DCR_ID .equals("0") ) ) {
 
             //Intent intent = new Intent(context, NonWorking_DCR.class);
             Intent intent = new Intent(context, Expense.class);
@@ -1367,7 +1403,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
                     if (work_name.equals("") && !work_type_code.contains("_W") && !MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) {
                         Toast.makeText(context, "Select Work With", Toast.LENGTH_SHORT).show();
                     } else if (root_name.equals("") && !work_type_code.contains("_R")) {
-                        customVariablesAndMethod.msgBox(context,"Please Select Route Fisrt .....");
+                        customVariablesAndMethod.msgBox(context,"Please Select Route First .....");
                     }else if (getArea().trim().isEmpty()  && !work_type_code.contains("_A")
                             && MyCustumApplication.getInstance().getDCR().getAdditionalAreaValidationReqd().equalsIgnoreCase("Y")) {
                         customVariablesAndMethod.msgBox(context,"Please Select "+MyCustumApplication.getInstance().getDCR().getAreaTitle()+" First .....");
@@ -1652,7 +1688,9 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
     private void setUITitles(){
 
         if (MyCustumApplication.getInstance().getDCR().getShowWorkWithAsPerTP().equalsIgnoreCase("Y")
-                && !DIVERTWWYN.isChecked()){
+                && !DIVERTWWYN.isChecked() && (work_type_TPYN.isEmpty()
+                || work_type_TPYN.equalsIgnoreCase("1"))) {
+//                )){
             //get_workwith.setEnabled(false);
             //work_with_title.setText("WorkWith (As per TP)");
             work_with_title.setText(MyCustumApplication.getInstance().getDCR().getWorkWithTitle()+" (As per TP)");
@@ -1661,7 +1699,8 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
         }
 
         if (MyCustumApplication.getInstance().getDCR().getShowRouteAsPerTP().equalsIgnoreCase("Y")
-                && !ROUTEDIVERTYN.isChecked()){
+                && !ROUTEDIVERTYN.isChecked()&& (work_type_TPYN.isEmpty()
+                || work_type_TPYN.equalsIgnoreCase("1"))){
             //get_area.setEnabled(false);
             Route_Title.setText(MyCustumApplication.getInstance().getDCR().getRouteTitle()+" (As per TP)");
         }else{
@@ -1722,7 +1761,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             JSONArray jsonArray1 = new JSONArray(table0);
             for (int i = 0; i < jsonArray1.length(); i++) {
                 JSONObject c = jsonArray1.getJSONObject(i);
-                getworkingType.add(new SpinnerModel(c.getString("FIELD_NAME"),c.getString("WORKING_TYPE")));
+                getworkingType.add(new SpinnerModel(c.getString("FIELD_NAME"),c.getString("WORKING_TYPE"),c.getString("TPYN")));
             }
 
 
@@ -1865,6 +1904,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
             cbo_helper.deleteDCRDetails();
 
             new CustomTextToSpeech().setTextToSpeech("");
+            new DayPlanTextToSpeech().stopTextToSpeech();
 
             long val = cbo_helper.insertUtils(Custom_Variables_And_Method.pub_area);
             long val2 = cbo_helper.insertDcrDetails(Custom_Variables_And_Method.DCR_ID, Custom_Variables_And_Method.pub_area);
@@ -1878,6 +1918,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"working_head", work_val);
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"working_code", work_type_code);
+            customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"working_TPYN", work_type_TPYN);
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"BackDateReason", late_remark.getText().toString());
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"sDivert_Remark", divert_remark.getText().toString());
@@ -1885,6 +1926,7 @@ public class DCR_Root_new extends AppCompatActivity implements up_down_ftp.Adapt
 
             customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"dcr_date_real", real_date);
             cbo_helper.putDcrId(Custom_Variables_And_Method.DCR_ID);
+            MyCustumApplication.getInstance().getUser().setDCRId(Custom_Variables_And_Method.DCR_ID);
 
             MyCustumApplication.getInstance().getDCR().setAttachment(attachment.getAttachmentStr());
 

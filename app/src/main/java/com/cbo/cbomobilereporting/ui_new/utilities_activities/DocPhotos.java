@@ -84,6 +84,7 @@ public class DocPhotos extends AppCompatActivity {
 		customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 		cbohelp=new CBO_DB_Helper(getApplicationContext());
 		PA_ID= Custom_Variables_And_Method.PA_ID;
+		Dr_Id = getIntent().getStringExtra("dr_id");
 		who=getIntent().getIntExtra("who",1);
         if (who==0){
             Bundle getExtra = getIntent().getExtras();
@@ -97,7 +98,7 @@ public class DocPhotos extends AppCompatActivity {
 
 		String splcode;
 		splcode="";
-		Cursor c=cbohelp.getDoctorSpecialityCodeByDrId(Custom_Variables_And_Method.DR_ID);
+		Cursor c=cbohelp.getDoctorSpecialityCodeByDrId(Dr_Id);
 		if(c.moveToFirst())
 		{
 			do
@@ -276,9 +277,10 @@ public class DocPhotos extends AppCompatActivity {
 					Intent i=new Intent(getApplicationContext(),Show_Sample.class);
 					i.putExtra("samid", sample_id);
 					i.putExtra("sam_name", sample_name);
+                    i.putExtra("dr_id",Dr_Id);
 					i.putExtra("myid", id);
 					i.putExtra("title", item_name);
-					i.putExtra("rowid", rowid);
+					i.putExtra("rowid", position);
 					i.putExtra("who", who);
 
                     i.putExtra("sample_name_Stored", sample_name_Stored);
@@ -367,9 +369,9 @@ public class DocPhotos extends AppCompatActivity {
 		c.close();
 
 		 int cnt3=0;
-		 Cursor c3=cbohelp.getphitemSpl();
+		 Cursor c3=cbohelp.getphitemSpl(Custom_Variables_And_Method.DOCTOR_SPL_ID );
 		int cnt2=0;
-		Cursor c1=cbohelp.getSelectedFromDr(Custom_Variables_And_Method.DR_ID);
+		Cursor c1=cbohelp.getSelectedFromDr(Dr_Id);
 		//ArrayList<String> Dr_Item_list=new ArrayList<>();
 		if(c1.moveToFirst()){
 			do{
@@ -465,12 +467,49 @@ public class DocPhotos extends AppCompatActivity {
 					}
 				}
 			}
+			sortList(list);
 		}
 
 
 
        	return list;
     }
+
+    private List<DocSampleModel> sortList(List<DocSampleModel> list){
+    	int pointer = 0;
+		/*sample_id.clear();
+		sample_name.clear();*/
+		if (!MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("VISUALAID_SELECTEDONLY","").equalsIgnoreCase("Y")) {
+			for (int index = 0; index < list.size(); index++) {
+				DocSampleModel sampleModel = list.get(index);
+				if (sampleModel.isHighlighted()) {
+					pointer++;
+				} else if (sampleModel.get_Checked() && index != pointer) {
+					list.add(pointer, sampleModel);
+					sample_id.add(pointer, sampleModel.getId());
+					sample_name.add(pointer, sampleModel.getName());
+					pointer++;
+					list.remove(index + 1);
+					sample_id.remove(index + 1);
+					sample_name.remove(index + 1);
+				}
+
+
+			}
+		}else{
+			for (int index = 0; index < list.size(); index++) {
+				DocSampleModel sampleModel = list.get(index);
+				if (!(sampleModel.isHighlighted() || sampleModel.get_Checked())) {
+					list.remove(index );
+					sample_id.remove(index);
+					sample_name.remove(index--);
+				}
+			}
+
+		}
+
+    	return list;
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

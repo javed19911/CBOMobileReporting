@@ -601,7 +601,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
             item_qty = itemqty.toString();
             item_pob = itempob.toString();
             cbohelp.close();
-            if (checkIfPOB_Entered) {
+            //if (checkIfPOB_Entered) {
 
                 Bundle i = new Bundle();
                 i.putString("val", "");
@@ -610,7 +610,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
                 i.putDouble("resultpob",  mainval);
 
                 threadMsg(i);
-             }
+             //}
 
         dialog.dismiss();
     }

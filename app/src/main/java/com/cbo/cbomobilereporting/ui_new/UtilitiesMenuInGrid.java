@@ -299,7 +299,7 @@ public class UtilitiesMenuInGrid extends Fragment {
         if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
             AppAlert.getInstance().getAlert(context,"Logged-In as Support!!!","You are not allowed to Reset DCR....");
         }else if (networkUtil.internetConneted(context)) {
-            if (Custom_Variables_And_Method.DCR_ID.equals("0")) {
+            if (Custom_Variables_And_Method.DCR_ID.equals("0") || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "dcr_date_real").equals("")) {
                 customVariablesAndMethod.msgBox(context,"Please Plan your Dcr Day..");
             } else {
                 askForReset();
@@ -388,6 +388,7 @@ public class UtilitiesMenuInGrid extends Fragment {
 
         Intent i = new Intent(getActivity(), DocPhotos.class);
         i.putExtra("who",1);
+        i.putExtra("dr_id","0");
         startActivity(i);
 
 

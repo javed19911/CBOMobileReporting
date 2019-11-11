@@ -51,6 +51,7 @@ import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.MyCamera;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.pobmail.activity.pobmail.PobMail;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -269,8 +270,10 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 view = v;
                 if (checkDrawOverlayPermission()) {
                     //new SyncAllDataFirebase(context);
-                    LoginFake(false);
+                    //LoginFake(false);
 
+                    Intent intent = new Intent(context, PobMail.class);
+                    startActivity(intent);
 
                     //new CustomTextToSpeech().setTextToSpeech("1");
 

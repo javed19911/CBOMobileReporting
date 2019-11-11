@@ -14,6 +14,7 @@ import android.view.View;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Local.DayPlanAlertDB;
 import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.cbo.cbomobilereporting.databaseHelper.User.mUser;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
@@ -601,6 +602,8 @@ public class Service_Call_From_Multiple_Classes {
                        .setDescription("Please Wait....\nDownloading Miscellaneous data..").setResponse(new CBOServices.APIResponse() {
                             @Override
                             public void onComplete(Bundle message) {
+                                new DayPlanTextToSpeech().setTextToSpeech( context,"","",null);
+
                                 if (listener != null)
                                     listener.onSuccess(message);
 
@@ -637,8 +640,7 @@ public class Service_Call_From_Multiple_Classes {
 
             Intent i = new Intent(context, LoginMain.class);
             ((CustomActivity) context).stopLoctionService();
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
             ((CustomActivity) context).finish();
@@ -663,6 +665,7 @@ public class Service_Call_From_Multiple_Classes {
                                     listener.onSuccess(message);
 
                                 Intent i = new Intent(context, LoginMain.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                 ((CustomActivity) context).stopLoctionService();
                                 context.startActivity(i);
                                 ((CustomActivity) context).finish();
@@ -713,6 +716,7 @@ public class Service_Call_From_Multiple_Classes {
         customMethod.stopAlarm10Sec();
         customMethod.stopDOB_DOA_Remainder();
         new CustomTextToSpeech().stopTextToSpeech();
+        new DayPlanTextToSpeech().stopTextToSpeech();
 
         new MainDB().delete(null);
         //MyCustumApplication.getInstance().updateUser();
@@ -844,7 +848,7 @@ public class Service_Call_From_Multiple_Classes {
 
 
                 // fmcgddl_2
-                parseFMCG(context,new JSONArray(result.getString("Tables12")),new JSONArray(result.getString("Tables13")));
+                parseFMCG(context,new JSONArray(result.getString("Tables12")),new JSONArray(result.getString("Tables13")),new JSONArray(result.getString("Tables14")));
 
 
             /*} catch (JSONException e) {
@@ -864,7 +868,7 @@ public class Service_Call_From_Multiple_Classes {
     }
 
 
-    public void parseFMCG(Context context,JSONArray controls,JSONArray menus) throws JSONException {
+    public void parseFMCG(Context context,JSONArray controls,JSONArray menus,JSONArray DayPlanAlert) throws JSONException {
         try {
             // fmcgddl_2
             SharedPreferences.Editor editor = context.getSharedPreferences(Custom_Variables_And_Method.FMCG_PREFRENCE, context.MODE_PRIVATE).edit();
@@ -963,9 +967,13 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("DRSALEMSG_FINALSUBMITYN", c.getString("DRSALEMSG_FINALSUBMITYN"));
 
                 editor.putString("DASHBOARD_TYPE", c.getString("DASHBOARD_TYPE"));
+                editor.putString("DAYPLAN_REMINDER_FTIME", c.getString("DAYPLAN_REMINDER_FTIME"));
+                editor.putString("VISUALAID_SELECTEDONLY", c.getString("VISUALAID_SELECTEDONLY"));
 
-                editor.commit();
+                editor.apply();
+
                 MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("DASHBOARD_DATE", "");
+
                 Controls.getInstance().setGiftCampaignWiseReqd(c.getString("GIFTCAMP_WISEYN"));
                 Controls.getInstance().setGpsRequired(c.getString("GPRSYN"));
                 Controls.getInstance().setRouteWise(c.getString("ROUTE"));
@@ -986,6 +994,24 @@ public class Service_Call_From_Multiple_Classes {
                 cbo_helper.insertMenu(menu, menu_code, menu_name, menu_url, main_menu_srno);
             }
             MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","N");
+
+            if ( controls.length() > 0) {
+                DayPlanAlertDB dayPlanAlertDB = new DayPlanAlertDB(context);
+                dayPlanAlertDB.delete();
+                JSONObject control = controls.getJSONObject(0);
+                for (int i = 0; i < DayPlanAlert.length(); i++) {
+                    JSONObject object = DayPlanAlert.getJSONObject(i);
+                    String DAYPLAN_REMINDER_VOICE = control.getString("DAYPLAN_REMINDER_VOICE");
+                    String DAYPLAN_REMINDER_INTERVAL = control.getString("DAYPLAN_REMINDER_INTERVAL");
+                    String DAYPLAN_REMINDER_TTIME = control.getString("DAYPLAN_REMINDER_TTIME");
+                    String DAYPLAN_REMINDER_FTIME = control.getString("DAYPLAN_REMINDER_FTIME");
+                    String DCR_DATE = object.getString("DCR_DATE");
+                    dayPlanAlertDB.insert(DCR_DATE, DAYPLAN_REMINDER_FTIME, DAYPLAN_REMINDER_TTIME, DAYPLAN_REMINDER_INTERVAL, DAYPLAN_REMINDER_VOICE);
+                }
+            }
+
+
+
             //return true;
         }catch (JSONException e) {
             throw e;

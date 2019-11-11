@@ -10,6 +10,9 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true">
+
+        <activity android:name=".ui_new.dcr_activities.pobmail.activity.selection.Selection"></activity>
+        <activity android:name=".ui_new.dcr_activities.pobmail.activity.pobmail.PobMail"/>
         <activity android:name="bill.phystock.PhyStockEntry" />
         <activity android:name="bill.stockEntry.OpenScreenActivity" />
         <activity android:name="bill.openingStock.OpeningStockActivity"/>
@@ -438,6 +441,8 @@
             </intent-filter>
         </receiver>
         <receiver android:name="utils_new.CustomTextToSpeech" />
+
+        <receiver android:name="utils_new.DayPlanTextToSpeech" />
 
         <service android:name="services.NotificationService" />
         <service

@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,7 +57,8 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 	//ImageView sample;
 	
 	MediaPlayer mPlayer;
-	Button save,back_img,next_img;
+    ImageButton save,back_img,next_img;
+	ImageButton cancel;
 	String rowid="";
 	String item_name="";
 	String pic_id="";
@@ -78,7 +80,7 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 
 	private ArrayList<String> imageArray=null;
 
-
+    String Dr_Id="";
 	
 	final int stub_id = R.drawable.no_image;
 	
@@ -100,6 +102,7 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 		save= findViewById(R.id.save_sample_btn);
 		back_img=findViewById(R.id.back_img);
 		next_img=findViewById(R.id.next_img);
+        cancel=findViewById(R.id.cancel);
 
 		pic_id=getIntent().getExtras().getString("myid");
 		show_id=getIntent().getExtras().getStringArrayList("samid");
@@ -107,10 +110,12 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 		LAST_INDEX=(show_id.size()-1);
 		 zoom = new ZoomControls(Show_Sample.this);
 		cbohelp=new CBO_DB_Helper(getApplicationContext());
-		String Row_Id=getIntent().getExtras().getString("rowid");
-		ITEM_ID_INDEX=Integer.parseInt(Row_Id);
+//		String Row_Id=getIntent().getExtras().getString("rowid");
+//		ITEM_ID_INDEX=Integer.parseInt(Row_Id);
+		ITEM_ID_INDEX=getIntent().getExtras().getInt("rowid");
 		mPlayer = MediaPlayer.create(Show_Sample.this, R.raw.ring);
 
+        Dr_Id = getIntent().getStringExtra("dr_id");
 		who=getIntent().getExtras().getInt("who");
 		if (who==1){
 			save.setVisibility(View.INVISIBLE);
@@ -131,6 +136,8 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 			//DisplayImage(sample, pic_id);
 			//usingSimpleImage(sample);
 			back_img.setVisibility(View.INVISIBLE);
+			next_img.setVisibility(View.VISIBLE);
+			save.setVisibility(View.VISIBLE);
 			//usingSimpleImage(sample);
 			setReference();
 		} else if(ITEM_ID_INDEX==LAST_INDEX) {
@@ -139,6 +146,8 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 			//DisplayImage(sample, pic_id);
 			//usingSimpleImage(sample);
 			next_img.setVisibility(View.INVISIBLE);
+			back_img.setVisibility(View.VISIBLE);
+			save.setVisibility(View.VISIBLE);
 			//usingSimpleImage(sample);
 			setReference();
 		} else {
@@ -146,6 +155,7 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 
 			back_img.setVisibility(View.VISIBLE);
 			next_img.setVisibility(View.VISIBLE);
+			save.setVisibility(View.VISIBLE);
 			//DisplayImage(sample, pic_id);
 			//usingSimpleImage(sample);
 			//usingSimpleImage(sample);
@@ -172,6 +182,15 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 				showNextImage();
 			}
 		});
+
+        cancel.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                makeFullScreen();
+            }
+        });
 
 
 		back_img.setOnClickListener(new OnClickListener() {
@@ -235,6 +254,10 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 		showControl=false;
 
 		makeFullScreen();
+
+        if (dotsCount==1 && cancel.getVisibility() != View.VISIBLE){
+            makeFullScreen();
+        }
 		pager_indicator.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -279,6 +302,12 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 			save.setVisibility(View.VISIBLE);
 		}
 
+        if (cancel.getVisibility() == View.VISIBLE){
+            cancel.setVisibility(View.INVISIBLE);
+        }else{
+            cancel.setVisibility(View.VISIBLE);
+        }
+
     }
 
 	private void setUiPageViewController() {
@@ -316,7 +345,11 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 		for (int i = 0; i < dotsCount; i++) {
 			dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
 		}
-
+        if (dotsCount-1==position && cancel.getVisibility() != View.VISIBLE){
+            makeFullScreen();
+        }else if(dotsCount-1 != position && cancel.getVisibility() == View.VISIBLE){
+            makeFullScreen();
+        }
 		dots[position].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
 
 	}
@@ -390,21 +423,27 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 	    }
 	    */
 	    public void saveAndNextImages() {
-	    	String DR_ID=Custom_Variables_And_Method.DR_ID;
+	    	//String DR_ID=Custom_Variables_And_Method.DR_ID;
 			ArrayList<String>doclist=cbohelp.getDoctorList();
 			ArrayList<String>docitems=cbohelp.getDoctorAllItems();
 
-			if(doclist.contains(Custom_Variables_And_Method.DR_ID)&&(docitems.contains(show_id.get(ITEM_ID_INDEX)))) {
-				cbohelp.updateVisuals(DR_ID, show_id.get(ITEM_ID_INDEX), show_name.get(ITEM_ID_INDEX), "0", "0", "0","1");
+			if(doclist.contains(Dr_Id)&&(docitems.contains(show_id.get(ITEM_ID_INDEX)))) {
+				cbohelp.updateVisuals(Dr_Id, show_id.get(ITEM_ID_INDEX), show_name.get(ITEM_ID_INDEX), "0", "0", "0","1");
 			} else {
-				cbohelp.insertVisuals(DR_ID, show_id.get(ITEM_ID_INDEX), show_name.get(ITEM_ID_INDEX), "0", "0", "0","1");
+				cbohelp.insertVisuals(Dr_Id, show_id.get(ITEM_ID_INDEX), show_name.get(ITEM_ID_INDEX), "0", "0", "0","1");
 			}
+
 			ITEM_ID_INDEX=ITEM_ID_INDEX+1;
+			if (ITEM_ID_INDEX>LAST_INDEX){
+				ITEM_ID_INDEX = 0;
+			}
+
 			if(ITEM_ID_INDEX==0) {
 				prepareImageArray(show_id.get(ITEM_ID_INDEX),ITEM_ID_INDEX);
 				//DisplayImage(sample, show_id.get(ITEM_ID_INDEX+1));
 				//usingSimpleImage(sample);
 				back_img.setVisibility(View.INVISIBLE);
+				next_img.setVisibility(View.VISIBLE);
 				setReference();
 			}else if((ITEM_ID_INDEX>0)&&(ITEM_ID_INDEX<LAST_INDEX)) {
 				prepareImageArray(show_id.get(ITEM_ID_INDEX),ITEM_ID_INDEX);
@@ -412,11 +451,15 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 				//DisplayImage(sample, show_id.get(ITEM_ID_INDEX+1));
 				//usingSimpleImage(sample);
 				back_img.setVisibility(View.VISIBLE);
+				next_img.setVisibility(View.VISIBLE);
+				save.setVisibility(View.VISIBLE);
 				setReference();
 			}else if(ITEM_ID_INDEX==LAST_INDEX) {
+				prepareImageArray(show_id.get(ITEM_ID_INDEX),ITEM_ID_INDEX);
 				next_img.setVisibility(View.INVISIBLE);
-				save.setVisibility(View.INVISIBLE);
+				save.setVisibility(View.VISIBLE);
 				back_img.setVisibility(View.VISIBLE);
+				setReference();
 			}
 
 			mPlayer.start();
@@ -432,6 +475,8 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 				//DisplayImage(sample, show_id.get(ITEM_ID_INDEX));
 				//usingSimpleImage(sample);
 				back_img.setVisibility(View.VISIBLE);
+				next_img.setVisibility(View.VISIBLE);
+				save.setVisibility(View.VISIBLE);
 				setReference();
 			} else if(ITEM_ID_INDEX==LAST_INDEX) {
 				prepareImageArray(show_id.get(ITEM_ID_INDEX),ITEM_ID_INDEX);
@@ -439,6 +484,7 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 				//usingSimpleImage(sample);
 				next_img.setVisibility(View.INVISIBLE);
 				back_img.setVisibility(View.VISIBLE);
+				save.setVisibility(View.VISIBLE);
 				setReference();
 			}
 			
@@ -453,7 +499,7 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 				//DisplayImage(sample, show_id.get(ITEM_ID_INDEX));
 				//usingSimpleImage(sample);
 				next_img.setVisibility(View.VISIBLE);
-				//save.setVisibility(View.VISIBLE);
+				save.setVisibility(View.VISIBLE);
 				setReference();
 			}else if(ITEM_ID_INDEX==0) {
 				prepareImageArray(show_id.get(ITEM_ID_INDEX),ITEM_ID_INDEX);

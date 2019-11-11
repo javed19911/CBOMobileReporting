@@ -402,6 +402,7 @@ public class Doctor_Sample extends AppCompatActivity {
                 } else {
                     Intent i = new Intent(Doctor_Sample.this, DocPhotos.class);
                     i.putExtra("who",0);
+                    i.putExtra("dr_id",dr_id);
                     i.putExtra("sample_name",sample_name);
                     i.putExtra("sample_pob",sample_pob);
                     i.putExtra("sample_sample",sample_sample);

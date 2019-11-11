@@ -14,28 +14,30 @@
         android:fitsSystemWindows="true"
         android:layout_below="@+id/include2" />
 
-    <Button
+    <ImageButton
         android:id="@+id/next_img"
         style="?android:attr/buttonStyleSmall"
-        android:background="@drawable/next"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:textColor="#ffffff"
+        android:src="@drawable/next"
+        android:layout_width="90dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/gray_circle"
         android:layout_centerInParent="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/back_img"
         style="?android:attr/buttonStyleSmall"
-        android:background="@drawable/previous"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:src="@drawable/previous"
+        android:layout_width="90dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/gray_circle"
         android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
-        android:textColor="#ffffff"
         />
 
 
@@ -61,17 +63,31 @@
 
 
 
-    <Button
+    <ImageButton
         android:id="@+id/save_sample_btn"
-        android:background="@drawable/save_next"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="10dp"
+        android:src="@drawable/save_next"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:padding="15dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/gray_circle"
         android:layout_gravity="center"
-        android:layout_marginRight="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:textColor="#ffffff" />
+        android:layout_centerInParent="true" />
+
+
+
+    <ImageButton
+        android:id="@+id/cancel"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/gray_circle"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_cancel_black_24dp"/>
 
 
 

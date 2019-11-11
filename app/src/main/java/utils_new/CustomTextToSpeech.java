@@ -11,9 +11,11 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
+import com.cbo.cbomobilereporting.databaseHelper.Call.Local.DayPlanAlertDB;
 
 import static android.content.Context.POWER_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -29,7 +31,6 @@ public class CustomTextToSpeech extends BroadcastReceiver  {
     private TextToSpeech tts;
     Custom_Variables_And_Method customVariablesAndMethod = Custom_Variables_And_Method.getInstance();
 
-
     Intent intent = new Intent( MyCustumApplication.getInstance(), CustomTextToSpeech.class);
     PendingIntent pendingIntent = PendingIntent.getBroadcast(
             MyCustumApplication.getInstance(), RQS_1, intent, 0);
@@ -37,7 +38,6 @@ public class CustomTextToSpeech extends BroadcastReceiver  {
 
 
     public void setTextToSpeech(String time) {
-
        Double alert_time =  Double.parseDouble(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(MyCustumApplication.getInstance(),"DCR_SUBMIT_TIME","0.0"));
        if (alert_time == 0)
            return;

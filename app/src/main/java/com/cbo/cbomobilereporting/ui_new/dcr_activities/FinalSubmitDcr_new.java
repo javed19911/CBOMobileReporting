@@ -52,6 +52,7 @@ import services.MyAPIService;
 import utils_new.AppAlert;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
+import utils_new.DayPlanTextToSpeech;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.GetVersionCode;
 import utils.networkUtil.AppPrefrences;
@@ -957,10 +958,13 @@ public class FinalSubmitDcr_new extends CustomActivity implements up_down_ftp.Ad
                                     customMethod.stopDOB_DOA_Remainder();
                                     new CustomTextToSpeech().stopTextToSpeech();
 
+
                                     new MainDB().delete(null);
                                     //MyCustumApplication.getInstance().updateUser();
 
                                     new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
+                                    new DayPlanTextToSpeech().setTextToSpeech( context,"","",null);
+
                                     /*Intent i = new Intent(getApplicationContext(), LoginFake.class);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1020,7 +1024,8 @@ public class FinalSubmitDcr_new extends CustomActivity implements up_down_ftp.Ad
         if ( c.getString("STATUS").equals("Y")) {
             String table1 = result.getString("Tables1");
             JSONArray jsonArray2 = new JSONArray(table1);
-            service.parseFMCG(context,jsonArray1,jsonArray2);
+            service.parseFMCG(context,jsonArray1,jsonArray2,
+                    new JSONArray(result.getString("Tables2")));
 
         }
 

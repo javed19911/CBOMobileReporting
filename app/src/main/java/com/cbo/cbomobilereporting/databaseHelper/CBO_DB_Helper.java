@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.cbo.cbomobilereporting.databaseHelper.Call.Local.PobMailDb;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mChemistCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpense;
@@ -29,7 +30,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 49;
+    private static final int DATABASE_VERSION = 50;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -300,6 +301,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_VSTOCK);
 
+        db.execSQL(PobMailDb.PobMailDb_Query);
+
 
     }
 
@@ -534,6 +537,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL(RC_CHEM);
             case 48:
                 db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE+" ADD COLUMN CAMPAIGN text DEFAULT ''");
+            case 49:
+                db.execSQL(PobMailDb.PobMailDb_Query);
 
 
         }
@@ -1665,10 +1670,14 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor getphitemSpl() {
+    public Cursor getphitemSpl(int SPL_ID) {
         sd = this.getWritableDatabase();
         //Cursor c=sd.rawQuery("select phitem.item_name,phitem.item_id from phitemspl inner join phitem phitem on phitem.item_id=phitemspl.item_id where phitemspl.dr_spl_id="+MyConnection.DOCTOR_SPL_ID+" order by phitem.item_name", null);
-        return sd.rawQuery("select phitem.item_name,phitem.item_id from phitemspl inner join phitem phitem on phitem.item_id=phitemspl.item_id where  SHOW_YN = '1' and phitemspl.dr_spl_id=" + Custom_Variables_And_Method.DOCTOR_SPL_ID + " order by phitemspl.srno", null);
+        return sd.rawQuery("select phitem.item_name,phitem.item_id from phitemspl " +
+                "inner join phitem phitem on phitem.item_id=phitemspl.item_id " +
+                "where  SHOW_YN = '1' and " +
+                "phitemspl.dr_spl_id=" + SPL_ID
+                + " order by phitemspl.srno", null);
 
     }
 
