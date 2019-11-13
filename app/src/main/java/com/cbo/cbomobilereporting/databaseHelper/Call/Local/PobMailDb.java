@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.pobmail.fragment.pending.mChemist;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.pobmail.fragment.pending.mStockist;
 
 import java.util.ArrayList;
 
@@ -79,14 +80,23 @@ public class PobMailDb extends CBO_DB_Helper {
 
             if (c.moveToFirst()) {
                 do {
-                    chemists.add(new mChemist()
+                    mChemist chemist=new mChemist()
                             .setNAME(c.getString(c.getColumnIndex("chem_name")))
                             .setID (c.getInt(c.getColumnIndex("chem_id")))
                             .setRate( c.getString(c.getColumnIndex("rate")))
                             .setIS_SEND(c.getInt(c.getColumnIndex("Is_Send")))
                             .setItemId(c.getString(c.getColumnIndex("item_id")))
                             .setQTY(c.getString(c.getColumnIndex("qty")))
-                            .setAmount(c.getString(c.getColumnIndex("Amt"))));
+                            .setAmount(c.getString(c.getColumnIndex("Amt")));
+
+                   if (c.getInt(c.getColumnIndex("STK_ID")) != 0) {
+                       mStockist stk = new mStockist();
+                       stk.setID(c.getInt(c.getColumnIndex("STK_ID")));
+                       stk.setNAME(c.getString(c.getColumnIndex("STK_NAME")));
+                       chemist.setSelectedStokist(stk);
+                   }
+
+                    chemists.add(chemist);
                             // c.getString(c.getColumnIndex("DR_LAT_LONG3")), c.getString(c.getColumnIndex("CALLYN"))));
                 } while (c.moveToNext());
             }
