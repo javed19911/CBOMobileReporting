@@ -94,11 +94,11 @@ public class PobMail extends CustomActivity implements iPobMail, IPobStoKist {
 
     @Override
     public String getActivityTitle() {
-        return null;
+        return getIntent().getStringExtra("title");
     }
 
     @Override
-    public void setTile(String var1) {
+    public void setTile(String titleTxt) {
         androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -109,7 +109,7 @@ public class PobMail extends CustomActivity implements iPobMail, IPobStoKist {
         }
 
         TextView title = toolbar.findViewById(R.id.title);
-        title.setText("Pob Mail");
+        title.setText(titleTxt);
     }
 
     @Override

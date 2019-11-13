@@ -50,7 +50,7 @@ public class CaptureSignatureMain extends AppCompatActivity {
             // TODO Auto-generated method stub
             Intent i = new Intent(CaptureSignatureMain.this, CaptureSignature.class);
             startActivityForResult(i, 0);
-            finish();
+            //finish();
         }
     };
 

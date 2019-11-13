@@ -39,17 +39,17 @@ public class VM_DCR_Report extends ViewModel {
     }
 
     public interface OnResultListener{
-         void onSuccess(ArrayList<mDCR_Report> item);
-         void onError(String Title, String error);
+        void onSuccess(ArrayList<mDCR_Report> item);
+        void onError(String Title, String error);
     }
 
-    public void getDCRReports(Context context, String lastPaId, String monthId, OnResultListener listener){
+    public void getDCRReports(Context context,String dcr_id, String lastPaId, String monthId, OnResultListener listener){
         if (this.lastPaId != lastPaId || this.monthId != monthId)
             mDCR_reports = null;
         this.lastPaId = lastPaId;
         this.monthId = monthId;
         if (mDCR_reports == null){
-            showReportsToUI((AppCompatActivity) context,listener);
+            showReportsToUI((AppCompatActivity) context,listener,dcr_id);
         }else{
             listener.onSuccess(mDCR_reports);
         }
@@ -64,13 +64,15 @@ public class VM_DCR_Report extends ViewModel {
                 .setDP_MissedTypeReq(false);
     }
 
-    private void showReportsToUI(final AppCompatActivity context, OnResultListener listener){
+    private void showReportsToUI(final AppCompatActivity context,
+                                 OnResultListener listener,String dcr_id){
 
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
         request.put("sPaId", lastPaId);
         request.put("sMonth", monthId);
         request.put("sVerify", "0");
+        request.put("DCR_ID", dcr_id);
         request.put("sLoginPaId", MyCustumApplication.getInstance().getUser().getID());
         request.put("sEntryDate", "0");
 
@@ -78,7 +80,7 @@ public class VM_DCR_Report extends ViewModel {
         tables.add(0);
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DCRLISTWITHEXPENSEGRID_1", request)
+                .execute(new ResponseBuilder("DCRLISTWITHEXPENSEGRID_2", request)
                         .setTables(tables)
                         .setDescription("Please Wait..")
                         .setResponse(new CBOServices.APIResponse() {
@@ -129,6 +131,9 @@ public class VM_DCR_Report extends ViewModel {
                                     String exp=c.getString("DA_TYPE");
 
                                     rptModel.setTtlexp(exp);
+                                    String rxCaps=c.getString("RX_CAPS");
+
+                                    rptModel.setRxCaps(rxCaps);
                                     mDCR_reports.add(rptModel);
 
 

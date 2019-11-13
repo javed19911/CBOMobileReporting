@@ -16,6 +16,7 @@ import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.mail_activities.Notification;
+import com.cbo.cbomobilereporting.ui_new.mail_activities.popup_noti.PopUpModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class Notification_Adapter extends BaseAdapter {
     HashMap<String, ArrayList<String>> dataList;
     Custom_Variables_And_Method customVariablesAndMethod;
 
-
+    ArrayList<PopUpModel> arrayList = new ArrayList<>();
 
 
 
@@ -110,14 +111,52 @@ public class Notification_Adapter extends BaseAdapter {
                     String[] msglist=msg2.split("@");
 
                     String msg3="";
-                    for (String aMsglist : msglist) {
+                   /* for (String aMsglist : msglist) {
                         String msg1 = aMsglist;
                         msg1 = msg1.replace("#_", "@");
                         msg3=msg3.concat(msg1 + "\n");
                     }
-                    if (msglist.length>1) {
-                        customVariablesAndMethod.getAlert(context, dataList.get("Title").get(position), msglist);
-                    }else{
+
+*/
+                    arrayList.clear();
+                    for (String aMsglist : msglist) {
+                        String msg1 = aMsglist;
+                        msg1 = msg1.replace("#_", "@");
+                        String[] msgC = msg1.split("!@");
+                        String textMsg = msgC[0];
+                        String[] th = textMsg.split(":");
+
+                        String tName=th[0];
+                        String tValue="";
+                        if(th.length>1){
+                            tValue=th[1];
+                        }
+
+
+                        String dcrCode = "";
+                        String page = "";
+                        if (msgC.length > 1) {
+
+                            String[]   code = msgC[1].split(",");
+
+                            if (code.length > 1) {
+                                page = code[0];
+                                dcrCode = code[1];
+                            }else{
+                                page = code[0];
+                            }
+                        }
+
+
+
+                        arrayList.add(new PopUpModel( page, dcrCode,tName,tValue));
+                        msg3 = msg3.concat(msg1 + "\n");
+                    }
+
+                    if (msglist.length > 1) {
+//                        customVariablesAndMethod.getAlert(context, dataList.get("Title").get(position), msglist);
+                        customVariablesAndMethod.getAlertArrayR(context, dataList.get("Title").get(position), arrayList);
+                    } else {
                         customVariablesAndMethod.getAlert(context, dataList.get("Title").get(position), msg3);
                     }
                 }else {

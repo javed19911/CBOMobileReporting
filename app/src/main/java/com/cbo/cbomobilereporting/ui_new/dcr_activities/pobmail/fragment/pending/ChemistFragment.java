@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import utils_new.AppAlert;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
@@ -111,6 +112,9 @@ public class ChemistFragment extends Fragment implements iChemist, IPobStoKist {
                         Intent intent = new Intent(context, Selection.class);
                         intent.putExtra("DATA", chemests.get(position));
                         startActivityForResult(intent, STOKIST_FILTER);
+                    }else {
+
+                        AppAlert.getInstance().getAlert(context, "Alert", "Stokist Data Not Found");
                     }
                 }
 

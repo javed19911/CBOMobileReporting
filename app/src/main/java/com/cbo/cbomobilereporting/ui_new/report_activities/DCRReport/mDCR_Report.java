@@ -12,6 +12,16 @@ public class mDCR_Report {
     String ttlDrRiminder, ttlNonDoctor, ttlTenivia;
     String dairyCount, PolutaryCount;
     String remark;
+
+    public String getRxCaps() {
+        return rxCaps;
+    }
+
+    public void setRxCaps(String rxCaps) {
+        this.rxCaps = rxCaps;
+    }
+
+    String rxCaps;
     boolean blinkRemark = false;
 
 

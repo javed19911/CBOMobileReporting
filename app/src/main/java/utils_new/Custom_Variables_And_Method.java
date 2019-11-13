@@ -42,6 +42,8 @@ import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.emp_tracking.MyLoctionService;
+import com.cbo.cbomobilereporting.ui_new.mail_activities.popup_noti.PopUpModel;
+import com.cbo.cbomobilereporting.ui_new.popup_noti.PopUpAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -63,6 +65,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import locationpkg.LocationTest;
 import utils.networkUtil.NetworkUtil;
 
@@ -217,6 +221,50 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         IntentFilter batrylevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         context.registerReceiver(br, batrylevelFilter);
     }
+
+    public void getAlertArrayR(Context context, String title, ArrayList<PopUpModel> arrayList) {
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogLayout = inflater.inflate(R.layout.alert_view_recycler, null);
+        final TextView Alert_title = (TextView) dialogLayout.findViewById(R.id.title);
+
+        final RecyclerView recyclerView = (RecyclerView) dialogLayout.findViewById(R.id.recyclerView);
+        final Button Alert_Positive = (Button) dialogLayout.findViewById(R.id.positive);
+        Alert_title.setText(title);
+
+        final TextView pa_id_txt = (TextView) dialogLayout.findViewById(R.id.PA_ID);
+        pa_id_txt.setText("" + PA_ID);
+
+        final TextView report = (TextView) dialogLayout.findViewById(R.id.report);
+
+
+        if (arrayList == null) {
+            recyclerView.setVisibility(View.GONE);
+        } else {
+
+            recyclerView.setHasFixedSize(true);
+
+            // use a linear layout manager
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(layoutManager);
+
+            // specify an adapter (see also next example)
+            PopUpAdapter mAdapter = new PopUpAdapter(context, arrayList);
+            recyclerView.setAdapter(mAdapter);
+        }
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        final AlertDialog dialog = builder1.create();
+        Alert_Positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(dialogLayout);
+        dialog.show();
+    }
+
 
     public void getAlert(Context context, String title, String message) {
         getAlert(context,title,message,null,null,false);

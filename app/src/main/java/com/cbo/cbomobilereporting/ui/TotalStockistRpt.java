@@ -38,6 +38,7 @@ public class TotalStockistRpt extends AppCompatActivity {
     ListView mylist;
     String mDate, newDate;
     String mPAID="";
+    String DCR_ID="";
     SimpleAdapter sm = null;
     ResultSet rs;
    ArrayList<Map<String,String>> data =new ArrayList<Map<String, String>>();
@@ -72,6 +73,10 @@ public class TotalStockistRpt extends AppCompatActivity {
         back = (Button) findViewById(R.id.bt_stk_back);
         mDate = TotalStockistRpt.this.getIntent().getExtras().getString("date");
 
+        if (getIntent().getExtras().getString("DCR_ID") != null){
+            DCR_ID = getIntent().getExtras().getString("DCR_ID");
+        }
+
         if (getIntent().getExtras().getString("PAID") == null){
             mPAID = CBOReportView.lastPaId;
         }else{
@@ -104,10 +109,11 @@ public class TotalStockistRpt extends AppCompatActivity {
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
         request.put("iPaId", mPAID);
+        request.put("DCR_ID", DCR_ID);
         request.put("sDCR_DATE", mDate);
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("STOCKIST_VIEW", request)
+                .execute(new ResponseBuilder("STOCKIST_VIEW_1", request)
                         .setMultiTable(false)
                         .setDescription("Please Wait..")
                         .setResponse(new CBOServices.APIResponse() {

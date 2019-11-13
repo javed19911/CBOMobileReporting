@@ -270,10 +270,7 @@ public class LoginFake extends CustomActivity implements  LocationListener,
                 view = v;
                 if (checkDrawOverlayPermission()) {
                     //new SyncAllDataFirebase(context);
-                    //LoginFake(false);
-
-                    Intent intent = new Intent(context, PobMail.class);
-                    startActivity(intent);
+                    LoginFake(false);
 
                     //new CustomTextToSpeech().setTextToSpeech("1");
 

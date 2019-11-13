@@ -91,7 +91,7 @@ public class DcrReportsActivity extends AppCompatActivity {
                 startActivity(intent);*/
 
 
-                    vm_dcr_report.getDCRReports(context, fTeamMonthDivision.getViewModel().getUser().getId(), fTeamMonthDivision.getViewModel().getMonth().getId(), new VM_DCR_Report.OnResultListener() {
+                    vm_dcr_report.getDCRReports(context,"",fTeamMonthDivision.getViewModel().getUser().getId(), fTeamMonthDivision.getViewModel().getMonth().getId(), new VM_DCR_Report.OnResultListener() {
 
                         @Override
                         public void onSuccess(ArrayList<mDCR_Report> item) {

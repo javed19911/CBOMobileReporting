@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_margin="3dp"
+    android:background="#aaa"
+    android:elevation="5dp"
+    card_view:cardCornerRadius="7dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fa0B89ED"
+        android:elevation="3dp"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Title"
+        android:textColor="@android:color/white"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:layout_below="@+id/title"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#8c8c8c"
+        android:padding="5dp"
+        android:visibility="gone" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/container_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:paddingBottom="50dp"
+                    android:layout_marginTop="40dp"
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+                <!-- <include
+                     android:id="@+id/attach_perview"
+                     android:visibility="gone"
+                     layout="@layout/activity_preiew_attachment"/>-->
+
+                <RelativeLayout
+                    android:paddingBottom="10dp"
+                    android:background="@color/White_new"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/container_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center">
+
+
+                    <Button
+                        android:id="@+id/negative"
+                        android:layout_width="90dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toEndOf="@+id/positive"
+                        android:layout_toRightOf="@+id/positive"
+                        android:background="@drawable/button_alert"
+                        android:text="Cancel"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12dp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/positive"
+                        android:layout_width="90dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/button_alert"
+                        android:text="Ok"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12dp"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/container_2"
+                    android:gravity="right">
+
+                    <TextView
+                        android:id="@+id/PA_ID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="49dp"
+
+                        android:gravity="left"
+                        android:text="PA_ID"
+                        android:textColor="#aaa"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/report"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/body"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Error? Click Me to Report Now....."
+                        android:textColor="#F00"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+</androidx.cardview.widget.CardView>

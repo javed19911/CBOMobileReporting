@@ -101,6 +101,10 @@ public class DcrNewAdapter extends RecyclerView.Adapter<DcrNewAdapter.MyviewHold
             holder.totalChem_text.setText("Total " + cbohelp.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL").split(" ")[0] + " :");
         }
 
+
+        holder.totalTenivia_text.setText(rptmodel.getRxCaps());
+
+
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Tenivia_NOT_REQUIRED","Y").equals("N")) {
             holder.totalTenivia_text.setText(cbohelp.getMenu("DCR", "D_DR_RX").get("D_DR_RX"));
         }

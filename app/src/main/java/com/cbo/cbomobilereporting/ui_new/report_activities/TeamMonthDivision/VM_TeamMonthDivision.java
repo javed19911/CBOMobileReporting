@@ -191,7 +191,7 @@ public class VM_TeamMonthDivision extends ViewModel{
         }
     }
 
-    private void setUser(mUser user) {
+    public void setUser(mUser user) {
         this.user = user;
 
         if (getMissed_call_Filter(user).size() >= 1){

@@ -1,18 +1,24 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport;
 
 import android.app.ProgressDialog;
+
 import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Context;
 import android.os.Bundle;
+
+import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mUser;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.core.view.ViewCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,17 +32,17 @@ import java.util.ArrayList;
 import utils_new.AppAlert;
 
 
-public class DcrReportsNew extends AppCompatActivity{
+public class DcrReportsNew extends AppCompatActivity {
+    public static String lastPaId;
+    public ProgressDialog progress1;
     Context context;
     RecyclerView listView;
     VM_DCR_Report vm_dcr_report;
     DcrNewAdapter rptAdapter;
-    public static String lastPaId;
-    public ProgressDialog progress1;
     F_TeamMonthDivision fTeamMonthDivision;
-    private Menu menu;
     AppBarLayout appBarLayout;
-
+    String mDCR_ID = "";
+    private Menu menu;
     private DcrRawAdapter mAdapter;
     private ArrayList<mDcrGrid> movieList = new ArrayList<>();
 
@@ -51,7 +57,7 @@ public class DcrReportsNew extends AppCompatActivity{
         context = this;
 
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
@@ -59,13 +65,20 @@ public class DcrReportsNew extends AppCompatActivity{
 
         }
 
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-       appBarLayout=(AppBarLayout)findViewById(R.id.app_bar) ;
-
         fTeamMonthDivision = (F_TeamMonthDivision) getSupportFragmentManager().findFragmentById(R.id.dcrfragment);
+        if (getIntent().getStringExtra("DCR_ID") != null) {
+            mDCR_ID = getIntent().getStringExtra("DCR_ID");
+        }
+
+
+
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+
+
         vm_dcr_report = ViewModelProviders.of(DcrReportsNew.this).get(VM_DCR_Report.class);
         vm_dcr_report.setFragment(fTeamMonthDivision);
-        listView =findViewById(R.id.dcr_report_content);
+        listView = findViewById(R.id.dcr_report_content);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,12 +86,12 @@ public class DcrReportsNew extends AppCompatActivity{
             public void onClick(View view) {
 
 
-                if (fTeamMonthDivision.getViewModel().getUser() == null
+                if ((fTeamMonthDivision.getViewModel().getUser() == null
                         || fTeamMonthDivision.getViewModel().getUser().getId().isEmpty()
-                        || fTeamMonthDivision.getViewModel().getUser().getId().equalsIgnoreCase("0")) {
+                        || fTeamMonthDivision.getViewModel().getUser().getId().equalsIgnoreCase("0")) && mDCR_ID.isEmpty()) {
                     AppAlert.getInstance().getAlert(context, "Employee ?", "Please Select Employee from the list....");
                 } else {
-                    vm_dcr_report.getDCRReports(context, fTeamMonthDivision.getViewModel().getUser().getId(), fTeamMonthDivision.getViewModel().getMonth().getId(), new VM_DCR_Report.OnResultListener() {
+                    vm_dcr_report.getDCRReports(context, mDCR_ID, fTeamMonthDivision.getViewModel().getUser().getId(),mDCR_ID.isEmpty()? fTeamMonthDivision.getViewModel().getMonth().getId():"", new VM_DCR_Report.OnResultListener() {
 
                         @Override
                         public void onSuccess(ArrayList<mDCR_Report> item) {
@@ -125,26 +138,36 @@ public class DcrReportsNew extends AppCompatActivity{
         });
 
         AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
 
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
+
+        if(!mDCR_ID.isEmpty()){
+//            hideOption(R.id.action_info);
+            fTeamMonthDivision.getViewModel().setUser(new mUser("",mDCR_ID));
+            fab.performClick();
+
+        }else {
+
+            mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                boolean isShow = false;
+                int scrollRange = -1;
+
+                @Override
+                public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                    if (scrollRange == -1) {
+                        scrollRange = appBarLayout.getTotalScrollRange();
+                    }
+                    if (scrollRange + verticalOffset == 0) {
+                        showOption(R.id.action_info);
+                        // collapsingToolbarLayout.setTitle("Title");
+                        isShow = true;
+                    } else if (isShow) {
+                        hideOption(R.id.action_info);
+                        // collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                        isShow = false;
+                    }
                 }
-                if (scrollRange + verticalOffset == 0) {
-                    showOption(R.id.action_info);
-                    // collapsingToolbarLayout.setTitle("Title");
-                    isShow = true;
-                } else if (isShow) {
-                    hideOption(R.id.action_info);
-                    // collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
-                    isShow = false;
-                }
-            }
-        });
+            });
+        }
     }
 
 
@@ -157,19 +180,18 @@ public class DcrReportsNew extends AppCompatActivity{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-       if (id == R.id.action_info) {
+        if (id == R.id.action_info) {
 
-         if (appBarLayout.getTop() < 0)
-                    appBarLayout.setExpanded(true);
-                else
-                    appBarLayout.setExpanded(false);
+            if (appBarLayout.getTop() < 0)
+                appBarLayout.setExpanded(true);
+            else
+                appBarLayout.setExpanded(false);
             return true;
-        }else {
-           finish();
-       }
+        } else {
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
@@ -180,7 +202,6 @@ public class DcrReportsNew extends AppCompatActivity{
         hideOption(R.id.action_info);
         return true;
     }
-
 
 
     private void hideOption(int id) {

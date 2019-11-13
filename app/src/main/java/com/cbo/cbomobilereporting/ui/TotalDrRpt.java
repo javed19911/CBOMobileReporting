@@ -35,6 +35,7 @@ public class TotalDrRpt extends AppCompatActivity {
     ListView mylist;
     String mDate,call_type,Title;
     String mPAID="";
+    String DCR_ID="";
     ResultSet rs;
     ArrayList<Map<String,String>> data=new ArrayList<Map<String, String>>();
     Custom_Variables_And_Method customVariablesAndMethod;
@@ -71,6 +72,9 @@ public class TotalDrRpt extends AppCompatActivity {
         call_type= getIntent().getExtras().getString("call_type");
         Title= getIntent().getExtras().getString("Title");
 
+        if (getIntent().getExtras().getString("DCR_ID") != null){
+            DCR_ID = getIntent().getExtras().getString("DCR_ID");
+        }
         if (getIntent().getExtras().getString("PAID") == null){
             mPAID = CBOReportView.lastPaId;
         }else{
@@ -101,11 +105,12 @@ public class TotalDrRpt extends AppCompatActivity {
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
         request.put("iPaId", mPAID);
+        request.put("DCR_ID", DCR_ID);
         request.put("sDCR_DATE", mDate);
         request.put("sCALL_TYPE", call_type);
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DOCTOR_VIEW_1", request)
+                .execute(new ResponseBuilder("DOCTOR_VIEW_2", request)
                         .setMultiTable(false)
                         .setDescription("Please Wait..")
                         .setResponse(new CBOServices.APIResponse() {

@@ -49,6 +49,7 @@ public class TotalChemistRpt extends AppCompatActivity {
     Context context;
     Button back;
     SimpleAdapter simpleAdapter;
+    String DCR_ID="";
 
     ExpandableListAdapter listAdapter;
     ExpandableListView doctor;
@@ -92,7 +93,9 @@ public class TotalChemistRpt extends AppCompatActivity {
 
         back =(Button) findViewById(R.id.bt_chem_back);
 
-
+        if (getIntent().getExtras().getString("DCR_ID") != null){
+            DCR_ID = getIntent().getExtras().getString("DCR_ID");
+        }
         mDate=TotalChemistRpt.this.getIntent().getExtras().getString("date");
         if (getIntent().getExtras().getString("PAID") == null){
             mPAID = CBOReportView.lastPaId;
@@ -123,10 +126,11 @@ public class TotalChemistRpt extends AppCompatActivity {
         HashMap<String,String> request=new HashMap<>();
         request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
         request.put("iPaId", mPAID);
+        request.put("DCR_ID", DCR_ID);
         request.put("sDCR_DATE", mDate);
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("CHEMIST_VIEW", request)
+                .execute(new ResponseBuilder("CHEMIST_VIEW_1", request)
                         .setMultiTable(false)
                         .setDescription("Please Wait..")
                         .setResponse(new CBOServices.APIResponse() {

@@ -47,6 +47,7 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Location.CentroidLocation;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.pobmail.activity.pobmail.PobMail;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.FinalSubmitDcr_new;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.NonListedCall;
@@ -385,6 +386,15 @@ public class DcrmenuInGrid extends Fragment {
                     setLetLong(menuCodeOnClick);
                     Intent i = new Intent(getActivity(), CustomerCall.class);
                     i.putExtra("title",cboDbHelper.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL"));
+                    startActivity(i);
+                }
+                break;
+            }
+            case "D_CS_SMS": {
+                if (IsCallAllowed(true)){
+                    setLetLong(menuCodeOnClick);
+                    Intent i = new Intent(getActivity(), PobMail.class);
+                    i.putExtra("title",cboDbHelper.getMenu("DCR", "D_CS_SMS").get("D_CS_SMS"));
                     startActivity(i);
                 }
                 break;
