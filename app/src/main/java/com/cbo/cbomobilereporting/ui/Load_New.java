@@ -4,15 +4,13 @@ package com.cbo.cbomobilereporting.ui;
 
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,8 +18,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.flurry.android.FlurryAgent;
-
-import utils.ExceptionHandler;
 
 public class Load_New extends AppCompatActivity{
 	Button load;

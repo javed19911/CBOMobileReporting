@@ -2,7 +2,7 @@ package com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

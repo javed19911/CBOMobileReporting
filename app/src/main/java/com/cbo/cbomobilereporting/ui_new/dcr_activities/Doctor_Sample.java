@@ -1,5 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +10,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,6 @@ import com.cbo.cbomobilereporting.databaseHelper.Call.mDrCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.cbo.cbomobilereporting.ui.GridViewActivity;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui.PrescribeNew;
 import com.cbo.cbomobilereporting.ui.VideoPlay;
 import com.flurry.android.FlurryAgent;
@@ -87,7 +87,7 @@ public class Doctor_Sample extends AppCompatActivity {
     HashMap<String, HashMap<String, ArrayList<String>>> summary_list=new HashMap<>();
     HashMap<String, ArrayList<String>> doctor_list_summary=new HashMap<>();
     ExpandableListAdapter listAdapter;
-    String sample_name="",sample_pob="",sample_sample="",sample_noc="";
+    String sample_name="",sample_pob="",sample_sample="",sample_noc="",sample_rate;
     String gift_name="",gift_qty="",call="N";
     String workwith1,workwith2,workwith34,loc,time;
     Boolean sample_added=false;
@@ -130,7 +130,7 @@ public class Doctor_Sample extends AppCompatActivity {
         setContentView(R.layout.doctor_sample);
         FlurryAgent.logEvent("Doctor_Sample");
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
         setSupportActionBar(toolbar);
         hader_text.setText("Doctor Sample");
@@ -318,13 +318,17 @@ public class Doctor_Sample extends AppCompatActivity {
                         String[] sample_qty1= doctor_list.get("sample_qty").get(0).split(",");
                         String[] sample_pob1= doctor_list.get("sample_pob").get(0).split(",");
                         String[] sample_noc1= doctor_list.get("sample_noc").get(0).split(",");
+                        String[] sample_rate1= doctor_list.get("sample_rate").get(0).split(",");
 
                         sample_name=doctor_list.get("sample_name").get(0);
                         sample_sample=doctor_list.get("sample_qty").get(0);
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
-
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        String[] sample_rate = null;
+                       /* if (childText.containsKey("sample_rate")) {
+                            sample_rate = childText.get("sample_rate").get(childPosition).isEmpty()? null : childText.get("sample_rate").get(childPosition).split(",");
+                        }*/
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }else{
                         sample_added=false;
                         sample_name="";
@@ -430,6 +434,7 @@ public class Doctor_Sample extends AppCompatActivity {
 
                     Bundle b=new Bundle();
                     b.putString("intent_fromRcpaCAll","dr");
+                    b.putString("title",gift.getText().toString());
                     b.putString("gift_name", gift_name);
                     b.putString("gift_qty",gift_qty);
                     new Dr_Gift_Dialog(context,mHandler,b,GIFT_DILOG).Show();
@@ -525,13 +530,14 @@ public class Doctor_Sample extends AppCompatActivity {
         later.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                /*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra("EXIT", true);
                 startActivity(intent);
-                finish();
+                finish();*/
+                MyCustumApplication.getInstance().Logout((Activity) context);
             }
         });
 
@@ -593,13 +599,14 @@ public class Doctor_Sample extends AppCompatActivity {
                     if(!call.equals("Y")) {
                         new Service_Call_From_Multiple_Classes().SendFCMOnCall(context, mHandler, MESSAGE_INTERNET_SEND_FCM,"D",dr_id,"");                    }else {
                         customVariablesAndMethod.msgBox(context, "Sample Saved Sucessfully....");
-                        Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                        /*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         intent.putExtra("EXIT", true);
                         startActivity(intent);
-                        finish();
+                        finish();*/
+                        MyCustumApplication.getInstance().Logout((Activity) context);
                     }
 
                 }
@@ -680,7 +687,7 @@ public class Doctor_Sample extends AppCompatActivity {
         return drlist;
     }
 
-    private void init(String[] sample_name, String[] sample_qty, String[] sample_pob,String[] sample_noc) {
+    private void init(String[] sample_name, String[] sample_qty, String[] sample_pob,String[] sample_noc,String[] sample_rate ) {
 
         Boolean showNOC=true;
         if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty()){
@@ -718,6 +725,16 @@ public class Doctor_Sample extends AppCompatActivity {
             tv3.setTypeface(null, Typeface.BOLD);
             tbrow0.addView(tv3);
         }
+
+        if (sample_rate != null) {
+            TextView tv4 = new TextView(context);
+            tv4.setPadding(5, 5, 5, 0);
+            tv4.setText("Amt.");
+            tv4.setTextColor(Color.WHITE);
+            tv4.setTypeface(null, Typeface.BOLD);
+            tbrow0.addView(tv4);
+        }
+
         stk.removeAllViews();
         stk.addView(tbrow0);
         for (int i = 0; i < sample_name.length; i++) {
@@ -743,6 +760,14 @@ public class Doctor_Sample extends AppCompatActivity {
             if (showNOC) {
                 TextView t4v = new TextView(context);
                 t4v.setText(sample_noc[i]);
+                t4v.setPadding(5, 5, 5, 0);
+                t4v.setTextColor(Color.BLACK);
+                t4v.setGravity(Gravity.CENTER);
+                tbrow.addView(t4v);
+            }
+            if (sample_rate != null) {
+                TextView t4v = new TextView(context);
+                t4v.setText(""+ String.format("%.2f",(Double.parseDouble( sample_pob[i]) * Double.parseDouble( sample_rate[i]))));
                 t4v.setPadding(5, 5, 5, 0);
                 t4v.setTextColor(Color.BLACK);
                 t4v.setGravity(Gravity.CENTER);
@@ -840,7 +865,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }
                     if (!doctor_list.get("gift_name").get(0).equals("")) {
                         String[] gift_name1= doctor_list.get("gift_name").get(0).split(",");
@@ -872,7 +897,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }
                     if (!doctor_list.get("gift_name").get(0).equals("")) {
                         String[] gift_name1= doctor_list.get("gift_name").get(0).split(",");
@@ -924,13 +949,14 @@ public class Doctor_Sample extends AppCompatActivity {
 
             if (call.equals("Y")) {
                 if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "SAMPLE_POB_MANDATORY").equals("Y") || !sample_name.equals("")) {
-                    Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                   /* Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putExtra("EXIT", true);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+                    MyCustumApplication.getInstance().Logout((Activity) context);
                 }else {
                     customVariablesAndMethod.msgBox(context,"Plese enter POB quantity");
                 }
@@ -1004,7 +1030,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }else{
                         sample_added=false;
                         sample_name = "";
@@ -1058,7 +1084,7 @@ public class Doctor_Sample extends AppCompatActivity {
                         sample_pob=doctor_list.get("sample_pob").get(0);
                         sample_noc=doctor_list.get("sample_noc").get(0);
 
-                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1);
+                        init(sample_name1, sample_qty1, sample_pob1,sample_noc1,null);
                     }else{
                         sample_added=false;
                         sample_name = "";
@@ -1096,13 +1122,14 @@ public class Doctor_Sample extends AppCompatActivity {
                     break;
                 case MESSAGE_INTERNET_SEND_FCM:
                     customVariablesAndMethod.msgBox(context,"Sample Saved Sucessfully....");
-                    Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+                    /*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putExtra("EXIT", true);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+                    MyCustumApplication.getInstance().Logout((Activity) context);
                     break;
                 case 99:
                     if ((null != msg.getData())) {
@@ -1120,13 +1147,14 @@ public class Doctor_Sample extends AppCompatActivity {
     public void onBackPressed() {
         if (call.equals("Y")) {
             if (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "SAMPLE_POB_MANDATORY").equals("Y") || sample_added) {
-                Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+               /* Intent intent = new Intent(getApplicationContext(), LoginFake.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra("EXIT", true);
                 startActivity(intent);
-                finish();
+                finish();*/
+                MyCustumApplication.getInstance().Logout((Activity) context);
             }else {
                 customVariablesAndMethod.msgBox(context,"Plese enter POB quantity");
             }

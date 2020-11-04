@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.cbo.cbomobilereporting.ui.LoginMain;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.uenics.javed.CBOLibrary.Response;
@@ -32,7 +32,7 @@ import static java.lang.Thread.sleep;
 
 public class DCR_Summary_new extends CustomActivity {
 
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
 
     ExpandableListView doctor;
     Context context;
@@ -63,7 +63,7 @@ public class DCR_Summary_new extends CustomActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dcr__summary_new);
 
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
 
@@ -111,6 +111,9 @@ public class DCR_Summary_new extends CustomActivity {
         summary_list=new LinkedHashMap<>();
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Doctor_NOT_REQUIRED").equals("N")){
             summary_list.put(cboDbHelper.getMenu("DCR", "D_DRCALL").get("D_DRCALL"),doctor_list);
+        }
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"RXQTYYN").equals("Y")){
+            summary_list.put(cboDbHelper.getMenu("DCR", "D_DRCALL").get("D_DRCALL") + "(Rx)",tenivia_traker);
         }
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("N")){
@@ -185,12 +188,15 @@ public class DCR_Summary_new extends CustomActivity {
                     new Service_Call_From_Multiple_Classes().resetDCRNow(context);
 
                     Intent i = new Intent(context, LoginMain.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     stopLoctionService();
                     startActivity(i);
-                    finish();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        finishAffinity ();
+                    }else{
+                        finish();
+                    }
 
 
                     /*cboDbHelper.deleteLogin();

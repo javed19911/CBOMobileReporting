@@ -2,7 +2,7 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +14,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -46,6 +46,7 @@ import com.cbo.cbomobilereporting.ui_new.AttachImage;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.CallBuilder;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.WorkWith.WorkWithActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.WorkWith.WorkWithBuilder;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.lead.LeadActivity;
@@ -545,7 +546,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
 
     @Override
     public void setTile() {
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
 
@@ -635,6 +636,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
             customVariablesAndMethod.msgBox(context, "Please Select " + getCallBuilder().getTitle() + " First..");
         } else {
             SamplePOBBuilder samplePOBBuilder = new SamplePOBBuilder()
+                    .setCallType(CallType.CHEMIST)
                     .setType(SamplePOBBuilder.ItemType.LEAD)
                     .setTitle("Select Leads...")
                     .setItems(leads);
@@ -652,6 +654,7 @@ public class CustomerCall extends CustomActivity implements iCustomerCall,
             customVariablesAndMethod.msgBox(context, "Please Select " + getCallBuilder().getTitle() + " First..");
         } else {
             SamplePOBBuilder samplePOBBuilder = new SamplePOBBuilder()
+                    .setCallType(CallType.CHEMIST)
                     .setType(SamplePOBBuilder.ItemType.POB)
                     .setTitle("Select Products...")
                     .setItems(pob);

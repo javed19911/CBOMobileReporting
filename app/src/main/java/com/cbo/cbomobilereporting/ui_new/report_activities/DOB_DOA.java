@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import services.ServiceHandler;
-import utils.MyConnection;
 import utils.adapterutils.DOB_DOA_doc_Adapter;
 import utils.adapterutils.DOB_DOA_emp_Adapter;
 import utils.adapterutils.MarketingSales_model;
@@ -68,7 +67,7 @@ public class DOB_DOA extends AppCompatActivity {
     DOB_DOA_doc_Adapter salesAdapter;
     SimpleDateFormat month_date1;
 
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,7 @@ public class DOB_DOA extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dob__do);
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

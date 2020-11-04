@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.report_activities.Spo_Report;
+import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,8 +37,6 @@ import utils.MyConnection;
 import utils.adapterutils.SpoRptAdapter;
 import utils_new.Custom_Variables_And_Method;
 
-import static com.cbo.cbomobilereporting.ui.LayoutZoomer.CurrencyType;
-
 /**
  * Created by Akshit Udainiya on 9/14/15.
  */
@@ -51,7 +49,7 @@ public class SpoProductWiseStock extends AppCompatActivity {
     Context context;
    ListView myList;
     ZoomView myZoom;
-    String extraFromDate,extraTODate,extraCompanyName;
+    String extraCompanyName;
     CBO_DB_Helper myDataBase;
     SimpleAdapter simpleAdapter;
     ListView listView;
@@ -60,6 +58,7 @@ public class SpoProductWiseStock extends AppCompatActivity {
     LinkedHashMap<String,ArrayList<String>> data1;
     ArrayList<String> Consignee,Sales_Amount,Sales_Return,Breakage_Expiry,Credit_Note_Other,Net_Sales,Receipt,Outstanding,Stock_Amount,Stock_Qty,Exp_Qty,Exp_Amount;
     String Title="Stock Report",cnftxt="Distributors",rpt_typ="c";
+    mSPO _mSPO = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +101,8 @@ public class SpoProductWiseStock extends AppCompatActivity {
         myService = new ServiceHandler(context);
         myCon = new MyConnection(context);
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
-        extraFromDate =myIntent.getStringExtra("");
-        extraTODate = myIntent.getStringExtra("");
         extraCompanyName = myIntent.getStringExtra("company_name");
+        _mSPO = (mSPO) myIntent.getSerializableExtra("mSPO");
         myDataBase = new CBO_DB_Helper(context);
 
         dataList = new ArrayList<Map<String, String>>();
@@ -269,7 +267,8 @@ public class SpoProductWiseStock extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             String spoProductWise_Result = myService.getResponse_SPOCNFViewGrid(myDataBase.getCompanyCode(),
-                    extraCompanyName, Spo_Report.mIdFrom,Spo_Report.mIdTo,""+ Custom_Variables_And_Method.PA_ID,rpt_typ,CurrencyType);
+                    extraCompanyName, _mSPO.getFDate(),_mSPO.getTDate(),
+                    ""+ Custom_Variables_And_Method.PA_ID,_mSPO.getType().getValue(),_mSPO.getCurrencyType());
 
             return spoProductWise_Result;
         }

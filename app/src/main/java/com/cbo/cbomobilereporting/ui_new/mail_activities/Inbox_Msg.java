@@ -1,4 +1,4 @@
-package com.cbo.cbomobilereporting.ui;
+package com.cbo.cbomobilereporting.ui_new.mail_activities;
 
 import java.io.File;
 import java.sql.ResultSet;
@@ -14,8 +14,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,7 +30,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.mail_activities.CreateMail1;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +45,7 @@ public class Inbox_Msg extends AppCompatActivity{
 	TextView remark,from,subject,date_time,from_label;
     Custom_Variables_And_Method customVariablesAndMethod;
 	ImageView attach;
-	LinearLayout edit,delete,reply,forward;
+	LinearLayout edit,delete,reply,replyAll,forward;
 	ResultSet rs;
 	int PA_ID;
 	String Msg_Id,mail_type;
@@ -58,6 +57,12 @@ public class Inbox_Msg extends AppCompatActivity{
 	private  static final int MESSAGE_INTERNET_Mail=1;
 	public ProgressDialog progress1;
 	ListView mylist;
+	String cc_Ids = "";
+	String to_Ids = "";
+	String replyto_Ids = "";
+	String cc_Names = "";
+	String to_Names = "";
+	String replyto_Names = "";
 	
 	public void onCreate(Bundle b){
 		super.onCreate(b);
@@ -86,6 +91,7 @@ public class Inbox_Msg extends AppCompatActivity{
 		delete=(LinearLayout) findViewById(R.id.delete);
 		forward=(LinearLayout) findViewById(R.id.forward);
 		reply=(LinearLayout) findViewById(R.id.reply);
+		replyAll=(LinearLayout) findViewById(R.id.replyAll);
 
 		mylist = (ListView) findViewById(R.id.mailinbox_list);
 
@@ -114,12 +120,14 @@ public class Inbox_Msg extends AppCompatActivity{
 				from_label.setText("To");
 				edit.setVisibility(View.GONE);
 				reply.setVisibility(View.GONE);
+				replyAll.setVisibility(View.GONE);
 				delete.setVisibility(View.GONE);
 				PopulateMail_History(Msg_Id);
 				break;
 			case "d":
 				from_label.setText("To");
 				reply.setVisibility(View.GONE);
+				replyAll.setVisibility(View.GONE);
 				forward.setVisibility(View.GONE);
 				break;
 		}
@@ -212,12 +220,35 @@ public class Inbox_Msg extends AppCompatActivity{
 				} else {
 					Intent intent=new Intent(context,CreateMail1.class);
 					intent.putExtra("mail_id",data.get(0).get("id"));
+					intent.putExtra("mail_cc_ids","");
+					intent.putExtra("mail_cc_names","");
+					intent.putExtra("mail_to_ids",replyto_Ids);
+					intent.putExtra("mail_to_names",replyto_Names);
 					intent.putExtra("mail_type","R");
 					startActivity(intent);
 				}
 			}
 		});
 
+
+		replyAll.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				String networkStatus= NetworkUtil.getConnectivityStatusString(context);
+				if(networkStatus.equals("Not connected to Internet")) {
+					customVariablesAndMethod.Connect_to_Internet_Msg(context);
+				} else {
+					Intent intent=new Intent(context,CreateMail1.class);
+					intent.putExtra("mail_id",data.get(0).get("id"));
+					intent.putExtra("mail_cc_ids",cc_Ids);
+					intent.putExtra("mail_cc_names",cc_Names);
+					intent.putExtra("mail_to_ids",to_Ids);
+					intent.putExtra("mail_to_names",to_Names);
+					intent.putExtra("mail_type","RA");
+					startActivity(intent);
+				}
+			}
+		});
 		forward.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -248,6 +279,7 @@ public class Inbox_Msg extends AppCompatActivity{
 		ArrayList<Integer> tables = new ArrayList<>();
 		tables.add(0);
 		tables.add(1);
+		tables.add(2);
 
 		progress1.setMessage("Please Wait.. \n Fetching mails");
 		progress1.setCancelable(false);
@@ -312,6 +344,50 @@ public class Inbox_Msg extends AppCompatActivity{
 					datanum.put("REMARK", object.getString("REPLY_REMARK"));
 					datanum.put("IS_READ","0");//object.getString("IS_READ"));
 					data1.add(datanum);
+
+				}
+
+				String table1 = result.getString("Tables2");
+				JSONArray jsonArray2 = new JSONArray(table1);
+				ArrayList<Map<String, String>> data2 = new ArrayList<Map<String, String>>();
+				int cc_count =0;
+				int to_count =0;
+				int replyto_count =0;
+				for (int i = 0; i < jsonArray2.length(); i++) {
+					JSONObject object = jsonArray2.getJSONObject(i);
+
+					Map<String,String>datanum=new HashMap<String,String>();
+					datanum.put("from",object.getString("PA_NAME"));
+					datanum.put("from_id",object.getString("PA_ID"));
+					datanum.put("CCYN",object.getString("CCYN"));
+
+					if (object.getInt("ID") ==0){
+						String saparator = "";
+						if (replyto_count != 0){
+							saparator =",";
+						}
+						replyto_Ids = String.format("%s%s", to_Ids, saparator + object.getString("PA_ID"));
+						replyto_Names =  String.format("%s%s", to_Names, saparator + object.getString("PA_NAME"));
+						replyto_count++;
+					}
+					if (object.getInt("CCYN") ==0){
+						String saparator = "";
+						if (to_count != 0){
+							saparator =",";
+						}
+						to_Ids = String.format("%s%s", to_Ids, saparator + object.getString("PA_ID"));
+						to_Names =  String.format("%s%s", to_Names, saparator + object.getString("PA_NAME"));
+						to_count++;
+					}else{
+						String saparator = "";
+						if (cc_count != 0){
+							saparator =",";
+						}
+						cc_Ids = String.format("%s%s", cc_Ids, saparator + object.getString("PA_ID"));
+						cc_Names =  String.format("%s%s", cc_Names, saparator + object.getString("PA_NAME"));
+						cc_count ++;
+					}
+					data2.add(datanum);
 
 				}
 

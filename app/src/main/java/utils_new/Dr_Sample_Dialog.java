@@ -6,13 +6,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,13 +22,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.Response;
@@ -37,7 +36,9 @@ import com.uenics.javed.CBOLibrary.Response;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import interfaces.Ipob;
@@ -80,6 +81,8 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
     ImageView speciality_filter;
 
     String sample_name="",sample_pob="",sample_sample="",sample_noc="";
+    ArrayList<HashMap<String, String>> RxCall;
+    String RxQty ="",RxId ="";
     ArrayList<DropDownModel> Specialitis;
 
 
@@ -155,6 +158,17 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
         if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DR_RX_ENTRY_YN","N").equals("N")){
 
             prescribe_text.setVisibility(View.GONE);
+
+        }
+
+        if (customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"RXQTYYN","N").equals("Y")){
+
+            //prescribe_text.setVisibility(View.GONE);
+            RxCall = cbohelp.get_tenivia_traker(Custom_Variables_And_Method.DR_ID);
+            if (RxCall.size()>0) {
+                RxQty = RxCall.get(0).get("QTY");
+                RxId = RxCall.get(0).get("ITEM_ID");
+            }
 
         }
 
@@ -285,7 +299,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
             }
         }
         if (total_pob>0){
-            itemincart.setText( AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
+            itemincart.setText("POB : " +AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
         }else{
             itemincart.setText(items + " item");
         }
@@ -313,7 +327,10 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
 
             }
         }
-        adapter = new PobAdapter((Activity) context, display_item_list,customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),this::onItemSelectedListChanged);
+        adapter = new PobAdapter((Activity) context, display_item_list,
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),
+                customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"RXQTYYN","N").equalsIgnoreCase("Y"),
+                this::onItemSelectedListChanged);
         mylist.setAdapter(adapter);
         onItemSelectedListChanged();
     }
@@ -339,7 +356,7 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
             String ItemIdNotIn = "0";
             who = params[1];
 
-            Cursor c = cbohelp.getAllProducts(params[0]);
+            Cursor c = cbohelp.getAllProducts(params[0],"Dr");
             if (c.moveToFirst()) {
                 do {
                     main_item_list.add(new PobModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), c.getString(c.getColumnIndex("stk_rate")), c.getString(c.getColumnIndex("sn")),
@@ -369,7 +386,10 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
         protected void onPostExecute(List<PobModel> result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            adapter = new PobAdapter((Activity) context, result,customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),Dr_Sample_Dialog.this);
+            adapter = new PobAdapter((Activity) context, result,
+                    customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NOC_HEAD","").isEmpty(),
+                    customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"RXQTYYN","N").equalsIgnoreCase("Y"),
+                    Dr_Sample_Dialog.this);
 
             if (adapter.getCount() != 0) {
 
@@ -378,6 +398,9 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
                 String[] sample_pob1= sample_pob.split(",");
                 String[] sample_noc1= sample_noc.split(",");
 
+                String[] RxQty1= RxQty.split(",");
+                String[] RxId1= RxId.split(",");
+
                 for (int i=0;i<sample_name1.length;i++){
                     for (int j = 0; j< result.size(); j++) {
                         if (sample_name1[i].equals(result.get(j).getName())) {
@@ -385,6 +408,16 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
                             result.get(j).setScore(sample_qty1[i]);
                             result.get(j).setNOC(sample_noc1[i]);
                             result.get(j).setBalance( result.get(j).getBalance() + Integer.parseInt(sample_qty1[i]));
+                            break;
+                        }
+                    }
+                }
+
+                for (int i=0;i<RxId1.length;i++){
+                    for (int j = 0; j< result.size(); j++) {
+                        if (RxId1[i].equals(result.get(j).getId())) {
+                            result.get(j).setRx_Qty(RxQty1[i]);
+                            result.get(j).setSelected_Rx(true);
                             break;
                         }
                     }
@@ -445,6 +478,10 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
             data5.clear();
             ArrayList<String> getPrescribeRx_Dr = new ArrayList<String>();
             StringBuilder sb_rx = new StringBuilder();
+            StringBuilder sb_rx_Qty = new StringBuilder();
+            StringBuilder sb_rx_amt = new StringBuilder();
+            StringBuilder sb_rx_Qty_caption = new StringBuilder();
+            StringBuilder sb_rx_amt_caption = new StringBuilder();
             int j= 0;
             String seprator ="";
             cbohelp.deletedata(Custom_Variables_And_Method.DR_ID,"");
@@ -461,7 +498,13 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
 
                     }
 
-                    sb_rx.append(seprator).append(display_item_list.get(i).getId()).append(",");
+                    sb_rx.append(seprator).append(main_item_list.get(i).getId());
+                    sb_rx_Qty.append(seprator).append(main_item_list.get(i).getRx_Qty().isEmpty()
+                            ?"0":main_item_list.get(i).getRx_Qty());
+
+                    sb_rx_amt.append(seprator).append("");
+                    sb_rx_Qty_caption.append(seprator).append(main_item_list.get(i).getName());
+                    sb_rx_amt_caption.append(seprator).append("");
                     j++;
 
                 }
@@ -536,6 +579,20 @@ public class Dr_Sample_Dialog implements Up_Dwn_interface, Ipob {
                     cbohelp.insert_drRx_Data(Custom_Variables_And_Method.DR_ID, "" + sb_rx);
                 }
             }
+
+            if (!sb_rx.toString().equals("") && MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("RXQTYYN","N").equalsIgnoreCase("Y")) {
+                if(RxCall.size()>0 ) {
+                    cbohelp.Update_tenivia_traker(Custom_Variables_And_Method.DR_ID, Custom_Variables_And_Method.DR_NAME,
+                            sb_rx_Qty.toString(),  sb_rx_amt.toString(), sb_rx_Qty_caption.toString(), sb_rx.toString(), sb_rx_amt_caption.toString(),  customVariablesAndMethod.currentTime(context), "");
+
+                } else {
+                    cbohelp.Insert_tenivia_traker(Custom_Variables_And_Method.DR_ID, Custom_Variables_And_Method.DR_NAME,
+                            sb_rx_Qty.toString(),sb_rx_amt.toString(), sb_rx_Qty_caption.toString(), sb_rx.toString(), sb_rx_amt_caption.toString(),  customVariablesAndMethod.currentTime(context), "");
+
+
+                }
+            }
+
             item_id = itemid.toString();
             item_name = itemname.toString();
             item_qty = itemqty.toString();

@@ -42,6 +42,9 @@ public abstract class FirebsaeDB<T> {
     public String getTable() {
         return table;
     }
+//    public DatabaseReference getDbRef(){
+//        return rootRef;
+//    }
 
     public void setTable(String table) {
         this.table = table;
@@ -49,21 +52,9 @@ public abstract class FirebsaeDB<T> {
             login (new ILogin () {
                 @Override
                 public void onSuccess(DatabaseReference rootRef) {
-                    rootRef.addValueEventListener (new ValueEventListener () {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (response !=null){
-                                response.onTableUpdated (dataSnapshot);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            if (response !=null){
-                                response.onTableUpdateError ("","");
-                            }
-                        }
-                    });
+                    if (response !=null) {
+                        rootRef.addValueEventListener(valueListener);
+                    }
                 }
 
                 @Override
@@ -77,6 +68,23 @@ public abstract class FirebsaeDB<T> {
 
 
     }
+
+
+    private ValueEventListener valueListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+
+            response.onTableUpdated(dataSnapshot);
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+            response.onTableUpdateError("", "");
+
+        }
+    };
 
     public  interface Response<T>{
 
@@ -141,18 +149,26 @@ public abstract class FirebsaeDB<T> {
 
     }
 
-   /* @Override
+    @Override
     protected void finalize() throws Throwable {
-        if (mAuthListener != null) {
+        /*if (mAuthListener != null) {
             auth.removeAuthStateListener(mAuthListener);
+        }*/
+        if (rootRef != null && getResponse() != null){
+            rootRef.removeEventListener(valueListener);
         }
-        super.finalize ();
-    }*/
 
-    protected   void login( final ILogin response){
+        super.finalize ();
+    }
+
+    protected  void login( final ILogin response){
         if(getTable ().trim ().isEmpty ()){
             response.onError("Table Error ","Please  specfied table name");
             return;
+        }
+
+        if (rootRef != null && getResponse() != null){
+            rootRef.removeEventListener(valueListener);
         }
 
         //FirebaseUser user = auth.getCurrentUser ();

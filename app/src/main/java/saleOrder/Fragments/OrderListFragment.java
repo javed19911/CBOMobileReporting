@@ -1,14 +1,14 @@
 package saleOrder.Fragments;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +25,8 @@ import cbomobilereporting.cbo.com.cboorder.R;
 import cbomobilereporting.cbo.com.cboorder.View.iOrder;
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
 import saleOrder.Activities.CartActivity;
+import saleOrder.Activities.CartAttachment;
+import saleOrder.Activities.PartyOverDue;
 import saleOrder.Model.mParty;
 import saleOrder.ViewModel.vmOrder;
 import utils_new.AppAlert;
@@ -46,6 +48,24 @@ public class OrderListFragment extends Fragment implements iOrder {
     vmOrder viewModel;
     View fragmentView;
     String AppYN ="";
+    Boolean ShowParty = false;
+    private static final int OVER_DUE = 0;
+    private static final int ATTACHMENT = 10;
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case OVER_DUE:
+                    viewModel.getOrderDetail(context,(mOrder) data.getSerializableExtra ("order"));
+                    break;
+                default:
+
+            }
+        }
+    }
+
 
     @Nullable
     @Override
@@ -89,15 +109,19 @@ public class OrderListFragment extends Fragment implements iOrder {
         });*/
 
 
+        party = ((mParty) getArguments().getSerializable("party"));
+        filterType = getArguments().getString("OrderType");
+        ShowParty = getArguments().getBoolean("ShowParty");
+
+
         itemlist_filter = (RecyclerView) fragmentView.findViewById(R.id.itemList);
-        order_list_adaptor = new Order_List_Adaptor(context, viewModel.getOrders());
+        order_list_adaptor = new Order_List_Adaptor(context, viewModel.getOrders(),party.getId().equalsIgnoreCase("0") || ShowParty);
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         itemlist_filter.setLayoutManager(mLayoutManager1);
         itemlist_filter.setItemAnimator(new DefaultItemAnimator());
         itemlist_filter.setAdapter(order_list_adaptor);
 
-        party = ((mParty) getArguments().getSerializable("party"));
-        filterType = getArguments().getString("OrderType");
+
 
         if (filterType.contains("Pending")) {
             filterType = "P";
@@ -143,15 +167,24 @@ public class OrderListFragment extends Fragment implements iOrder {
                             });
 
                 }else if (view.getId () == com.cbo.cbomobilereporting.R.id.attach) {
-
-                   MyCustumApplication.getInstance().LoadURL("Attachment",viewModel.getOrders().get(position).getAttachment());
+                    addAttachment(viewModel.getOrders().get(position));
+                   //MyCustumApplication.getInstance().LoadURL("Attachment",viewModel.getOrders().get(position).getAttachment());
 
                 }else{
+
+                    //showPartyOverDue(viewModel.getOrders().get(position));
+
                     viewModel.getOrderDetail(context,viewModel.getOrders().get(position));
                 }
 
             }
         });
+    }
+
+    public void addAttachment(mOrder order) {
+        Intent intent = new Intent (context, CartAttachment.class);
+        intent.putExtra ("order", order);
+        startActivityForResult (intent, ATTACHMENT);
     }
 
     @Override
@@ -160,12 +193,21 @@ public class OrderListFragment extends Fragment implements iOrder {
         if (!getUserVisibleHint()) {
             return;
         }
+
         viewModel.setStatus(filterType);
     }
 
     @Override
     public String getPartyID() {
+        if (ShowParty){
+            party.setId("0");
+        }
         return party.getId();
+    }
+
+    @Override
+    public String getUserID() {
+        return MyCustumApplication.getInstance().getUser().getID();
     }
 
     @Override
@@ -201,10 +243,29 @@ public class OrderListFragment extends Fragment implements iOrder {
     }
 
     @Override
+    public void showPartyOverDue(mOrder order) {
+        Intent intent = new Intent(context, PartyOverDue.class);
+        if (party.getId().equalsIgnoreCase("0")){
+            ShowParty = true;
+            party.setId(order.getPartyId());
+            party.setName(order.getPartyName());
+        }
+        intent.putExtra("party",party);
+        intent.putExtra("order",order);
+        startActivityForResult(intent,OVER_DUE);
+    }
+
+
+    @Override
     public void showOderDetail(mOrder order) {
         // show dialog
         if (order.getItems().size()>0) {
             Intent intent = new Intent(context, CartActivity.class);
+            if (party.getId().equalsIgnoreCase("0")){
+                ShowParty = true;
+                party.setId(order.getPartyId());
+                party.setName(order.getPartyName());
+            }
             intent.putExtra("party",party);
             intent.putExtra("order",order);
             startActivity(intent);

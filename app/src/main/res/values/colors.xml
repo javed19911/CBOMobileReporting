@@ -3,8 +3,12 @@
     <color name="titlebackgroundcolor">#6f2a02</color>
     <color name="background_color">#FDFD96</color>
     <color name="White_new">#FFFFFFFF</color>
+
+    <color name="my_statusbar_color">#002D80</color>
     <color name="transparent">#00000000</color>
 
+
+    <color name="semiTransparentWhite">#FFFFFF</color>
     <color name="colorPrimary">#066199</color>
     <color name="colorPrimaryDark">#104c6c</color>
     <color name="colorPrimaryLight">#7aa4</color>

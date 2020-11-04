@@ -21,11 +21,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,11 +53,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,7 +65,6 @@ import services.CboServices;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
 import utils_new.Custom_Variables_And_Method;
-import utils_new.GPS_Timmer_Dialog;
 import utils_new.up_down_ftp;
 
 public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.AdapterCallback{
@@ -109,7 +105,7 @@ public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_non_listed_call__cnf);
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView textView = (TextView) findViewById(R.id.hadder_text_1);
 
         setSupportActionBar(toolbar);
@@ -628,8 +624,8 @@ public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.
                 //set crop properties
                 cropIntent.putExtra("crop", "true");
                 //indicate aspect of desired crop
-                cropIntent.putExtra("aspectX", 1);
-                cropIntent.putExtra("aspectY", 1);
+              /*  cropIntent.putExtra("aspectX", 1);
+                cropIntent.putExtra("aspectY", 1);*/
                 cropIntent.putExtra("scale", true);
                 //indicate output X and Y
                 cropIntent.putExtra("outputX", 700);
@@ -682,8 +678,8 @@ public class NonListedCall_CNF extends AppCompatActivity implements up_down_ftp.
             // set crop properties
             cropIntent.putExtra("crop", "true");
             // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
+           /* cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);*/
             // indicate output X and Y
             cropIntent.putExtra("outputX", 700);
             cropIntent.putExtra("outputY", 700);

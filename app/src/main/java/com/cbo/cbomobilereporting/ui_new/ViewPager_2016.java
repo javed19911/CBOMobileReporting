@@ -1,7 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -10,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,21 +16,22 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.design.internal.NavigationMenuView;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import com.google.android.material.internal.NavigationMenuView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.view.GravityCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,13 +45,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.Contact_Us;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.uenics.javed.CBOLibrary.Response;
@@ -112,7 +109,7 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
         context=this;
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 
-        android.support.v7.app.ActionBarDrawerToggle actionBarDrawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this, drawer, toolbar_,
+        androidx.appcompat.app.ActionBarDrawerToggle actionBarDrawerToggle = new androidx.appcompat.app.ActionBarDrawerToggle(this, drawer, toolbar_,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -167,15 +164,16 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
             } else {
                 new GetProfilePicture().execute();
             }
-        }
-        if  ( times==0 && !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"COMPANY_PIC","").isEmpty() && !COMPANY_PIC.exists()){
+        }else if  ( times==0 && !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"COMPANY_PIC","").isEmpty() && !COMPANY_PIC.exists()){
             if (!networkUtil.internetConneted(ViewPager_2016.this)) {
                 customVariablesAndMethod.getAlert(this,"Turn ON your Internet","Company Logo download Pending...");
                 initiate();
             } else {
                 new GetProfilePicture().execute();
             }
-        }else if(cbo_db_helper.getmenu_count(CBO_DB_Helper.MenuControl)<=0){
+        }else if(cbo_db_helper.getmenu_count(CBO_DB_Helper.MenuControl)<=0 ||
+                cbo_db_helper.getMenu("UTILITY","U_UPDOWN").size() == 0 ||
+                MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("MENU_SYNC_FAILED","N").equalsIgnoreCase("Y")){
             //fmcg and menu not available
             //get fmcg and menu
 
@@ -434,6 +432,12 @@ public class ViewPager_2016 extends CustomActivity implements NavigationView.OnN
             case (R.id.nav_contact_us): {
                 // mycon.msgBox("Clicked On Contact Us");
                 startActivity(new Intent(getApplicationContext(), Contact_Us.class));
+                break;
+
+            }
+            case (R.id.nav_help_us): {
+                // mycon.msgBox("Clicked On Contact Us");
+                startActivity(new Intent(getApplicationContext(), Pdfviewer.class));
                 break;
             }
             default:

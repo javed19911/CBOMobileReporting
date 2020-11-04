@@ -1,20 +1,15 @@
 package com.cbo.cbomobilereporting.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
@@ -28,10 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import async.DrvisitedListTask;
 import services.CboServices;
-import services.TaskListener;
-import utils.MyConnection;
 import utils.adapterutils.Doctor_Visit_Adapter;
 import utils_new.Custom_Variables_And_Method;
 

@@ -141,5 +141,9 @@
     <string name="title_activity_location_test"></string>
     <string name="search_hint">Enter Name</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textsubmit">Submit</string>
+
 
 </resources>

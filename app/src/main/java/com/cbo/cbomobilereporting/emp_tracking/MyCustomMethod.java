@@ -9,18 +9,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,31 +24,20 @@ import android.widget.Toast;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import receivers.DOB_DOA_broadcastreciever;
 import receivers.MyBroadcastReceiver;
 import services.ServiceHandler;
-import utils.MyConnection;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
-
-import static android.content.Context.ALARM_SERVICE;
 
 
 public class MyCustomMethod {

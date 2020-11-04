@@ -14,7 +14,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.cbo.cbomobilereporting.R;
@@ -677,6 +677,7 @@ public class up_down_ftp {
     }
 
     public void uploadFile( final File[] files,final Context context) {
+
         IsLastFile = false;
         Runnable runnable = new Runnable() {
 
@@ -689,7 +690,17 @@ public class up_down_ftp {
                 if(mFtpClient != null) {
                     try {
 
+                        if (files.length == 0){
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
 
+                                @Override
+                                public void run() {
+                                    mAdapterCallback.failed(responseCode,"No File!!!","No File Found to be uploaded..");
+                                }
+                            });
+
+                        }
                         // code here to compress images......
 
                         for (File uploadFile: files) {

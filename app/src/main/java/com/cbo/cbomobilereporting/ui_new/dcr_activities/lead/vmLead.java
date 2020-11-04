@@ -41,13 +41,13 @@ public class vmLead extends CBOViewModel<iLead> {
             Cursor c;
             switch (getBuilder().getType()){
                 case GIFT:
-                    c = cbohelp.getAllProducts("0");
+                    c = cbohelp.getAllProducts("0",getBuilder().getCallType().getValue());
                     break;
                 case LEAD:
                     c = cbohelp.getAllLeadProducts("0");
                     break;
                 default:
-                    c = cbohelp.getAllProducts("0");
+                    c = cbohelp.getAllProducts("0",getBuilder().getCallType().getValue());
 
             }
 

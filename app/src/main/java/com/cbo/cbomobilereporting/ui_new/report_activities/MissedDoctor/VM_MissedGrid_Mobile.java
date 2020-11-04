@@ -2,7 +2,7 @@ package com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

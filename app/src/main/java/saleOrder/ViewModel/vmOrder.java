@@ -16,8 +16,10 @@ import java.util.HashMap;
 
 import cbomobilereporting.cbo.com.cboorder.DBHelper.OrderDB;
 import cbomobilereporting.cbo.com.cboorder.DBHelper.OrderDetailDB;
+import cbomobilereporting.cbo.com.cboorder.Enum.eDeal;
 import cbomobilereporting.cbo.com.cboorder.Enum.eDiscount;
 import cbomobilereporting.cbo.com.cboorder.Enum.eTax;
+import cbomobilereporting.cbo.com.cboorder.Model.mDeal;
 import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
@@ -76,11 +78,12 @@ public class vmOrder extends CBOViewModel<iOrder> {
         request.put("sCompanyFolder", view.getCompanyCode());
         request.put("iPaId", view.getPartyID() );
         request.put("sStatus",  sStatus);
+        request.put("iLOGIN_PA_ID",  view.getUserID());
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
 
-        new MyOrderAPIService(context).execute(new ResponseBuilder("OrderGridMain",request)
+        new MyOrderAPIService(context).execute(new ResponseBuilder("OrderGridMain1",request)
                 .setTables(tables)
                 /*.setShowProgess(orders.size() == 0 )*/
                 .setResponse(new CBOServices.APIResponse() {
@@ -119,7 +122,8 @@ public class vmOrder extends CBOViewModel<iOrder> {
                     JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
 
                     mOrder order = new mOrder()
-                            .setPartyId(view.getPartyID())
+                            .setPartyId(jsonObject2.getString("PA_ID"))
+                            .setPartyName(jsonObject2.getString("PA_NAME"))
                             .setDocId(jsonObject2.getString("ID"))
                             .setDocNo(jsonObject2.getString("DOC_NO"))
                             .setDocDate(jsonObject2.getString("DOC_DATE"))
@@ -267,6 +271,15 @@ public class vmOrder extends CBOViewModel<iOrder> {
                         .setCGST(jsonObject2.getDouble("TAX_PERCENT"));
 
                 item.setGST(GST).setQty(jsonObject2.getDouble("QTY"));
+
+                mDeal deal = new mDeal();
+               deal.setType(eDeal.get(jsonObject2.getString("DEAL_TYPE")))
+                       .setId(jsonObject2.getInt("DEAL_ID"))
+                        .setFreeQty(jsonObject2.getDouble("DEAL_QTY"))
+                        .setQty(jsonObject2.getDouble("DEAL_ON"));
+                item.setDeal(deal);
+
+                item.setFreeQty(jsonObject2.getDouble("FREE_QTY"));
 
                 //orderDetailDB.insert(view.getPartyID(),order.getDocId(),item);
                 order.getItems().add(item);

@@ -19,6 +19,7 @@ import com.cbo.cbomobilereporting.ui.LoginMain;
 import interfaces.SampleInterface;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import utils.Font_helper;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 
 
@@ -56,6 +57,25 @@ public class SplashScreen_2016 extends CustomActivity  {
             image.setImageBitmap(bmp);
         }
 
+        /*alert("From outside");
+        Thread thread1=new Thread(){
+            @Override
+            public void run() {
+                try{
+
+
+                    sleep(50);
+
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }  finally {
+
+                    alert("From Inside");
+                }
+
+            }
+        };*/
 
 
         Thread thread=new Thread(){
@@ -107,6 +127,9 @@ public class SplashScreen_2016 extends CustomActivity  {
         }
     }
 
+    private void alert(String from){
+        AppAlert.getInstance().getAlert(context,"test", from);
+    }
 
     public boolean CheckIfResigned(){
        /* if(!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"doryn","").equals("") ||

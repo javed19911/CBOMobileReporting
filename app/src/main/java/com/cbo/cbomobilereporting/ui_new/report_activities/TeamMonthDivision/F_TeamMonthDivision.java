@@ -1,18 +1,17 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision;
 
 import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -22,7 +21,6 @@ import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Mod
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mMonth;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mUser;
 
-import services.CboServices;
 import utils_new.AppAlert;
 import utils_new.CustomError;
 import utils_new.Custom_Variables_And_Method;

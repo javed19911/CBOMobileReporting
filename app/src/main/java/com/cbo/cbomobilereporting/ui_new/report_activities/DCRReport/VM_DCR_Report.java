@@ -1,14 +1,11 @@
 package com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModel;
+
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 
-import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.F_TeamMonthDivision;
 
 import org.json.JSONArray;
@@ -19,15 +16,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import async.RptShowTask;
 import services.MyAPIService;
-import services.TaskListener;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import utils_new.AppAlert;
-import utils_new.Custom_Variables_And_Method;
 
 
 /**
@@ -92,13 +87,13 @@ public class VM_DCR_Report extends ViewModel {
                             @Override
                             public void onComplete(Bundle message) throws JSONException {
 
-                                mDCR_reports = new ArrayList<> ();
+                              mDCR_reports = new ArrayList<> ();
 
-                                String table0 = message.getString("Tables0");
-                                JSONArray row = new JSONArray(table0);
+                                    String table0 = message.getString("Tables0");
+                                    JSONArray row = new JSONArray(table0);
 
 
-                                for (int i = 0; i < row.length(); i++) {
+                                    for (int i = 0; i < row.length(); i++) {
                                     Map<String,String> datanum=new HashMap<String,String> ();
                                     JSONObject c = row.getJSONObject(i);
                                     mDCR_Report rptModel=new mDCR_Report ();
@@ -131,7 +126,10 @@ public class VM_DCR_Report extends ViewModel {
 
                                     rptModel.setTtlTenivia(c.getString("DRRX_TOTAL"));
 
+                                    rptModel.setBlinkRemark(c.getString("FINAL_SUBMITYN").equalsIgnoreCase("N"));
+
                                     String exp=c.getString("DA_TYPE");
+
                                     rptModel.setTtlexp(exp);
                                     mDCR_reports.add(rptModel);
 

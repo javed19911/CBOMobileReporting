@@ -1,7 +1,7 @@
 package saleOrder.ViewModel;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * Created by cboios on 04/03/19.

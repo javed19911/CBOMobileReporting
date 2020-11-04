@@ -65,19 +65,27 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //this.visible_status = visible_status;
 
     }
-    private String TeniviaMenuName(){
+    private ArrayList<String> TeniviaMenuName(){
+
+        ArrayList<String> menuList = new ArrayList<>();
+
+        if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"RXQTYYN").equals("Y")){
+            menuList.add( cboDbHelper.getMenu("DCR", "D_DRCALL").get("D_DRCALL") + "(Rx)");
+        }
+
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Tenivia_NOT_REQUIRED").equals("N")) {
-            return cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX");
+            menuList.add( cboDbHelper.getMenu("DCR", "D_DR_RX").get("D_DR_RX"));
         }
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Rx_NOT_REQUIRED").equals("N")) {
-            return cboDbHelper.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN");
+            menuList.add( cboDbHelper.getMenu("DCR", "D_RX_GEN").get("D_RX_GEN"));
         }
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"Rx_NA_NOT_REQUIRED").equals("N")) {
-            return cboDbHelper.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA");
+            menuList.add( cboDbHelper.getMenu("DCR", "D_RX_GEN_NA").get("D_RX_GEN_NA"));
         }
-        return "";
+
+        return menuList;
     }
 
     @Override
@@ -210,12 +218,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 String[] sample_qty= childText.get("sample_qty").get(childPosition).split(",");
                 String[] sample_pob= childText.get("sample_pob").get(childPosition).split(",");
                 String[] sample_noc= childText.get("sample_noc").get(childPosition).split(",");
-                init(stk,sample_name,sample_qty,sample_pob,sample_noc,_listDataHeader.get(groupPosition));
+                String[] sample_rate = null;
+                if (childText.containsKey("sample_rate")) {
+                    sample_rate = childText.get("sample_rate").get(childPosition).isEmpty()? null : childText.get("sample_rate").get(childPosition).split(",");
+                }
+                init(stk,sample_name,sample_qty,sample_pob,sample_noc,_listDataHeader.get(groupPosition),sample_rate);
             }
             if (!childText.get("gift_name").get(childPosition).equals("")) {
                 String[] gift_name= childText.get("gift_name").get(childPosition).split(",");
                 String[] gift_qty= childText.get("gift_qty").get(childPosition).split(",");
-                if (!_listDataHeader.get(groupPosition).equals(TeniviaMenuName())) {
+                if (!TeniviaMenuName().contains( _listDataHeader.get(groupPosition))) {
                     init_gift(gift_layout, gift_name, gift_qty, "Gift", " Qty. ");
                 }else{
                     init_gift(gift_layout, gift_name, gift_qty, "", "");
@@ -584,7 +596,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    private void init(TableLayout stk1, String[] sample_name, String[] sample_qty, String[] sample_pob,String[] sample_noc,String headType) {
+    private void init(TableLayout stk1, String[] sample_name, String[] sample_qty, String[] sample_pob,String[] sample_noc,String headType,String[] sample_rate ) {
 
         Boolean showNOC=true;
         if (!headType.equals(cboDbHelper.getMenu("DCR", "D_DRCALL").get("D_DRCALL")) || customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(_context,"NOC_HEAD","").isEmpty()){
@@ -623,6 +635,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             tv3.setTypeface(null, Typeface.BOLD);
             tbrow0.addView(tv3);
         }
+        if (sample_rate != null) {
+            TextView tv4 = new TextView(_context);
+            tv4.setPadding(5, 5, 5, 0);
+            tv4.setText( "Amt.");
+            tv4.setTextColor(Color.WHITE);
+            tv4.setTypeface(null, Typeface.BOLD);
+            tbrow0.addView(tv4);
+        }
         stk.removeAllViews();
         stk.addView(tbrow0);
         for (int i = 0; i < sample_name.length; i++) {
@@ -648,6 +668,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             if (showNOC) {
                 TextView t4v = new TextView(_context);
                 t4v.setText(sample_noc[i]);
+                t4v.setPadding(5, 5, 5, 0);
+                t4v.setTextColor(Color.BLACK);
+                t4v.setGravity(Gravity.CENTER);
+                tbrow.addView(t4v);
+            }
+            if (sample_rate != null) {
+                TextView t4v = new TextView(_context);
+                t4v.setText(""+ String.format("%.2f",(Double.parseDouble( sample_pob[i]) * Double.parseDouble( sample_rate[i]))));
                 t4v.setPadding(5, 5, 5, 0);
                 t4v.setTextColor(Color.BLACK);
                 t4v.setGravity(Gravity.CENTER);

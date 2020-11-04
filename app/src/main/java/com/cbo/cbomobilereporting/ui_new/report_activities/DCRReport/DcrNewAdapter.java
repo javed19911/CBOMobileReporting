@@ -2,14 +2,17 @@ package com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
@@ -74,6 +77,22 @@ public class DcrNewAdapter extends RecyclerView.Adapter<DcrNewAdapter.MyviewHold
 //            // holder.totalDr_text.setText("Total Retailer :");
 //
 //        }
+
+        if (Rptdata.get(position).isBlinkRemark()){
+            Animation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(500);
+            anim.setStartOffset(20);
+            anim.setRepeatMode(Animation.REVERSE);
+            anim.setRepeatCount(Animation.INFINITE);
+            holder.remark.startAnimation(anim);
+            holder.remark.setText("Final Submit Pending");
+            holder.remark.setTextColor(Color.parseColor("#ff0000"));
+        }else{
+            holder.remark.setText(Rptdata.get(position).getRemark());
+            holder.remark.clearAnimation();
+            holder.remark.setTextColor(Color.parseColor("#000000"));
+        }
+
 
         if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CUSTOMER_NOT_REQUIRED","Y").equals("N")) {
             holder.totalChem_text.setText("Total " + cbohelp.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL").split(" ")[0] + " :");
@@ -227,7 +246,7 @@ public class DcrNewAdapter extends RecyclerView.Adapter<DcrNewAdapter.MyviewHold
                     Intent ttlche=new Intent(v.getContext(),TotalChemistRpt.class);
                     ttlche.putExtra("PAID", Report_PAID);
                     ttlche.putExtra("date",Rptdata.get(position).getDate());
-                    ttlche.putExtra("Title", holder.TTlchm.getText().toString());
+                    ttlche.putExtra("Title", holder.totalChem_text.getText().toString());
                     v.getContext().startActivity(ttlche);
                 }else{
                     customVariablesAndMethod.msgBox(context,"No Chemist in the list");

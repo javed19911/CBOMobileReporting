@@ -4,26 +4,28 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -41,12 +43,12 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
+import com.uenics.javed.CBOLibrary.CBOServices;
+import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ksoap2.serialization.SoapObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -56,11 +58,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import locationpkg.Const;
 import services.CboServices;
-import services.ServiceHandler;
-import services.TaskListener;
+import services.MyAPIService;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
+import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.up_down_ftp;
 
@@ -107,7 +110,7 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nonlisted_call);
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView textView = (TextView) findViewById(R.id.hadder_text_1);
 
         setSupportActionBar(toolbar);
@@ -155,35 +158,12 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
         fmCGYN =customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"fmcg_value");
         imgSpinCat = (ImageView) findViewById(R.id.spinner_category);
 
-       /* if (fmCGYN.equalsIgnoreCase("Y")) {
-            mylist.add(new SpinnerModel("Retailer"));
-            mylist.add(new SpinnerModel("Distributor"));
-            mylist.add(new SpinnerModel("C & F"));
-
-        } else {
-            mylist.add(new SpinnerModel("Doctor"));
-            if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("N")){
-                mylist.add(new SpinnerModel("Chemist"));
-            }
-            if( customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED","N")){
-                mylist.add(new SpinnerModel("Stockist"));
-            }
-            mylist.add(new SpinnerModel("C & F"));
-        }
-
-        if (cboDbHelper.getCompanyCode().toUpperCase().equals("MOHINI")){
-            mylist.add(new SpinnerModel("Dealer"));
-        }*/
-
-       /* SpinAdapter = new SpinAdapter(this, R.layout.spin_row, mylist);
-        SpinAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        spinCat.setAdapter(SpinAdapter);*/
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                onClickSubmit();
+                onClickSubmit(false);
 
             }
         });
@@ -310,12 +290,36 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
         tables.add(3);
         tables.add(4);
 
-        progress1.setMessage("Please Wait.. \n Fetching data");
+       /* progress1.setMessage("Please Wait.. \n Fetching data");
         progress1.setCancelable(false);
         progress1.show();
 
         new CboServices(this, mHandler).customMethodForAllServices(request, "DCRNLCDDL_MOBILE", MESSAGE_INTERNET_Spinner, tables);
+*/
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCRNLCDDL_MOBILE", request)
+                        .setDescription("Please Wait.. \n Fetching data....")
+                        .setTables(tables)
+                        .setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
 
+                                parser_spinner(message);
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+
+
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+
+                            }
+                        })
+                );
         //End of call to service
 
 
@@ -468,118 +472,20 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
 
     private boolean performCropImage(String picUri) {
         attach_txt.setText(filename);
-       /* Uri mCropImagedUri;
-        try {
-            if (picUri != null) {
-                //call the standard crop action intent (the user device may not support it)
-                Intent cropIntent = new Intent("com.android.camera.action.CROP");
-                //indicate image type and Uri
-                File f = new File(picUri);
 
-//            fileTemp = ImageUtils.getOutputMediaFile();
-                ContentValues values = new ContentValues(1);
-                //values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
-                values.put( MediaStore.Images.ImageColumns.DATA, f.getPath() );
-                Uri  contentUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-                // Uri contentUri = Uri.fromFile(f);
-
-                cropIntent.setDataAndType(contentUri, "image");
-                //set crop properties
-                cropIntent.putExtra("crop", "true");
-                //indicate aspect of desired crop
-                cropIntent.putExtra("aspectX", 1);
-                cropIntent.putExtra("aspectY", 1);
-                cropIntent.putExtra("scale", true);
-                //indicate output X and Y
-                cropIntent.putExtra("outputX", 700);
-                cropIntent.putExtra("outputY", 700);
-                //retrieve data on return
-                cropIntent.putExtra("return-data", true);
-
-                filename = Custom_Variables_And_Method.PA_ID+"_"+Custom_Variables_And_Method.DCR_ID+"_"+new Date().getTime()+ ".jpg";
-                File f1 = new File(Environment.getExternalStorageDirectory()+File.separator+ "CBO"+File.separator+ filename);
-                try {
-                    f1.createNewFile();
-                } catch (IOException ex) {
-                    Log.e("io", ex.getMessage());
-                }
-                mCropImagedUri = Uri.fromFile(f);
-                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCropImagedUri);
-                //start the activity - we handle returning in onActivityResult
-                startActivityForResult(cropIntent, RESULT_CROP);
-                return true;
-            }
-        } catch (ActivityNotFoundException anfe) {
-            //display an error message
-            String errorMessage = "your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
-            attach_txt.setText(filename);
-
-            return false;
-        }*/
         return false;
     }
 
     private void performCrop(String picUri) {
 
         attach_txt.setText(filename);
-     /*   try {
-            //Start Crop Activity
 
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            File f = new File(picUri);
-
-//            fileTemp = ImageUtils.getOutputMediaFile();
-            ContentValues values = new ContentValues(1);
-            //values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
-            values.put( MediaStore.Images.ImageColumns.DATA, f.getPath() );
-            Uri  contentUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-           // Uri contentUri = Uri.fromFile(f);
-
-            cropIntent.setDataAndType(contentUri, "image");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 700);
-            cropIntent.putExtra("outputY", 700);
-
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, RESULT_CROP);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            // display an error message
-            String errorMessage = "your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
-            attach_txt.setText(filename);
-        }*/
     }
 
 
     private void capture_Image(){
         captureImage();
-       /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File dir = new File(Environment.getExternalStorageDirectory(), "CBO");
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                Toast.makeText(this, "error", Toast.LENGTH_LONG).show();
-                //return true;
-            }
-        }
-        filename = Custom_Variables_And_Method.PA_ID+"_"+Custom_Variables_And_Method.DCR_ID+"_"+new Date().getTime()+ ".jpg";
-        output = new File(dir, filename);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
-        startActivityForResult(intent, REQUEST_CAMERA);*/
+
     }
 
 
@@ -669,8 +575,17 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
         myalertDialog = myDialog.show();
     }
 
+    private BroadcastReceiver mLocationUpdated = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context contex, Intent intent) {
+            Location location = intent.getParcelableExtra(Const.LBM_EVENT_LOCATION_UPDATE);
+            LocalBroadcastManager.getInstance(context).unregisterReceiver(mLocationUpdated);
+            //new GPS_Timmer_Dialog(context,mHandler,"Final Submit in Process...",GPS_TIMMER).show();
+            onClickSubmit(true);
+        }
+    };
 
-    private void onClickSubmit() {
+    private void onClickSubmit(boolean Skip_Verification) {
 
         sDrName = name_edt.getText().toString();
         sAdd1 = address_edt.getText().toString();
@@ -691,8 +606,10 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
             customVariablesAndMethod.msgBox(context,"Category Can't be Empty...");
         } else if ( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"NLC_PIC_YN","N").equals("Y") && filename.equals("")) {
             customVariablesAndMethod.msgBox(context,"Please Attach a Picture....");
-        }else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,false)) {
+        }else if(!customVariablesAndMethod.checkIfCallLocationValid(context,false,Skip_Verification)) {
             customVariablesAndMethod.msgBox(context,"Verifing Your Location");
+            LocalBroadcastManager.getInstance(context).registerReceiver(mLocationUpdated,
+                    new IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE));
         }else {
 
             //new SubmitNonListed().execute();
@@ -756,17 +673,42 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(0);
 
-        progress1.setMessage("Please Wait.. \n Processing....");
+        /*progress1.setMessage("Please Wait.. \n Processing....");
         progress1.setCancelable(false);
         progress1.show();
 
         new CboServices(this, mHandler).customMethodForAllServices(request, "DCRNLC_Commit_3", MESSAGE_INTERNET_SUBMIT, tables);
+*/
 
+        new MyAPIService(context)
+                .execute(new ResponseBuilder("DCRNLC_Commit_3", request)
+                        .setDescription("Please Wait.. \n Processing....")
+                        .setTables(tables)
+                        .setResponse(new CBOServices.APIResponse() {
+                            @Override
+                            public void onComplete(Bundle message) {
+
+                                parser_submit(message);
+                            }
+
+                            @Override
+                            public void onResponse(Bundle response) {
+
+
+                            }
+
+                            @Override
+                            public void onError(String message, String description) {
+                                AppAlert.getInstance().getAlert(context,message,description);
+
+                            }
+                        })
+                );
         //End of call to service
     }
 
 
-    private final Handler mHandler = new Handler() {
+/*    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -798,7 +740,7 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
 
             }
         }
-    };
+    };*/
 
     private void parser_submit(Bundle result) {
         customVariablesAndMethod.SetLastCallLocation(context);
@@ -861,51 +803,6 @@ public class NonListedCall extends AppCompatActivity  implements up_down_ftp.Ada
         progress1.dismiss();
     }
 
-   /* @Override
-    public void upload_complete(final String IsCompleted) {
-        //pd.dismiss();
-        progress1.dismiss();
-        if (IsCompleted.equals("S")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-
-                }
-            });
-        }else if (IsCompleted.equals("Y")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    SubmitNLC();
-                }
-            });
-        }else if (IsCompleted.contains("ERROR")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    //new UploadPhotoInBackGround().execute();
-                    String folder=IsCompleted.substring(6);
-                    customVariablesAndMethod.getAlert(context,"Folder not found",folder+"   Invalid path \nPlease contact your administrator");
-                }
-            });
-        }else {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    customVariablesAndMethod.msgBox(context,"UPLOAD FAILED \n Please try again");
-                }
-            });
-        }
-
-    }*/
 
     @Override
     public void started(Integer responseCode, String message, String description) {

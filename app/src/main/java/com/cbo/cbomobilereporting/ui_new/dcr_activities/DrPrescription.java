@@ -2,14 +2,13 @@ package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -46,7 +45,6 @@ import java.util.List;
 import java.util.Locale;
 
 import services.ServiceHandler;
-import utils.MyConnection;
 import utils.adapterutils.DrPres_Adapter;
 import utils.adapterutils.DrPres_Model;
 import utils.adapterutils.SpinAdapter;

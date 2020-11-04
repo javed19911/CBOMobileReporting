@@ -2,6 +2,7 @@ package saleOrder.Views;
 
 import java.util.ArrayList;
 
+import cbomobilereporting.cbo.com.cboorder.Model.mDeal;
 import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mTax;
@@ -24,11 +25,14 @@ public interface iFNewOrder {
     void setManagerDiscount(mDiscount discount);
     Boolean IsRemarkReqd();
     void setRemarkEnabled(Boolean required);
+    String getRemarkTitle();
     void setRemark(String remark);
     void setQty(Double Qty);
     void setFocusQty(Boolean focusQty);
     void updateRate(Double rate);
     void updateAmt(Double amt);
+    void updateDeal(mDeal deal);
+    void setFreeQty(Double freeQty);
     void updateDiscountAmt(Double DisAmt);
     void updateDiscountStr(String DisStr);
     void updateTAX(mTax GST);

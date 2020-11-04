@@ -22,8 +22,8 @@ import android.os.StrictMode;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -36,8 +36,8 @@ import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
@@ -62,8 +62,6 @@ import it.sauronsoftware.ftp4j.FTPClient;
 import it.sauronsoftware.ftp4j.FTPDataTransferListener;
 import services.ServiceHandler;
 import services.TaskListener;
-import utils.ExceptionHandler;
-import utils.MyConnection;
 import utils.adapterutils.LeaveModel;
 import utils.adapterutils.SpinnerModel;
 import utils_new.Custom_Variables_And_Method;
@@ -268,11 +266,12 @@ public class Leave_Request extends AppCompatActivity {
         pa_name = pa_name + Custom_Variables_And_Method.PA_NAME;
         cbohelp = new CBO_DB_Helper(context);
         if (!pa_name.equals(Custom_Variables_And_Method.PA_NAME)) {
-            Intent i = new Intent(context, LoginFake.class);
+            /*Intent i = new Intent(context, LoginFake.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            startActivity(i);
+            startActivity(i);*/
+            MyCustumApplication.getInstance().Logout((Activity) context);
         } else {
 
             empName.setText("" + pa_name);

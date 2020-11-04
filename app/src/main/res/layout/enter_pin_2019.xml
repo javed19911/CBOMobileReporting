@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <RelativeLayout
+            android:id="@+id/container1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:background="@drawable/background_slant">
+
+
+            <RelativeLayout
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:layout_height="400dp" >
+
+
+                <TextView
+                    android:id="@+id/company_name_drawer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/caviardreams"
+                    android:text="Welcome Back To Cbo MobileReporting"
+                    android:gravity="top|center"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="25sp"
+                    android:textSize="18dp"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/entertext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_below="@+id/company_name_drawer"
+                    android:text="Enter Pin To Login"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="25dp"
+                    android:textColor="@color/white"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp"
+                    android:src="@drawable/cbo_noti"
+                    android:alpha="0.15"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:layout_below="@+id/entertext"
+                    android:text="Cbo Infotech Pvt Ltd"
+                    android:textColor="@color/white"
+                    android:textSize="22dp" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/container2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/background"
+                android:layout_marginTop="-100dp"
+
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+
+                <!-- <LinearLayout
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_marginStart="12dp"
+                     android:layout_marginEnd="12dp"
+                     android:layout_marginBottom="24dp"
+                     android:layout_gravity="bottom">
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:fontFamily="sans-serif-light"
+                         android:text="Bebe Rexha"
+                         android:textSize="30sp"
+                         android:textColor="@android:color/black"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:fontFamily="sans-serif-light"
+                         android:text="musician, singer, songwriter"
+                         android:textSize="14sp"/>
+                 </LinearLayout>-->
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/container3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_gravity="center"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/ic_usericon"
+                    android:layout_marginTop="200dp"
+                    app:civ_border_color="@color/semiTransparentWhite"
+                    app:civ_border_width="10dp" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="16.5dp"
+                    android:textColor="@color/navigationBarColor"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="gone"
+                    android:text="Please enter your PIN below"/>
+
+
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/custom_button__empty"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="38dp"
+                        android:layout_weight="11"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/enter_pin" />
+                    <View
+                        android:layout_width="0.8dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="fill_parent"
+                        android:background="@color/logo_green"/>
+
+                    <utils.font_package.Edit_text_Regular
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="2"
+                        android:textCursorDrawable="@drawable/cursor_for_et"
+                        android:imeOptions="actionGo"
+                        android:background="@drawable/edit_box_background_2016"
+                        android:hint="Enter pin"
+                        android:inputType="textPassword"
+                        android:paddingLeft="7dp"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/container3"
+                android:layout_margin="5dp"
+
+                >
+
+
+                <ImageView
+                    android:id="@+id/fingerprinticon"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+
+
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_fingerprint_icon" />
+                <LinearLayout
+                    android:id="@+id/loginbtn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fingerprinticon"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Pin"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        >
+
+
+
+                        <utils.font_package.Edit_text_Regular
+                            android:id="@+id/pin_again22"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                              android:inputType="textPassword"
+                            android:drawableRight="@drawable/ic_lockedicon"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <utils.font_package.Button_Regular_white
+                        android:id="@+id/submit_login22_enter_pin"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/cutom_buton_round_filled"
+                        android:gravity="center"
+                        android:text="Login"
+                        android:visibility="gone"
+                        android:layout_marginTop="15dp"
+                        android:textAllCaps="false"
+                        android:textColor="#fff"
+                        android:textSize="22sp" />
+
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/version_code"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:layout_below="@+id/loginbtn"
+                    android:text="Version : 000"
+                    android:textColor="@color/colorAccent"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/reset_pin_enter_pin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:layout_below="@+id/version_code"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+
+                    android:text="Forgot/Reset Pin ?"
+                    android:textColor="#00B9F5"
+                    android:textStyle="bold" />
+
+
+
+
+            </RelativeLayout>
+
+            <!--<include layout="@layout/pin_login_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container2"/>-->
+
+            <!--      <android.support.v7.widget.Toolbar
+                      android:id="@+id/toolbar"
+                      android:layout_width="match_parent"
+                      android:layout_height="?android:attr/actionBarSize"
+                      android:layout_marginTop="24dp"
+                      app:theme="@style/TransparentBar">
+
+
+                  </android.support.v7.widget.Toolbar>-->
+
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>
+
+
+
+

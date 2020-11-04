@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.cbo.cbomobilereporting.R;
@@ -60,6 +60,8 @@ public class Sync_service extends Service {
     String sDAIRY_ID, sSTRDAIRY_CPID,sDCRDAIRY_LOC,sDCRDAIRY_IN_TIME,sDCRDAIRY_BATTERY_PERCENT,sDCRDAIRY_REMARK,sDCRDAIRY_KM,sDCRDAIRY_SRNO,sDAIRY_REF_LAT_LONG;
     String sDCRDAIRYITEM_DAIRY_ID,sDCRDAIRYITEM_ITEM_ID_ARR,sDCRDAIRYITEM_QTY_ARR,sDCRDAIRYITEM_ITEM_ID_GIFT_ARR,sDCRDAIRYITEM_QTY_GIFT_ARR;
     String sDCRDAIRYITEM_POB_QTY,sDAIRY_FILE,sDCRDAIRY_INTERSETEDYN;
+
+    String DCRSTK_RATE, DCRDR_RATE, DCRCHEM_RATE;
 
     public void DCR_sync_all(){
         try {
@@ -125,6 +127,7 @@ public class Sync_service extends Service {
                 sDCRITEM_POB_VALUE = "";
                 sDCRITEM_VISUAL_ARR = "";
                 sDCRITEM_NOC_ARR="";
+                DCRDR_RATE = "";
 
             } else {
                 sDCRITEM_DR_ID = dcr_Commititem.get("sb_sDCRITEM_DR_ID");
@@ -137,6 +140,7 @@ public class Sync_service extends Service {
                 sDCRITEM_POB_VALUE = dcr_Commititem.get("sb_sDCRITEM_POB_VALUE");
                 sDCRITEM_VISUAL_ARR = dcr_Commititem.get("sb_sDCRITEM_VISUAL_ARR");
                 sDCRITEM_NOC_ARR = dcr_Commititem.get("sb_sDCRITEM_NOC_ARR");
+                DCRDR_RATE = dcr_Commititem.get("sb_DCRDR_RATE");
 
             }
 
@@ -157,6 +161,7 @@ public class Sync_service extends Service {
                 sDCRDR_SRNO="";
                 sDCRDR_FILE="";
                 sDCRDR_CALLTYPE="";
+                sDR_REF_LAT_LONG = "";
             } else {
                 sDCRDR_DR_ID = dcr_CommitDr.get("sb_sDCRDR_DR_ID");
                 sDCRDR_WW1 = dcr_CommitDr.get("sb_sDCRDR_WW1");
@@ -170,6 +175,7 @@ public class Sync_service extends Service {
                 sDCRDR_SRNO=dcr_CommitDr.get("sb_sDCRDR_SRNO");
                 sDCRDR_FILE=dcr_CommitDr.get("sb_sDCRDR_FILE");
                 sDCRDR_CALLTYPE=dcr_CommitDr.get("sb_sDCRDR_CALLTYPE");
+                sDR_REF_LAT_LONG = dcr_CommitDr.get("sb_sDR_REF_LAT_LONG");
             }
 
             if (  IsGPRS_ON ) {
@@ -192,6 +198,8 @@ public class Sync_service extends Service {
                 sDCRCHEM_SRNO="";
                 sDCRCHEM_REMARK="";
                 sDCRCHEM_FILE="";
+                DCRCHEM_RATE = "";
+                sCHEM_REF_LAT_LONG = "";
 
                 sCHEM_STATUS="";
                 sCOMPETITOR_REMARK="";
@@ -212,6 +220,8 @@ public class Sync_service extends Service {
                 sDCRCHEM_SRNO=dcr_ChemistCommit.get("sb_sDCRCHEM_SRNO");
                 sDCRCHEM_REMARK= dcr_ChemistCommit.get("sb_sDCRCHEM_REMARK");
                 sDCRCHEM_FILE= dcr_ChemistCommit.get("sb_sDCRCHEM_FILE");
+                DCRCHEM_RATE = dcr_ChemistCommit.get("sb_DCRCHEM_RATE");
+                sCHEM_REF_LAT_LONG = dcr_ChemistCommit.get("sb_sCHEM_REF_LAT_LONG");
 
                 sCHEM_STATUS= dcr_ChemistCommit.get("sCHEM_STATUS");
                 sCOMPETITOR_REMARK= dcr_ChemistCommit.get("sCOMPETITOR_REMARK");
@@ -241,6 +251,8 @@ public class Sync_service extends Service {
                 sDCRSTK_SRNO = "";
                 sDCRSTK_REMARK="";
                 sDCRSTK_FILE="";
+                sSTK_REF_LAT_LONG = "";
+                DCRSTK_RATE = "";
 
             } else {
                 sDCRSTK_STK_ID = dcr_StkCommit.get("sb_sDCRSTK_STK_ID");
@@ -258,6 +270,8 @@ public class Sync_service extends Service {
                 sDCRSTK_SRNO = dcr_StkCommit.get("sb_sDCRSTK_SRNO");
                 sDCRSTK_REMARK= dcr_StkCommit.get("sb_sDCRSTK_REMARK");
                 sDCRSTK_FILE= dcr_StkCommit.get("sb_sDCRSTK_FILE");
+                sSTK_REF_LAT_LONG = dcr_StkCommit.get("sb_sSTK_REF_LAT_LONG");
+                DCRSTK_RATE = dcr_StkCommit.get("sb_DCRSTK_RATE");
             }
 
 
@@ -478,6 +492,11 @@ public class Sync_service extends Service {
                 request.put("sRC_REF_LAT_LONG", sRC_REF_LAT_LONG);
 
 
+                request.put("sSTKITEM_RATE", DCRSTK_RATE);
+                request.put("sDRITEM_RATE", DCRDR_RATE);
+                request.put("sCHEMITEM_RATE", DCRCHEM_RATE);
+
+
                 request.put("sCHEM_STATUS", sCHEM_STATUS);
                 request.put("sCOMPETITOR_REMARK", sCOMPETITOR_REMARK);
 
@@ -488,7 +507,7 @@ public class Sync_service extends Service {
                     tables.add(-1);
                 }
 
-                new CboServices(this, mHandler).customMethodForAllServices(request, "DCR_SYNC_MOBILE_ALL_5", MESSAGE_INTERNET_SYNC, tables);
+                new CboServices(this, mHandler).customMethodForAllServices(request, "DCR_SYNC_MOBILE_ALL_6", MESSAGE_INTERNET_SYNC, tables);
 
                 //End of call to service
             }

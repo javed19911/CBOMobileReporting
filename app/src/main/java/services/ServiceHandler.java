@@ -660,7 +660,8 @@ public class ServiceHandler {
 
 
     public String getResponse_SpoCNFGrid(String sCompanyFolder, String iPA_ID, String sFDATE, String sTDATE,
-                                         String sType, String iCompanyId, String iHqId,String sCurrencyType) {
+                                         String sType, String iCompanyId, String iHqId,String sCurrencyType,
+                                         String iSTK_ID) {
 
         //Start of call to service
 
@@ -675,10 +676,11 @@ public class ServiceHandler {
         request.put("iCompanyId", iCompanyId);
         request.put("iHqId", iHqId);
         request.put("sCurrencyType", sCurrencyType);
+        request.put("iSTK_ID", iSTK_ID);
 
         //End of call to service
 
-        return customMethodForAllServices(request,"SpoCNFGrid_1");
+        return customMethodForAllServices(request,"SpoCNFGrid_2");
 
     }
 

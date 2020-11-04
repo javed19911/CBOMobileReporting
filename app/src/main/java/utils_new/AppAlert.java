@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +17,6 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.ui_new.SystemAlertActivity;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
-
-import org.json.JSONException;
 
 
 /**
@@ -60,19 +59,19 @@ public class AppAlert {
         return this;
     }
 
-    public void getAlert(Context context, String title, String massege) {
-        getAlert(context,title,massege,null,null,false);
+    public void getAlert(Context context, String title, String message) {
+        getAlert(context,title,message,null,null,false);
     }
-    public void getAlert(Context context, String title, String massege, Boolean resultVisible) {
-        getAlert(context,title,massege,null,null,resultVisible);
+    public void getAlert(Context context, String title, String message, Boolean resultVisible) {
+        getAlert(context,title,message,null,null,resultVisible);
     }
-    public void getAlert(Context context, String title, String massege, String url) {
-        getAlert(context,title,massege,null,url,false);
+    public void getAlert(Context context, String title, String message, String url) {
+        getAlert(context,title,message,null,url,false);
     }
     public void getAlert(Context context, String title, String[] table_list) {
         getAlert(context,title,null,table_list,null,false);
     }
-    public void getAlert(Context context, final String title, final String massege, String[] table_list, final String url, Boolean reportVisible) {
+    public void getAlert(Context context, final String title, final String message, String[] table_list, final String url, Boolean reportVisible) {
 
         //Context context = MyCustumApplication.getInstance();
 
@@ -94,7 +93,7 @@ public class AppAlert {
         }
 
         if (table_list==null ) {
-            Alert_message.setText(massege);
+            Alert_message.setText(message);
             Alert_message_list.setVisibility(View.GONE);
         }else{
             Alert_message.setVisibility(View.GONE);
@@ -144,6 +143,7 @@ public class AppAlert {
 
 
         final AlertDialog dialog = builder1.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setView(dialogLayout);
         Alert_Positive.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +166,7 @@ public class AppAlert {
                 /*Location currentBestLocation=getObject(context,"currentBestLocation",Location.class);
                 List toEmailList = Arrays.asList("mobilereporting@cboinfotech.com".split("\\s*,\\s*"));
                 *//*new SendMailTask().execute("mobilereporting@cboinfotech.com",
-                        "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n massege : "+massege+"\n Error Alert :"+title+"\n"+
+                        "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n message : "+massege+"\n Error Alert :"+title+"\n"+
                 "\nLocation-timestamp : "+currentBestLocation.getTime()+"\nLocation-Lat : "+currentBestLocation.getLatitude()+
                         "\nLocation-long : "+currentBestLocation.getLongitude()+"\n time : " +currentTime(context)+"\nlatlong : "+ getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON));
 *//*
@@ -188,7 +188,7 @@ public class AppAlert {
         dialog.show();
     }
 
-    public void inputAlert(Context context, String title, String massege, String hint, OnClickListener listener){
+    public void inputAlert(Context context, String title, String message, String hint, OnClickListener listener){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogLayout = inflater.inflate(R.layout.input_alert_view, null);
         final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
@@ -232,7 +232,7 @@ public class AppAlert {
     }
 
 
-    public void Alert(Context context, String title, String massege, View.OnClickListener listener){
+    public void Alert(Context context, String title, String message, View.OnClickListener listener){
 
         //Context context = MyCustumApplication.getInstance();
 
@@ -248,12 +248,13 @@ public class AppAlert {
         final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
         pa_id_txt.setText(""+ Custom_Variables_And_Method.PA_ID);
 
-        Alert_message.setText(massege);
+        Alert_message.setText(message);
         Alert_message_list.setVisibility(View.GONE);
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
 
         final AlertDialog dialog = builder1.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setView(dialogLayout);
         Alert_Positive.setOnClickListener(new View.OnClickListener() {
@@ -269,6 +270,38 @@ public class AppAlert {
         dialog.setCancelable(false);
         dialog.show();
 
+     /*   LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        BottomSheetDialog dialog = new BottomSheetDialog(context);
+        final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
+
+        final TextView Alert_title= (TextView) dialogLayout.findViewById(R.id.title);
+
+        final TextView Alert_message= (TextView) dialogLayout.findViewById(R.id.message);
+        final TableLayout Alert_message_list= (TableLayout) dialogLayout.findViewById(R.id.table_view);
+        final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
+        Alert_title.setText(title);
+
+        final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
+        pa_id_txt.setText(""+ Custom_Variables_And_Method.PA_ID);
+
+        Alert_message.setText(massege);
+        Alert_message_list.setVisibility(View.GONE);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+
+
+        Alert_Positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null ){
+                    listener.onClick(view);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(dialogLayout);
+        dialog.show();*/
+
     }
 
     public void SystemAlert( String title, String message, View.OnClickListener listener){
@@ -282,7 +315,7 @@ public class AppAlert {
         context.startActivity(intent);
     }
 
-    public void DecisionAlert(Context context, String title, String massege, OnClickListener listener){
+    public void DecisionAlert(Context context, String title, String message, OnClickListener listener){
 
         //Context context = MyCustumApplication.getInstance();
 
@@ -304,13 +337,14 @@ public class AppAlert {
         final TextView pa_id_txt= (TextView) dialogLayout.findViewById(R.id.PA_ID);
         pa_id_txt.setText(""+ Custom_Variables_And_Method.PA_ID);
 
-        Alert_message.setText(massege);
+        Alert_message.setText(message);
         Alert_message_list.setVisibility(View.GONE);
         Alert_negative.setVisibility(View.VISIBLE);
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
 
 
         final AlertDialog dialog = builder1.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setView(dialogLayout);
         Alert_Positive.setOnClickListener(new View.OnClickListener() {

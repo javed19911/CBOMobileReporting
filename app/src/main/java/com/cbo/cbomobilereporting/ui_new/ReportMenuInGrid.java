@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,6 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DCRReport.DcrReportsNew;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DOB_DOA;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DashboardReport;
-import com.cbo.cbomobilereporting.ui_new.report_activities.DcrReports;
 import com.cbo.cbomobilereporting.ui_new.report_activities.DrWiseVisit;
 import com.cbo.cbomobilereporting.ui_new.report_activities.Logged_UnLogged;
 import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.MissedDoctorActivity;
@@ -32,6 +31,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import saleOrder.Activities.MyOrder;
+import saleOrder.Model.mParty;
 import utils.adapterutils.ReportMenu_Grid_Adapter;
 import com.cbo.cbomobilereporting.MyCustumApplication;
 import utils.networkUtil.NetworkUtil;
@@ -141,6 +142,11 @@ public class ReportMenuInGrid extends Fragment {
                             onClickmsg_ho();
                             break;
                         }
+                        case "R_SORD_SUM": {
+
+                            onClickSalesOrderSummary();
+                            break;
+                        }
                         default: {
                             url = new CBO_DB_Helper(getActivity()).getMenuUrl("REPORTS", getKeyList.get(position));
                             if (url != null && !url.equals("")) {
@@ -165,6 +171,17 @@ public class ReportMenuInGrid extends Fragment {
 
 
     }
+
+
+    private void onClickSalesOrderSummary() {
+
+        Intent intent = new Intent(context, MyOrder.class);
+        intent.putExtra("party", new mParty());
+        intent.putExtra("ShowParty", true);
+        startActivity(intent);
+
+    }
+
 
     private void onClickmsg_ho() {
         if (!networkUtil.internetConneted(context)) {

@@ -2,6 +2,7 @@ package com.cbo.cbomobilereporting.databaseHelper.User;
 
 import android.location.Location;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.databaseHelper.Property;
 
 import java.util.Date;
@@ -22,11 +23,13 @@ public class mUser {
 
     private String IMEI;
     private String OS;
+    private String BRAND;
     private String battery;
-    private String AppVersion = "20190527";
+    private String AppVersion = "20190724";
     private String time;
     private Location location;
-    private Boolean LoggedInAsSupport = false;
+    private Boolean LoggedInAsSupport;
+    private String GCMToken ="";
     //private Boolean showLatLong = false;
 
     public mUser(String ID, String companyCode) {
@@ -76,6 +79,9 @@ public class mUser {
     public String getOS() {
         return OS;
     }
+    public String getBRAND() {
+        return BRAND;
+    }
 
     public String getBattery() {
         return battery;
@@ -95,6 +101,11 @@ public class mUser {
     }
 
     public Boolean getLoggedInAsSupport() {
+        if (LoggedInAsSupport == null){
+            LoggedInAsSupport= !MyCustumApplication.getInstance()
+                    .getDataFrom_FMCG_PREFRENCE("LoggedInAsSupport","0")
+                    .equals("0");
+        }
         return LoggedInAsSupport;
     }
 
@@ -111,9 +122,20 @@ public class mUser {
     }*/
 
     public String getIMEI() {
+        if (getLoggedInAsSupport()){
+            return MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("IMEI","");
+        }
         return IMEI;
     }
-///setter
+
+    public String getGCMToken() {
+        if (GCMToken.isEmpty()){
+            GCMToken= MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GCMToken","");
+        }
+        return getLoggedInAsSupport()? "" : GCMToken;
+    }
+
+    ///setter
 
     public mUser setName(String name) {
         Name = name;
@@ -157,6 +179,10 @@ public class mUser {
         this.OS = OS;
         return this;
     }
+    public mUser setBRAND(String BRAND) {
+        this.BRAND = BRAND;
+        return this;
+    }
 
     public mUser setBattery(String battery) {
         this.battery = battery;
@@ -170,6 +196,7 @@ public class mUser {
     }
 
     public mUser setLoggedInAsSupport(Boolean loggedInAsSupport) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("LoggedInAsSupport",loggedInAsSupport?"1":"0");
         LoggedInAsSupport = loggedInAsSupport;
         return this;
     }
@@ -187,6 +214,19 @@ public class mUser {
     public mUser setIMEI(String IMEI) {
         this.IMEI = IMEI;
         return this;
+    }
+
+    public mUser setIMEIasSupport(String IMEI) {
+        if (getLoggedInAsSupport()) {
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("IMEI", IMEI);
+        }
+        this.IMEI = IMEI;
+        return this;
+    }
+
+    public void setGCMToken(String GCMToken) {
+        MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("GCMToken",GCMToken);
+        this.GCMToken = GCMToken;
     }
 
     /*public void setShowLatLong(Boolean showLatLong) {

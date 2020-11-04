@@ -32,7 +32,7 @@ import java.util.HashMap;
 
 import services.CboServices;
 import services.MyAPIService;
-import utils.CBOUtils.SystemArchitecture;
+
 import com.cbo.cbomobilereporting.MyCustumApplication;
 
 /**
@@ -181,7 +181,7 @@ public class Service_Call_From_Multiple_Classes {
                             c.getString("ITEM_NAME"), c.getString("ITEM_POB"), c.getString("ITEM_SALE"),c.getString("AREA"),c.getString("DR_LAT_LONG")
                             , c.getString("FREQ"),c.getString("NO_VISITED") , c.getString("DR_LAT_LONG2"),c.getString("DR_LAT_LONG3"),c.getString("COLORYN")
                             ,c.getString("CRM_COUNT"),c.getString("DRCAPM_GROUP"),c.getString("SHOWYN"),c.getInt("MAX_REG"),c.getString("RXGENYN")
-                            , c.getString("APP_PENDING_YN"));
+                            , c.getString("APP_PENDING_YN"), c.getString("DRLAST_PRODUCT"));
 
                 }
 
@@ -529,7 +529,6 @@ public class Service_Call_From_Multiple_Classes {
 
 
     public void DownloadAll(Context context, Response listener){
-        new SystemArchitecture(context).getDEVICE_ID(context);
         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
 
 
@@ -540,9 +539,9 @@ public class Service_Call_From_Multiple_Classes {
         request.put("iPA_ID", MyCustumApplication.getInstance().getUser().getID());
         request.put("sDcrId",MyCustumApplication.getInstance().getDCR().getId());
         request.put("sRouteYn", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"root_needed"));
-        request.put("sGCM_TOKEN", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken"));
-        request.put("sMobileId", SystemArchitecture.COMPLETE_DEVICE_INFO);
-        request.put("sVersion", Custom_Variables_And_Method.VERSION);
+        request.put("sGCM_TOKEN", MyCustumApplication.getInstance().getUser().getGCMToken());
+        request.put("sMobileId", MyCustumApplication.getInstance().getUser().getIMEI());
+        request.put("sVersion", MyCustumApplication.getInstance().getUser().getAppVersion());
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -637,7 +636,8 @@ public class Service_Call_From_Multiple_Classes {
             Intent i = new Intent(context, LoginMain.class);
             ((CustomActivity) context).stopLoctionService();
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
             ((CustomActivity) context).finish();
 
@@ -754,7 +754,8 @@ public class Service_Call_From_Multiple_Classes {
                 for (int a = 0; a < jsonArray11.length(); a++) {
                     JSONObject jasonObj1 = jsonArray11.getJSONObject(a);
                     cbo_helper.insertProducts(jasonObj1.getString("ITEM_ID"), jasonObj1.getString("ITEM_NAME"),
-                            Double.parseDouble(jasonObj1.getString("STK_RATE")), jasonObj1.getString("GIFT_TYPE"),
+                            Double.parseDouble(jasonObj1.getString("STK_RATE")),Double.parseDouble(jasonObj1.getString("CHEM_RATE")),
+                            Double.parseDouble(jasonObj1.getString("DR_RATE")),jasonObj1.getString("GIFT_TYPE"),
                             jasonObj1.getString("SHOW_ON_TOP"),jasonObj1.getString("SHOW_YN"),
                             jasonObj1.getInt("SPL_ID"),jasonObj1.getString("GENERIC_NAME"));
                     Log.e("%%%%%%%%%%%%%%%", "item insert");
@@ -945,8 +946,12 @@ public class Service_Call_From_Multiple_Classes {
                 editor.putString("FY_FDATE", c.getString("FY_FDATE"));
                 editor.putString("FY_TDATE", c.getString("FY_TDATE"));
                 editor.putString("ORD_DISC_TYPE", c.getString("ORD_DISC_TYPE"));
-                editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
                 editor.putString("ORD_DISC_EDITCOLS", c.getString("ORD_DISC_EDITCOLS"));
+                editor.putString("SALE_ORDER_REMARKYN", c.getString("SALE_ORDER_REMARKYN"));
+                editor.putString("SALE_ORDER_REMARK_TITLE", c.getString("SALE_ORDER_REMARK_TITLE"));
+                editor.putString("INDEPENDENT_WORKING", c.getString("INDEPENDENT_WORKING"));
+                editor.putString("RXQTYYN", c.getString("RXQTYYN"));
+                editor.putString("GIFTSHOW_STOCKONLYYN", c.getString("GIFTSHOW_STOCKONLYYN"));
 
 
                 editor.commit();
@@ -954,6 +959,8 @@ public class Service_Call_From_Multiple_Classes {
             }
 
             cbo_helper.deleteMenu();
+
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","Y");
             for (int i = 0; i < menus.length(); i++) {
                 JSONObject object = menus.getJSONObject(i);
                 String menu = object.getString("MAIN_MENU");
@@ -963,6 +970,7 @@ public class Service_Call_From_Multiple_Classes {
                 String main_menu_srno = object.getString("MAIN_MENU_SRNO");
                 cbo_helper.insertMenu(menu, menu_code, menu_name, menu_url, main_menu_srno);
             }
+            MyCustumApplication.getInstance().setDataInTo_FMCG_PREFRENCE("MENU_SYNC_FAILED","N");
             //return true;
         }catch (JSONException e) {
             throw e;

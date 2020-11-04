@@ -4,19 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
@@ -28,11 +25,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import services.CboServices;
-import utils.adapterutils.Dcr_Workwith_Adapter;
-import utils.adapterutils.Dcr_Workwith_Model;
 import utils.adapterutils.SpinnerModel;
 import utils.adapterutils.TPList_Adapter;
 import utils_new.Custom_Variables_And_Method;
@@ -54,7 +48,7 @@ public class PospondFarmerMeeting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pospond_farmer_meeting);
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
         hader_text.setText("Select the Postpond Activity Date....");
         setSupportActionBar(toolbar);

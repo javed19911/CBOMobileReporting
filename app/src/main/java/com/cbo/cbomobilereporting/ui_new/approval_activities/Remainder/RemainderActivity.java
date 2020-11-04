@@ -1,12 +1,12 @@
 package com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewCompat;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.view.ViewCompat;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +27,7 @@ import utils_new.AppAlert;
 public class RemainderActivity extends CustomActivity implements IApprovalRemainder{
 
 
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
     Button backBtn;
     VMApprovalRemainder vmApprovalRemainder;
     RecyclerView listView;

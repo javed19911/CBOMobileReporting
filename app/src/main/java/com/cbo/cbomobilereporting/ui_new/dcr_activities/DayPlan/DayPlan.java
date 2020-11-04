@@ -1,6 +1,6 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.DayPlan;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.cbo.cbomobilereporting.R;

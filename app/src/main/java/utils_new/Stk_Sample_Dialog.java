@@ -10,7 +10,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -419,7 +418,7 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
         main_item_list.clear();
         display_item_list.clear();
        // String ItemIdNotIn = "0";
-        Cursor c = cbohelp.getAllProducts(ID);
+        Cursor c = cbohelp.getAllProducts(ID,"Stk");
         if (c.moveToFirst()) {
             do {
                 main_item_list.add(new GiftModel(c.getString(c.getColumnIndex("item_name")), c.getString(c.getColumnIndex("item_id")), c.getString(c.getColumnIndex("stk_rate")),
@@ -476,7 +475,7 @@ public class Stk_Sample_Dialog implements Up_Dwn_interface, Ipob {
             }
         }
         if (total_pob>0){
-            itemincart.setText( AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
+            itemincart.setText( "POB : " + AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
         }else{
             itemincart.setText(items + " item");
         }

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
 import utils.adapterutils.Dcr_Workwith_Model;
-import utils.adapterutils.SpinnerModel;
-import utils_new.Custom_Variables_And_Method;
 
 /**
  * Created by cboios on 11/03/19.

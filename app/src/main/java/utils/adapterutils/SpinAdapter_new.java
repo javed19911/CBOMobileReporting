@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator;
 
@@ -46,6 +47,9 @@ public class SpinAdapter_new extends ArrayAdapter<String>{
         activity = activitySpinner;
         data     = objects;
         this.show=show;
+        if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
+            this.show=0;
+        }
         DR_COLOR = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(getContext(),"DR_COLOR","");
 
 

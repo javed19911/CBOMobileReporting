@@ -32,11 +32,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +49,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -84,7 +85,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
     TextView tof, ccf, subf;
     EditText toppls, ccppl, subject, message;
     Button toadd, tocc, send, back;
-    LinearLayout lay1, lay2, lay3, lay4;
+    LinearLayout lay1, lay2, lay3, lay4,deletelayout;
     Custom_Variables_And_Method customVariablesAndMethod;
     Context context;
     String company_name = "", myppl_list = "", name = "", name2 = "";
@@ -101,6 +102,8 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
     CheckBox add_attachment;
     RadioGroup attach_option;
     ImageView attach_img;
+    ImageView deletebtn;
+    TextView filenameTxt;
     ArrayList<Map<String, String>> data = null;
     String Msg_Id,mail_type="";
     boolean save_as_draft=true;
@@ -114,15 +117,27 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
         setContentView(R.layout.create_mail1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_hadder);
         TextView textView = (TextView) findViewById(R.id.hadder_text_1);
-
         add_attachment = (CheckBox) findViewById(R.id.add_attachment);
         attach_option = (RadioGroup) findViewById(R.id.attach_option);
         attach_img= (ImageView) findViewById(R.id.attach_img);
+        filenameTxt = (TextView) findViewById(R.id.filename);
+        deletelayout=(LinearLayout)findViewById(R.id.deletelayout);
+
+        deletebtn=(ImageView) findViewById(R.id.deletebtn);
+
+        deletebtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filenameTxt.setText("");
+                filename="";
+                deletelayout.setVisibility(View.GONE);
+          //      Toast.makeText(context, "Attachment Deleted Sucessfully", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         textView.setText("Compose Mail");
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_hadder_2016);
@@ -164,6 +179,9 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
+        deletelayout.setVisibility(View.GONE);
+        filenameTxt.setVisibility(View.GONE);
+        deletebtn.setVisibility(View.GONE);
         if (bundle!=null){
             save_as_draft=false;
             Msg_Id=intent.getStringExtra("mail_id");
@@ -174,8 +192,12 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             Msg_Id = data.get(0).get("mail_id");
             message.setText(data.get(0).get("REMARK"));
             subject.setText(data.get(0).get("sub"));
+
             if (!data.get(0).get("FILE_NAME").equals("")) {
-                attach_img.setImageResource(R.drawable.attach);
+                //attach_img.setImageResource(R.drawable.attach);
+                deletelayout.setVisibility(View.GONE);
+                filenameTxt.setVisibility(View.VISIBLE);
+                deletebtn.setVisibility(View.VISIBLE);
                 final String[] aT1 = {data.get(0).get("FILE_NAME")};
                 filename=aT1[0].substring( aT1[0].lastIndexOf("/")+1);
                 if(data.get(0).get("category").equals("d")) {
@@ -208,6 +230,17 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                         MyCustumApplication.getInstance().LoadURL("Attachment",aT1[0]);
                     }
                 });
+
+                filenameTxt.setText(filename);
+
+                filenameTxt.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        attach_img.performClick();
+                    }
+                });
+
             }
 
             switch (mail_type){
@@ -218,15 +251,29 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                     myCboDbHelper.delete_Mail(Msg_Id);
                     save_as_draft=true;
                     break;
+                case "RA":
                 case "R":
+                    filetype = -1;
                     subject.setFocusable(false);
-                    toppls.setFocusable(false);
-                    name = data.get(0).get("from");
-                    toid =data.get(0).get("from_id");
+                    //toppls.setFocusable(false);
+                    if (intent.getStringExtra("mail_to_ids").isEmpty()) {
+                        name = data.get(0).get("from");
+                        toid = data.get(0).get("from_id");
+                    }else{
+                        name = intent.getStringExtra("mail_to_names");
+                        toid = intent.getStringExtra("mail_to_ids");
+                    }
+
+                    if (!intent.getStringExtra("mail_cc_ids").isEmpty()) {
+                        name2 = intent.getStringExtra("mail_cc_names");
+                        ccid = intent.getStringExtra("mail_cc_ids");
+                    }
                     toppls.setText(name);
-                    toadd.setVisibility(View.GONE);
+                    ccppl.setText(name2);
+                    //toadd.setVisibility(View.GONE);
                     break;
                 case "F":
+                    filetype = -1;
                     subject.setFocusable(false);
                     //message.setFocusable(false);
                     break;
@@ -276,6 +323,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), MailTo_PPL.class);
+                i.putExtra("selected_ID",toid);
                 startActivityForResult(i, 0);
             }
         });
@@ -286,6 +334,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent i = new Intent(getApplicationContext(), Mail_CC.class);
+                i.putExtra("selected_ID",ccid);
                 startActivityForResult(i, 1);
             }
         });
@@ -320,12 +369,12 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
 
     private void semd_mail(){
         if (toppls.getText().toString().equals("")) {
-            customVariablesAndMethod.msgBox(context,"Please Add Atleast one Recepient ");
+            customVariablesAndMethod.msgBox(context,"Please Add Atleast one Recipient ");
 
         } else if (subject.getText().toString().equals("")) {
             customVariablesAndMethod.msgBox(context,"Enter Subject Please.... ");
         } else if (message.getText().toString().equals("")) {
-            customVariablesAndMethod.msgBox(context,"Enter Your Massege Please.... ");
+            customVariablesAndMethod.msgBox(context,"Enter Your Message Please.... ");
         } else {
 
 
@@ -417,7 +466,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
                 JSONObject jsonObject1 = jsonArray1.getJSONObject(0);
                 String mail_id = jsonObject1.getString("DCRID");
 
-                customVariablesAndMethod.msgBox(context,"Massage Send Successfully..");
+                customVariablesAndMethod.msgBox(context,"Message Send Successfully..");
                 Intent i = new Intent(context, Outbox_Mail.class);
                 i.putExtra("mail_type","s");
                 i.putExtra("mail_id",mail_id);
@@ -701,7 +750,7 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             // hide video preview
 
             // bimatp factory
-            BitmapFactory.Options options = new BitmapFactory.Options();
+           /* BitmapFactory.Options options = new BitmapFactory.Options();
 
             // downsizing image as it throws OutOfMemory Exception for larger
             // images
@@ -715,7 +764,11 @@ public class CreateMail1 extends AppCompatActivity implements up_down_ftp.Adapte
             final Bitmap bitmap = BitmapFactory.decodeFile(picUri,
                     options);
             filename_type="i";//image
-            attach_img.setImageBitmap(bitmap);
+            attach_img.setImageBitmap(bitmap);*/
+            deletelayout.setVisibility(View.VISIBLE);
+            filenameTxt.setVisibility(View.VISIBLE);
+            deletebtn.setVisibility(View.VISIBLE);
+            filenameTxt.setText(filename);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

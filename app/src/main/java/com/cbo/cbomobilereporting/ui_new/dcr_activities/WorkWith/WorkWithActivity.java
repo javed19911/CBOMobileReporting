@@ -1,13 +1,13 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.WorkWith;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -16,17 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.CallUtils.aCall;
 
 import java.util.ArrayList;
 
-import cbomobilereporting.cbo.com.cboorder.interfaces.RecycleViewOnItemClickListener;
 import utils.adapterutils.Dcr_Workwith_Model;
 
 public class WorkWithActivity extends AppCompatActivity implements iWorkWith{
 
 
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
     private RecyclerView itemlist_filter;
     private aWorkWith workWithAdaptor;
     private vmWorkWith viewModel;
@@ -104,7 +102,7 @@ public class WorkWithActivity extends AppCompatActivity implements iWorkWith{
 
     @Override
     public void setTile() {
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar()!=null) {

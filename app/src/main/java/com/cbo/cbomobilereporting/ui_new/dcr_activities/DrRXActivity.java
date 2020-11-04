@@ -1,27 +1,17 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,17 +20,10 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mMissedFilter;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.ksoap2.serialization.SoapObject;
-
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -48,19 +31,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 
 import services.MyAPIService;
 import services.ServiceHandler;
-import utils.CBOUtils.SystemArchitecture;
 import utils.adapterutils.DrPres_Adapter;
 import utils.adapterutils.DrPres_Model;
 import utils.adapterutils.ExpandableListAdapter;
-import utils.adapterutils.GiftModel;
-import utils.adapterutils.MyAdapter2;
-import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
-import utils.model.DropDownModel;
 import utils_new.AppAlert;
 import utils_new.CustomDialog.Spinner_Dialog;
 import utils_new.Custom_Variables_And_Method;
@@ -412,7 +389,7 @@ public class DrRXActivity extends AppCompatActivity  implements ExpandableListAd
 
             list.clear();
 
-            Cursor c = cbohelp.getAllProducts("0");
+            Cursor c = cbohelp.getAllProducts("0","Dr");
             if (c.moveToFirst()) {
                 do {
 

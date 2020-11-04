@@ -1,5 +1,7 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.lead;
 
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Enum.CallType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ public class SamplePOBBuilder implements Serializable{
 
 
     private ItemType type = ItemType.POB;
+    private CallType callType = CallType.DOCTOR;
     private String title = "Select Items....";
     private String lookForId ="";
     private ArrayList<PobModel>  items = new ArrayList<>();
@@ -28,6 +31,10 @@ public class SamplePOBBuilder implements Serializable{
 
     public ItemType getType() {
         return type;
+    }
+
+    public CallType getCallType() {
+        return callType;
     }
 
     public String getTitle() {
@@ -61,6 +68,11 @@ public class SamplePOBBuilder implements Serializable{
 
     public SamplePOBBuilder setItems(ArrayList<PobModel> items) {
         this.items = items;
+        return this;
+    }
+
+    public SamplePOBBuilder setCallType(CallType callType) {
+        this.callType = callType;
         return this;
     }
 }

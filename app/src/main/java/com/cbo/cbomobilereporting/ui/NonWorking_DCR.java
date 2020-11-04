@@ -20,18 +20,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -59,11 +62,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.aDA;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.eExpanse;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mDA;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Expense.mExpHead;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,6 +98,7 @@ import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.GPS_Timmer_Dialog;
 import utils_new.GalleryUtil;
+import utils_new.interfaces.RecycleViewOnItemClickListener;
 import utils_new.up_down_ftp;
 
 public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapter.Expense_interface, up_down_ftp.AdapterCallback {
@@ -149,10 +155,15 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
     Boolean resultTF;
     ArrayList<SpinnerModel> data1;
     ImageView attachnew;
-    LinearLayout actual_fare_layout,actual_DA_layout;
+    LinearLayout actual_fare_layout,actual_DA_layout,manual_DA_layout;
     String ROUTE_CLASS = "",ACTUALDA_FAREYN = "",ACTUALFAREYN_MANDATORY="";
     Double ACTUALFARE_MAXAMT = 0D;
     EditText da_root;
+
+    Button btn_DaType;
+    ImageView DaType_img;
+    AlertDialog myalertDialog = null;
+    private ArrayList<mDA> DA_Types = new ArrayList<>();
 
 
     public void onCreate(Bundle b) {
@@ -174,6 +185,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
         loclayout = (LinearLayout) findViewById(R.id.layout2_nonworkingdcr);
         actual_fare_layout = (LinearLayout) findViewById(R.id.actual_fare_layout);
         actual_DA_layout = findViewById(R.id.actual_DA_layout);
+        manual_DA_layout = findViewById(R.id.manual_DA_layout);
         da_root = (EditText) findViewById(R.id.da_root);
 
         rootView = (HorizontalScrollView) findViewById(R.id.root_view);
@@ -250,6 +262,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 tables.add(0);
                 tables.add(1);
                 tables.add(2);
+                tables.add(3);
 
                 progress1.setMessage("Please Wait..");
                 progress1.setCancelable(false);
@@ -292,6 +305,23 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
         data1 = new ArrayList<SpinnerModel>();
 
         data1.add(new SpinnerModel("--Select--"));
+
+        DaType_img = findViewById(R.id.DaType_img);
+        DaType_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickManualDaType();
+            }
+        });
+
+        btn_DaType = findViewById(R.id.btn_DaType);
+        btn_DaType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickManualDaType();
+            }
+        });
+
 
         exp_head = new ArrayList<String>();
 
@@ -602,6 +632,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                 request.put("sDaType", datype_val);
                 request.put("iDistanceId", dist_id3);
 
+
                 ArrayList<Integer> tables = new ArrayList<>();
                 tables.add(0);
 
@@ -628,6 +659,37 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
         }
     };
 
+    private void onClickManualDaType() {
+        AlertDialog.Builder myDialog = new AlertDialog.Builder(context);
+        final RecyclerView itemlist_filter = new RecyclerView(context);
+
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(itemlist_filter);
+        myDialog.setView(layout);
+        aDA arrayAdapter = new aDA(context, DA_Types);
+
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        itemlist_filter.setLayoutManager(mLayoutManager1);
+        itemlist_filter.setItemAnimator(new DefaultItemAnimator());
+        itemlist_filter.setAdapter(arrayAdapter);
+        arrayAdapter.setOnClickListner(new RecycleViewOnItemClickListener() {
+            @Override
+            public void onClick(View view, int position, boolean isLongClick) {
+                datype_val = DA_Types.get(position).getCode();
+                btn_DaType.setText(DA_Types.get(position).getName());
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"DA_TYPE",datype_val);
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val","" + DA_Types.get(position).getDAAmount());
+                customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val","" + DA_Types.get(position).getTAAmount());
+                init_DA_type(DA_layout);
+                myalertDialog.dismiss();
+            }
+        });
+
+
+        myalertDialog = myDialog.show();
+    }
+
     private void expense_commit(){
 
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "da_val",da_root.getText().toString().isEmpty()? "0" : da_root.getText().toString());
@@ -640,6 +702,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
         request.put("sDaType", datype_val);
         request.put("iDistanceId", dist_id3);
         request.put("iDA_VALUE", customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context, "da_val","0"));
+        request.put("DA_TYPE_SAVEYN",manual_DA_layout.getVisibility()== View.GONE ? "N": "Y");
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
@@ -648,7 +711,7 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
         progress1.setCancelable(false);
         progress1.show();
 
-        new CboServices(NonWorking_DCR.this,mHandler).customMethodForAllServices(request,"DCR_COMMITEXP_2",MESSAGE_INTERNET_DCR_COMMITEXP,tables);
+        new CboServices(NonWorking_DCR.this,mHandler).customMethodForAllServices(request,"DCR_COMMITEXP_3",MESSAGE_INTERNET_DCR_COMMITEXP,tables);
 
         //End of call to service
         customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"ACTUALFARE",distAmt.getText().toString());
@@ -1463,14 +1526,16 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
 
                 Custom_Variables_And_Method.CHEMIST_NOT_VISITED = "";
                 Custom_Variables_And_Method.STOCKIST_NOT_VISITED = "";
-                Intent i = new Intent(NonWorking_DCR.this, LoginFake.class);
+                /*Intent i = new Intent(NonWorking_DCR.this, LoginFake.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                startActivity(i);*/
 
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "Final_submit", "Y");
                 customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context, "work_type_Selected", "w");
 
-                finish();
+//                finish();
+
+                MyCustumApplication.getInstance().Logout((Activity) context);
 
             } catch (JSONException e) {
                 Log.d("MYAPP", "objects are: " + e.toString());
@@ -1532,10 +1597,11 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
 
 
                 rootdata.clear();
+                JSONObject object = null;
                 String table2 = result.getString("Tables2");
                 JSONArray jsonArray3 = new JSONArray(table2);
                 for (int i = 0; i < jsonArray3.length(); i++) {
-                    JSONObject object = jsonArray3.getJSONObject(i);
+                    object = jsonArray3.getJSONObject(i);
 
                     rootdata.add((object.getString("DA_TYPE")));
                     rootdata.add((object.getString("FARE")));
@@ -1553,6 +1619,51 @@ public class NonWorking_DCR extends AppCompatActivity implements Expenses_Adapte
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"da_val",da_val);
                     customVariablesAndMethod.setDataInTo_FMCG_PREFRENCE(context,"distance_val",object.getString("TA_AMT_NEW"));
                 }
+
+
+                DA_Types.clear();
+                String table3 = result.getString("Tables3");
+                JSONArray jsonArray4 = new JSONArray(table3);
+                for (int i = 0; i < jsonArray4.length(); i++) {
+                    JSONObject object1 = jsonArray4.getJSONObject(i);
+                    mDA da = new mDA();
+                    da.setCode(object1.getString("FIELD_CODE"));
+                    da.setName(object1.getString("FIELD_NAME"));
+                    da.setMultipleFactor(object1.getDouble("FARE_MULT_BY"));
+
+                    if (object != null) {
+                        da.setTA_Km(object.getDouble("KM_SINGLE_SIDE"));
+                        da.setTA_Rate(object.getDouble("FARE_RATE"));
+                        switch (da.getCode()) {
+                            case "L":
+                                da.setDAAmount(object.getDouble("DA_L_RATE"));
+                                break;
+                            case "EX":
+                            case "EXS":
+                                da.setDAAmount(object.getDouble("DA_EX_RATE"));
+                                break;
+                            case "NS":
+                            case "NSD":
+                                da.setDAAmount(object.getDouble("DA_NS_RATE"));
+                                break;
+                        }
+                    }
+                    if (datype_val.equalsIgnoreCase(da.getCode())){
+                        btn_DaType.setText(da.getName());
+                    }
+                    DA_Types.add(da);
+                }
+
+
+
+                if (object != null){
+                    if (object.getString("DA_TYPE_MANUALYN").equalsIgnoreCase("Y")){
+                        manual_DA_layout.setVisibility(View.VISIBLE);
+                    }else{
+                        manual_DA_layout.setVisibility(View.GONE);
+                    }
+                }
+
 
                 data = cbohelp.get_Expense();
                 sm = new Expenses_Adapter(NonWorking_DCR.this, data);

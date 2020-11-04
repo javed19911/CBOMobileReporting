@@ -80,7 +80,7 @@
                     />
 
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listView_rem_approval"
                     android:cacheColorHint="#00000000"
                     android:scrollbars="none"

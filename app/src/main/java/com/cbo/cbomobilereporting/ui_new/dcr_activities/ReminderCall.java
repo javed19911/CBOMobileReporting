@@ -17,9 +17,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -46,10 +46,8 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.DrRcCallDB;
 import com.cbo.cbomobilereporting.databaseHelper.Call.mDrRCCall;
-import com.cbo.cbomobilereporting.databaseHelper.Call.mStockistCall;
 import com.cbo.cbomobilereporting.databaseHelper.Location.LocationDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.transaction_activities.Doctor_registration_GPS;
 import com.flurry.android.FlurryAgent;
 import com.uenics.javed.CBOLibrary.CBOServices;
@@ -155,7 +153,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 								  c.getString(c.getColumnIndex("DR_LAT_LONG2")), c.getString(c.getColumnIndex("DR_LAT_LONG3")),
 								  c.getString(c.getColumnIndex("COLORYN")), c.getString(c.getColumnIndex("CALLYN")),
 								  c.getString(c.getColumnIndex("CRM_COUNT")), c.getString(c.getColumnIndex("DRCAPM_GROUP")),
-								  c.getString(c.getColumnIndex("APP_PENDING_YN"))));
+								  c.getString(c.getColumnIndex("APP_PENDING_YN")),c.getString(c.getColumnIndex("DRLAST_PRODUCT"))));
 
 					  }while(c.moveToNext());
 					 
@@ -178,7 +176,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		setContentView(R.layout.reminder_card);
         FlurryAgent.logEvent("ReminderCall");
 
-		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+		androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
 		TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
 
@@ -447,13 +445,15 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 						}
 					}
 
-					Intent intent = new Intent(getApplicationContext(), LoginFake.class);
+					/*Intent intent = new Intent(getApplicationContext(), LoginFake.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 					intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					intent.putExtra("EXIT", true);
 					startActivity(intent);
-					finish();
+					finish();*/
+
+					MyCustumApplication.getInstance().Logout((Activity) context);
 					break;
 				case 99:
 					if ((null != msg.getData())) {
@@ -592,7 +592,8 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 		}
 	}
 
-	private void Doc_Detail(String doc_class, String doc_potential, String doc_last_visited,String area, String CRM_COUNT,String DRCAPM_GROUP) {
+	private void Doc_Detail(String doc_class, String doc_potential, String doc_last_visited,String area, String CRM_COUNT,
+							String DRCAPM_GROUP,String lastProduct) {
 		doc_detail.removeAllViews();
 
 		//tbrow0.setBackgroundColor(0xff125688);
@@ -734,6 +735,32 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 
 			TextView tv12 = new TextView(context);
 			tv12.setText(DRCAPM_GROUP);
+			tv12.setPadding(5, 5, 5, 0);
+			tv12.setTextSize(11);
+			tv12.setTextColor(Color.BLACK);
+			tv12.setGravity(Gravity.RIGHT);
+			tv12.setTypeface(null, Typeface.NORMAL);
+			tv12.setLayoutParams(params);
+			tbrow02.addView(tv12);
+
+			doc_detail.addView(tbrow02);
+		}
+
+
+		if (!lastProduct.equals("")) {
+
+			TableRow tbrow02 = new TableRow(context);
+			TextView tv02 = new TextView(context);
+			tv02.setText("Last Product");
+			tv02.setTextSize(11);
+			tv02.setPadding(5, 5, 5, 0);
+			tv02.setTextColor(Color.BLACK);
+			tv02.setTypeface(null, Typeface.BOLD);
+			tv02.setLayoutParams(params);
+			tbrow02.addView(tv02);
+
+			TextView tv12 = new TextView(context);
+			tv12.setText(lastProduct);
 			tv12.setPadding(5, 5, 5, 0);
 			tv12.setTextSize(11);
 			tv12.setTextColor(Color.BLACK);
@@ -1197,7 +1224,9 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
             remark.setText(rc_doctor_list.get("remark").get(0));
             last_pob_layout(sample_name, sample_qty, sample_pob);
 
-            Doc_Detail(getdc.get(position).getCLASS(), getdc.get(position).getPOTENCY_AMT(), getdc.get(position).getLastVisited(), getdc.get(position).getAREA(), array_sort.get(position).getCRM_COUNT(), array_sort.get(position).getDRCAPM_GROUP());
+            Doc_Detail(getdc.get(position).getCLASS(), getdc.get(position).getPOTENCY_AMT(), getdc.get(position).getLastVisited(),
+					getdc.get(position).getAREA(), array_sort.get(position).getCRM_COUNT(),
+					array_sort.get(position).getDRCAPM_GROUP(),array_sort.get(position).getDRLAST_PRODUCT());
         }
     }
 
@@ -1236,7 +1265,7 @@ public class ReminderCall extends AppCompatActivity implements ExpandableListAda
 						}
 					}else if (file1.exists() && Custom_Variables_And_Method.internetConneted(context)){
 						Location currentBestLocation=customVariablesAndMethod.getObject(context,"currentBestLocation",Location.class);
-						new SendAttachment((Activity) context).execute(Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n massege : "+alertdFragment.Alertmassege+
+						new SendAttachment((Activity) context).execute(Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n Message : "+alertdFragment.Alertmassege+
 								"\nLocation-timestamp : "+currentBestLocation.getTime()+"\nLocation-Lat : "+currentBestLocation.getLatitude()+
 								"\nLocation-long : "+currentBestLocation.getLongitude()+"\n time : " +customVariablesAndMethod.currentTime(context)+"\nlatlong : "+ customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON),alertdFragment.compressImage(file1));
 

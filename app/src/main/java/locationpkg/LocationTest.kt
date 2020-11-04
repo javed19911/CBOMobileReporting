@@ -3,11 +3,11 @@ package locationpkg
 import android.app.ActivityManager
 import android.location.Location
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import com.cbo.cbomobilereporting.R
 
-import android.support.v4.content.LocalBroadcastManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -18,7 +18,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.cbo.cbomobilereporting.emp_tracking.DistanceCalculator
@@ -93,7 +93,7 @@ class LocationTest : AppCompatActivity() {
         // start location updates
         FusedLocationSingleton.getInstance().startLocationUpdates()
         // register observer for location updates
-        LocalBroadcastManager.getInstance(this@LocationTest).registerReceiver(mLocationUpdated,
+        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(this@LocationTest).registerReceiver(mLocationUpdated,
                 IntentFilter(Const.INTENT_FILTER_LOCATION_UPDATE))
     }
 
@@ -101,7 +101,7 @@ class LocationTest : AppCompatActivity() {
         // stop location updates
         FusedLocationSingleton.getInstance().stopLocationUpdates()
         // unregister observer
-        LocalBroadcastManager.getInstance(this@LocationTest).unregisterReceiver(mLocationUpdated)
+        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(this@LocationTest).unregisterReceiver(mLocationUpdated)
     }
 
     /***********************************************************************************************
@@ -301,7 +301,7 @@ class LocationTest : AppCompatActivity() {
 
         val intent = Intent(Const.INTENT_FILTER_LOCATION_UPDATE_AVAILABLE)
         intent.putExtra(Const.LBM_EVENT_LOCATION_UPDATE, BestLocation)
-        LocalBroadcastManager.getInstance(MyCustumApplication.getInstance()).sendBroadcast(intent)
+        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(MyCustumApplication.getInstance()).sendBroadcast(intent)
 
         finish()
     }

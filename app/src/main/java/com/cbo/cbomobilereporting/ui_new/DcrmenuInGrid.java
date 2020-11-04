@@ -11,12 +11,13 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,10 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
+import com.cbo.cbomobilereporting.databaseHelper.Controls;
 import com.cbo.cbomobilereporting.emp_tracking.GPSTracker;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
+import com.cbo.cbomobilereporting.ui.NonWorking_DCR;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.ChemistCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.Customer.CustomerCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DCR_Summary_new;
@@ -39,6 +42,7 @@ import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrCall;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrPrescription;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.DrRXActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.PospondFarmerMeeting;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.TabbedActivity.TabbedCallActivity;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Dcr_Open_New;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.area.Expense;
 import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.DCR_Root_new;
@@ -80,7 +84,7 @@ import utils.adapterutils.DcrMenu_Grid_Adapter;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Service_Call_From_Multiple_Classes;
 
-public class DcrmenuInGrid extends android.support.v4.app.Fragment {
+public class DcrmenuInGrid extends Fragment {
 
 
     private static final int MESSAGE_INTERNET_DCR_PLAN = 1;
@@ -153,16 +157,24 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                 String nameOnClick = getKeyList.get(position);
                 nameOnClickGlobal = nameOnClick;
                 if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                         ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                         ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
                     //takePictureButton.setEnabled(false);
                     ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.ACCESS_FINE_LOCATION
+                            Manifest.permission.READ_PHONE_STATE
                     }, 22);
                     // LoginMain.this.checkAndRequestPermission();
+                }else if (Controls.getInstance().IsGPSRequired() &&
+                        (ContextCompat.checkSelfPermission(context,
+                                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(context,
+                                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )){
+                    ActivityCompat.requestPermissions((Activity) context, new String[] {
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    }, 22);
+
                 }else {
                     String url = new CBO_DB_Helper(getActivity()).getMenuUrl("DCR", nameOnClick);
                     if (url != null && !url.equals("")) {
@@ -172,7 +184,27 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
                         startActivity(i);*/
                         MyCustumApplication.getInstance().LoadURL(listOfAllTab.get(position),url);
                     } else if (customVariablesAndMethod.IsGPS_GRPS_ON(context)){
-                        OnGridItemClick(nameOnClick,false);
+
+                        String work_type_Selected= customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"work_type_Selected","w");
+                        if (nameOnClick.equalsIgnoreCase("D_DP")){
+                            work_type_Selected = "X";
+                        }
+                        switch (work_type_Selected){
+                            case "l":
+                                Intent intent = new Intent(context, FinalSubmitDcr_new.class);
+                                intent.putExtra("Back_allowed","N");
+                                startActivity(intent);
+                                break;
+                            case "n":
+                                Intent intent1 = new Intent(context, NonWorking_DCR.class);
+                                intent1.putExtra("Back_allowed","N");
+                                startActivity(intent1);
+
+                                break;
+                            default:
+                                OnGridItemClick(nameOnClick,false);
+                        }
+
                     }
                 }
             }
@@ -1392,14 +1424,15 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         // new concept of working type is if any validation for final submit is to be skiped for a menu then
         //workingcode = NR
         //
-        if (drInLocal.size() <= 0 && customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").contains("NR")  &&
+        if (((drInLocal.size() <= 0 &&
+                !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"working_code","W").equals("CSC")) && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() ) &&
                 (cboDbHelper.getmenu_count("chemisttemp") == 0 && (cboDbHelper.getmenu_count("phdcrstk") == 0))
                 && (cboDbHelper.getCountphdairy_dcr("D") == 0 && (cboDbHelper.getCountphdairy_dcr("P") == 0))) {
             if (listener != null) {
                 listener.onError("No Calls found !!!", "Please make atleast One Call....");
             }
 
-        }else if (dr_call_size <= 0 &&
+        }else if (dr_call_size <= 0 && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 (Hide_status.equalsIgnoreCase("N") &&
                         !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"Doctor_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
@@ -1417,7 +1450,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         int chemist_status = cboDbHelper.getmenu_count("chemisttemp");
         String menuName = cboDbHelper.getMenu("DCR", "D_CHEMCALL").get("D_CHEMCALL");
 
-        if ((chemist_status == 0) &&
+        if ((chemist_status == 0) && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_VISITED").equals("Y") &&
                         !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CHEMIST_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
@@ -1436,7 +1469,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
         String menuName = cboDbHelper.getMenu("DCR", "D_CUST_CALL").get("D_CUST_CALL");
 
         String working_code = MyCustumApplication.getInstance().getDCR().getWorkTypeId();
-        if ((chemist_status == 0) &&
+        if ((chemist_status == 0) && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"CUSTOMER_NOT_REQUIRED").equals("Y")
                 && (working_code.equals("OCC") || (working_code.contains("NR") && !working_code.contains("C")))) {
             if (listener != null) {
@@ -1454,7 +1487,7 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
         int stockist_count = cboDbHelper.getmenu_count("phdcrstk");
 
-        if ((stockist_count == 0) &&
+        if ((stockist_count == 0) && !MyCustumApplication.getInstance().IsSubmitDCR_WithoutCalls() &&
                 (!customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_VISITED").equals("Y") &&
                         !customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"STOCKIST_NOT_REQUIRED").equals("Y"))) {
             if (listener != null) {
@@ -1761,6 +1794,8 @@ public class DcrmenuInGrid extends android.support.v4.app.Fragment {
 
             } else {
                 if (!DCR_ID.equals("0")) {
+
+                    //Intent i = new Intent(getActivity(), TabbedCallActivity.class);
                     Intent i = new Intent(getActivity(), Doctor_Sample.class);
                     startActivity(i);
                 } else {

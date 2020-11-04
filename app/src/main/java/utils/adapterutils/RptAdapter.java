@@ -2,9 +2,12 @@ package utils.adapterutils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -117,6 +120,22 @@ public class RptAdapter extends BaseAdapter{
         holder.TttlTenivia.setText(Rptdata.get(position).getTtlTenivia());
         holder.Dairy.setText(Rptdata.get(position).getDairyCount());
         holder.Polutary.setText(Rptdata.get(position).getPolutaryCount());
+
+
+        if (Rptdata.get(position).isBlinkRemark()){
+            Animation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(500);
+            anim.setStartOffset(20);
+            anim.setRepeatMode(Animation.REVERSE);
+            anim.setRepeatCount(Animation.INFINITE);
+            holder.remark.startAnimation(anim);
+            holder.remark.setText("Final Submit Pending");
+            holder.remark.setTextColor(Color.parseColor("#ff0000"));
+        }else{
+            holder.remark.setText(Rptdata.get(position).getRemark());
+            holder.remark.clearAnimation();
+            holder.remark.setTextColor(Color.parseColor("#000"));
+        }
 
         if (fmcgYn.equalsIgnoreCase("Y")){
             holder.lLayoutDr.setVisibility(View.GONE);

@@ -1,8 +1,8 @@
 package com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.MissedDocAdapter;
-import com.cbo.cbomobilereporting.ui_new.report_activities.MissedDoctor.mMissedGrid;
 
 import java.util.ArrayList;
 

@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +26,7 @@ import com.cbo.cbomobilereporting.ui_new.utilities_activities.CaptureSignatureMa
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DivisionWise_Map;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.DocPhotos;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.PersonalInfo;
+import com.cbo.cbomobilereporting.ui_new.utilities_activities.SyncFirebaseActivity;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.Upload_Photo;
 import com.cbo.cbomobilereporting.ui_new.utilities_activities.VisualAdsDownload.VisualAdsDownloadActivity;
 import com.uenics.javed.CBOLibrary.Response;
@@ -167,7 +168,13 @@ public class UtilitiesMenuInGrid extends Fragment {
                             onClickPI();
                             break;
                         }
+                        case "U_SYNC": {
 
+                            //onClickPI();
+                            startActivity(new Intent(getActivity(), SyncFirebaseActivity.class));
+
+                            break;
+                        }
                         case "Show Demo Kilometer": {
 
                             // mycon.msgBox(mycon.currentTime());
@@ -198,6 +205,7 @@ public class UtilitiesMenuInGrid extends Fragment {
     public void addDataInList() {
 
         keyValue = cboDbHelper.getMenu("UTILITY","");
+        keyValue.put("U_SYNC","Sync data for Support");
         listOfAllTab = new ArrayList<String>();
         for (String key : keyValue.keySet()) {
             getKeyList.add(key);
@@ -291,9 +299,9 @@ public class UtilitiesMenuInGrid extends Fragment {
 
     ///////////////////onClickUpload Pic
     private void onClickResetDayplan() {
-
-
-        if (networkUtil.internetConneted(context)) {
+        if (MyCustumApplication.getInstance().getUser().getLoggedInAsSupport()){
+            AppAlert.getInstance().getAlert(context,"Logged-In as Support!!!","You are not allowed to Reset DCR....");
+        }else if (networkUtil.internetConneted(context)) {
             if (Custom_Variables_And_Method.DCR_ID.equals("0")) {
                 customVariablesAndMethod.msgBox(context,"Please Plan your Dcr Day..");
             } else {

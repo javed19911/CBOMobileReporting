@@ -8,10 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -30,18 +28,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -57,7 +53,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -67,8 +62,7 @@ import android.widget.Toast;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
-import com.cbo.cbomobilereporting.ui_new.dcr_activities.root.ExpenseRoot;
+import com.cbo.cbomobilereporting.ui_new.dcr_activities.ExpenseNew.Mexpenses;
 import com.flurry.android.FlurryAgent;
 
 
@@ -78,8 +72,6 @@ import org.json.JSONObject;
 
 import services.CboServices;
 import services.ServiceHandler;
-import utils.ExceptionHandler;
-import utils.MyConnection;
 import utils.adapterutils.Expenses_Adapter;
 import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinAdapter2;
@@ -164,7 +156,7 @@ public class Expense extends AppCompatActivity implements Expenses_Adapter.Expen
         }
         FlurryAgent.logEvent("Expense");
 
-		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+		androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
 		TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 		hader_text.setText("Expanse");
 		setSupportActionBar(toolbar);
@@ -1192,6 +1184,13 @@ public class Expense extends AppCompatActivity implements Expenses_Adapter.Expen
 				id= object.getString("ID");
 
 				cbohelp.insert_Expense(exp_id,exp_hed,my_Amt,my_rem,filename,id,customVariablesAndMethod.currentTime(context));
+
+
+
+
+
+
+
 
 				data=cbohelp.get_Expense();
 				sm = new Expenses_Adapter(Expense.this, data);

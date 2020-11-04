@@ -17,8 +17,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,7 +70,7 @@ public class DocPhotos extends AppCompatActivity {
 		setContentView(R.layout.doc_photos);
         FlurryAgent.logEvent("Doc Photos");
 
-		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+		androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
 		TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 		setSupportActionBar(toolbar);
 		hader_text.setText("Visual Ads");

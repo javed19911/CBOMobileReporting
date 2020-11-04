@@ -8,8 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 
@@ -274,7 +275,10 @@ public class Work_With_Dialog {
                         JSONObject c = rows.getJSONObject(i);
                         list.add(new Dcr_Workwith_Model(c.getString("PA_NAME"),c.getString("PA_ID"),
                                 c.getString("RESIGYN"), c.getString("LEAVEYN"),
-                                Msg.getString("PlanType").equals("p")? c.getString("WORKWITHYN") : "0"));
+                                Msg.getString("PlanType").equals("p")?
+                                        (c.getString("PA_ID").equalsIgnoreCase(MyCustumApplication.getInstance().getUser().getID())
+                                            && MyCustumApplication.getInstance().getUser().getDesginationID().equalsIgnoreCase("1")) ?
+                                                "1"  : c.getString("WORKWITHYN") : "0"));
                     }
 
                 }

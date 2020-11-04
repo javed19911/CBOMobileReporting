@@ -15,8 +15,10 @@ import java.util.HashMap;
 
 import cbomobilereporting.cbo.com.cboorder.DBHelper.ItemDB;
 import cbomobilereporting.cbo.com.cboorder.DBHelper.discountDB;
+import cbomobilereporting.cbo.com.cboorder.Enum.eDeal;
 import cbomobilereporting.cbo.com.cboorder.Enum.eDiscount;
 import cbomobilereporting.cbo.com.cboorder.Enum.eTax;
+import cbomobilereporting.cbo.com.cboorder.Model.mDeal;
 import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
@@ -181,15 +183,19 @@ public class vmItem extends CBOViewModel<iFNewOrder> {
         }
 
 
-
-
+        Double fQty = item.getFreeQty();
 
         view.setItemName(item.getName());
         view.setQty(item.getQty());
+
+        item.setFreeQty(fQty);
+        view.setFreeQty(item.getFreeQty());
+
         //view.updateAmt(item.getAmt());
         view.setRemarkEnabled(item.getRemarkReqd());
         view.setRemark(item.getRemark());
         view.updateRate(item.getRate());
+        view.updateDeal(item.getDeal());
         view.ManualDiscountEnabled(item.getNoOfDiscountAlowed()<6);
         view.ManagerDiscountEnabled(item.getNoOfDiscountAlowed()<5);
         view.setManagerDiscount(item.getMangerDiscount());
@@ -275,6 +281,13 @@ public class vmItem extends CBOViewModel<iFNewOrder> {
                     GST.getTaxs().add(new mTaxComponent(eTax.SGST).setTax(jsonObject2.getDouble("TAX_PERCENT2")));
                 }*/
                 item.setGST(GST);
+
+                mDeal deal = new mDeal();
+                deal.setType(eDeal.get(jsonObject2.getString("DEAL_TYPE") ))
+                        .setId(jsonObject2.getInt("DEAL_ID"))
+                        .setFreeQty(jsonObject2.getDouble("DEAL_QTY"))
+                        .setQty(jsonObject2.getDouble("DEAL_ON"));
+                item.setDeal(deal);
 
                 itemDB.insert(item);
 

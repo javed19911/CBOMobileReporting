@@ -6,9 +6,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,17 +18,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
-import com.uenics.javed.CBOLibrary.Response;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import locationpkg.SetGPS_Setting;
-import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
-import utils_new.Service_Call_From_Multiple_Classes;
 
 public class FloatingAlertService extends Service implements View.OnTouchListener {
     private WindowManager mWindowManager;

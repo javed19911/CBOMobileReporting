@@ -10,10 +10,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import services.CboServices;
-import utils.CBOUtils.SystemArchitecture;
 import utils.networkUtil.NetworkUtil;
 import utils_new.Custom_Variables_And_Method;
 
@@ -142,8 +141,6 @@ public class FogetPin extends CustomActivity {
                    // }
 
 
-                    new SystemArchitecture(context).getDEVICE_ID(context);
-
                     networkStatus = NetworkUtil.getConnectivityStatusString(getApplicationContext());
 
                     if (networkStatus.equals("Not connected to Internet")) {
@@ -175,8 +172,8 @@ public class FogetPin extends CustomActivity {
         request.put("sCompanyFolder", company_code);
         request.put("USERNAME", mylog);
         request.put("PASSWORD",mypass);
-        request.put("MobileID",SystemArchitecture.COMPLETE_DEVICE_INFO);
-        request.put("MobileVersion",Custom_Variables_And_Method.VERSION);
+        request.put("MobileID", MyCustumApplication.getInstance().getUser().getIMEI());
+        request.put("MobileVersion",MyCustumApplication.getInstance().getUser().getAppVersion());
 
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(-1);  // to get all the tables
@@ -296,7 +293,6 @@ public class FogetPin extends CustomActivity {
 
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
 
-                    new SystemArchitecture(context).getDEVICE_ID(context);
                     // mycon.msgBox("Permission Granted For Device IMEI.......");
 
                 } else {

@@ -2,7 +2,7 @@ package com.cbo.cbomobilereporting.ui_new.approval_activities.Remainder;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;

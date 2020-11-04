@@ -285,7 +285,7 @@ public class PrescribeNew extends Activity {
                 }while (c1.moveToNext());
 
             }
-            Cursor c=cbohelp.getAllProducts(itemIdnotIn);
+            Cursor c=cbohelp.getAllProducts(itemIdnotIn,"Dr");
 
             if (c.moveToFirst()){
                 do{

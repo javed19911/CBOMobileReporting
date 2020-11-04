@@ -1,13 +1,10 @@
 package utils_new;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.net.ParseException;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
+
+import androidx.annotation.NonNull;
+
 import android.widget.DatePicker;
 
 import java.text.SimpleDateFormat;

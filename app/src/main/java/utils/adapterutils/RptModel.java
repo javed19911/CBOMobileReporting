@@ -14,6 +14,7 @@ public class RptModel {
     String ttlDrRiminder,ttlNonDoctor,ttlTenivia;
     String dairyCount,PolutaryCount;
     String remark;
+    boolean blinkRemark = false;
 
     public RptModel(String mdate,String mwith,String mdr,String mchm,String mstk,String mexp,String ttlNonDistributor,String ttlNonRetailer){
         this.date=mdate;
@@ -116,5 +117,13 @@ public class RptModel {
 
     public void setPolutaryCount(String polutaryCount) {
         PolutaryCount = polutaryCount;
+    }
+
+    public boolean isBlinkRemark() {
+        return blinkRemark;
+    }
+
+    public void setBlinkRemark(boolean blinkRemark) {
+        this.blinkRemark = blinkRemark;
     }
 }

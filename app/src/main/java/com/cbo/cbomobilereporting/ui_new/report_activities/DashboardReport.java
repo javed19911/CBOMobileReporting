@@ -2,29 +2,21 @@ package com.cbo.cbomobilereporting.ui_new.report_activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Vibrator;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui_new.ViewPager_2016;
-import com.cbo.cbomobilereporting.ui_new.mail_activities.Inbox_Mail;
-import com.flurry.android.FlurryAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,19 +25,13 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import services.CboServices;
-import services.ServiceHandler;
-import utils.MyConnection;
 import utils.adapterutils.ExpandableDashboardAdapter;
-import utils.adapterutils.ExpandableListAdapter;
-import utils.adapterutils.MarketingSales_model;
-import utils.adapterutils.OutboxMail_Adapter;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.UnderlineTextView;
 
@@ -242,6 +228,7 @@ public class DashboardReport extends AppCompatActivity {
                     datanum1.put("REMARK", jobj.getString("REMARK"));
                     datanum1.put("AMOUNT", jobj.getString("AMOUNT"));
                     datanum1.put("AMOUNT_CUMM", jobj.getString("AMOUNT_CUMM"));
+                    datanum1.put("URL", jobj.getString("URL"));
                     data1.add(datanum1);
 
                 }
@@ -253,6 +240,7 @@ public class DashboardReport extends AppCompatActivity {
                     datanum2.put("REMARK", jobj.getString("REMARK"));
                     datanum2.put("AMOUNT", jobj.getString("AMOUNT"));
                     datanum2.put("AMOUNT_CUMM", jobj.getString("AMOUNT_CUMM"));
+                    datanum2.put("URL", jobj.getString("URL"));
                     data2.add(datanum2);
 
                 }

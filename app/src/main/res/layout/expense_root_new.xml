@@ -1,0 +1,2134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+
+
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/hadder_2016"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <RelativeLayout
+            android:id="@+id/container_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:textColor="#fFF"
+                android:gravity="center"
+                android:background="#800000"
+                android:id="@+id/ROUTE_CLASS"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:id="@+id/actual_fare_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:id="@+id/ex_dis_root1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:text="Enter Actual Fare Amt."/>
+                    <TextView
+                        android:id="@+id/attach_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="left"
+                        android:text="* Attach Picture...."
+                        android:textColor="@color/red"
+                        android:textSize="10sp"
+                        android:textStyle="italic" />
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/custom_square_transparent_bg"
+
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/ex_dis_root"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Amt."
+                        android:inputType="number" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimaryDark"/>
+                    <ImageView
+                        android:id="@+id/attachnew"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="2.5dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:src="@android:drawable/ic_menu_camera" />
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/actual_DA_layout"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:text="Enter DA Amt."/>
+
+                    </LinearLayout>
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/custom_square_transparent_bg"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/da_root"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:hint="DA Amt."
+                            android:inputType="number" />
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorPrimary"/>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/container_3"
+            android:layout_below="@+id/container_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/manual_DA_layout"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="DA Type"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/drop_bg"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_DaType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:minHeight="40dp"
+                        android:prompt="@string/spinner_title4"
+                        android:text="-&#45;&#45;Select-&#45;&#45;"
+                        android:textAllCaps="false"
+                        android:textColor="@color/navigationBarColor"
+
+                        />
+
+                    <View
+                        android:layout_width="1.5dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3.5dp"
+                        android:layout_marginTop="3.5dp"
+                        android:background="@color/colorPrimaryDark" />
+
+                    <ImageView
+                        android:id="@+id/DaType_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        android:layout_weight="7"
+                        android:padding="6.5dp"
+                        android:src="@drawable/drop_icon" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorPrimary"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_4"
+            android:layout_below="@+id/container_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:text="D.A. Type"
+                    android:visibility="gone"
+                    android:textColor="#000"
+                    />
+
+                <TextView
+                    android:id="@+id/da_type_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dip"
+                    android:textColor="#000"
+
+                    />
+
+                <EditText
+                    android:id="@+id/ex_da_root"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:ems="10"
+                    android:visibility="gone"
+                    android:hint="Amt."
+                    android:textColor="#fff"
+                    android:inputType="number"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
+
+
+
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_5"
+            android:layout_below="@+id/container_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:id="@+id/layout1_root"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:text="Distance"
+                    android:visibility="gone"
+                    android:textColor="#000"
+                    />
+
+                <TextView
+                    android:id="@+id/da_distance_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dip"
+                    android:layout_marginRight="8dip"
+                    android:textColor="#000"
+                    android:text="Distance"
+
+                    />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_5">
+
+            <LinearLayout
+                android:id="@+id/ta_expenses_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:orientation="horizontal"
+                android:layout_margin="5dp">
+                <Button
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:textSize="12pt"
+                    android:id="@+id/add_ta_exp"
+                    android:text="+"
+                    android:background="@drawable/button_text_view_selector"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    android:text="TA Expenses"/>
+            </LinearLayout>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_ta_exp_root"
+                android:divider="#0000"
+                android:layout_below="@+id/ta_expenses_layout"
+                android:layout_marginBottom="5dp"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_6">
+
+
+
+        </RelativeLayout>
+
+       &lt;!&ndash; <include
+            layout="@layout/taved_layput" />&ndash;&gt;
+        <RelativeLayout
+            android:id="@+id/container_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_7">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:elevation="3dp"
+                android:id="@+id/DA_layout">
+            </TableLayout>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_8">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:textSize="12pt"
+                    android:id="@+id/add_exp"
+                    android:text="+"
+                    android:background="@drawable/button_text_view_selector"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    android:text="Other Expenses"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_9">
+            <ListView
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_exp_root"
+                android:divider="#0000"
+                android:layout_marginBottom="5dp"/>
+
+        </RelativeLayout>
+
+
+
+
+        <RelativeLayout
+            android:id="@+id/container_11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_10"
+            android:layout_alignParentBottom="true">
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:id="@+id/foot"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+        <Button
+            android:text="Submit"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:layout_margin="5dp"
+            android:textAllCaps="false"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:id="@+id/save_back1_root"
+            android:layout_below="@+id/container_10"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_text_view_selector"
+            android:layout_gravity="center"/>
+    </RelativeLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</androidx.core.widget.NestedScrollView>-->
+
+<!--<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+
+    <include
+        android:id="@+id/header1"
+        layout="@layout/hadder_2016"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header1">
+
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <RelativeLayout
+                android:id="@+id/container_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:visibility="gone"
+                    android:textSize="16sp"
+                    android:textColor="#fFF"
+                    android:gravity="center"
+                    android:background="#800000"
+                    android:id="@+id/ROUTE_CLASS"
+                    android:textStyle="bold"/>
+                <LinearLayout
+                    android:id="@+id/actual_fare_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:id="@+id/ex_dis_root1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:text="Enter Actual Fare Amt."/>
+                        <TextView
+                            android:id="@+id/attach_txt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left"
+                            android:text="* Attach Picture...."
+                            android:textColor="@color/red"
+                            android:textSize="10sp"
+                            android:textStyle="italic" />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/custom_square_transparent_bg"
+
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/ex_dis_root"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:hint="Amt."
+                            android:inputType="number" />
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_marginBottom="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorPrimaryDark"/>
+                        <ImageView
+                            android:id="@+id/attachnew"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="2.5dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:src="@android:drawable/ic_menu_camera" />
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/actual_DA_layout"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:gravity="center_vertical"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@android:color/black"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:text="Enter DA Amt."/>
+
+                        </LinearLayout>
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/custom_square_transparent_bg"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/da_root"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:hint="DA Amt."
+                                android:inputType="number" />
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/container_3"
+                android:layout_below="@+id/container_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/manual_DA_layout"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:text="DA Type"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/drop_bg"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_DaType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:minHeight="40dp"
+                            android:prompt="@string/spinner_title4"
+                            android:text="-&#45;&#45;Select-&#45;&#45;"
+                            android:textAllCaps="false"
+                            android:textColor="@color/navigationBarColor"
+
+                            />
+
+                        <View
+                            android:layout_width="1.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="3.5dp"
+                            android:layout_marginTop="3.5dp"
+                            android:background="@color/colorPrimaryDark" />
+
+                        <ImageView
+                            android:id="@+id/DaType_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:layout_weight="7"
+                            android:padding="6.5dp"
+                            android:src="@drawable/drop_icon" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_4"
+                android:layout_below="@+id/container_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="D.A. Type"
+                        android:visibility="gone"
+                        android:textColor="#000"
+                        />
+
+                    <TextView
+                        android:id="@+id/da_type_root"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dip"
+                        android:textColor="#000"
+
+                        />
+
+                    <EditText
+                        android:id="@+id/ex_da_root"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:ems="10"
+                        android:visibility="gone"
+                        android:hint="Amt."
+                        android:textColor="#fff"
+                        android:inputType="number"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+
+
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_5"
+                android:layout_below="@+id/container_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                    android:id="@+id/layout1_root"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="Distance"
+                        android:visibility="gone"
+                        android:textColor="#000"
+                        />
+
+                    <TextView
+                        android:id="@+id/da_distance_root"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dip"
+                        android:layout_marginRight="8dip"
+                        android:textColor="#000"
+                        android:text="Distance"
+
+                        />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_5">
+
+                <LinearLayout
+                    android:id="@+id/ta_expenses_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <Button
+                        android:id="@+id/add_ta_exp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/button_text_view_selector"
+                        android:text="+"
+                        android:textColor="#fff"
+                        android:textSize="12pt"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="TA Expenses"
+                        android:textColor="#000"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/list_ta_exp_root"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/ta_expenses_layout"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:divider="#0000" />
+
+
+
+                <include
+                    android:id="@+id/DA_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/taved_layput"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/list_ta_exp_root"/>
+
+             &lt;!&ndash;<LinearLayout
+                    android:id="@+id/list_ta_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ta_expenses_layout">
+
+                    <ListView
+                        android:id="@+id/list_ta_exp_root"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:divider="#0000" />
+
+                </LinearLayout>&ndash;&gt;
+&lt;!&ndash;
+
+             <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/list_ta_layout">
+
+
+                    <include layout="@layout/taved_layput" />
+
+
+                </LinearLayout>
+&ndash;&gt;
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_6">
+
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_7"
+
+                >
+
+
+
+             <TableLayout
+                    android:id="@+id/DA_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                </TableLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_8">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:textColor="#fff"
+                        android:textStyle="bold"
+                        android:textSize="12pt"
+                        android:id="@+id/add_exp"
+                        android:text="+"
+                        android:background="@drawable/button_text_view_selector"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#000"
+                        android:textStyle="bold"
+                        android:text="Other Expenses"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/container_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_9">
+                <ListView
+                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/list_exp_root"
+                    android:divider="#0000"
+                    android:layout_marginBottom="5dp"/>
+
+            </RelativeLayout>
+
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/container_11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+
+
+        <Button
+            android:text="Submit"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:layout_margin="5dp"
+            android:textAllCaps="false"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:id="@+id/save_back1_root"
+            android:background="@drawable/button_text_view_selector"
+            android:layout_gravity="center"/>
+
+
+
+
+
+    </RelativeLayout>
+</RelativeLayout>-->
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/geader1"
+                layout="@layout/hadder_2016"/>
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/geader1">
+
+
+                <RelativeLayout
+                    android:id="@+id/container_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:visibility="gone"
+                        android:textSize="16sp"
+                        android:textColor="#fFF"
+                        android:gravity="center"
+                        android:background="#800000"
+                        android:id="@+id/ROUTE_CLASS"
+                        android:textStyle="bold"/>
+                    <LinearLayout
+                        android:id="@+id/actual_fare_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:gravity="center_vertical"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/ex_dis_root1"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@android:color/black"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:text="Enter Actual Fare Amt."/>
+                            <TextView
+                                android:id="@+id/attach_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="5dp"
+                                android:gravity="left"
+                                android:text="* Attach Picture...."
+                                android:textColor="@color/red"
+                                android:textSize="10sp"
+                                android:textStyle="italic" />
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/custom_square_transparent_bg"
+
+                            android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/ex_dis_root"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:hint="Amt."
+                                android:inputType="number" />
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorPrimaryDark"/>
+                            <ImageView
+                                android:id="@+id/attachnew"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:padding="2.5dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:src="@android:drawable/ic_menu_camera" />
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/actual_DA_layout"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="2"
+                                android:gravity="center_vertical"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center_vertical"
+                                    android:textColor="@android:color/black"
+                                    android:textStyle="bold"
+                                    android:textSize="16sp"
+                                    android:text="Enter DA Amt."/>
+
+                            </LinearLayout>
+
+
+
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/custom_square_transparent_bg"
+                                android:layout_height="wrap_content">
+
+                                <EditText
+                                    android:id="@+id/da_root"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:hint="DA Amt."
+                                    android:inputType="number" />
+                            </LinearLayout>
+
+
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/container_3"
+                    android:layout_below="@+id/container_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/manual_DA_layout"
+                        android:layout_marginTop="5dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:text="DA Type"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/drop_bg"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btn_DaType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:minHeight="40dp"
+                                android:prompt="@string/spinner_title4"
+                                android:text="---Select---"
+                                android:textAllCaps="false"
+                                android:textColor="@color/navigationBarColor"
+
+                                />
+
+                            <View
+                                android:layout_width="1.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="3.5dp"
+                                android:layout_marginTop="3.5dp"
+                                android:background="@color/colorPrimaryDark" />
+
+                            <ImageView
+                                android:id="@+id/DaType_img"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="1dp"
+                                android:layout_weight="7"
+                                android:padding="6.5dp"
+                                android:src="@drawable/drop_icon" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_4"
+                    android:layout_below="@+id/container_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:text="D.A. Type"
+                            android:visibility="gone"
+                            android:textColor="#000"
+                            />
+
+                        <TextView
+                            android:id="@+id/da_type_root"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dip"
+                            android:textColor="#000"
+
+                            />
+
+                        <EditText
+                            android:id="@+id/ex_da_root"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:ems="10"
+                            android:visibility="gone"
+                            android:hint="Amt."
+                            android:textColor="#fff"
+                            android:inputType="number"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"/>
+
+
+
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_5"
+                    android:layout_below="@+id/container_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:id="@+id/layout1_root"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:text="Distance"
+                            android:visibility="gone"
+                            android:textColor="#000"
+                            />
+
+                        <TextView
+                            android:id="@+id/da_distance_root"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dip"
+                            android:layout_marginRight="8dip"
+                            android:textColor="#000"
+                            android:text="Distance"
+
+                            />
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_5">
+
+                    <LinearLayout
+                        android:id="@+id/ta_expenses_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <Button
+                            android:id="@+id/add_ta_exp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="+"
+                            android:textColor="#fff"
+                            android:textSize="12pt"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="TA Expenses"
+                            android:textColor="#000"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <ListView
+                        android:id="@+id/list_ta_exp_root"
+                        android:layout_width="match_parent"
+                        android:layout_below="@+id/ta_expenses_layout"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp"
+                        android:divider="#0000" />
+
+
+
+
+                    <!--<LinearLayout
+                           android:id="@+id/list_ta_layout"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_below="@+id/ta_expenses_layout">
+
+                           <ListView
+                               android:id="@+id/list_ta_exp_root"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_marginBottom="5dp"
+                               android:divider="#0000" />
+
+                       </LinearLayout>-->
+                    <!--
+
+                                 <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/list_ta_layout">
+
+
+                                        <include layout="@layout/taved_layput" />
+
+
+                                    </LinearLayout>
+                    -->
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_6">
+
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_7"
+
+                    >
+
+
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/container_8">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+
+                        <Button
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:textColor="#fff"
+                            android:textStyle="bold"
+                            android:textSize="12pt"
+                            android:id="@+id/add_exp"
+                            android:text="+"
+                            android:background="@drawable/button_text_view_selector"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:text="Other Expenses"/>
+                    </LinearLayout>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/container_9">
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/list_exp_root"
+                        android:divider="#0000"
+                        android:layout_marginBottom="5dp"/>
+
+                </RelativeLayout>
+
+
+
+
+
+
+            </RelativeLayout>
+
+
+            <include
+                android:id="@+id/DA_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/taved_layput"
+                android:layout_alignParentBottom="true"
+               />
+
+
+
+
+
+
+
+
+
+
+
+
+        </RelativeLayout>
+
+        <Button
+            android:text="Submit"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:layout_margin="5dp"
+            android:textAllCaps="false"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:id="@+id/save_back1_root"
+            android:layout_below="@+id/geader1"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/button_text_view_selector"
+            android:layout_gravity="center"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.core.widget.NestedScrollView>
+
+<!--<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+
+
+
+
+            <include
+                android:id="@+id/header1"
+                layout="@layout/hadder_2016"/>
+
+
+
+
+
+
+
+
+
+
+                <RelativeLayout
+                    android:id="@+id/container_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:visibility="gone"
+                        android:textSize="16sp"
+                        android:textColor="#fFF"
+                        android:gravity="center"
+                        android:background="#800000"
+                        android:id="@+id/ROUTE_CLASS"
+                        android:textStyle="bold"/>
+                    <LinearLayout
+                        android:id="@+id/actual_fare_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:gravity="center_vertical"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:id="@+id/ex_dis_root1"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:textColor="@android:color/black"
+                                android:textStyle="bold"
+                                android:textSize="16sp"
+                                android:text="Enter Actual Fare Amt."/>
+                            <TextView
+                                android:id="@+id/attach_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="5dp"
+                                android:gravity="left"
+                                android:text="* Attach Picture...."
+                                android:textColor="@color/red"
+                                android:textSize="10sp"
+                                android:textStyle="italic" />
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/custom_square_transparent_bg"
+
+                            android:layout_height="wrap_content">
+                            <EditText
+                                android:id="@+id/ex_dis_root"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:hint="Amt."
+                                android:inputType="number" />
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorPrimaryDark"/>
+                            <ImageView
+                                android:id="@+id/attachnew"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:padding="2.5dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:src="@android:drawable/ic_menu_camera" />
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/actual_DA_layout"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="2"
+                                android:gravity="center_vertical"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center_vertical"
+                                    android:textColor="@android:color/black"
+                                    android:textStyle="bold"
+                                    android:textSize="16sp"
+                                    android:text="Enter DA Amt."/>
+
+                            </LinearLayout>
+
+
+
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/custom_square_transparent_bg"
+                                android:layout_height="wrap_content">
+
+                                <EditText
+                                    android:id="@+id/da_root"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:hint="DA Amt."
+                                    android:inputType="number" />
+                            </LinearLayout>
+
+
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/container_3"
+                    android:layout_below="@+id/container_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/manual_DA_layout"
+                        android:layout_marginTop="5dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:text="DA Type"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/drop_bg"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btn_DaType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:minHeight="40dp"
+                                android:prompt="@string/spinner_title4"
+                                android:text="-&#45;&#45;Select-&#45;&#45;"
+                                android:textAllCaps="false"
+                                android:textColor="@color/navigationBarColor"
+
+                                />
+
+                            <View
+                                android:layout_width="1.5dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="3.5dp"
+                                android:layout_marginTop="3.5dp"
+                                android:background="@color/colorPrimaryDark" />
+
+                            <ImageView
+                                android:id="@+id/DaType_img"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="1dp"
+                                android:layout_weight="7"
+                                android:padding="6.5dp"
+                                android:src="@drawable/drop_icon" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_4"
+                    android:layout_below="@+id/container_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:text="D.A. Type"
+                            android:visibility="gone"
+                            android:textColor="#000"
+                            />
+
+                        <TextView
+                            android:id="@+id/da_type_root"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dip"
+                            android:textColor="#000"
+
+                            />
+
+                        <EditText
+                            android:id="@+id/ex_da_root"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:ems="10"
+                            android:visibility="gone"
+                            android:hint="Amt."
+                            android:textColor="#fff"
+                            android:inputType="number"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"/>
+
+
+
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_5"
+                    android:layout_below="@+id/container_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:id="@+id/layout1_root"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:text="Distance"
+                            android:visibility="gone"
+                            android:textColor="#000"
+                            />
+
+                        <TextView
+                            android:id="@+id/da_distance_root"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dip"
+                            android:layout_marginRight="8dip"
+                            android:textColor="#000"
+                            android:text="Distance"
+
+                            />
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_5">
+
+                    <LinearLayout
+                        android:id="@+id/ta_expenses_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <Button
+                            android:id="@+id/add_ta_exp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/button_text_view_selector"
+                            android:text="+"
+                            android:textColor="#fff"
+                            android:textSize="12pt"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="TA Expenses"
+                            android:textColor="#000"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <ListView
+                        android:id="@+id/list_ta_exp_root"
+                        android:layout_width="match_parent"
+                        android:layout_below="@+id/ta_expenses_layout"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:divider="#0000" />
+
+
+
+                    <include
+                        android:id="@+id/DA_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/taved_layput"
+                        android:layout_alignParentBottom="true"
+                        android:layout_below="@+id/list_ta_exp_root"/>
+
+                    <LinearLayout
+                        android:id="@+id/list_ta_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ta_expenses_layout"
+                        android:orientation="vertical">
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/list_ta_layout">
+
+
+                        <include layout="@layout/taved_layput" />
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_6">
+
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_7"
+
+                    >
+
+
+
+                    <TableLayout
+                        android:id="@+id/DA_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                    </TableLayout>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_8">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+
+                        <Button
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:textColor="#fff"
+                            android:textStyle="bold"
+                            android:textSize="12pt"
+                            android:id="@+id/add_exp"
+                            android:text="+"
+                            android:background="@drawable/button_text_view_selector"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:text="Other Expenses"/>
+                    </LinearLayout>
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/container_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_9">
+                    <ListView
+                        android:layout_weight="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/list_exp_root"
+                        android:divider="#0000"
+                        android:layout_marginBottom="5dp"/>
+
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/container_11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+
+
+            <Button
+                android:text="Submit"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:layout_margin="5dp"
+                android:textAllCaps="false"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:id="@+id/save_back1_root"
+                android:background="@drawable/button_text_view_selector"
+                android:layout_gravity="center"/>
+
+
+
+
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+</androidx.core.widget.NestedScrollView>-->

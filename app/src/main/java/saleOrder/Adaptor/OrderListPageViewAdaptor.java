@@ -2,10 +2,10 @@ package saleOrder.Adaptor;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import java.util.HashMap;
@@ -22,12 +22,14 @@ public class OrderListPageViewAdaptor extends FragmentPagerAdapter {
 
     TabLayout tabLayout;
     mParty party;
+    Boolean ShowParty = false;
     @SuppressLint("UseSparseArrays")
     private HashMap<Integer,OrderListFragment> mPageReferenceMap= new HashMap<>();
-    public OrderListPageViewAdaptor(FragmentManager fm, TabLayout tb, mParty party) {
+    public OrderListPageViewAdaptor(FragmentManager fm, TabLayout tb, mParty party,Boolean ShowParty) {
         super(fm);
         tabLayout = tb;
         this.party = party;
+        this.ShowParty = ShowParty;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class OrderListPageViewAdaptor extends FragmentPagerAdapter {
         Bundle data = new Bundle();//Use bundle to pass data
         data.putString("OrderType", tabLayout.getTabAt(position).getText().toString());
         data.putSerializable("party", party);
+        data.putSerializable("ShowParty", ShowParty);
         myFragment.setArguments(data);
         return myFragment;
     }

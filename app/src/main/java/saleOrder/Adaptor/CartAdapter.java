@@ -1,7 +1,7 @@
 package saleOrder.Adaptor;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 
 import cbomobilereporting.cbo.com.cboorder.DBHelper.ItemDB;
+import cbomobilereporting.cbo.com.cboorder.Enum.eDeal;
 import cbomobilereporting.cbo.com.cboorder.Enum.eTax;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
@@ -72,7 +74,14 @@ public class CartAdapter extends RecyclerView.Adapter {
                 ((ProductViewHolder) holder).pack.setText("Pack : "+item.getPack());
                 ((ProductViewHolder) holder).amount.setText( AddToCartView.toCurrency(String.format("%.2f", item.getAmt())));
                 ((ProductViewHolder) holder).Qty.setText(String.format("%.0f",item.getQty()));
-                ((ProductViewHolder) holder).rate.setText(String.format("%.0f",item.getQty()) + " X " +  AddToCartView.toCurrency(String.format("%.2f", item.getRate())));
+                if (item.getDeal().getType() != eDeal.NA) {
+                    ((ProductViewHolder) holder).rate.setText(String.format("%.0f", item.getQty()) +
+                            " X " + AddToCartView.toCurrency(String.format("%.2f", item.getRate())) +
+                            " + " + item.getFreeQty());
+                }else{
+                    ((ProductViewHolder) holder).rate.setText(String.format("%.0f", item.getQty()) +
+                            " X " + AddToCartView.toCurrency(String.format("%.2f", item.getRate())));
+                }
                 ((ProductViewHolder) holder).discountName.setText("Discount " + item.getDiscountStr());
                 ((ProductViewHolder) holder).discount.setText(AddToCartView.toCurrency(String.format("%.2f",(item.getAmt() - item.getNetAmt()))));
 
@@ -91,6 +100,7 @@ public class CartAdapter extends RecyclerView.Adapter {
                 ((ProductViewHolder) holder).brand_tot_amt.setText(AddToCartView.toCurrency(String.format("%.2f",(item.getTotAmt()))));
 
                 ((ProductViewHolder) holder).remark.setText(item.getRemark());
+                ((ProductViewHolder) holder).remarkTitle.setText(MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SALE_ORDER_REMARK_TITLE","Remark"));
                 ((ProductViewHolder) holder).remarkLayout.setVisibility(item.getRemarkReqd()? View.VISIBLE: View.GONE);
 
 
@@ -184,7 +194,7 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
         private TextView brand,pack,rate,amount,net_amount,brand_tot_amt,SGST_amt,CGST_amt;
-        private TextView Qty,discountName,discount,centralTaxName,LocalTaxName,remark;
+        private TextView Qty,discountName,discount,centralTaxName,LocalTaxName,remark,remarkTitle;
         private ImageView delete,edit;
         private ImageButton more;
         private RelativeLayout sapratorLayout;
@@ -218,6 +228,7 @@ public class CartAdapter extends RecyclerView.Adapter {
             extraLayout = view.findViewById(R.id.extraLayout);
 
             remark = view.findViewById(R.id.remark);
+            remarkTitle = view.findViewById(R.id.remarkTitle);
             remarkLayout = view.findViewById(R.id.remarkLayout);
 
 

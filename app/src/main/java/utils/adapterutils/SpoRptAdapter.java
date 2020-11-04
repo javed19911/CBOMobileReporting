@@ -15,6 +15,7 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.SpoDistributorsWise;
 import com.cbo.cbomobilereporting.ui.SpoHeadquarterWise;
 import com.cbo.cbomobilereporting.ui.SpoProductWiseStock;
+import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 
 import java.util.ArrayList;
 
@@ -33,18 +34,20 @@ public class SpoRptAdapter extends BaseAdapter {
     ServiceHandler myServices;
     String spoId;
     CBO_DB_Helper myDb;
-     public static int clickCount =0;
+    public static int clickCount =0;
+    mSPO _mSPO = null;
 
 
 
     LayoutInflater layoutInflater;
     ArrayList<SpoModel> dataList = new ArrayList<SpoModel>();
 
-    public SpoRptAdapter(Context context, ArrayList<SpoModel> arrayList){
+    public SpoRptAdapter(Context context, ArrayList<SpoModel> arrayList, mSPO _mSPO){
 
         this.context = context;
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         myServices = new ServiceHandler(context);
+        this._mSPO = _mSPO;
         this.layoutInflater =(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.dataList =arrayList;
         myDb = new CBO_DB_Helper(context);
@@ -137,7 +140,12 @@ public class SpoRptAdapter extends BaseAdapter {
 
             if (clickCount == 1){
                 if (!spoIdFromList.equals("0")) {
-                Intent spoHeadquarterWise = new Intent(context, SpoHeadquarterWise.class);
+                    Intent spoHeadquarterWise = new Intent(context, SpoHeadquarterWise.class);
+                    _mSPO.setType(mSPO.eSPO.HEADQUATER);
+                    _mSPO.setConsigneeId(spoIdFromList);
+                    //_mSPO.setHqId("0");
+                    _mSPO.setStkId("0");
+                    spoHeadquarterWise.putExtra("mSPO", _mSPO);
                     spoHeadquarterWise.putExtra("spoId", spoIdFromList);
 
                     v.getContext().startActivity(spoHeadquarterWise);
@@ -156,6 +164,16 @@ public class SpoRptAdapter extends BaseAdapter {
             else{
                     if (!spoIdFromList.equals("0")) {
                         Intent spoDistributorsWise = new Intent(context, SpoDistributorsWise.class);
+                        if (clickCount==2){
+                            _mSPO.setType(mSPO.eSPO.STOCKIST);
+                            _mSPO.setHqId(spoIdFromList);
+                            _mSPO.setStkId("0");
+                        }else{
+                            _mSPO.setType(mSPO.eSPO.BILL);
+                            _mSPO.setStkId(spoIdFromList);
+                        }
+
+                        spoDistributorsWise.putExtra("mSPO", _mSPO);
                         spoDistributorsWise.putExtra("spoId", spoIdFromList);
 
                         v.getContext().startActivity(spoDistributorsWise);
@@ -182,6 +200,7 @@ public class SpoRptAdapter extends BaseAdapter {
                 if (!spoIdFromList.equals("0")) {
                     //mycon.msgBox(dataList.get(position).getStockAmt().toString());
                     Intent spoProductWiseStock = new Intent(context, SpoProductWiseStock.class);
+                    spoProductWiseStock.putExtra("mSPO", _mSPO);
                     spoProductWiseStock.putExtra("company_name", compName);
                     v.getContext().startActivity(spoProductWiseStock);
                 }else {

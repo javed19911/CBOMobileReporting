@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +57,7 @@ public class aLead extends RecyclerView.Adapter {
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.pob_card, parent, false);
                 return new POBViewHolder(itemView);
             case GIFT:
-                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_with_card, parent, false);
+                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.gift_card, parent, false);
                 return new GiftViewHolder(itemView);
             case LEAD:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.work_with_card, parent, false);
@@ -134,16 +137,21 @@ public class aLead extends RecyclerView.Adapter {
                     break;
                 case GIFT:
 
-                    ((LeadViewHolder) holder).name.setText(item.getName());
+                    ((GiftViewHolder) holder).name.setText(item.getName());
                     //holder.description.setText(item.getAREA());
-                    ((LeadViewHolder) holder).character.setText(item.getName().substring(0,1).toUpperCase());
+                    ((GiftViewHolder) holder).character.setText(item.getName().substring(0,1).toUpperCase());
 
-                    drawable =  ((LeadViewHolder) holder).character.getBackground();
+                    drawable =  ((GiftViewHolder) holder).character.getBackground();
 
 
                     drawable.setColorFilter(color[0], PorterDuff.Mode.SRC_IN);
 
-                    ((LeadViewHolder) holder).selected.setChecked(GetOrderItemWhere(item) != null);
+                    PobModel selecteditem = GetOrderItemWhere(item);
+                    if (selecteditem != null) {
+                        ((GiftViewHolder) holder).Qty.setText(selecteditem.getScore());
+                    }else{
+                        ((GiftViewHolder) holder).Qty.setText("");
+                    }
                     break;
                 case LEAD:
 
@@ -256,14 +264,32 @@ public class aLead extends RecyclerView.Adapter {
                 }
             });
 
+            sample.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    PobModel model = itemsCopy.get(getAdapterPosition());
+                    model.setScore(s.toString().isEmpty()?"0":s.toString());
+                    addItem(model);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
         }
     }
 
 
     public class GiftViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
-        public CheckBox selected;
-        public CheckBox independent;
+        public EditText Qty;
         public TextView character;
         public TextView description;
         public LinearLayout card_view;
@@ -272,18 +298,28 @@ public class aLead extends RecyclerView.Adapter {
             super(view);
             this.card_view = view.findViewById(R.id.card_view);
             this.name = view.findViewById(R.id.name);
-            this.selected = view.findViewById(R.id.selected);
             this.character = view.findViewById(R.id.character);
             this.description = view.findViewById(R.id.description);
+            this.Qty = view.findViewById(R.id.qty);
 
-            selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            Qty.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (!updating) {
-                        PobModel model = itemsCopy.get(getAdapterPosition());
-                        model.setSelected(isChecked);
-                        addItem(model);
-                    }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    PobModel model = itemsCopy.get(getAdapterPosition());
+                    model.setScore(s.toString().isEmpty()?"0":s.toString());
+                    model.setSelected(!s.toString().isEmpty());
+                    addItem(model);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
                 }
             });
 

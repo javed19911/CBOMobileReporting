@@ -1,12 +1,12 @@
 package saleOrder.Fragments;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,15 +23,15 @@ import com.cbo.cbomobilereporting.R;
 
 import java.util.ArrayList;
 
+import cbomobilereporting.cbo.com.cboorder.Enum.eDeal;
+import cbomobilereporting.cbo.com.cboorder.Model.mDeal;
 import cbomobilereporting.cbo.com.cboorder.Model.mDiscount;
 import cbomobilereporting.cbo.com.cboorder.Model.mItem;
 import cbomobilereporting.cbo.com.cboorder.Model.mOrder;
 import cbomobilereporting.cbo.com.cboorder.Model.mTax;
 import cbomobilereporting.cbo.com.cboorder.Utils.AddToCartView;
 import saleOrder.Activities.ItemFilterActivity;
-import saleOrder.Adaptor.CartAdapter;
 import saleOrder.Enum.eItem;
-import saleOrder.ViewModel.vmFCart;
 import saleOrder.ViewModel.vmItem;
 import saleOrder.Views.iCart;
 import saleOrder.Views.iFNewOrder;
@@ -43,13 +43,13 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     Activity context;
     private static final int NEW_ORDER_ITEM_FILTER = 10;
     private vmItem viewModel;
-    EditText QtyTxt,Manualdiscount,managerDiscount,remarkTxt;
+    EditText QtyTxt,Manualdiscount,managerDiscount,remarkTxt,FreeQty;
     EditText dis1,dis2,dis3,dis4;
     Button Add;
     mOrder order;
     Boolean keyPressed = true;
-    LinearLayout mainLayout,detailLayout;
-    TextView RateTxt,AmtTxt;
+    LinearLayout mainLayout,detailLayout,freeQtyLayout;
+    TextView RateTxt,AmtTxt,schemeTxt;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate (R.layout.fragment_new_order_view, container, false);
@@ -92,6 +92,10 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
         mainLayout = view.findViewById(R.id.mainLayout);
         detailLayout = view.findViewById(R.id.detail_layout);
 
+        freeQtyLayout = view.findViewById(R.id.FreeQtyLayout);
+        FreeQty = view.findViewById(R.id.FreeQty);
+        schemeTxt = view.findViewById(R.id.scheme);
+
         RateTxt = view.findViewById(R.id.rate);
         AmtTxt = view.findViewById(R.id.amount);
         remarkTxt = view.findViewById(R.id.remark);
@@ -121,6 +125,23 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
             }
         });
 
+        FreeQty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                getItem().setFreeQty(s.toString().trim().isEmpty() ? 0D: Double.parseDouble(s.toString()) );
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         QtyTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -131,6 +152,7 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getItem().setQty(s.toString().trim().isEmpty() ? 0D: Double.parseDouble(s.toString()) );
                 updateAmt(getItem().getAmt());
+                setFreeQty(getItem().getFreeQty());
             }
 
             @Override
@@ -594,9 +616,14 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
 
     @Override
     public void setRemarkEnabled(Boolean required) {
+        remarkTxt.setHint(getRemarkTitle());
         remarkTxt.setVisibility(required? View.VISIBLE:View.GONE);
     }
 
+    @Override
+    public String getRemarkTitle() {
+        return MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("SALE_ORDER_REMARK_TITLE","Remark");
+    }
 
 
     @Override
@@ -636,6 +663,24 @@ public class FNewOrder  extends Fragment implements iFNewOrder {
     @Override
     public void updateAmt(Double amt) {
         AmtTxt.setText(AddToCartView.toCurrency(String.format("%.2f", amt)));
+    }
+
+    @Override
+    public void updateDeal(mDeal deal) {
+        if (deal.getType() == eDeal.NA){
+            freeQtyLayout.setVisibility(View.GONE);
+            return;
+        }
+        freeQtyLayout.setVisibility(View.VISIBLE);
+        if (deal.getFreeQty() != 0D) {
+            schemeTxt.setText("*Scheme : " + deal.getQty() + " + " + deal.getFreeQty());
+        }
+
+    }
+
+    @Override
+    public void setFreeQty(Double freeQty) {
+        FreeQty.setText( freeQty == 0D ? "" : "" + freeQty);
     }
 
     @Override

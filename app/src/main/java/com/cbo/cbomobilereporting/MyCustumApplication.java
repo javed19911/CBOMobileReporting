@@ -14,7 +14,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.multidex.MultiDexApplication;
+import androidx.multidex.MultiDexApplication;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -108,6 +108,12 @@ public class MyCustumApplication extends MultiDexApplication {
          Custom_Variables_And_Method.getInstance().setDataInTo_FMCG_PREFRENCE(getInstance(),key,value);
     }
 
+
+    public Boolean IsSubmitDCR_WithoutCalls(){
+        return getDataFrom_FMCG_PREFRENCE("working_code","W").contains("NR")
+                && getDataFrom_FMCG_PREFRENCE("working_code","W").contains("X");
+    }
+
     @SuppressLint("MissingPermission")
     private void getDEVICE_ID() {
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -137,6 +143,7 @@ public class MyCustumApplication extends MultiDexApplication {
         }
 
         user.setIMEI(DEVICE_ID +"'!'"+ BRAND +""+ DEVICE_MODEL);
+        user.setBRAND(BRAND);
         user.setOS(BRAND +" - "+ DEVICE_MODEL+ " : "+Build.VERSION.SDK_INT );
 
 
@@ -174,13 +181,16 @@ public class MyCustumApplication extends MultiDexApplication {
 
     public void Logout(Activity context){
         stopLoctionService(false);
-        Intent intent = new Intent(getApplicationContext(), LoginFake.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        Intent intent = new Intent(context, LoginFake.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("EXIT", true);
         startActivity(intent);
-        context.finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            context.finishAffinity ();
+        }else{
+            context.finish();
+        }
     }
 
     public void clearApplicationData() {

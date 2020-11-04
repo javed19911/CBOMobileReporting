@@ -21,9 +21,9 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,16 +43,11 @@ import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.text.SimpleDateFormat;
@@ -71,6 +66,7 @@ import com.google.android.gms.tasks.Task;
 import utils.networkUtil.NetworkUtil;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * Created by pc24 on 06/01/2017.
@@ -108,8 +104,8 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String ROOT_NEEDED;
     public static String CHEMIST_ID;
     public static String COMPANY_NAME;
-    public static String checkVersion = "20190527";
-    public static String VERSION = "20190527";
+    public static String checkVersion = "20190724";
+    public static String VERSION = "20190724";
     public static String RPT_DATE;
     public static String EMP_ID;
     public static String DCR_DATE;
@@ -128,7 +124,6 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public static String lastLocation;
     public static String SELECTED_AREA;
     public static String INTERNET_REQ = "";
-    public static String GCMToken = "";
 
     public static String extraFrom = "";
     public static String extraTo = "";
@@ -174,7 +169,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     }
 
     public void snackBar(String msg, View v) {
-        android.support.design.widget.Snackbar snackbar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(v, msg, Snackbar.LENGTH_LONG);
         snackbar.setAction("RETRY", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +177,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         });
         snackbar.setActionTextColor(Color.RED);
         View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
         textView.setTextColor(Color.WHITE);
         sbView.performClick();
 
@@ -223,19 +218,19 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
         context.registerReceiver(br, batrylevelFilter);
     }
 
-    public void getAlert(Context context, String title, String massege) {
-        getAlert(context,title,massege,null,null,false);
+    public void getAlert(Context context, String title, String message) {
+        getAlert(context,title,message,null,null,false);
     }
-    public void getAlert(Context context, String title, String massege,Boolean resultVisible) {
-        getAlert(context,title,massege,null,null,resultVisible);
+    public void getAlert(Context context, String title, String message,Boolean resultVisible) {
+        getAlert(context,title,message,null,null,resultVisible);
     }
-    public void getAlert(Context context, String title, String massege, String url) {
-        getAlert(context,title,massege,null,url,false);
+    public void getAlert(Context context, String title, String message, String url) {
+        getAlert(context,title,message,null,url,false);
     }
     public void getAlert(Context context, String title,String[] table_list) {
         getAlert(context,title,null,table_list,null,false);
     }
-    public void getAlert(final Context context, final String title, final String massege, String[] table_list, final String url, Boolean reportVisible) {
+    public void getAlert(final Context context, final String title, final String message, String[] table_list, final String url, Boolean reportVisible) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogLayout = inflater.inflate(R.layout.alert_view, null);
@@ -255,7 +250,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
            }
 
         if (table_list==null ) {
-            Alert_message.setText(massege);
+            Alert_message.setText(message);
             Alert_message_list.setVisibility(View.GONE);
         }else{
             Alert_message.setVisibility(View.GONE);
@@ -327,7 +322,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
                 /*Location currentBestLocation=getObject(context,"currentBestLocation",Location.class);
                 List toEmailList = Arrays.asList("mobilereporting@cboinfotech.com".split("\\s*,\\s*"));
                 *//*new SendMailTask().execute("mobilereporting@cboinfotech.com",
-                        "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n massege : "+massege+"\n Error Alert :"+title+"\n"+
+                        "mreporting",toEmailList , Custom_Variables_And_Method.COMPANY_CODE+": Out of Range Error report",context.getResources().getString(R.string.app_name)+"\n Company Code :"+Custom_Variables_And_Method.COMPANY_CODE+"\n DCR ID :"+Custom_Variables_And_Method.DCR_ID+"\n PA ID : "+Custom_Variables_And_Method.PA_ID+"\n App version : "+Custom_Variables_And_Method.VERSION+"\n message : "+massege+"\n Error Alert :"+title+"\n"+
                 "\nLocation-timestamp : "+currentBestLocation.getTime()+"\nLocation-Lat : "+currentBestLocation.getLatitude()+
                         "\nLocation-long : "+currentBestLocation.getLongitude()+"\n time : " +currentTime(context)+"\nlatlong : "+ getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON));
 *//*
@@ -890,7 +885,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
     public Location latLongFromInternet(Context context) {
         final String[] latLong = {""};
 
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         Location location1=null;
         try {
             location1 = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -1026,7 +1021,7 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
 
     static private Boolean checkGpsEnableOldMethod(Context context) {
 
-        final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager manager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         Boolean gps;
         try {
             gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -1172,6 +1167,15 @@ public class Custom_Variables_And_Method implements com.google.android.gms.locat
                 , new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+/*
+                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+                        }else{
+                            showGPSDisabledAlertToUser();
+                        }*/
                         context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 });

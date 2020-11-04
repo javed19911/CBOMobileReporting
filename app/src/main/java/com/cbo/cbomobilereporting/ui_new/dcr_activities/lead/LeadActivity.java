@@ -1,13 +1,13 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities.lead;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -24,7 +24,7 @@ import utils.adapterutils.PobModel;
 public class LeadActivity extends AppCompatActivity implements iLead{
 
 
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
     private RecyclerView itemlist_filter;
     private aLead leadAdaptor;
     private vmLead viewModel;
@@ -53,7 +53,7 @@ public class LeadActivity extends AppCompatActivity implements iLead{
         ImageView clearQry = findViewById(R.id.clearQry);
         itemlist_filter = (RecyclerView) findViewById(R.id.itemList);
         leadAdaptor = new aLead(this, viewModel.getItems(),viewModel.getBuilder());
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         itemlist_filter.setLayoutManager(mLayoutManager1);
         itemlist_filter.setItemAnimator(new DefaultItemAnimator());
         itemlist_filter.setAdapter(leadAdaptor);
@@ -102,7 +102,7 @@ public class LeadActivity extends AppCompatActivity implements iLead{
 
     @Override
     public void setTile() {
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar()!=null) {

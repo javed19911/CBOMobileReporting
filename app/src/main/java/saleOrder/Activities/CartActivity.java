@@ -1,11 +1,11 @@
 package saleOrder.Activities;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +35,7 @@ public class CartActivity extends AppCompatActivity implements iCart {
     AppBarLayout appBarLayout;
     mParty party;
     Boolean orderChanged = false;
+    MenuItem additem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,10 @@ public class CartActivity extends AppCompatActivity implements iCart {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.cart_menu, menu);
+        additem = menu.findItem(R.id.add);
+        if  (subTitle.getText().toString().equalsIgnoreCase("New Order") && additem != null){
+            additem.setVisible(false);
+        }
         return true;
     }
     @Override
@@ -76,7 +81,7 @@ public class CartActivity extends AppCompatActivity implements iCart {
     @Override
     public void getReferencesById() {
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar()!=null) {
@@ -106,8 +111,16 @@ public class CartActivity extends AppCompatActivity implements iCart {
 
     @Override
     public void setTitle(String header) {
-        title.setText(party.getName() + "("+ party.getHeadQtr()+")");
+        if (party.getHeadQtr().equalsIgnoreCase("")){
+            title.setText(party.getName());
+        }else{
+            title.setText(party.getName() + "("+ party.getHeadQtr()+")");
+        }
+
         subTitle.setText(header);
+        if  (header.equalsIgnoreCase("New Order") && additem != null){
+            additem.setVisible(false);
+        }
     }
 
     @Override

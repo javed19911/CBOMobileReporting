@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +22,7 @@ import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.ui.LayoutZoomer;
-import com.cbo.cbomobilereporting.ui_new.report_activities.TeamMonthDivision.Model.mUser;
+import com.cbo.cbomobilereporting.ui_new.Model.mSPO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,20 +43,22 @@ import utils_new.Custom_Variables_And_Method;
 
 
 public class Spo_Report extends AppCompatActivity {
-    Button btShowReport, btBack, btFrom, btTo, btName, fromdatebtn, todatebtn,Display_Unit;
-    ImageView imgFrorm, imgTo,img_followdate,img_nextfollowdate,bt_unit;
+    Button btShowReport, btBack, btFrom, btTo, btName, fromdatebtn, todatebtn,Display_Unit,HQ_txt;
+    ImageView imgFrorm, imgTo,img_followdate,img_nextfollowdate,bt_unit,HQ_btn;
     Context context;
     Custom_Variables_And_Method customVariablesAndMethod;
     ProgressDialog pd;
 
     String uid, uname, mName;
-    public static String mIdFrom, mIdTo;
-    public static String mUnitID,mUnitName;
+    public  String mIdFrom, mIdTo;
+    public  String mUnitID,mUnitName;
+    public  String HqID,HqName;
     private AlertDialog myalertDialog = null;
 
     ArrayList<SpinnerModel> nameList = new ArrayList<SpinnerModel>();
     ArrayList<SpinnerModel> mothList = new ArrayList<SpinnerModel>();
     ArrayList<SpinnerModel>unitList= new ArrayList<SpinnerModel>();
+    ArrayList<SpinnerModel>HqList= new ArrayList<SpinnerModel>();
     public ProgressDialog progress1;
     private  static final int MESSAGE_INTERNET=1;
     CBO_DB_Helper cboDbHelper;
@@ -68,7 +70,7 @@ public class Spo_Report extends AppCompatActivity {
         //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.spo_report);
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
 
@@ -99,6 +101,10 @@ public class Spo_Report extends AppCompatActivity {
         btTo = (Button) findViewById(R.id.bt_spo_month_to);
         imgFrorm = (ImageView) findViewById(R.id.bt_spo_rptt_from_img);
         imgTo = (ImageView) findViewById(R.id.bt_spo_rptt_to_img);
+
+        HQ_txt = findViewById(R.id.Hq_txt);
+        HQ_btn = findViewById(R.id.Hq_btn);
+
         pd = new ProgressDialog(context);
 
 
@@ -187,6 +193,7 @@ public class Spo_Report extends AppCompatActivity {
         tables.add(1);
         tables.add(2);
         tables.add (4);
+        tables.add (5);
 
         progress1.setMessage("Please Wait..\n" +
                 " Fetching data");
@@ -200,14 +207,13 @@ public class Spo_Report extends AppCompatActivity {
         btShowReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Custom_Variables_And_Method.extraFrom=btFrom.getText().toString();
-                Custom_Variables_And_Method.extraTo =btTo.getText().toString();
+                /*Custom_Variables_And_Method.extraFrom=btFrom.getText().toString();
+                Custom_Variables_And_Method.extraTo =btTo.getText().toString();*/
                 Intent spoDetails = new Intent(getApplicationContext(), LayoutZoomer.class);
 
-                spoDetails.putExtra("uid", uid);
-                spoDetails.putExtra("mIdFrom", mIdFrom);
-                spoDetails.putExtra("mIdTo", mIdTo);
-                spoDetails.putExtra ("CurrencyType",mUnitID);
+                mSPO spo = new mSPO(mIdFrom,mIdTo,mUnitID);
+                spo.setHqId(HqID);
+                spoDetails.putExtra("mSPO", spo);
                 startActivity(spoDetails);
 
             }
@@ -223,6 +229,20 @@ public class Spo_Report extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setUnit();
+            }
+        });
+
+        HQ_txt.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                setHq();
+            }
+        });
+
+        HQ_btn.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                HQ_txt.performClick();
             }
         });
 
@@ -319,6 +339,19 @@ public class Spo_Report extends AppCompatActivity {
     }
 
 
+    private void setHq() {
+
+        new Spinner_Dialog(context, HqList, new Spinner_Dialog.OnItemClickListener() {
+            @Override
+            public void ItemSelected(DropDownModel item) {
+                HqID = item.getId();
+                HqName = item.getName();
+                HQ_txt.setText(HqName);
+                HQ_txt.setPadding(1, 0, 5, 0);
+            }
+        }).show();
+    }
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -357,7 +390,7 @@ public class Spo_Report extends AppCompatActivity {
                     unitList.add(new SpinnerModel(c.getString("PA_NAME"),c.getString("PA_ID")));
                 }
 
-                for (int i=0;i<unitList.size();i++){
+                if (unitList.size() >0){
                     mUnitID=unitList.get(0).getId ();
                     mUnitName=unitList.get(0).getName();
 
@@ -366,6 +399,24 @@ public class Spo_Report extends AppCompatActivity {
                     //  btTo.setPadding(1, 0, 5, 0);
                 }
 
+
+                String table5 = result.getString("Tables5");
+                JSONArray jsonArray3 = new JSONArray(table5);
+                for (int i = 0; i < jsonArray3.length(); i++) {
+                    JSONObject c = jsonArray3.getJSONObject(i);
+                    HqList.add(new SpinnerModel(c.getString("PA_NAME"),c.getString("PA_ID")));
+                }
+
+                if (HqList.size() > 0 ){
+                    if (HqList.size() != 1) {
+                        HqList.add(0, new SpinnerModel("ALL", "0"));
+                    }
+                    HqID = HqList.get(0).getId();
+                    HqName = HqList.get(0).getName();
+                    HQ_txt.setText(HqName);
+                    HQ_txt.setPadding(1, 0, 5, 0);
+                    //  btTo.setPadding(1, 0, 5, 0);
+                }
 
                 progress1.dismiss();
             } catch (JSONException e) {

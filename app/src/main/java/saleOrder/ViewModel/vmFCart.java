@@ -45,7 +45,7 @@ public class vmFCart extends CBOViewModel<iFCart> {
         String sDisc_Amt = "";
         String sDisc_Percent = "",sDisc_Percent1= "",sDisc_Percent2= "",
                 sDisc_Percent3= "",sDisc_Percent4= "",sDisc_Percent5= "";
-        String sRemark ="";
+        String sRemark ="",sDealId = "",sDealOn = "",sDealQty = "",sFreeQty ="";
 
         for(mItem item : order.getItems()){
             if (item.getQty() != 0.0) {
@@ -66,6 +66,11 @@ public class vmFCart extends CBOViewModel<iFCart> {
                 sDisc_Percent4 = item.getMangerDiscount().getPercent() + "," + sDisc_Percent4;
                 sDisc_Percent5 = item.getManualDiscount().getPercent() + "," + sDisc_Percent5;
                 sRemark = item.getRemark() + "|^" + sRemark;
+
+                sDealId = item.getDeal().getId() + "," + sDealId;
+                sDealOn = item.getDeal().getQty() + "," + sDealOn;
+                sDealQty = item.getDeal().getFreeQty() + "," + sDealQty;
+                sFreeQty = item.getFreeQty() + "," + sFreeQty;
             }
         }
 
@@ -98,12 +103,17 @@ public class vmFCart extends CBOViewModel<iFCart> {
         request.put("sDisc_Percent5", sDisc_Percent5);
         request.put("sRemark", sRemark);
 
+        request.put("sDealId", sDealId);
+        request.put("sDealOn", sDealOn);
+        request.put("sDealQty", sDealQty);
+        request.put("sFreeQty", sFreeQty);
+
 
         ArrayList<Integer> tables=new ArrayList<>();
         tables.add(0);
 
         new MyOrderAPIService(context)
-                .execute(new ResponseBuilder("OrderCommit",request)
+                .execute(new ResponseBuilder("OrderCommit_1",request)
                         .setDescription("Please Wait..." +
                                 "\nBooking your Order...")
                         .setResponse(new CBOServices.APIResponse() {

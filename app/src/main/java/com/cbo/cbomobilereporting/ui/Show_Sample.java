@@ -7,7 +7,6 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.flurry.android.FlurryAgent;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -15,22 +14,19 @@ import android.graphics.PointF;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
 
-import utils.ExceptionHandler;
-import utils.MyConnection;
 import utils.adapterutils.ViewPagerAdapter;
 import utils_new.Custom_Variables_And_Method;
 
@@ -75,7 +71,7 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 	private ImageView[] dots;
 	private ViewPagerAdapter mAdapter;
 	TextView hader_text;
-	android.support.v7.widget.Toolbar toolbar;
+	androidx.appcompat.widget.Toolbar toolbar;
 
 	boolean showControl=false,show_back=true,show_next=true,show_save=true;
 
@@ -90,7 +86,7 @@ public class Show_Sample extends AppCompatActivity implements ViewPager.OnPageCh
 		super.onCreate(b);
 		setContentView(R.layout.show_sample);
 		//sample=(ImageView)findViewById(R.id.img_sample);
-		toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+		toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
 		hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
 		setSupportActionBar(toolbar);

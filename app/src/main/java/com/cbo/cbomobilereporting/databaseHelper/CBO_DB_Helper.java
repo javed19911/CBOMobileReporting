@@ -36,7 +36,7 @@ import utils_new.Custom_Variables_And_Method;
 
 public class CBO_DB_Helper extends SQLiteOpenHelper {
     private SQLiteDatabase sd;
-    private static final int DATABASE_VERSION = 44;
+    private static final int DATABASE_VERSION = 47;
     private static final String DATABASE_NAME = "cbodb0017";
     private static final String LOGIN_TABLE = "cbo_login";
     private static final String LOGIN_DETAILS = "logindetail";
@@ -150,7 +150,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_DOCTOR_SAMPLE = "CREATE TABLE " + DOCTOR_ITEM_TABLE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text, updated text, noc  text DEFAULT '0')";
         String CREATE_DR_RX_TABLE = "CREATE TABLE " + DR_RX_TABLE + "(id integer primary key, dr_id text,item_id text)";
         String CREATE_DOCTOR_PRESCRIBE = "CREATE TABLE " + Dr_PRESCRIBE + "(id integer primary key,dr_id text,item_id text,item_name text,qty text,pob text,stk_rate text,visual text)";
-        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer,GENERIC_NAME text)";
+        String PH_ITEM = "CREATE TABLE " + DOCTOR_PRODUCTS_TABLE + "( id integer primary key,item_id text,item_name text,stk_rate double,gift_type text,SHOW_ON_TOP text,SHOW_YN text,SPL_ID integer,GENERIC_NAME text,chem_rate double,dr_rate double)";
         String PH_DOCTOR_IETM = "CREATE TABLE " + PH_DOCTOR_ITEM_TABLE + "( id integer primary key,dr_id integer,item_id integer,item_name text)";
 
         String ALLMST = "CREATE TABLE phallmst ( id integer primary key,allmst_id integer,table_name text,field_name text,remark text )";
@@ -194,7 +194,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String CREATE_TABLE_NonListed_call = "CREATE TABLE " + NonListed_call + "(id Integer PRIMARY KEY AUTOINCREMENT,sDocType text,sDrName text,sAdd1 text,sMobileNo text,sRemark text,iSplId text,iSpl text,iQflId text,iQfl text,iSrno text,loc text,time text,CLASS text,POTENCY_AMT text,AREA text)";
         String MASTER_DOCTOR = "CREATE TABLE phdoctor ( id integer primary key,dr_id integer,dr_name text,dr_code text,area text,spl_id integer,LAST_VISIT_DATE text" +
                 ",CLASS text,PANE_TYPE text,POTENCY_AMT text,ITEM_NAME text,ITEM_POB text,ITEM_SALE text,DR_AREA text,DR_LAT_LONG text,FREQ text,NO_VISITED text" +
-                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text,RXGENYN text,APP_PENDING_YN text)";
+                ",DR_LAT_LONG2 text,DR_LAT_LONG3 text,COLORYN text,CRM_COUNT text,DRCAPM_GROUP text,SHOWYN text,RXGENYN text,APP_PENDING_YN text,DRLAST_PRODUCT text)";
         String DOCTOR_IN_LOCAL = "CREATE TABLE phdcrdr_more ( id integer primary key,dr_id text,dr_name text,ww1 text,ww2 text,ww3 text,loc text,time text)";
 
         String CREATE_TABLE_LAT_LON_TEN = "CREATE TABLE " + latLong10Minute + "(id Integer PRIMARY KEY AUTOINCREMENT,lat text,lon text,time text,km text,updated text ,LOC_EXTRA text)";
@@ -217,7 +217,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
         String CREATE_TABLE_dob_doa = "CREATE TABLE " + dob_doa + "(id Integer PRIMARY KEY AUTOINCREMENT,PA_NAME text,DOB text,DOA text,MOBILE text,TYPE text)";
         String CREATE_TABLE_Expenses_head = "CREATE TABLE " + Expenses_head + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_NAME text,FIELD_ID text,MANDATORY text,DA_ACTION text,EXP_TYPE text,ATTACHYN text,MAX_AMT float,TAMST_VALIDATEYN text)";
-        String CREATE_TABLE_Tenivia_traker = "CREATE TABLE " + Tenivia_traker + "(id Integer PRIMARY KEY AUTOINCREMENT,DR_ID text,DR_NAME text,QTY text,AMOUNT text,QTY_CAPTION text,ITEM_ID text,AMOUN_CAPTION text,TIME text,REMARK text)";
+        String CREATE_TABLE_Tenivia_traker = "CREATE TABLE " + Tenivia_traker + "(id Integer PRIMARY KEY AUTOINCREMENT,DR_ID text,DR_NAME text,QTY text,AMOUNT text,QTY_CAPTION text,ITEM_ID text,AMOUN_CAPTION text,TIME text,REMARK text,updated text)";
         String CREATE_TABLE_Doctor_Call_Remark = "CREATE TABLE " + Doctor_Call_Remark + "(id Integer PRIMARY KEY AUTOINCREMENT,FIELD_ID text,FIELD_NAME text,type text)";
 
         String CREATE_TABLE_Lat_Long_Reg = "CREATE TABLE " + Lat_Long_Reg + "(id Integer PRIMARY KEY ,DCS_ID text,LAT_LONG text,DCS_TYPE text,DCS_ADD text,DCS_INDES text,UPDATED text)";
@@ -523,6 +523,15 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN ATTACHYN text DEFAULT 'N'");
                 db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN MAX_AMT float DEFAULT 0");
                 db.execSQL("ALTER TABLE "+Expenses_head +" ADD COLUMN TAMST_VALIDATEYN text DEFAULT 'N'");
+            case 44:
+                db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN chem_rate double DEFAULT '0'");
+                db.execSQL("ALTER TABLE "+DOCTOR_PRODUCTS_TABLE +" ADD COLUMN dr_rate double DEFAULT '0'");
+                db.execSQL("UPDATE " + DOCTOR_PRODUCTS_TABLE + " SET dr_rate= stk_rate,chem_rate= stk_rate");
+            case 45:
+                db.execSQL("ALTER TABLE "+"phdoctor"+" ADD COLUMN DRLAST_PRODUCT text DEFAULT ''");
+            case 46:
+                db.execSQL("ALTER TABLE "+Tenivia_traker+" ADD COLUMN updated text DEFAULT '0'");
+
 
         }
     }
@@ -1130,7 +1139,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     sb_pob.append(c.getString(c.getColumnIndex("pob"))).append(",");
                     sb_visual.append(c.getString(c.getColumnIndex("visual"))).append(",");
                     sb_noc.append(c.getString(c.getColumnIndex("noc"))).append(",");
-                    sb_rate.append(c.getString(c.getColumnIndex("stk_rate"))).append(",");
+                    sb_rate.append(c.getString(c.getColumnIndex("stk_rate")).equals("x")? "0":c.getString(c.getColumnIndex("stk_rate"))).append(",");
                 }
                 while (c.moveToNext());
             }
@@ -1206,7 +1215,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
     }
 
     //=============================================================Doctor Products=======================================================================================
-    public long insertProducts(String id, String name, double stk_rate, String gift,
+    public long insertProducts(String id, String name, double stk_rate,double chem_rate,double dr_rate, String gift,
                                String SHOW_ON_TOP,String SHOW_YN,int SPL_ID,String GENERIC_NAME) {
 
         Long l = 0l;
@@ -1216,6 +1225,8 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("item_id", id);
             cv.put("item_name", name);
             cv.put("stk_rate", stk_rate);
+            cv.put("chem_rate", chem_rate);
+            cv.put("dr_rate", dr_rate);
             cv.put("gift_type", gift);
             cv.put("SHOW_ON_TOP", SHOW_ON_TOP);
             cv.put("SHOW_YN", SHOW_YN);
@@ -1244,19 +1255,22 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         return sd.rawQuery(" Select  T.item_id, ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID,T.GENERIC_NAME as item_name from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID,GENERIC_NAME from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
                " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID,phitem.GENERIC_NAME from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
                 "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
-                "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' "+
+                "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and (PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' or PH_STK_ITEM_RATE.STK_ID ='0') " +
                 "where T.GENERIC_NAME != '' ", null);
         // phitem.SHOW_YN = '1' and
         //return sd.rawQuery("select item_id, item_name,'0' as stk_rate, '0' as sn from phdoctoritem where dr_id='"+itemidnotin+"'", null);
     }
 
-    public Cursor getAllProducts(String itemidnotin) {
+    public Cursor getAllProducts(String itemidnotin,String CallType) {
         try {
             sd = this.getWritableDatabase();
-            return sd.rawQuery(" Select  T.item_id, item_name,ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from (select item_id, item_name,stk_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
-                    " select phitem.item_id,phitem.item_name,phitem.stk_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
+            return sd.rawQuery(" Select  T.item_id, item_name,case when '" + CallType +"' = 'Dr' then ifnull( PH_STK_ITEM_RATE.RATE ,T.dr_rate) " +
+                    "when '" + CallType +"' = 'C' then ifnull( PH_STK_ITEM_RATE.RATE ,T.chem_rate) else ifnull( PH_STK_ITEM_RATE.RATE ,T.stk_rate) end" +
+                    " as stk_rate,  sn, VSTOCK.STOCK_QTY,VSTOCK.BALANCE ,T.SPL_ID from " +
+                    "(select item_id, item_name,stk_rate,chem_rate,dr_rate, '1' as sn,SPL_ID from phitem where gift_type='ORIGINAL' and item_id not in(select item_id from phdoctoritem where dr_id="+itemidnotin+") Union all " +
+                    " select phitem.item_id,phitem.item_name,phitem.stk_rate,phitem.chem_rate,phitem.dr_rate,'0' as sn,phitem.SPL_ID from phdoctoritem  inner join phitem on phdoctoritem.item_id=phitem.item_id where phdoctoritem.dr_id="+itemidnotin+" order by sn)T "+
                     "left join VSTOCK on VSTOCK.ITEM_ID = T.item_id " +
-                    "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"'", null);
+                    "left join PH_STK_ITEM_RATE on PH_STK_ITEM_RATE.ITEM_ID = T.item_id and (PH_STK_ITEM_RATE.STK_ID ='"+itemidnotin+"' or PH_STK_ITEM_RATE.STK_ID ='0')", null);
             // phitem.SHOW_YN = '1' and
             //return sd.rawQuery("select item_id, item_name,'0' as stk_rate, '0' as sn from phdoctoritem where dr_id='"+itemidnotin+"'", null);
         } finally {
@@ -1289,13 +1303,17 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
     }
 
-    public Cursor getAllGifts(String ItemIdNotIn) {
+    public Cursor getAllGifts(String includeItems  ,boolean ShowZeroStock) {
         try {
             sd = this.getWritableDatabase();
+            String StockQuery = "";
+            if (!ShowZeroStock){
+                StockQuery = " and (VSTOCK.BALANCE > 0 " + "OR phitem.item_name in('"+includeItems.replace(",","','")+"'))";
+            }
             //return sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='GIFT' ", null);
             return sd.rawQuery("select phitem.item_id, phitem.item_name,phitem.stk_rate,VSTOCK.STOCK_QTY,VSTOCK.BALANCE,phitem.SPL_ID from phitem"
                     + " left join VSTOCK on VSTOCK.ITEM_ID = phitem.item_id"
-                    + " where gift_type='GIFT' ", null);
+                    + " where gift_type='GIFT' "+ StockQuery, null);
         } finally {
            // sd.close();
         }
@@ -1394,7 +1412,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             , String CLASS, String PANE_TYPE, String POTENCY_AMT,String ITEM_NAME
             , String ITEM_POB, String ITEM_SALE, String DR_AREA, String DR_LAT_LONG, String FREQ, String NO_VISITED
             ,String DR_LAT_LONG2,String DR_LAT_LONG3,String COLORYN,String CRM_COUNT,String DRCAPM_GROUP,String SHOWYN,int MAX_REG,
-                                String RXGENYN,String APP_PENDING_YN) {
+                                String RXGENYN,String APP_PENDING_YN,String DRLAST_PRODUCT) {
 
         long l = 0l;
         Cursor c = null;
@@ -1431,6 +1449,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
             cv.put("RXGENYN", RXGENYN);
             cv.put("APP_PENDING_YN", APP_PENDING_YN);
+            cv.put("DRLAST_PRODUCT", DRLAST_PRODUCT);
             c = sd.rawQuery("Select * from phdoctor where dr_id='"+dr_id+"'",null);
             if (c.moveToFirst()) {
                 l=sd.update("phdoctor",  cv,"dr_id='"+dr_id+"'",null);
@@ -1465,7 +1484,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
                     "phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ," +
                     " phdoctor.NO_VISITED,phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN," +
-                    "phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP,phdoctor.SHOWYN,phdoctor.APP_PENDING_YN," +
+                    "phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP,phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,phdoctor.DRLAST_PRODUCT," +
                     "cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
                     " CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  from phdoctor " +
                     "LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID where SHOWYN = '1' " +
@@ -1483,7 +1502,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE" +
                     ",phdoctor.DR_AREA,phdoctor.PANE_TYPE, phdoctor.DR_LAT_LONG ,phdoctor.FREQ, phdoctor.NO_VISITED," +
                     "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
-                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
+                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,phdoctor.DRLAST_PRODUCT,cast (phdoctor.PANE_TYPE as int) as PANE_TYPE1," +
                     " CASE WHEN IFNull(phdcrdr_rc.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
                     "from phdoctor LEFT OUTER JOIN phdcrdr_rc  ON phdoctor.DR_ID=phdcrdr_rc.DR_ID " +
                     "where SHOWYN = '1' order by PANE_TYPE1 DESC", null);
@@ -1508,7 +1527,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                     "phdoctor.CLASS,phdoctor.POTENCY_AMT,phdoctor.ITEM_NAME,phdoctor.ITEM_POB,phdoctor.ITEM_SALE," +
                     "phdoctor.DR_AREA,phdoctor.PANE_TYPE,phdoctor.DR_LAT_LONG,phdoctor.FREQ,phdoctor.NO_VISITED," +
                     "phdoctor.DR_LAT_LONG2,phdoctor.DR_LAT_LONG3,phdoctor.COLORYN,phdoctor.CRM_COUNT,phdoctor.DRCAPM_GROUP," +
-                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN, CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
+                    "phdoctor.SHOWYN,phdoctor.APP_PENDING_YN,phdoctor.DRLAST_PRODUCT, CASE WHEN IFNull(tempdr.dr_id,0) >0 THEN 1 ELSE 0 END AS CALLYN  " +
                     "from phdoctor LEFT OUTER JOIN tempdr  ON phdoctor.DR_ID=tempdr.DR_ID" +
                     " where SHOWYN = '1' " + extraQuery  , null);
         } finally {
@@ -4942,7 +4961,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         String time="";
         String id="";
         String where_cluse="";
-        ArrayList<String> idList,nameList,timeList,sample_name,sample_qty,sample_pob,sample_noc,remark,gift_name,gift_qty,
+        ArrayList<String> idList,nameList,timeList,sample_name,sample_qty,sample_pob,sample_rate,sample_noc,remark,gift_name,gift_qty,
                 show_edit_delete_list,dr_class_list,dr_potential_list,dr_area_list,dr_work_with_list,attachment_list,
                 dr_work_with_id_list,dr_camp_group_list,dr_crm_count_list,color_list;
         ArrayList<String> visible_status=new ArrayList<>();
@@ -4956,6 +4975,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         gift_qty=new ArrayList<String>();
 
         sample_pob=new ArrayList<String>();
+        sample_rate=new ArrayList<String>();
         sample_noc=new ArrayList<String>();
         remark=new ArrayList<String>();
         show_edit_delete_list=new ArrayList<String>();
@@ -5062,6 +5082,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                         String dr_gift_name = "";
                         String dr_gift_qty = "";
                         String dr_sample_pob = "";
+                        String dr_sample_rate = "";
                         String dr_sample_noc="";
                         String pob_amt="0";
                         String dr_remark="";
@@ -5097,7 +5118,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                             }
 
 
-                            Cursor c2 = sd.rawQuery("select allitemid,allitemqty,sample,pob_amt,allgiftqty,allgiftid  from phdcrstk where stk_id='" + dr_id + "'", null);
+                            Cursor c2 = sd.rawQuery("select allitemid,allitemqty,sample,pob_amt,allgiftqty,allgiftid,rate  from phdcrstk where stk_id='" + dr_id + "'", null);
 
                             try {
                                 if (c2.moveToFirst()) {
@@ -5105,6 +5126,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                         dr_sample_id = c2.getString(c2.getColumnIndex("allitemid"));
                                         dr_sample_qty = c2.getString(c2.getColumnIndex("sample"));
                                         dr_sample_pob = c2.getString(c2.getColumnIndex("allitemqty"));
+                                        dr_sample_rate = c2.getString(c2.getColumnIndex("rate"));
 
                                         dr_gift_id = c2.getString(c2.getColumnIndex("allgiftid"));
                                         dr_gift_qty = c2.getString(c2.getColumnIndex("allgiftqty"));
@@ -5219,6 +5241,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                             dr_sample_name = c1.getString(c1.getColumnIndex("item_name")) + "," + dr_sample_name;
                                             dr_sample_qty = c1.getString(c1.getColumnIndex("qty")) + "," + dr_sample_qty;
                                             dr_sample_pob = c1.getString(c1.getColumnIndex("pob")) + "," + dr_sample_pob;
+                                            dr_sample_rate = c1.getString(c1.getColumnIndex("stk_rate")) + "," + dr_sample_rate;
                                             dr_sample_noc = c1.getString(c1.getColumnIndex("noc")) + "," + dr_sample_noc;
                                             pob+=Float.parseFloat(c1.getString(c1.getColumnIndex("pob")))*Float.parseFloat(c1.getString(c1.getColumnIndex("stk_rate")));
                                         }
@@ -5266,6 +5289,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
 
 
 
+
                             String dr_sample_id_list[] = dr_sample_id.split(",");
                             for (int i = 0; i < dr_sample_id_list.length; i++) {
                                 Cursor c2 = sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='ORIGINAL' and item_id='" + dr_sample_id_list[i] + "'", null);
@@ -5309,7 +5333,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                         } else if (table.equals("chemisttemp")) {
                             String dr_sample_id = "", dr_gift_id = "";
                             //Cursor c1 =  sd.rawQuery("select item_id, item_name,stk_rate from phitem where gift_type='ORIGINAL' ", null);
-                            Cursor c1 = sd.rawQuery("select allitemid,allitemqty,sample,allgiftid,allgiftqty,pob_amt,remark,file from phdcrchem where chem_id='" + dr_id + "'", null);
+                            Cursor c1 = sd.rawQuery("select allitemid,allitemqty,sample,allgiftid,allgiftqty,pob_amt,remark,file,rate from phdcrchem where chem_id='" + dr_id + "'", null);
 
                             try {
                                 if (c1.moveToFirst()) {
@@ -5318,6 +5342,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                                         dr_sample_id = c1.getString(c1.getColumnIndex("allitemid"));
                                         dr_sample_qty = c1.getString(c1.getColumnIndex("sample"));
                                         dr_sample_pob = c1.getString(c1.getColumnIndex("allitemqty"));
+                                        dr_sample_rate = c1.getString(c1.getColumnIndex("rate"));
 
                                         dr_gift_id = c1.getString(c1.getColumnIndex("allgiftid"));
                                         dr_gift_qty = c1.getString(c1.getColumnIndex("allgiftqty"));
@@ -5430,6 +5455,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
                         sample_name.add(dr_sample_name);
                         sample_qty.add(dr_sample_qty);
                         sample_pob.add(dr_sample_pob);
+                        sample_rate.add(dr_sample_rate);
                         sample_noc.add(dr_sample_noc);
 
                         gift_name.add(dr_gift_name);
@@ -5460,6 +5486,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             sample_name.add("");
             sample_qty.add("");
             sample_pob.add("");
+            sample_rate.add("");
             visible_status.add("0");
             remark.add("");
 
@@ -5484,6 +5511,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         Tabs.put("gift_qty", gift_qty);
 
         Tabs.put("sample_pob", sample_pob);
+        Tabs.put("sample_rate", sample_rate);
         Tabs.put("sample_noc", sample_noc);
         Tabs.put("visible_status", visible_status);
         Tabs.put("remark", remark);
@@ -5755,6 +5783,31 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
         }
         return data;
     }
+/*    public  ArrayList<mExpense> get_N_Expense() {
+        ArrayList<> data = new ArrayList<Map<String, String>>();
+        sd = this.getWritableDatabase();
+        String query = "Select * from " + Expenses ;
+        Cursor c = sd.rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    Map<String, String> datanum = new HashMap<String, String>();
+                    datanum.put("exp_head_id",c.getString(c.getColumnIndex("exp_head_id")));
+                    datanum.put("exp_head", c.getString(c.getColumnIndex("exp_head")));
+                    datanum.put("amount", c.getString(c.getColumnIndex("amount")).trim().isEmpty() ? "0": c.getString(c.getColumnIndex("amount")));
+                    datanum.put("remark",c.getString(c.getColumnIndex("remark")));
+                    datanum.put("FILE_NAME",c.getString(c.getColumnIndex("FILE_NAME")));
+                    datanum.put("ID",c.getString(c.getColumnIndex("exp_ID")));
+                    data.add(datanum);
+
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+        return data;
+    }*/
 
 
 
@@ -6318,6 +6371,7 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
             cv.put("TIME", TIME);
             cv.put("REMARK", REMARK);
+            cv.put("updated", "0");
             sd.insert(Tenivia_traker, null, cv);
             if (!DR_ID.equalsIgnoreCase("-1")) {
                 delete_tenivia_traker("-1");
@@ -6341,12 +6395,50 @@ public class CBO_DB_Helper extends SQLiteOpenHelper {
             cv.put("AMOUN_CAPTION", AMOUN_CAPTION);
             cv.put("TIME", TIME);
             cv.put("REMARK", REMARK);
+            cv.put("updated", "0");
+
             sd.update(Tenivia_traker, cv, "DR_ID ='" + DR_ID + "'", null);
         }finally {
             sd.close();
         }
     }
 
+    public ArrayList<HashMap<String, String>> get_tenivia_traker(String DR_ID) {
+        return get_tenivia_traker(DR_ID,null);
+    }
+    public ArrayList<HashMap<String, String>> get_tenivia_traker(String DR_ID,String updated) {
+        ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        sd = this.getWritableDatabase();
+        String query ="Select * from " + Tenivia_traker ;
+        if (DR_ID!= null){
+            query ="Select * from " + Tenivia_traker + " where DR_ID='" + DR_ID + "'";
+        }
+        if (updated!= null){
+            query = query +" and DR_ID='" + DR_ID + "'";
+        }
+        Cursor c = sd.rawQuery(query, null);
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    HashMap<String,String>datanum=new HashMap<String,String>();
+                    datanum.put("DR_ID",c.getString(c.getColumnIndex("DR_ID")));
+                    datanum.put("DR_NAME",c.getString(c.getColumnIndex("DR_NAME")));
+                    datanum.put("QTY",c.getString(c.getColumnIndex("QTY")));
+                    datanum.put("AMOUNT",c.getString(c.getColumnIndex("AMOUNT")));
+                    datanum.put("QTY_CAPTION",c.getString(c.getColumnIndex("QTY_CAPTION")));
+                    datanum.put("ITEM_ID",c.getString(c.getColumnIndex("ITEM_ID")));
+                    datanum.put("AMOUN_CAPTION",c.getString(c.getColumnIndex("AMOUN_CAPTION")));
+                    datanum.put("TIME",c.getString(c.getColumnIndex("TIME")));
+                    datanum.put("REMARK",c.getString(c.getColumnIndex("REMARK")));
+                    data.add(datanum);
+                } while (c.moveToNext());
+            }
+        }finally {
+            c.close();
+            sd.close();
+        }
+        return data;
+    }
     public void delete_tenivia_traker(String DR_ID) {
         try {
             sd = this.getWritableDatabase();

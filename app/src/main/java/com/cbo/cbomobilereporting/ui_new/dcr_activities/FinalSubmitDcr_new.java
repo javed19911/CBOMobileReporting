@@ -1,22 +1,19 @@
 package com.cbo.cbomobilereporting.ui_new.dcr_activities;
 
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import android.view.MenuItem;
 import android.view.View;
 
@@ -31,7 +28,6 @@ import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.cbo.cbomobilereporting.databaseHelper.Call.Db.MainDB;
 import com.cbo.cbomobilereporting.emp_tracking.MyCustomMethod;
-import com.cbo.cbomobilereporting.ui.LoginFake;
 import com.cbo.cbomobilereporting.ui_new.CustomActivity;
 import com.uenics.javed.CBOLibrary.CBOServices;
 import com.uenics.javed.CBOLibrary.ResponseBuilder;
@@ -42,18 +38,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import async.CBOFinalTask_New;
 import async.CBOFinalTasks;
 import locationpkg.Const;
-import services.CboServices;
 import services.MyAPIService;
-import services.ServiceHandler;
-import services.TaskListener;
 import utils_new.AppAlert;
 import utils_new.CustomTextToSpeech;
 import utils_new.Custom_Variables_And_Method;
@@ -61,12 +52,9 @@ import utils_new.GPS_Timmer_Dialog;
 import utils_new.GetVersionCode;
 import utils.networkUtil.AppPrefrences;
 import utils.networkUtil.NetworkUtil;
-import utils_new.SendMailTask;
 import utils_new.Service_Call_From_Multiple_Classes;
 
-/**
- * Created by Akshit on 1/5/2016.
- */
+
 public class FinalSubmitDcr_new extends CustomActivity {
 
 
@@ -85,7 +73,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String mRemark,back_allowed="Y";
     String DCR_REMARK_NA;
 
-    Service_Call_From_Multiple_Classes servive;
+    Service_Call_From_Multiple_Classes service;
     MyCustomMethod customMethod;
     private Location currentBestLocation;
 
@@ -100,6 +88,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
     Map<String, String> dcr_CommitDr_Reminder = new HashMap<>();
     Map<String, String> Lat_Long_Reg = new HashMap<>();
     Map<String, String> dcr_Dairy = new HashMap<>();
+    Map<String, String> dcr_RxCalls= new HashMap<>();
 
     String sb_DCRLATCOMMIT_KM, sb_DCRLATCOMMIT_LOC_LAT, sb_sDCRLATCOMMIT_IN_TIME, sDCRLATCOMMIT_ID, sDCRLATCOMMIT_LOC;
     String sDCRITEM_DR_ID, sDCRITEM_ITEMIDIN, sDCRITEM_ITEM_ID_ARR, sDCRITEM_QTY_ARR, sDCRITEM_ITEM_ID_GIFT_ARR, sDCRITEM_QTY_GIFT_ARR, sDCRITEM_POB_QTY, sDCRITEM_POB_VALUE, sDCRITEM_VISUAL_ARR,sDCRITEM_NOC_ARR;
@@ -118,6 +107,8 @@ public class FinalSubmitDcr_new extends CustomActivity {
     String sDCRDAIRYITEM_DAIRY_ID,sDCRDAIRYITEM_ITEM_ID_ARR,sDCRDAIRYITEM_QTY_ARR,sDCRDAIRYITEM_ITEM_ID_GIFT_ARR,sDCRDAIRYITEM_QTY_GIFT_ARR;
     String sDCRDAIRYITEM_POB_QTY,sDAIRY_FILE,sDCRDAIRY_INTERSETEDYN;
 
+    String aDCRDRRX_DOC_DATE,aDCRDRRX_DR_ID,aDCRDRRX_ITEM_ID,aDCRDRRX_QTY,aDCRDRRX_AMOUNT;
+
     public AppPrefrences appPrefrences;
 
     private static final int MESSAGE_INTERNET_FINAL_SUBMIT=0;
@@ -134,7 +125,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
         TextView Dcr_date = (TextView) findViewById(R.id.DCR_Date);
@@ -173,7 +164,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         Custom_Variables_And_Method.GLOBAL_LATLON = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"shareLatLong",Custom_Variables_And_Method.GLOBAL_LATLON);
 
         cbohelp = new CBO_DB_Helper(context);
-        servive = new Service_Call_From_Multiple_Classes();
+        service = new Service_Call_From_Multiple_Classes();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         DCR_REMARK_NA = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"DCR_REMARK_NA");
@@ -282,6 +273,25 @@ public class FinalSubmitDcr_new extends CustomActivity {
                 case GPS_TIMMER:
                     //finalSubmit();
                     finalSubmitNew();
+                    /*Thread thread=new Thread(){
+                        @Override
+                        public void run() {
+                            try{
+
+
+                                sleep(10);
+
+                            }
+                            catch (InterruptedException e){
+                                e.printStackTrace();
+                            }  finally {
+
+                                finalSubmitNew();
+                            }
+
+                        }
+                    };
+                    thread.start();*/
                     break;
                 case 99:
                     if ((null != msg.getData())) {
@@ -298,6 +308,14 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
     private void finalSubmitNew(){
+
+
+        ///disable submitbtn to be clicked twice
+        submit.setEnabled(false);
+
+
+
+
 
         String fmcg_Live_Km = customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"live_km");
 
@@ -592,6 +610,30 @@ public class FinalSubmitDcr_new extends CustomActivity {
             sDCRDAIRY_INTERSETEDYN = dcr_Dairy.get("sDCRDAIRY_INTERSETEDYN");
             sDAIRY_REF_LAT_LONG = dcr_Dairy.get("sDAIRY_REF_LAT_LONG");
         }
+
+
+
+        dcr_RxCalls = cboFinalTask_new.get_dcr_RxCalls(null);
+
+
+        if ((dcr_RxCalls.isEmpty()) || (dcr_RxCalls.size() == 0)) {
+
+            aDCRDRRX_DOC_DATE= "";
+            aDCRDRRX_DR_ID ="";
+            aDCRDRRX_ITEM_ID = "";
+            aDCRDRRX_QTY= "";
+            aDCRDRRX_AMOUNT= "";
+
+        } else {
+
+            aDCRDRRX_DOC_DATE= dcr_RxCalls.get("aDCRDRRX_DOC_DATE");
+            aDCRDRRX_DR_ID =dcr_RxCalls.get("aDCRDRRX_DR_ID");
+            aDCRDRRX_ITEM_ID = dcr_RxCalls.get("aDCRDRRX_ITEM_ID");
+            aDCRDRRX_QTY= dcr_RxCalls.get("aDCRDRRX_QTY");
+            aDCRDRRX_AMOUNT= dcr_RxCalls.get("aDCRDRRX_AMOUNT");
+        }
+
+
         //customMethod.getDataFromFromAllTables();
         //sFinalKm = mycon.getDataFrom_FMCG_PREFRENCE("final_km");
         // ArrayList<String> array=customMethod.kmWithWayPoint();
@@ -607,13 +649,13 @@ public class FinalSubmitDcr_new extends CustomActivity {
         if (ACTUALFARE.equals(""))
             ACTUALFARE=""+0;
 
-        Custom_Variables_And_Method.GCMToken=customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"GCMToken");
+
 
 
         HashMap<String, String> request = new HashMap<>();
 
-        request.put("sCompanyFolder", cbohelp.getCompanyCode());
-        request.put("iDcrId", "" + Custom_Variables_And_Method.DCR_ID);
+        request.put("sCompanyFolder", MyCustumApplication.getInstance().getUser().getCompanyCode());
+        request.put("iDcrId", MyCustumApplication.getInstance().getUser().getDCRId());
         request.put("iNoChemist", "1");
         request.put("iNoStockist", "1");
         request.put("sChemistRemark", "");
@@ -708,11 +750,11 @@ public class FinalSubmitDcr_new extends CustomActivity {
         request.put("sDCRRX_ITEMID_ARR", sDCR_ITM_RX);
 
         request.put("iFinalKM", sFinalKm);
-        request.put("iPaId",  "" + Custom_Variables_And_Method.PA_ID);
+        request.put("iPaId",  MyCustumApplication.getInstance().getUser().getID());
 
-        request.put("sGCM_TOKEN", Custom_Variables_And_Method.GCMToken);
+        request.put("sGCM_TOKEN", MyCustumApplication.getInstance().getUser().getGCMToken());
         request.put("sAPI_PATTERN", sAPI_Pattern);
-        request.put("sBATTERY_PERCENT", Custom_Variables_And_Method.BATTERYLEVEL);
+        request.put("sBATTERY_PERCENT", MyCustumApplication.getInstance().getUser().getBattery());
 
         request.put("REG_ID_ARR", DCS_ID_ARR);
         request.put("REG_LAT_LONG_ARR", LAT_LONG_ARR);
@@ -762,6 +804,14 @@ public class FinalSubmitDcr_new extends CustomActivity {
         request.put("sCHEM_STATUS", sCHEM_STATUS);
         request.put("sCOMPETITOR_REMARK", sCOMPETITOR_REMARK);
 
+        request.put("aDCRDRRX_DOC_DATE", aDCRDRRX_DOC_DATE);
+        request.put("aDCRDRRX_DR_ID", aDCRDRRX_DR_ID);
+        request.put("aDCRDRRX_ITEM_ID", aDCRDRRX_ITEM_ID);
+        request.put("aDCRDRRX_QTY", aDCRDRRX_QTY);
+        request.put("aDCRDRRX_AMOUNT", aDCRDRRX_AMOUNT);
+
+
+
         ArrayList<Integer> tables = new ArrayList<>();
         tables.add(-1);
 
@@ -779,7 +829,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
 
         new MyAPIService(context)
-                .execute(new ResponseBuilder("DCRCommitFinal_New_19", request)
+                .execute(new ResponseBuilder("DCRCommitFinal_New_21", request)
                         .setTables(tables)
                         .setDescription("Please Wait..\n" +
                                 "Final Submit in process......")
@@ -787,10 +837,12 @@ public class FinalSubmitDcr_new extends CustomActivity {
                             @Override
                             public void onComplete(Bundle message) throws JSONException {
 
+                                submit.setEnabled(true);
+
                                 String table0 = message.getString("Tables0");
                                 JSONArray jsonArray1 = new JSONArray(table0);
                                 JSONObject c = jsonArray1.getJSONObject(0);
-                                if ( c.getString("STATUS").equals("Y")) {
+                                if ( c.getString("STATUS").equals("Y")) {/*
                                     customMethod.stopAlarm10Sec();
                                     customMethod.stopAlarm10Minute();
                                     customMethod.stopDOB_DOA_Remainder();
@@ -800,9 +852,10 @@ public class FinalSubmitDcr_new extends CustomActivity {
                                     //MyCustumApplication.getInstance().updateUser();
 
                                     new CBOFinalTasks(FinalSubmitDcr_new.this).releseResources();
-                                    Intent i = new Intent(getApplicationContext(), LoginFake.class);
+                                    *//*Intent i = new Intent(getApplicationContext(), LoginFake.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(i);
+                                    startActivity(i);*//*
 
                                     if(customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE(context,"ASKUPDATEYN","N").equals("Y")) {
                                         new GetVersionCode(FinalSubmitDcr_new.this).execute();
@@ -810,8 +863,10 @@ public class FinalSubmitDcr_new extends CustomActivity {
 
                                     stopLoctionService();
                                     customVariablesAndMethod.msgBox(context,"DCR Saved Sucessfully..");
-                                    finish();
+                                    MyCustumApplication.getInstance().Logout((Activity) context);
+                                    *//*finish();*/
                                 } else {
+
                                     AppAlert.getInstance().getAlert(context,"Alert !!!", c.getString("MESSAGE"), c.getString("URL"));
 
                                 }
@@ -826,7 +881,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
                             @Override
                             public void onError(String s, String s1) {
                                 AppAlert.getInstance().getAlert(context,s, s1);
-
+                                submit.setEnabled(true);
                             }
 
 
@@ -847,7 +902,7 @@ public class FinalSubmitDcr_new extends CustomActivity {
         if ( c.getString("STATUS").equals("Y")) {
             String table1 = result.getString("Tables1");
             JSONArray jsonArray2 = new JSONArray(table1);
-            servive.parseFMCG(context,jsonArray1,jsonArray2);
+            service.parseFMCG(context,jsonArray1,jsonArray2);
 
         }
 

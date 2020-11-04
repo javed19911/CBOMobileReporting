@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,12 +35,9 @@ import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.Response;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLEncoder;
 
-import utils.MyConnection;
 import utils_new.AppAlert;
 import utils_new.Custom_Variables_And_Method;
 import utils_new.Service_Call_From_Multiple_Classes;
@@ -48,7 +45,7 @@ import utils_new.Service_Call_From_Multiple_Classes;
 public class Msg_ho extends AppCompatActivity {
 
     String message="0",title;
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
     ImageView close;
     Button back;
     LinearLayout main;
@@ -79,7 +76,7 @@ public class Msg_ho extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_msg_ho);
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
 
 

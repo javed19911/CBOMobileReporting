@@ -7,22 +7,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.MyCustumApplication;
@@ -42,10 +36,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import services.CboServices;
 import services.MyAPIService;
 import services.ServiceHandler;
-import utils.adapterutils.SpinAdapter;
 import utils.adapterutils.SpinnerModel;
 import utils.model.DropDownModel;
 import utils_new.CustomDatePicker;

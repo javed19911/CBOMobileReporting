@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +25,7 @@ public class Update_Avilable extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_available);
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar_hadder);
+        androidx.appcompat.widget.Toolbar toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar_hadder);
         TextView hader_text = (TextView) findViewById(R.id.hadder_text_1);
         hader_text.setText("New Version Available");
 
@@ -33,7 +33,7 @@ public class Update_Avilable extends AppCompatActivity {
     }
 
 
-     void getAppUpdateAlert(final Context context, String title, String massege) {
+     void getAppUpdateAlert(final Context context, String title, String message) {
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogLayout = inflater.inflate(R.layout.update_available_alert_view, null);
@@ -42,7 +42,7 @@ public class Update_Avilable extends AppCompatActivity {
         final Button Alert_Positive= (Button) dialogLayout.findViewById(R.id.positive);
         final Button Alert_Nagative= (Button) dialogLayout.findViewById(R.id.nagative);
         Alert_title.setText(title);
-        Alert_message.setText(massege);
+        Alert_message.setText(message);
 
 
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);

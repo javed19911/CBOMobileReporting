@@ -1,24 +1,24 @@
 package utils_new;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,29 +27,23 @@ import android.widget.TextView;
 
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
-import com.cbo.cbomobilereporting.ui.DcrRoot;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import async.CBORootTask;
 import services.ServiceHandler;
 import services.TaskListener;
 import utils.adapterutils.DcrRootAdapter;
 import utils.adapterutils.Dcr_Workwith_Adapter;
-import utils.adapterutils.Dcr_Workwith_Model;
 import utils.adapterutils.RootModel;
 
 /**
  * Created by pc24 on 28/11/2017.
  */
 
-public class Route_Dialog extends AlertDialog {
+public class Route_Dialog {
+        //extends AlertDialog {
 
     Custom_Variables_And_Method customVariablesAndMethod;
     Context context;
@@ -60,6 +54,7 @@ public class Route_Dialog extends AlertDialog {
 
     ListView mylist;
     Button done;
+    EditText filter;
 
 
     int PA_ID;
@@ -74,41 +69,74 @@ public class Route_Dialog extends AlertDialog {
 
     String name;
     ProgressBar progess;
-
+    int textlength=0;
+    RootModel[]TitleName;
+    ArrayList<RootModel>array_sort;
+    Dialog dialog;
 
 
     public Route_Dialog(@NonNull Context context, Handler hh, Bundle Msg, Integer response_code) {
-        super(context);
+        //super(context);
         this.context = context;
         h1=hh;
         this.response_code=response_code;
         this.Msg=Msg;
     }
 
-    @Override
+    // @Override
     public void show() {
-        super.show();
+        onCreate(null);
+        //super.show();
+        /*InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);*/
     }
 
-    @Override
+
+    /*public Route_Dialog(@NonNull Context context, Handler hh, Bundle Msg, Integer response_code) {
+        super(context);
+        this.context = context;
+        h1=hh;
+        this.response_code=response_code;
+        this.Msg=Msg;
+    }*/
+
+   /* @Override
+    public void show() {
+        super.show();
+    }*/
+
+    //@Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        /*requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dcr_root);
 
-        getWindow().setBackgroundDrawable(null);
+        getWindow().setBackgroundDrawable(null);*/
+
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dcr_root, null, false);
+
+        ((Activity) context).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.setContentView(view);
+        final Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawableResource(R.color.White_new);
+        window.setGravity(Gravity.CENTER);
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
         cbohelp=new CBO_DB_Helper(context);
         myServiceHandler=new ServiceHandler(context);
 
-        TextView textView =(TextView) findViewById(R.id.hadder_text_1);
+        TextView textView =(TextView) view.findViewById(R.id.hadder_text_1);
         textView.setText( Msg.getString("header"));
 
-        mylist=(ListView)findViewById(R.id.dcr_root_list);
-        done=(Button)findViewById(R.id.dcr_root_save);
+        mylist=(ListView) view.findViewById(R.id.dcr_root_list);
+        filter=(EditText) view.findViewById(R.id.myfilter);
+        done=(Button)view.findViewById(R.id.dcr_root_save);
 
-        progess=(ProgressBar)findViewById(R.id.progess);
+        progess=(ProgressBar)view.findViewById(R.id.progess);
 
         PA_ID= Custom_Variables_And_Method.PA_ID;
         data=new ArrayList<String>();
@@ -123,6 +151,41 @@ public class Route_Dialog extends AlertDialog {
 
         setRootDataToUI((Activity) context);
         Custom_Variables_And_Method.work_with_area_id="";
+
+
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                textlength = filter.getText().length();
+                array_sort.clear();
+                for (int i = 0; i < TitleName.length; i++) {
+                    if (textlength <= TitleName[i].getRootName().length()) {
+
+                        if (TitleName[i].getRootName().toLowerCase().contains(filter.getText().toString().toLowerCase().trim())) {
+                            array_sort.add(TitleName[i]);
+                        }
+                    }
+                }
+                RootModel rootModel = adapter.rootModel;
+                adapter = new DcrRootAdapter(context,array_sort ,allowMultipleRoute);
+                adapter.rootModel = rootModel;
+                mylist.setAdapter( adapter);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         done.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -135,10 +198,12 @@ public class Route_Dialog extends AlertDialog {
                     i.putString("route_id", adapter.id);
                     threadMsg(i);
                 }
-                dismiss();
+                dialog.dismiss();
 
             }
         });
+
+        dialog.show();
     }
 
     private void threadMsg(Bundle Msg) {
@@ -216,7 +281,13 @@ public class Route_Dialog extends AlertDialog {
                     customVariablesAndMethod.msgBox(context,result);
                 } else {
                     list=rootTask.setDataToRootList(result,list);
-                    adapter=new DcrRootAdapter(context,list ,allowMultipleRoute);
+                    TitleName = new RootModel[list.size()];
+                    for (int i = 0; i < list.size(); i++) {
+                        TitleName[i] = list.get(i);
+                    }
+
+                    array_sort = new ArrayList<RootModel>(Arrays.asList(TitleName));
+                    adapter=new DcrRootAdapter(context,array_sort ,allowMultipleRoute);
                     mylist.setAdapter(adapter);
                 }
 

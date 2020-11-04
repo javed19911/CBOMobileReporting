@@ -10,7 +10,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cbo.cbomobilereporting.MyCustumApplication;
 import com.cbo.cbomobilereporting.R;
 import com.cbo.cbomobilereporting.databaseHelper.CBO_DB_Helper;
 import com.uenics.javed.CBOLibrary.Response;
@@ -62,6 +63,8 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
     Context context;
     LinearLayout noGiftLayout;
     CheckBox noGift;
+    TextView noGiftTxt;
+    String Title = "Gift";
 
     Dialog dialog;
     public ProgressDialog progress1;
@@ -91,14 +94,13 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         window.setGravity(Gravity.CENTER);
 
 
-        TextView hader_text = (TextView) view.findViewById(R.id.hadder_text_1);
-        hader_text.setText("Dr. Gift");
-        // hader_text.setText( Msg.getString("header"));
+
 
         customVariablesAndMethod=Custom_Variables_And_Method.getInstance();
 
         noGiftLayout = view.findViewById(R.id.noGiftLayout);
         noGift = view.findViewById(R.id.noGift);
+        noGiftTxt = view.findViewById(R.id.noGiftTxt);
         if( customVariablesAndMethod.getDataFrom_FMCG_PREFRENCE (context,"DRGIFTMANDATORY").contains ("D")){
 
             noGiftLayout.setVisibility(View.VISIBLE);
@@ -117,7 +119,15 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         if (Msg != null) {
             gift_name = Msg.getString("gift_name");
             gift_qty = Msg.getString("gift_qty");
+            Title = Msg.getString("title");
         }
+
+
+        TextView hader_text = (TextView) view.findViewById(R.id.hadder_text_1);
+        hader_text.setText(Title);
+        noGiftTxt.setText("No "+ Title);
+        // hader_text.setText( Msg.getString("header"));
+
 
         adapter=new MyAdapter2((Activity) context,getModel());
 
@@ -128,7 +138,7 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 if (checked){
                     AppAlert.getInstance().DecisionAlert(context, "ALERT !!!",
-                            "Are you sure want to give NO  gift to the Doctor " ,
+                            "Are you sure want to give No " + Title +" to the Doctor " ,
                             new AppAlert.OnClickListener() {
                                 @Override
                                 public void onPositiveClicked(View item, String result) {
@@ -213,37 +223,66 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
 
             dialog.show();
 
+        }else if(MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y")){
+            AppAlert.getInstance()
+                    .setPositiveTxt("Check Stock?")
+                    .setNagativeTxt("Cancel")
+                    .DecisionAlert(context, "Out of Stock!!!",
+                            "No Item found with stock\nDo you want to Check for Stock?",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    //new upload_download(context,Dr_Gift_Dialog.this);
+                                    new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                                        @Override
+                                        public void onSuccess(Bundle bundle) {
+                                            onDownloadComplete();
+
+                                        }
+
+                                        @Override
+                                        public void onError(String message, String description) {
+                                            AppAlert.getInstance().getAlert(context,message,description);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+
+                                }
+                            });
         } else {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-            builder1.setTitle("CBO");
-            builder1.setIcon(R.drawable.alert1);
-            builder1.setMessage(" No Data In List.." + "\n" + "Please Download Data.....");
-            builder1.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    NetworkUtil networkUtil = new NetworkUtil(context);
-                    if (!networkUtil.internetConneted(context)) {
-                        customVariablesAndMethod.Connect_to_Internet_Msg(context);
-                    } else {
 
-                        //new upload_download(context,Dr_Gift_Dialog.this);
-                        new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
-                            @Override
-                            public void onSuccess(Bundle bundle) {
-                                onDownloadComplete();
+            AppAlert.getInstance()
+                    .setPositiveTxt("Ok")
+                    .setNagativeTxt("Cancel")
+                    .DecisionAlert(context, "Out of Stock!!!",
+                            " No Data In List.." + "\n" + "Please Download Data.....",
+                            new AppAlert.OnClickListener() {
+                                @Override
+                                public void onPositiveClicked(View item, String result) {
+                                    //new upload_download(context,Dr_Gift_Dialog.this);
+                                    new Service_Call_From_Multiple_Classes().getListForLocal(context, new Response() {
+                                        @Override
+                                        public void onSuccess(Bundle bundle) {
+                                            onDownloadComplete();
 
-                            }
+                                        }
 
-                            @Override
-                            public void onError(String message, String description) {
-                                AppAlert.getInstance().getAlert(context,message,description);
-                            }
-                        });
-                    }
+                                        @Override
+                                        public void onError(String message, String description) {
+                                            AppAlert.getInstance().getAlert(context,message,description);
+                                        }
+                                    });
+                                }
 
-                }
-            });
-            builder1.show();
+                                @Override
+                                public void onNegativeClicked(View item, String result) {
+
+                                }
+                            });
+
         }
 
 
@@ -276,7 +315,7 @@ public class Dr_Gift_Dialog implements Up_Dwn_interface {
         String ItemIdNotIn="0";
         cbohelp.giftDelete();
 
-        Cursor c1=cbohelp.getAllGifts(ItemIdNotIn);
+        Cursor c1=cbohelp.getAllGifts(ItemIdNotIn, !MyCustumApplication.getInstance().getDataFrom_FMCG_PREFRENCE("GIFTSHOW_STOCKONLYYN","N").equalsIgnoreCase("Y"));
         if(c1.moveToFirst()){
             do{
                 list.add(new GiftModel(c1.getString(c1.getColumnIndex("item_name")), c1.getString(c1.getColumnIndex("item_id")), "",

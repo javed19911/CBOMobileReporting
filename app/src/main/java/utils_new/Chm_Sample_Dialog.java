@@ -10,7 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -77,6 +76,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
     String sample_name_previous="",sample_pob_previous="",sample_sample_previous="";
     ImageView speciality_filter;
     EditText search;
+    String Title = "Chemist Sample";
 
     Dialog dialog;
     public ProgressDialog progress1;
@@ -109,8 +109,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
 
 
 
-        TextView hader_text =(TextView) view.findViewById(R.id.hadder_text_1);
-        hader_text.setText("Chemist Sample");
+
        // hader_text.setText( Msg.getString("header"));
 
 
@@ -128,11 +127,11 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
                 rcpaDate = Msg.getString("dateMMDDYY");
             }else{
 
-                if (callFromRcpa.contains("Select")){
-                    hader_text.setText(callFromRcpa );
-                }else if (!callFromRcpa.equals("Chem")){
-                    hader_text.setText(callFromRcpa + " Sample");
-                }
+//                if (callFromRcpa.contains("Select")){
+//                    hader_text.setText(callFromRcpa );
+//                }else if (!callFromRcpa.equals("Chem")){
+//                    hader_text.setText(callFromRcpa + " Sample");
+//                }
                 sample_name = Msg.getString("sample_name");
                 sample_pob = Msg.getString("sample_pob");
                 sample_sample = Msg.getString("sample_sample");
@@ -143,10 +142,14 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             }
 
 
+            Title = Msg.getString("title");
         } else {
             callFromRcpa = "intent not found";
 
         }
+
+        TextView hader_text =(TextView) view.findViewById(R.id.hadder_text_1);
+        hader_text.setText(Title);
 
 
 
@@ -503,7 +506,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             }
         }
         if (total_pob>0){
-            itemincart.setText( AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
+            itemincart.setText("POB : " + AddToCartView.toCurrency(String.format("%.2f", (total_pob))) + " (" + items + " items )" );
         }else{
             itemincart.setText(items + " item");
         }
@@ -520,7 +523,7 @@ public class Chm_Sample_Dialog  implements Up_Dwn_interface, Ipob {
             display_item_list.clear();
             String ItemIdNotIn = "0";
             who = params[1];
-            Cursor c = cbohelp.getAllProducts(ItemIdNotIn);
+            Cursor c = cbohelp.getAllProducts(ItemIdNotIn,"C");
             if (c.moveToFirst()) {
                 do {
                     if (callFromRcpa.equals("intent_fromRcpaCAll")) {
